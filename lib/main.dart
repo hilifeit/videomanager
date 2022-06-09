@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:videomanager/screens/auth/auth.dart';
 import 'package:videomanager/screens/video/video.dart';
+import 'package:videomanager/screens/video/videomark2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
