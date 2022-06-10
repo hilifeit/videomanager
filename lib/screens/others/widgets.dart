@@ -65,12 +65,21 @@ class Button extends StatelessWidget {
 class InputTextField extends StatelessWidget {
   final String? title;
   Color? fillColor = Colors.transparent;
-   bool isVisible = true;
+  bool isVisible = true;
   String? Function(String? val)? validator;
+  Function()? onTap;
   final Icon? prefixIcon;
   final TextStyle? hintStyle;
 
-  InputTextField({Key? key, required this.title, this.hintStyle, this.validator,required this.isVisible, this.fillColor, this.prefixIcon})
+  InputTextField(
+      {Key? key,
+      required this.title,
+      this.hintStyle,
+      this.validator,
+      required this.isVisible,
+      this.fillColor,
+      this.prefixIcon,
+      this.onTap})
       : super(key: key);
 
   @override
@@ -91,13 +100,15 @@ class InputTextField extends StatelessWidget {
         ),
         TextFormField(
           style: kTextStyleIbmMedium.copyWith(color: Colors.black),
+          onTap: onTap,
           //controller: TextEditingController(text: ''),
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: (val) {},
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
-            fillColor: fillColor,filled: true,
+            fillColor: fillColor,
+            filled: true,
             contentPadding:
                 EdgeInsets.only(left: 19.5.w, top: 16.h, bottom: 17.h),
             enabledBorder: OutlineInputBorder(
@@ -108,7 +119,7 @@ class InputTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(5.0),
               borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
             ),
-            hintText: isVisible?'Enter ${title!.toLowerCase()}':'$title',
+            hintText: isVisible ? 'Enter ${title!.toLowerCase()}' : '$title',
             hintStyle: hintStyle,
           ),
         ),
