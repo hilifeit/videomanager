@@ -1,9 +1,11 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:videomanager/videomanager_icons.dart';
 
 class Video extends StatefulWidget {
   @override
+  
   _VideoState createState() => _VideoState();
 }
 
@@ -26,6 +28,7 @@ class _VideoState extends State<Video> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
+      
     //   _controller.addListener(() {
     //   print(_controller.value.position);
     // });
@@ -41,6 +44,7 @@ class _VideoState extends State<Video> {
             color: Colors.blue,
           ),
           Flexible(
+            
             flex: 6,
             child: Row(
               children: [
@@ -108,7 +112,7 @@ class _VideoState extends State<Video> {
           });
         },
         child: Icon(
-          _controller1.value.isPlaying ? Icons.pause : Icons.play_arrow,
+          _controller1.value.isPlaying ? Icons.pause : Videomanager.play_video,
         ),
       ),
     );

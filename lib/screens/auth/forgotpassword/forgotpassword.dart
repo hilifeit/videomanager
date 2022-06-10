@@ -61,6 +61,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 Form(
                   key: formKey,
                   child: InputTextField(
+                    isVisible: true,
                     title: 'Email',
                     validator: (val) => validateEmail(val!),
                   ),

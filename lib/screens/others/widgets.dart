@@ -64,9 +64,13 @@ class Button extends StatelessWidget {
 
 class InputTextField extends StatelessWidget {
   final String? title;
+  Color? fillColor = Colors.transparent;
+   bool isVisible = true;
   String? Function(String? val)? validator;
+  final Icon? prefixIcon;
+  final TextStyle? hintStyle;
 
-  InputTextField({Key? key, required this.title, this.validator})
+  InputTextField({Key? key, required this.title, this.hintStyle, this.validator,required this.isVisible, this.fillColor, this.prefixIcon})
       : super(key: key);
 
   @override
@@ -74,9 +78,16 @@ class InputTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title!, style: kTextStyleIbmSemiBold),
-        SizedBox(
-          height: 9.5.h,
+        Visibility(
+          visible: isVisible,
+          child: Column(
+            children: [
+              Text(title!, style: kTextStyleIbmSemiBold),
+              SizedBox(
+                height: 9.5.h,
+              ),
+            ],
+          ),
         ),
         TextFormField(
           style: kTextStyleIbmMedium.copyWith(color: Colors.black),
@@ -85,6 +96,8 @@ class InputTextField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: (val) {},
           decoration: InputDecoration(
+            prefixIcon: prefixIcon,
+            fillColor: fillColor,filled: true,
             contentPadding:
                 EdgeInsets.only(left: 19.5.w, top: 16.h, bottom: 17.h),
             enabledBorder: OutlineInputBorder(
@@ -95,8 +108,8 @@ class InputTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(5.0),
               borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
             ),
-            hintText: 'Enter ${title!.toLowerCase()}',
-            hintStyle: kTextStyleIbmRegular,
+            hintText: isVisible?'Enter ${title!.toLowerCase()}':'$title',
+            hintStyle: hintStyle,
           ),
         ),
       ],

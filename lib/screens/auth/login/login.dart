@@ -75,6 +75,7 @@ class Login extends ConsumerWidget {
               child: Column(
                 children: [
                   InputTextField(
+                    isVisible: true,
                     title: 'USERNAME',
                     validator: (val) => validateUserName(val!),
                   ),
@@ -82,6 +83,7 @@ class Login extends ConsumerWidget {
                     height: 25.5.h,
                   ),
                   InputTextField(
+                    isVisible: true,
                     title: 'PASSWORD',
                     validator: (val) => validatePassword(val!),
                   ),
@@ -110,9 +112,9 @@ class Login extends ConsumerWidget {
                             return Checkbox(
                                 side: BorderSide(
                                   width: 1,
-                                  color: secondaryColor,
+                                  color: secondaryColorText,
                                 ),
-                                activeColor: secondaryColor,
+                                activeColor: primaryColor,
                                 value: checked,
                                 onChanged: (value) {
                                   ref.read(checkBoxStateProvider.state).state =

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:videomanager/screens/auth/auth.dart';
+import 'package:videomanager/screens/auth/login/login.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/video/videomark2.dart';
+import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,13 +25,13 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Demo',
-              themeMode: ThemeMode.system,
+              themeMode: ThemeMode.light,
               darkTheme: ThemeData(brightness: Brightness.dark),
               theme: ThemeData(
                 brightness: Brightness.light,
                 primarySwatch: Colors.blue,
               ),
-              home: Video()),
+              home: ViewScreen()),
         );
       },
     );
