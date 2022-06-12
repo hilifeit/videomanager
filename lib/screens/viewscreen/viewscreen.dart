@@ -14,10 +14,6 @@ class ViewScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-<<<<<<< HEAD
-            Expanded(child: Filter()),
-            Expanded(flex: 5, child: MapScreen())],
-=======
             Expanded(
               child: Filter(),
             ),
@@ -27,7 +23,6 @@ class ViewScreen extends StatelessWidget {
                   isvisible: true,
                 ))
           ],
->>>>>>> b281208b90a538eed4cef26a573d63649fae30fc
         ),
       ),
     );
