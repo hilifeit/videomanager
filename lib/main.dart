@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:videomanager/screens/viewscreen/viewscreen.dart';
+import 'package:videomanager/screens/holder/holder.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
                 brightness: Brightness.light,
                 primarySwatch: Colors.blue,
               ),
-              home: ViewScreen()),
+              home: Holder()),
         );
       },
     );

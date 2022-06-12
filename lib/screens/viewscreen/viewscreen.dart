@@ -16,10 +16,6 @@ class ViewScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
-              height: 101.h,
-              color: primaryColor,
-            ),
             Expanded(
               child: Row(
                 children: [
