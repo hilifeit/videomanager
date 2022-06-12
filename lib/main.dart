@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:videomanager/screens/holder/holder.dart';
+import 'package:videomanager/screens/others/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +24,7 @@ class MyApp extends StatelessWidget {
               title: 'Demo',
               themeMode: ThemeMode.light,
               darkTheme: ThemeData(brightness: Brightness.dark),
-              theme: ThemeData(
-                brightness: Brightness.light,
-                primarySwatch: Colors.blue,
-              ),
+              theme: lightTheme,
               home: Holder()),
         );
       },

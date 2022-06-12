@@ -19,7 +19,7 @@ class ViewScreen extends StatelessWidget {
             Expanded(
               child: Row(
                 children: [
-                  const Expanded(flex: 1, child: Filter()),
+                  Expanded(flex: 1, child: Filter()),
                   Expanded(flex: 5, child: MapScreen())
                 ],
               ),
