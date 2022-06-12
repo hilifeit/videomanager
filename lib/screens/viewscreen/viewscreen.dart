@@ -14,10 +14,10 @@ class ViewScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: Expanded(
-          child: Row(
-            children: [Expanded(flex: 5, child: MapScreen())],
-          ),
+        child: Row(
+          children: [
+            Expanded(child: Filter()),
+            Expanded(flex: 5, child: MapScreen())],
         ),
       ),
     );

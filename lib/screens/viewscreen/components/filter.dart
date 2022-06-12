@@ -60,7 +60,7 @@ class Filter extends StatelessWidget {
                           ),
                           placeholderStyle: kTextStyleInterMedium,
                           style: kTextStyleInterMedium,
-                          items: [],
+                          items: [ 'Test', 'test2 ok', ' test3', 'sanim', 'rajiv'],
                         ),
                       ),
                       SizedBox(

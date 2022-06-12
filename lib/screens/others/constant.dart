@@ -28,6 +28,7 @@ final kTextStyleIbmRegular = TextStyle(
 );
 
 final kTextStyleInterMedium = TextStyle(
+
   fontFamily: 'Inter',
   fontSize: 14.sp,
   fontWeight: FontWeight.w500,

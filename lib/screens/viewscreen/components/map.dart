@@ -5,8 +5,8 @@ import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 
 class MapScreen extends StatefulWidget {
-  bool? isvisible = true;
-  MapScreen({ this.isvisible});
+  final bool? isvisible;
+  MapScreen({ this.isvisible= true});
 
   @override
   _MapScreenState createState() => _MapScreenState();

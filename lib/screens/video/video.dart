@@ -1,7 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:videomanager/screens/video/components/videomenu.dart';
+import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/videomanager_icons.dart';
 
 class Video extends StatefulWidget {
@@ -39,12 +39,7 @@ class _VideoState extends State<Video> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
-          Placeholder(
-            fallbackHeight: 101.sm,
-            color: Colors.blue,
-          ),
-          Flexible(
+        children: [  Flexible(
             
             flex: 6,
             child: Row(
@@ -70,19 +65,12 @@ class _VideoState extends State<Video> {
                 Expanded(
                   flex: 3,
                   child: Row(
-                    children: [
-                      Expanded(
-                        child: Placeholder(
-                          child: VideoDetails(),
-                          color: Colors.green,
-                          fallbackHeight: 50.sm,
-                        ),
+                    children: const [
+                       Expanded(
+                        child: VideoDetails(),
                       ),
-                      Expanded(
-                        child: Placeholder(
-                          color: Colors.green,
-                          fallbackHeight: 50.sm,
-                        ),
+                       Expanded(
+                        child: VideoDetails(),
                       ),
                     ],
                   ),
@@ -101,21 +89,6 @@ class _VideoState extends State<Video> {
           //   fallbackHeight: 50.sm,
           // )
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller1.value.isPlaying
-                ? _controller1.pause()
-                : _controller1.play();
-            _controller2.value.isPlaying
-                ? _controller2.pause()
-                : _controller2.play();
-          });
-        },
-        child: Icon(
-          _controller1.value.isPlaying ? Icons.pause : Videomanager.play_video,
-        ),
       ),
     );
   }
