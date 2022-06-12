@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:videomanager/screens/others/constant.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 
@@ -14,10 +12,17 @@ class ViewScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: Expanded(
-          child: Row(
-            children: [Expanded(flex: 5, child: MapScreen())],
-          ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Filter(),
+            ),
+            Expanded(
+                flex: 5,
+                child: MapScreen(
+                  isvisible: true,
+                ))
+          ],
         ),
       ),
     );

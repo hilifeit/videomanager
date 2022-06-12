@@ -24,24 +24,26 @@ class MenuBar extends ConsumerWidget {
 
     //onPressed
     return Container(
-      height: 101.h,
-      width: double.infinity,
-      color: primaryColor,
-      child: Padding(
-        padding: EdgeInsets.only(top: 24.h,left: 36.w),
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context,index){
-          return MenuItemWidget(
-                    indexState: indexState,
-                    item: items[index],
-                  );
-        }, separatorBuilder: (_,index){
-          return SizedBox(
-            width: 100.w,
-          );
-        }, itemCount: items.length,
-      ),
-    ));
+        height: 101.h,
+        width: double.infinity,
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+          padding: EdgeInsets.only(top: 24.h, left: 36.w),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return MenuItemWidget(
+                indexState: indexState,
+                item: items[index],
+              );
+            },
+            separatorBuilder: (_, index) {
+              return SizedBox(
+                width: 100.w,
+              );
+            },
+            itemCount: items.length,
+          ),
+        ));
   }
 }

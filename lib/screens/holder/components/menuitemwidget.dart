@@ -22,31 +22,36 @@ class MenuItemWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(indexState.state).state;
-    return GestureDetector(
-      onTap: (() {
-        ref.read(indexState.state).state = item.id;
-      }),
-      child: Card(
-        elevation: 0,
-        color: Colors.transparent,
-        child: Column(
-          children: [
-            Icon(
-              item.icon,
-              color: index == item.id ? Colors.white : const Color(0xffd1d1d1),
-              size: 18.r,
-            ),
-            SizedBox(
-              height: 5.82.h,
-            ),
-            Text(
-              item.title,
-              style: kTextStyleIbmSemiBold.copyWith(
-                fontSize: 17.sp,
-                color: index == item.id ? Colors.white : const Color(0xffd1d1d1),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: (() {
+          ref.read(indexState.state).state = item.id;
+        }),
+        child: Card(
+          elevation: 0,
+          color: Colors.transparent,
+          child: Column(
+            children: [
+              Icon(
+                item.icon,
+                color:
+                    index == item.id ? Colors.white : const Color(0xffd1d1d1),
+                size: 18.r,
               ),
-            )
-          ],
+              SizedBox(
+                height: 5.82.h,
+              ),
+              Text(
+                item.title,
+                style: kTextStyleIbmSemiBold.copyWith(
+                  fontSize: 17.sp.sm,
+                  color:
+                      index == item.id ? Colors.white : const Color(0xffd1d1d1),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
