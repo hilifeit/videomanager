@@ -5,11 +5,15 @@ import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
 
 class MapScreen extends StatefulWidget {
+  bool? isvisible = true;
+  MapScreen({ this.isvisible});
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  
   final controller = MapController(
     location: LatLng(27.7251933, 85.3411312),
   );
@@ -72,13 +76,13 @@ class _MapScreenState extends State<MapScreen> {
               //print('${clicked.dx}, ${clicked.dy}');
               //print('${details.localPosition.dx}, ${details.localPosition.dy}');
 
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  content: Text(
-                      'You have clicked on (${location.longitude}, ${location.latitude}).'),
-                ),
-              );
+              // showDialog(
+              //   context: context,
+              //   builder: (context) => AlertDialog(
+              //     content: Text(
+              //         'You have clicked on (${location.longitude}, ${location.latitude}).'),
+              //   ),
+              // );
             },
             child: Listener(
               behavior: HitTestBehavior.opaque,
@@ -114,10 +118,13 @@ class _MapScreenState extends State<MapScreen> {
       ),
 
       // TODO: accrding to design
-      floatingActionButton: FloatingActionButton(
-        onPressed: _gotoDefault,
-        tooltip: 'My Location',
-        child: Icon(Icons.my_location),
+      floatingActionButton: Visibility(
+        visible: widget.isvisible!,
+        child: FloatingActionButton(
+          onPressed: _gotoDefault,
+          tooltip: 'My Location',
+          child: Icon(Icons.my_location),
+        ),
       ),
     );
   }

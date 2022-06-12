@@ -26,7 +26,7 @@ class Holder extends ConsumerWidget {
           ),
           Expanded(
             child: AnimatedIndexedStack(
-                index: index, children: [ViewScreen(), Video(), Container()]),
+                index: index, children: [ViewScreen(), Video(), Container(), Container()]),
           )
         ],
       ),

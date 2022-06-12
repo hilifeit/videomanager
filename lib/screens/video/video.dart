@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:videomanager/screens/video/components/videomenu.dart';
 import 'package:videomanager/videomanager_icons.dart';
 
 class Video extends StatefulWidget {
@@ -72,6 +73,7 @@ class _VideoState extends State<Video> {
                     children: [
                       Expanded(
                         child: Placeholder(
+                          child: VideoDetails(),
                           color: Colors.green,
                           fallbackHeight: 50.sm,
                         ),

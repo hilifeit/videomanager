@@ -14,19 +14,16 @@ class ViewScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  const Expanded(flex: 1, child: Filter()),
-                  Expanded(flex: 5, child: MapScreen())
-                ],
-              ),
-            ),
-          ],
+        child: Expanded(
+          child: Row(
+            children: [
+              const Expanded(flex: 1, child: Filter()),
+              Expanded(flex: 5, child: MapScreen())
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
