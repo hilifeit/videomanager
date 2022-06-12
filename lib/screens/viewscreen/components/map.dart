@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
+import 'package:videomanager/videomanager_icons.dart';
 
 class MapScreen extends StatefulWidget {
   final bool? isvisible;
@@ -110,6 +112,7 @@ class _MapScreenState extends State<MapScreen> {
                       );
                     },
                   ),
+
                 ],
               ),
             ),
@@ -118,14 +121,59 @@ class _MapScreenState extends State<MapScreen> {
       ),
 
       // TODO: accrding to design
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Visibility(
         visible: widget.isvisible!,
-        child: FloatingActionButton(
-          onPressed: _gotoDefault,
-          tooltip: 'My Location',
-          child: Icon(Icons.my_location),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SizedBox(
+              height: 54.r,
+              width: 54.r,
+              child: CustomFloatingActionButton(
+                icon: Videomanager.location,
+                onPressed: (){_gotoDefault();},
+                roundShape: true,
+                tooltip: 'My location'
+              ),
+            ),
+            SizedBox(
+              height: 32.h,
+            ),
+            SizedBox(
+              height: 54.r,
+              width: 54.r,
+              child: CustomFloatingActionButton(
+                icon: Icons.add,
+                onPressed: (){},
+                tooltip: 'Zoom in'
+              ),
+            ),SizedBox(
+              height: 54.r,
+              width: 54.r,
+              child: CustomFloatingActionButton(
+                icon: Icons.remove,
+                onPressed: (){},
+                tooltip: "Zoom out"
+              ),
+            ),
+            SizedBox(
+              height: 19.h,
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  FloatingActionButton CustomFloatingActionButton({required IconData icon, required Function onPressed,  bool roundShape=false, String? tooltip}) {
+
+    return FloatingActionButton(
+            shape: RoundedRectangleBorder(borderRadius: !roundShape?BorderRadius.zero:BorderRadius.circular(100.r)),
+              backgroundColor: Colors.white,
+              onPressed: (){onPressed();},
+              tooltip: tooltip!,
+              child: Icon(icon,size: 28.r,color: Colors.black,),
+            );
   }
 }

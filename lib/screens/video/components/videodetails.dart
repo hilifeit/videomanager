@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:videomanager/screens/others/constant.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/videomanager_icons.dart';
 
 class VideoDetails extends StatelessWidget {
   final bool? pathvis;
@@ -54,9 +55,16 @@ class VideoDetails extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const VideoDetailText(
-                    title: 'Date',
-                    details: '2072-12-13',
+                  GestureDetector(
+                    onDoubleTap: () {
+                      AlertDialog(
+                        content: MapScreen(),
+                      );
+                    },
+                    child: const VideoDetailText(
+                      title: 'Date',
+                      details: '2072-12-13',
+                    ),
                   ),
                 ],
               ),
@@ -64,9 +72,30 @@ class VideoDetails extends StatelessWidget {
           ),
           Expanded(
               flex: 2,
-              child: MapScreen(
-                isvisible: false,
-              ))
+              child: Stack(
+                children: [
+                  MapScreen(
+                      isvisible: false,
+                    ),
+                    Positioned(
+                      bottom: 5.h,
+                      right: 5.w,
+                      child: IconButton(onPressed: () async{
+                  print('ok');
+                  await showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          
+                          content: SizedBox(
+                            width: 1.sw,
+                            child: MapScreen()),
+                        );
+                      });
+                }, icon: const Icon(Icons.fullscreen)))
+                ],
+              ),
+              )
         ],
       ),
     );
@@ -86,9 +115,17 @@ class VideoDetailText extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(children: [
-        TextSpan(text: '$title:',style: kTextStyleInterMedium.copyWith(fontSize: 18.sp, color: Colors.black.withOpacity(0.8))),
-        WidgetSpan(child: SizedBox(width: 21.79.w,)),
-        TextSpan(text: '$details',style: kTextStyleInterMedium.copyWith(fontSize: 18.sp)),
+        TextSpan(
+            text: '$title:',
+            style: kTextStyleInterMedium.copyWith(
+                fontSize: 18.sp, color: Colors.black.withOpacity(0.8))),
+        WidgetSpan(
+            child: SizedBox(
+          width: 21.79.w,
+        )),
+        TextSpan(
+            text: '$details',
+            style: kTextStyleInterMedium.copyWith(fontSize: 18.sp)),
       ]),
       // '$title : $details',
       // style: kTextStyleInterMedium.copyWith(fontSize: 18.sp),
