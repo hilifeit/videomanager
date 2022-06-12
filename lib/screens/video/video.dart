@@ -2,11 +2,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
+
+import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 import 'package:videomanager/videomanager_icons.dart';
 
 class Video extends StatefulWidget {
   @override
-  
   _VideoState createState() => _VideoState();
 }
 
@@ -29,7 +30,7 @@ class _VideoState extends State<Video> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
-      
+
     //   _controller.addListener(() {
     //   print(_controller.value.position);
     // });
@@ -39,23 +40,26 @@ class _VideoState extends State<Video> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [  Flexible(
-            
+        children: [
+          Flexible(
             flex: 6,
-            child: Row(
-              children: [
-                Expanded(
-                    child: Column(
-                  children: [
-                    Expanded(flex: 4, child: VideoPlayer(_controller1)),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: Placeholder(),
-                    // )
-                  ],
-                )),
-                Expanded(child: VideoPlayer(_controller2)),
-              ],
+            child: Container(
+              color: Colors.black,
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Column(
+                    children: [
+                      Expanded(flex: 4, child: VideoPlayer(_controller1)),
+                      // Expanded(
+                      //   flex: 1,
+                      //   child: Placeholder(),
+                      // )
+                    ],
+                  )),
+                  Expanded(child: VideoPlayer(_controller2)),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -77,9 +81,9 @@ class _VideoState extends State<Video> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Placeholder(
-                    color: Colors.red,
-                    fallbackHeight: 65.sm,
+                  child: VideoPlayerControls(
+                    left: _controller1,
+                    right: _controller2,
                   ),
                 ),
               ],

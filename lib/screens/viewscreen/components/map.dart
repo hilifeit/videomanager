@@ -6,14 +6,17 @@ import 'package:map/map.dart';
 
 class MapScreen extends StatefulWidget {
   final bool? isvisible;
+<<<<<<< HEAD
   MapScreen({ this.isvisible= true});
+=======
+  MapScreen({this.isvisible = true});
+>>>>>>> b281208b90a538eed4cef26a573d63649fae30fc
 
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  
   final controller = MapController(
     location: LatLng(27.7251933, 85.3411312),
   );
