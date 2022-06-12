@@ -50,14 +50,12 @@ class _VideoState extends State<Video> {
                   Expanded(
                       child: Column(
                     children: [
-                      Expanded(flex: 4, child: VideoPlayer(_controller1)),
-                      // Expanded(
-                      //   flex: 1,
-                      //   child: Placeholder(),
-                      // )
+                      Expanded(
+                          flex: 4,
+                          child: CustomVideoPlayer(controller: _controller1)),
                     ],
                   )),
-                  Expanded(child: VideoPlayer(_controller2)),
+                  Expanded(child: CustomVideoPlayer(controller: _controller2)),
                 ],
               ),
             ),
@@ -70,10 +68,10 @@ class _VideoState extends State<Video> {
                   flex: 3,
                   child: Row(
                     children: const [
-                       Expanded(
+                      Expanded(
                         child: VideoDetails(),
                       ),
-                       Expanded(
+                      Expanded(
                         child: VideoDetails(),
                       ),
                     ],
@@ -95,6 +93,30 @@ class _VideoState extends State<Video> {
         ],
       ),
     );
+  }
+
+  Builder CustomVideoPlayer({required VideoPlayerController controller}) {
+    return Builder(builder: (context) {
+      bool buffering = false;
+      return StatefulBuilder(builder: (context, setCustomState) {
+        controller.addListener(() {
+          setCustomState(() {
+            buffering = controller.value.isBuffering;
+          });
+        });
+        return Stack(
+          children: [
+            VideoPlayer(controller),
+            if (buffering)
+              Positioned.fill(
+                  child: Center(
+                      child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              )))
+          ],
+        );
+      });
+    });
   }
 
   @override
