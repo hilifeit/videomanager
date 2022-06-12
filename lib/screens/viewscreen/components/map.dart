@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlng/latlng.dart';
 import 'package:map/map.dart';
+import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
 import 'package:videomanager/videomanager_icons.dart';
 
 class MapScreen extends StatefulWidget {
@@ -61,64 +62,92 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MapLayoutBuilder(
-        controller: controller,
-        builder: (context, transformer) {
-          return GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onDoubleTap: _onDoubleTap,
-            onScaleStart: _onScaleStart,
-            onScaleUpdate: _onScaleUpdate,
-            onTapUp: (details) {
-              final location =
-                  transformer.fromXYCoordsToLatLng(details.localPosition);
+      body: LayoutBuilder(builder: (context, constraint) {
+        return MapLayoutBuilder(
+          controller: controller,
+          builder: (context, transformer) {
+            final markerWidgets = [
+              ClipRRect(
+                child: Stack(children: [
+                  CustomPaint(
+                    size: Size(constraint.maxWidth, constraint.maxHeight),
+                    painter: Painter(
+                        currentIndex: 0,
+                        // data: geoFiles,
+                        sample: 100,
+                        transformer: transformer,
+                        selectedIndex: 0),
+                  )
+                ]
 
-              //final clicked = transformer.fromLatLngToXYCoords(location);
-              //print('${location.longitude}, ${location.latitude}');
-              //print('${clicked.dx}, ${clicked.dy}');
-              //print('${details.localPosition.dx}, ${details.localPosition.dy}');
+                    // Transform.rotate(
+                    //   angle: 0.58,
+                    //   child: Container(
+                    //     color: Colors.red,
+                    //     width: 100,
+                    //     height: 100,
+                    //   ),
+                    // )
 
-              // showDialog(
-              //   context: context,
-              //   builder: (context) => AlertDialog(
-              //     content: Text(
-              //         'You have clicked on (${location.longitude}, ${location.latitude}).'),
-              //   ),
-              // );
-            },
-            child: Listener(
+                    ),
+              )
+            ];
+            return GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onPointerSignal: (event) {
-                if (event is PointerScrollEvent) {
-                  final delta = event.scrollDelta;
+              onDoubleTap: _onDoubleTap,
+              onScaleStart: _onScaleStart,
+              onScaleUpdate: _onScaleUpdate,
+              onTapUp: (details) {
+                final location =
+                    transformer.fromXYCoordsToLatLng(details.localPosition);
 
-                  controller.zoom -= delta.dy / 1000.0;
-                  setState(() {});
-                }
+                //final clicked = transformer.fromLatLngToXYCoords(location);
+                //print('${location.longitude}, ${location.latitude}');
+                //print('${clicked.dx}, ${clicked.dy}');
+                //print('${details.localPosition.dx}, ${details.localPosition.dy}');
+
+                // showDialog(
+                //   context: context,
+                //   builder: (context) => AlertDialog(
+                //     content: Text(
+                //         'You have clicked on (${location.longitude}, ${location.latitude}).'),
+                //   ),
+                // );
               },
-              child: Stack(
-                children: [
-                  Map(
-                    controller: controller,
-                    builder: (context, x, y, z) {
-                      //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
-                      //Google Maps
-                      final url =
-                          'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
+              child: Listener(
+                behavior: HitTestBehavior.opaque,
+                onPointerSignal: (event) {
+                  if (event is PointerScrollEvent) {
+                    final delta = event.scrollDelta;
 
-                      return CachedNetworkImage(
-                        imageUrl: url,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  ),
+                    controller.zoom -= delta.dy / 1000.0;
+                    setState(() {});
+                  }
+                },
+                child: Stack(
+                  children: [
+                    Map(
+                      controller: controller,
+                      builder: (context, x, y, z) {
+                        //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
+                        //Google Maps
+                        final url =
+                            'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
 
-                ],
+                        return CachedNetworkImage(
+                          imageUrl: url,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                    ...markerWidgets
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      ),
+            );
+          },
+        );
+      }),
 
       // TODO: accrding to design
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -131,11 +160,12 @@ class _MapScreenState extends State<MapScreen> {
               height: 54.r,
               width: 54.r,
               child: CustomFloatingActionButton(
-                icon: Videomanager.location,
-                onPressed: (){_gotoDefault();},
-                roundShape: true,
-                tooltip: 'My location'
-              ),
+                  icon: Videomanager.location,
+                  onPressed: () {
+                    _gotoDefault();
+                  },
+                  roundShape: true,
+                  tooltip: 'My location'),
             ),
             SizedBox(
               height: 32.h,
@@ -144,18 +174,13 @@ class _MapScreenState extends State<MapScreen> {
               height: 54.r,
               width: 54.r,
               child: CustomFloatingActionButton(
-                icon: Icons.add,
-                onPressed: (){},
-                tooltip: 'Zoom in'
-              ),
-            ),SizedBox(
+                  icon: Icons.add, onPressed: () {}, tooltip: 'Zoom in'),
+            ),
+            SizedBox(
               height: 54.r,
               width: 54.r,
               child: CustomFloatingActionButton(
-                icon: Icons.remove,
-                onPressed: (){},
-                tooltip: "Zoom out"
-              ),
+                  icon: Icons.remove, onPressed: () {}, tooltip: "Zoom out"),
             ),
             SizedBox(
               height: 19.h,
@@ -166,14 +191,25 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  FloatingActionButton CustomFloatingActionButton({required IconData icon, required Function onPressed,  bool roundShape=false, String? tooltip}) {
-
+  FloatingActionButton CustomFloatingActionButton(
+      {required IconData icon,
+      required Function onPressed,
+      bool roundShape = false,
+      String? tooltip}) {
     return FloatingActionButton(
-            shape: RoundedRectangleBorder(borderRadius: !roundShape?BorderRadius.zero:BorderRadius.circular(100.r)),
-              backgroundColor: Colors.white,
-              onPressed: (){onPressed();},
-              tooltip: tooltip!,
-              child: Icon(icon,size: 28.r,color: Colors.black,),
-            );
+      shape: RoundedRectangleBorder(
+          borderRadius:
+              !roundShape ? BorderRadius.zero : BorderRadius.circular(100.r)),
+      backgroundColor: Colors.white,
+      onPressed: () {
+        onPressed();
+      },
+      tooltip: tooltip!,
+      child: Icon(
+        icon,
+        size: 28.r,
+        color: Colors.black,
+      ),
+    );
   }
 }
