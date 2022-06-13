@@ -57,7 +57,8 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer(builder: (context, ref, c) {
-        final files = ref.watch(fileDetailMiniServiceProvider);
+        final fileService = ref.watch(fileDetailMiniServiceProvider);
+
         return LayoutBuilder(builder: (context, constraint) {
           return MapLayoutBuilder(
             controller: widget.controller,
@@ -71,11 +72,13 @@ class _MapScreenState extends State<MapScreen> {
                     CustomPaint(
                       size: Size(constraint.maxWidth, constraint.maxHeight),
                       painter: Painter(
-                          currentIndex: 0,
-                          // data: geoFiles,
-                          sample: 100,
-                          transformer: transformer,
-                          selectedIndex: 0),
+                        files: fileService.files,
+                        // currentIndex: 0,
+                        // data: geoFiles,
+                        // sample: 100,
+                        transformer: transformer,
+                        // selectedIndex: 0
+                      ),
                     )
                   ]
 

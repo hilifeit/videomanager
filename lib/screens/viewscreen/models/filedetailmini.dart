@@ -3,6 +3,7 @@
 //     final fileDetailMini = fileDetailMiniFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:ui';
 
 List<FileDetailMini> fileDetailMiniFromJson(String str) =>
     List<FileDetailMini>.from(
@@ -21,6 +22,7 @@ class FileDetailMini {
   final String id;
   final String filename;
   final Location location;
+  Rect? boundingBox;
 
   FileDetailMini copyWith({
     required String id,

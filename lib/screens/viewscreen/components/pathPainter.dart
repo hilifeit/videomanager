@@ -1,19 +1,16 @@
 import 'dart:math';
 import 'package:videomanager/screens/others/exporter.dart';
-
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class Painter extends CustomPainter {
   Painter({
-    // required this.data,
-    required this.currentIndex,
-    required this.selectedIndex,
-    required this.sample,
+    required this.files,
     required this.transformer,
   });
   // List<GeoFile> data;
-  int currentIndex, selectedIndex;
-  int sample;
-
+  // int currentIndex, selectedIndex;
+  // int sample;
+  List<FileDetailMini> files;
   MapTransformer transformer;
   //final _random = Random();
   @override
@@ -27,15 +24,42 @@ class Painter extends CustomPainter {
     paint.style = PaintingStyle.stroke;
     paint.color = Colors.red;
     paint.strokeWidth = 3;
-    Offset test =
-        transformer.fromLatLngToXYCoords(LatLng(27.7251933, 85.3411312));
-    Offset test1 =
-        transformer.fromLatLngToXYCoords(LatLng(27.7351933, 85.3511312));
-    Offset test2 =
-        transformer.fromLatLngToXYCoords(LatLng(27.7351933, 85.3611312));
-    // print(test);
-    canvas.drawLine(test, test1, paint);
-    canvas.drawLine(test1, test2, paint);
+
+    // for (int i = 0; i < 2; i++) {
+    for (var element in files) {
+      // print(files[0].boundingBox!.left.toString() +
+      //     " " +
+      //     files[0].boundingBox!.top.toString());
+      // var rect = Rect.fromLTRB(
+      //   transformer
+      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.left, files[0].boundingBox!.))
+      //       .dx,
+      //   transformer
+      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.top, 0))
+      //       .dx,
+      //   transformer
+      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.right, 0))
+      //       .dx,
+      //   transformer
+      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.bottom, 0))
+      //       .dx,
+      // );
+
+      // print(rect.left.toString() + rect.top.toString());
+      // canvas.drawRect(rect, paint);
+      Path path = Path();
+      Offset start = transformer.fromLatLngToXYCoords(LatLng(
+          element.location.coordinates.first[1],
+          element.location.coordinates.first[0]));
+      path.moveTo(start.dx, start.dy);
+      for (var elementLocation in element.location.coordinates) {
+        Offset current = transformer.fromLatLngToXYCoords(
+            LatLng(elementLocation.last, elementLocation.first));
+        path.lineTo(current.dx, current.dy);
+      }
+      path.close();
+      canvas.drawPath(path, paint);
+    }
     // canvas.drawRect(
     //     Rect.fromLTWH(5, 5, transformer.constraints.maxWidth - 10,
     //         transformer.constraints.maxHeight - 10),
