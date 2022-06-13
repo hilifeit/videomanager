@@ -1,13 +1,13 @@
 // To parse this JSON data, do
 //
-//     final searchItem = searchItemFromMap(jsonString);
+//     final searchItem = searchItemFromJson(jsonString);
 
 import 'dart:convert';
 
-SearchItem searchItemFromMap(String str) =>
-    SearchItem.fromMap(json.decode(str));
+SearchItem searchItemFromJson(String str) =>
+    SearchItem.fromJson(json.decode(str));
 
-String searchItemToMap(SearchItem data) => json.encode(data.toMap());
+String searchItemToJson(SearchItem data) => json.encode(data.toJson());
 
 class SearchItem {
   SearchItem({
@@ -27,15 +27,15 @@ class SearchItem {
         results: results,
       );
 
-  factory SearchItem.fromMap(Map<String, dynamic> json) => SearchItem(
+  factory SearchItem.fromJson(Map<String, dynamic> json) => SearchItem(
         count: json["count"],
         results:
-            List<Result>.from(json["results"].map((x) => Result.fromMap(x))),
+            List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "count": count,
-        "results": List<dynamic>.from(results.map((x) => x.toMap())),
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
       };
 }
 
@@ -44,50 +44,103 @@ class Result {
     required this.id,
     required this.filename,
     required this.path,
-    required this.score,
     required this.startCoordinate,
+    required this.area,
+    required this.endCoordinate,
+    required this.score,
   });
 
   final String id;
   final String filename;
   final String path;
+  final Coordinate startCoordinate;
+  final Area area;
+  final Coordinate endCoordinate;
   final double score;
-  final StartCoordinate startCoordinate;
 
   Result copyWith({
     required String id,
     required String filename,
     required String path,
+    required Coordinate startCoordinate,
+    required Area area,
+    required Coordinate endCoordinate,
     required double score,
-    required StartCoordinate startCoordinate,
   }) =>
       Result(
         id: id,
         filename: filename,
         path: path,
-        score: score,
         startCoordinate: startCoordinate,
+        area: area,
+        endCoordinate: endCoordinate,
+        score: score,
       );
 
-  factory Result.fromMap(Map<String, dynamic> json) => Result(
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["_id"],
         filename: json["filename"],
         path: json["path"],
+        startCoordinate: Coordinate.fromJson(json["startCoordinate"]),
+        area: Area.fromJson(json["area"]),
+        endCoordinate: Coordinate.fromJson(json["endCoordinate"]),
         score: json["score"].toDouble(),
-        startCoordinate: StartCoordinate.fromMap(json["startCoordinate"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "_id": id,
         "filename": filename,
         "path": path,
+        "startCoordinate": startCoordinate.toJson(),
+        "area": area.toJson(),
+        "endCoordinate": endCoordinate.toJson(),
         "score": score,
-        "startCoordinate": startCoordinate.toMap(),
       };
 }
 
-class StartCoordinate {
-  StartCoordinate({
+class Area {
+  Area({
+    required this.state,
+    required this.city,
+    required this.area,
+    required this.id,
+  });
+
+  final int state;
+  final String city;
+  final String area;
+  final String id;
+
+  Area copyWith({
+    required int state,
+    required String city,
+    required String area,
+    required String id,
+  }) =>
+      Area(
+        state: state,
+        city: city,
+        area: area,
+        id: id,
+      );
+
+  factory Area.fromJson(Map<String, dynamic> json) => Area(
+        state: json["state"],
+        city: json["city"],
+        area: json["area"],
+        id: json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "state": state,
+        "city": city,
+        "area": area,
+        "_id": id,
+      };
+}
+
+class Coordinate {
+  Coordinate({
     required this.lat,
     required this.lng,
   });
@@ -95,21 +148,21 @@ class StartCoordinate {
   final double lat;
   final double lng;
 
-  StartCoordinate copyWith({
+  Coordinate copyWith({
     required double lat,
     required double lng,
   }) =>
-      StartCoordinate(
+      Coordinate(
         lat: lat,
         lng: lng,
       );
 
-  factory StartCoordinate.fromMap(Map<String, dynamic> json) => StartCoordinate(
+  factory Coordinate.fromJson(Map<String, dynamic> json) => Coordinate(
         lat: json["lat"].toDouble(),
         lng: json["lng"].toDouble(),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "lat": lat,
         "lng": lng,
       };

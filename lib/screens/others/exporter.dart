@@ -10,8 +10,6 @@ export 'package:map/map.dart';
 export 'package:searchfield/searchfield.dart';
 export 'package:file_picker/file_picker.dart';
 
-
-
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/videomanager_icons.dart';
@@ -21,7 +19,7 @@ export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
 //
 
-const baseURL = "http://localhost:5000/api/";
+const baseURL = "http://192.168.1.10:5000/api/";
 final client = http.Client();
 
 final LatLng home = LatLng(27.7251933, 85.3411312);

@@ -12,10 +12,7 @@ final checkBoxStateStateProvider = StateProvider<bool>((ref) {
 
 class Filter extends StatelessWidget {
   Filter({Key? key, required this.mapController}) : super(key: key);
-  final searchChangeNotifierProvider =
-      ChangeNotifierProvider<SearchService>((ref) {
-    return SearchService();
-  });
+
   final MapController mapController;
   FocusNode focus = FocusNode();
   @override
@@ -24,88 +21,85 @@ class Filter extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: fluent.ScaffoldPage(
           padding: EdgeInsets.zero,
-          content: Container(
-            // color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: 29.w, top: 15.h, right: 21.33.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Filter',
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              color: primaryColor)),
-                      SizedBox(
-                        height: 26.h,
-                      ),
-                      Consumer(builder: (context, ref, c) {
-                        final searchService =
-                            ref.watch(searchChangeNotifierProvider);
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 29.w, top: 15.h, right: 21.33.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Filter',
+                        style: kTextStyleIbmSemiBold.copyWith(
+                            color: primaryColor)),
+                    SizedBox(
+                      height: 26.h,
+                    ),
+                    Consumer(builder: (context, ref, c) {
+                      final searchService =
+                          ref.watch(searchChangeNotifierProvider);
 
-                        return SearchField<Result>(
-                            focusNode: focus,
-                            // hasOverlay: false,
-                            onSubmit: (result) async {
-                              await searchService.search(result);
-                              FocusScope.of(context).unfocus();
-                              FocusScope.of(context).requestFocus(focus);
-                            },
-                            onSuggestionTap: (item) {
-                              mapController.center = LatLng(
-                                  item.item!.startCoordinate.lat,
-                                  item.item!.startCoordinate.lng);
-                            },
-                            suggestions: searchService.results
-                                .map((e) => SearchFieldListItem<Result>(
-                                    e.filename,
-                                    item: e,
-                                    child: Text(e.filename)))
-                                .toList());
+                      return SearchField<Result>(
+                          focusNode: focus,
+                          // hasOverlay: false,
+                          onSubmit: (result) async {
+                            await searchService.search(result);
+                            FocusScope.of(context).unfocus();
+                            FocusScope.of(context).requestFocus(focus);
+                          },
+                          onSuggestionTap: (item) {
+                            mapController.center = LatLng(
+                                item.item!.startCoordinate.lat,
+                                item.item!.startCoordinate.lng);
+                          },
+                          suggestions: searchService.results
+                              .map((e) => SearchFieldListItem<Result>(
+                                  e.filename,
+                                  item: e,
+                                  child: Text(e.filename)))
+                              .toList());
 
-                        // fluent.SizedBox(
-                        //   child: fluent.AutoSuggestBox(
-                        //     showCursor: true,
-                        //     onChanged: (value, reason) async {
-                        //       await searchService.search(value);
-                        //     },
-                        //     onSelected: (value) {
-                        //       print(value);
-                        //     },
-                        //     foregroundDecoration: fluent.BoxDecoration(
-                        //         border: Border.all(color: Colors.transparent),
-                        //         borderRadius:
-                        //             fluent.BorderRadius.circular(4.r)),
-                        //     placeholder: "Search",
-                        //     // decoration: fluent.BoxDecoration(
-                        //     //   borderRadius: BorderRadius.circular(4),
-                        //     // ),
+                      // fluent.SizedBox(
+                      //   child: fluent.AutoSuggestBox(
+                      //     showCursor: true,
+                      //     onChanged: (value, reason) async {
+                      //       await searchService.search(value);
+                      //     },
+                      //     onSelected: (value) {
+                      //       print(value);
+                      //     },
+                      //     foregroundDecoration: fluent.BoxDecoration(
+                      //         border: Border.all(color: Colors.transparent),
+                      //         borderRadius:
+                      //             fluent.BorderRadius.circular(4.r)),
+                      //     placeholder: "Search",
+                      //     // decoration: fluent.BoxDecoration(
+                      //     //   borderRadius: BorderRadius.circular(4),
+                      //     // ),
 
-                        //     leadingIcon: fluent.Padding(
-                        //       padding: EdgeInsets.all(15.r),
-                        //       child: Icon(
-                        //         Videomanager.search,
-                        //         size: 18.r,
-                        //       ),
-                        //     ),
-                        //     placeholderStyle: kTextStyleInterMedium,
-                        //     style: kTextStyleInterMedium,
-                        //     items: searchService.results
-                        //         .map((e) => e.filename)
-                        //         .toList(),
-                        //   ),
-                        // );
-                      }),
-                      SizedBox(
-                        height: 29.h,
-                      ),
-                    ],
-                  ),
+                      //     leadingIcon: fluent.Padding(
+                      //       padding: EdgeInsets.all(15.r),
+                      //       child: Icon(
+                      //         Videomanager.search,
+                      //         size: 18.r,
+                      //       ),
+                      //     ),
+                      //     placeholderStyle: kTextStyleInterMedium,
+                      //     style: kTextStyleInterMedium,
+                      //     items: searchService.results
+                      //         .map((e) => e.filename)
+                      //         .toList(),
+                      //   ),
+                      // );
+                    }),
+                    SizedBox(
+                      height: 29.h,
+                    ),
+                  ],
                 ),
-                Expanded(
-                    child: ListView.separated(
+              ),
+              Expanded(
+                child: ListView.separated(
                   itemBuilder: (_, index) {
                     return ExpansionTile(
 
@@ -178,9 +172,9 @@ class Filter extends StatelessWidget {
                     );
                   },
                   itemCount: 3,
-                ),),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ));
   }

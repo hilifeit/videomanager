@@ -1,10 +1,9 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
+const primaryColor = Color(0xff40667D);
 
-final primaryColor = Color(0xff40667D);
-
-final secondaryColorText = Color(0xffBABABA);
-final secondaryColor = Color(0xffF2F2F2);
+const secondaryColorText = Color(0xffBABABA);
+const secondaryColor = Color(0xffF2F2F2);
 
 final kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',
@@ -28,7 +27,6 @@ final kTextStyleIbmRegular = TextStyle(
 );
 
 final kTextStyleInterMedium = TextStyle(
-
   fontFamily: 'Inter',
   fontSize: 14.sp,
   fontWeight: FontWeight.w500,

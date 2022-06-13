@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 
 var lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
-    primaryColor: const Color(0xff40667D),
+    primaryColor: primaryColor,
     inputDecorationTheme: InputDecorationTheme(
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),

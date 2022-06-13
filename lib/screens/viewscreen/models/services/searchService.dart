@@ -1,6 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
+
+final searchChangeNotifierProvider =
+    ChangeNotifierProvider<SearchService>((ref) {
+  return SearchService();
+});
 
 class SearchService extends ChangeNotifier {
   List<Result> results = [];
@@ -8,10 +12,10 @@ class SearchService extends ChangeNotifier {
   search(String query) async {
     try {
       var response = await client.get(
-          Uri.parse(baseURL + "file/search?q=$query"),
+          Uri.parse("${baseURL}file/search?q=$query"),
           headers: {"Content-Type": "application/json"});
       if (response.statusCode == 200) {
-        SearchItem temp = searchItemFromMap(response.body);
+        SearchItem temp = searchItemFromJson(response.body);
         results = temp.results.toList();
         notifyListeners();
       } else {
@@ -20,5 +24,10 @@ class SearchService extends ChangeNotifier {
     } catch (e, s) {
       throw "$e";
     }
+  }
+
+  add(result) {
+    results.add(result);
+    // notifyListeners();
   }
 }

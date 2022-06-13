@@ -55,11 +55,13 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: LayoutBuilder(builder: (context, constraint) {
         return MapLayoutBuilder(
           controller: widget.controller,
           builder: (context, transformer) {
+            transformer.controller.addListener(() {
+              setState(() {});
+            });
             final markerWidgets = [
               ClipRRect(
                 child: Stack(children: [
@@ -88,36 +90,31 @@ class _MapScreenState extends State<MapScreen> {
             ];
             return GestureDetector(
               onSecondaryTapUp: (details) {
-                 print('local :${details.localPosition}');
-              print('global: ${details.globalPosition}');
-              print(transformer.constraints);
-              showMenu(
-                  context: context,
-                  position: RelativeRect.fromLTRB(
-                      details.localPosition.dx,
-                      details.localPosition.dy,
-                      transformer.constraints.maxWidth-details.localPosition.dx,
-                      0),
-                      
-                  items: [PopupMenuItem(child: Text('data'))]);
-
+                print('local :${details.localPosition}');
+                print('global: ${details.globalPosition}');
+                print(transformer.constraints);
+                showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(
+                        details.localPosition.dx,
+                        details.localPosition.dy,
+                        transformer.constraints.maxWidth -
+                            details.localPosition.dx,
+                        0),
+                    items: [PopupMenuItem(child: Text('data'))]);
               },
-
-              
-              
               behavior: HitTestBehavior.opaque,
               onDoubleTap: _onDoubleTap,
               onScaleStart: _onScaleStart,
               onScaleUpdate: _onScaleUpdate,
-              onTap:(){
-                   showDialog(
-                context: context,
-                builder: (context) => Center(
-                    child:
-                        Container(color: Colors.white, child: ContextMenu())),
-              );
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => Center(
+                      child:
+                          Container(color: Colors.white, child: ContextMenu())),
+                );
               },
-             
               onTapUp: (details) {
                 final location =
                     transformer.fromXYCoordsToLatLng(details.localPosition);
@@ -135,7 +132,6 @@ class _MapScreenState extends State<MapScreen> {
                 //   ),
                 // );
               },
-
               child: Listener(
                 behavior: HitTestBehavior.opaque,
                 onPointerSignal: (event) {
@@ -165,7 +161,6 @@ class _MapScreenState extends State<MapScreen> {
                     ...markerWidgets
                   ],
                 ),
-
               ),
             );
           },
@@ -197,25 +192,21 @@ class _MapScreenState extends State<MapScreen> {
               height: 54.r,
               width: 54.r,
               child: CustomFloatingActionButton(
-
                   icon: Icons.add,
                   onPressed: () {
                     widget.controller.zoom += 1;
                   },
                   tooltip: 'Zoom in'),
-
             ),
             SizedBox(
               height: 54.r,
               width: 54.r,
               child: CustomFloatingActionButton(
-
                   icon: Icons.remove,
                   onPressed: () {
                     widget.controller.zoom -= 1;
                   },
                   tooltip: "Zoom out"),
-
             ),
             SizedBox(
               height: 19.h,
