@@ -1,11 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:videomanager/screens/others/constant.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
-import 'package:videomanager/videomanager_icons.dart';
 
 class VideoDetails extends StatelessWidget {
   final bool? pathvis;
@@ -58,7 +52,9 @@ class VideoDetails extends StatelessWidget {
                   GestureDetector(
                     onDoubleTap: () {
                       AlertDialog(
-                        content: MapScreen(),
+                        content: MapScreen(
+                          controller: MapController(location: home),
+                        ),
                       );
                     },
                     child: const VideoDetailText(
@@ -71,31 +67,36 @@ class VideoDetails extends StatelessWidget {
             ),
           ),
           Expanded(
-              flex: 2,
-              child: Stack(
-                children: [
-                  MapScreen(
-                      isvisible: false,
-                    ),
-                    Positioned(
-                      bottom: 5.h,
-                      right: 5.w,
-                      child: IconButton(onPressed: () async{
-                  print('ok');
-                  await showDialog(
-                      context: context,
-                      builder: (_) {
-                        return AlertDialog(
-                          
-                          content: SizedBox(
-                            width: 1.sw,
-                            child: MapScreen()),
-                        );
-                      });
-                }, icon: const Icon(Icons.fullscreen)))
-                ],
-              ),
-              )
+            flex: 2,
+            child: Stack(
+              children: [
+                MapScreen(
+                  controller: MapController(location: home),
+                  isvisible: false,
+                ),
+                Positioned(
+                    bottom: 5.h,
+                    right: 5.w,
+                    child: IconButton(
+                        onPressed: () async {
+                          print('ok');
+                          await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  content: SizedBox(
+                                      width: 1.sw,
+                                      child: MapScreen(
+                                        controller:
+                                            MapController(location: home),
+                                      )),
+                                );
+                              });
+                        },
+                        icon: const Icon(Icons.fullscreen)))
+              ],
+            ),
+          )
         ],
       ),
     );

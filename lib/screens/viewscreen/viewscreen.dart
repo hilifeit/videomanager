@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 
 class ViewScreen extends StatelessWidget {
-  const ViewScreen({Key? key}) : super(key: key);
-
+  ViewScreen({Key? key}) : super(key: key);
+  final controller = MapController(
+    location: home,
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,11 +17,14 @@ class ViewScreen extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Filter(),
+              child: Filter(
+                mapController: controller,
+              ),
             ),
             Expanded(
                 flex: 5,
                 child: MapScreen(
+                  controller: controller,
                   isvisible: true,
                 ))
           ],

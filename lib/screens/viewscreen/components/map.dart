@@ -9,25 +9,21 @@ import 'package:videomanager/videomanager_icons.dart';
 
 class MapScreen extends StatefulWidget {
   final bool? isvisible;
-
-  MapScreen({this.isvisible = true});
+  final MapController controller;
+  MapScreen({this.isvisible = true, required this.controller});
 
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
-  final controller = MapController(
-    location: LatLng(27.7251933, 85.3411312),
-  );
-
   void _gotoDefault() {
-    controller.center = LatLng(27.7251933, 85.3411312);
+    widget.controller.center = LatLng(27.7251933, 85.3411312);
     setState(() {});
   }
 
   void _onDoubleTap() {
-    controller.zoom += 0.5;
+    widget.controller.zoom += 0.5;
     setState(() {});
   }
 
@@ -43,18 +39,18 @@ class _MapScreenState extends State<MapScreen> {
     _scaleStart = details.scale;
 
     if (scaleDiff > 0) {
-      // controller.zoom += 0.02;
-      controller.zoom += 1;
+      // widget.controller.zoom += 0.02;
+      widget.controller.zoom += 1;
       setState(() {});
     } else if (scaleDiff < 0) {
-      controller.zoom -= 1;
-      // controller.zoom -= 0.02;
+      widget.controller.zoom -= 1;
+      // widget.controller.zoom -= 0.02;
       setState(() {});
     } else {
       final now = details.focalPoint;
       final diff = now - _dragStart!;
       _dragStart = now;
-      controller.drag(diff.dx, diff.dy);
+      widget.controller.drag(diff.dx, diff.dy);
       setState(() {});
     }
   }
@@ -64,7 +60,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraint) {
         return MapLayoutBuilder(
-          controller: controller,
+          controller: widget.controller,
           builder: (context, transformer) {
             final markerWidgets = [
               ClipRRect(
@@ -93,6 +89,18 @@ class _MapScreenState extends State<MapScreen> {
               )
             ];
             return GestureDetector(
+              onSecondaryTapUp: (details) {
+                // showMenu(
+                //     context: context,
+                //     position: RelativeRect.fromSize(
+                //         Rect.fromCenter(
+                //             center: details.localPosition,
+                //             width: 50,
+                //             height: 50),
+                //         Size(transformer.constraints.maxWidth,
+                //             transformer.constraints.maxHeight)),
+                //     items: [PopupMenuItem(child: Text("asdsad"))]);
+              },
               behavior: HitTestBehavior.opaque,
               onDoubleTap: _onDoubleTap,
               onScaleStart: _onScaleStart,
@@ -120,14 +128,14 @@ class _MapScreenState extends State<MapScreen> {
                   if (event is PointerScrollEvent) {
                     final delta = event.scrollDelta;
 
-                    controller.zoom -= delta.dy / 1000.0;
+                    widget.controller.zoom -= delta.dy / 1000.0;
                     setState(() {});
                   }
                 },
                 child: Stack(
                   children: [
                     Map(
-                      controller: controller,
+                      controller: widget.controller,
                       builder: (context, x, y, z) {
                         //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
                         //Google Maps
