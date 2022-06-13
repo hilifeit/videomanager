@@ -7,6 +7,9 @@ final fileDetailMiniServiceProvider =
 });
 
 class FileService extends ChangeNotifier {
+  FileService() {
+    fetch();
+  }
   List<FileDetailMini> files = [];
   fetch() async {
     try {
