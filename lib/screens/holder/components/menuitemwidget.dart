@@ -42,12 +42,14 @@ class MenuItemWidget extends ConsumerWidget {
               SizedBox(
                 height: 5.82.h,
               ),
-              Text(
-                item.title,
-                style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 17.sp.sm,
-                  color:
-                      index == item.id ? Colors.white : const Color(0xffd1d1d1),
+              Center(
+                child: Text(
+                  item.title,
+                  style: kTextStyleIbmSemiBold.copyWith(
+                    fontSize: 17.sp.sm,
+                    color:
+                        index == item.id ? Colors.white : const Color(0xffd1d1d1),
+                  ),
                 ),
               )
             ],

@@ -55,16 +55,9 @@ class VideoDetails extends StatelessWidget {
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onDoubleTap: () {
-                      AlertDialog(
-                        content: MapScreen(),
-                      );
-                    },
-                    child: const VideoDetailText(
-                      title: 'Date',
-                      details: '2072-12-13',
-                    ),
+                  const VideoDetailText(
+                    title: 'Date',
+                    details: '2072-12-13',
                   ),
                 ],
               ),

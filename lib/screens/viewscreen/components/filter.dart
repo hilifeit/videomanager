@@ -143,7 +143,7 @@ class Filter extends StatelessWidget {
                     );
                   },
                   itemCount: 3,
-                ))
+                ),),
               ],
             ),
           ),

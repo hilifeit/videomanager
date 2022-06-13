@@ -6,6 +6,7 @@ import 'package:videomanager/screens/others/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // window.document.onContextMenu.listen((evt) => evt.preventDefault());
   runApp(const MyApp());
 }
 
