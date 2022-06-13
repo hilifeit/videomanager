@@ -1,9 +1,6 @@
 import 'dart:math';
+import 'package:videomanager/screens/others/exporter.dart';
 
-import 'package:flutter/material.dart';
-
-import 'package:latlng/latlng.dart';
-import 'package:map/map.dart';
 
 class Painter extends CustomPainter {
   Painter({

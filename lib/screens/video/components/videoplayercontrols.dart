@@ -1,9 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:video_player/video_player.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
-import 'package:videomanager/screens/others/constant.dart';
+
 
 class VideoPlayerControls extends ConsumerStatefulWidget {
   VideoPlayerControls({required this.left, required this.right});

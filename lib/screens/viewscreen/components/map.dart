@@ -1,15 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:latlng/latlng.dart';
-import 'package:map/map.dart';
-
+import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/components/contextmenu/contextmenu.dart';
-
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
-
-import 'package:videomanager/videomanager_icons.dart';
 
 class MapScreen extends StatefulWidget {
   final bool? isvisible;

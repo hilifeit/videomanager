@@ -1,10 +1,7 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
-import 'package:flutter/material.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
-
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
-import 'package:videomanager/videomanager_icons.dart';
+
 
 class Video extends StatefulWidget {
   @override

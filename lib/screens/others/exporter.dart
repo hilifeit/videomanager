@@ -8,12 +8,17 @@ export 'package:flutter_hooks/flutter_hooks.dart';
 export 'package:hooks_riverpod/hooks_riverpod.dart';
 export 'package:map/map.dart';
 export 'package:searchfield/searchfield.dart';
+export 'package:file_picker/file_picker.dart';
+
+
+
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/videomanager_icons.dart';
 export 'package:videomanager/screens/others/theme.dart';
 export 'package:videomanager/screens/others/validator.dart';
 export 'package:videomanager/screens/others/widgets.dart';
+export 'package:videomanager/screens/components/animatedindexedstack.dart';
 //
 
 const baseURL = "http://localhost:5000/api/";
