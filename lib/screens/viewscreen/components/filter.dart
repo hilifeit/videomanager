@@ -1,10 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:videomanager/screens/others/constant.dart';
-import 'package:videomanager/screens/others/theme.dart';
-import 'package:videomanager/videomanager_icons.dart';
+import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
+import 'package:videomanager/screens/viewscreen/models/services/searchService.dart';
 
 final checkBoxCountryStateProvider = StateProvider<bool>((ref) {
   return false;
@@ -14,14 +11,17 @@ final checkBoxStateStateProvider = StateProvider<bool>((ref) {
 });
 
 class Filter extends StatelessWidget {
-  Filter({Key? key}) : super(key: key);
-
-  FocusScopeNode focus = FocusScopeNode();
+  Filter({Key? key, required this.mapController}) : super(key: key);
+  final searchChangeNotifierProvider =
+      ChangeNotifierProvider<SearchService>((ref) {
+    return SearchService();
+  });
+  final MapController mapController;
+  FocusNode focus = FocusNode();
   @override
   Widget build(BuildContext context) {
     return fluent.FluentApp(
         debugShowCheckedModeBanner: false,
-        theme: fluentTheme,
         home: fluent.ScaffoldPage(
           padding: EdgeInsets.zero,
           content: Container(
@@ -41,28 +41,63 @@ class Filter extends StatelessWidget {
                       SizedBox(
                         height: 26.h,
                       ),
-                      fluent.SizedBox(
-                        child: fluent.AutoSuggestBox(
-                          foregroundDecoration: fluent.BoxDecoration(
-                              border: Border.all(color: Colors.transparent),
-                              borderRadius: fluent.BorderRadius.circular(4.r)),
-                          placeholder: "Search",
-                          // decoration: fluent.BoxDecoration(
-                          //   borderRadius: BorderRadius.circular(4),
-                          // ),
+                      Consumer(builder: (context, ref, c) {
+                        final searchService =
+                            ref.watch(searchChangeNotifierProvider);
 
-                          leadingIcon: fluent.Padding(
-                            padding: EdgeInsets.all(15.r),
-                            child: Icon(
-                              Videomanager.search,
-                              size: 18.r,
-                            ),
-                          ),
-                          placeholderStyle: kTextStyleInterMedium,
-                          style: kTextStyleInterMedium,
-                          items: [ 'Test', 'test2 ok', ' test3', 'sanim', 'rajiv'],
-                        ),
-                      ),
+                        return SearchField<Result>(
+                            focusNode: focus,
+                            // hasOverlay: false,
+                            onSubmit: (result) async {
+                              await searchService.search(result);
+                              FocusScope.of(context).unfocus();
+                              FocusScope.of(context).requestFocus(focus);
+                            },
+                            onSuggestionTap: (item) {
+                              mapController.center = LatLng(
+                                  item.item!.startCoordinate.lat,
+                                  item.item!.startCoordinate.lng);
+                            },
+                            suggestions: searchService.results
+                                .map((e) => SearchFieldListItem<Result>(
+                                    e.filename,
+                                    item: e,
+                                    child: Text(e.filename)))
+                                .toList());
+
+                        // fluent.SizedBox(
+                        //   child: fluent.AutoSuggestBox(
+                        //     showCursor: true,
+                        //     onChanged: (value, reason) async {
+                        //       await searchService.search(value);
+                        //     },
+                        //     onSelected: (value) {
+                        //       print(value);
+                        //     },
+                        //     foregroundDecoration: fluent.BoxDecoration(
+                        //         border: Border.all(color: Colors.transparent),
+                        //         borderRadius:
+                        //             fluent.BorderRadius.circular(4.r)),
+                        //     placeholder: "Search",
+                        //     // decoration: fluent.BoxDecoration(
+                        //     //   borderRadius: BorderRadius.circular(4),
+                        //     // ),
+
+                        //     leadingIcon: fluent.Padding(
+                        //       padding: EdgeInsets.all(15.r),
+                        //       child: Icon(
+                        //         Videomanager.search,
+                        //         size: 18.r,
+                        //       ),
+                        //     ),
+                        //     placeholderStyle: kTextStyleInterMedium,
+                        //     style: kTextStyleInterMedium,
+                        //     items: searchService.results
+                        //         .map((e) => e.filename)
+                        //         .toList(),
+                        //   ),
+                        // );
+                      }),
                       SizedBox(
                         height: 29.h,
                       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent;
 
 var lightTheme = ThemeData(
     brightness: Brightness.light,
@@ -15,5 +14,3 @@ var lightTheme = ThemeData(
         borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
       ),
     ));
-
-var fluentTheme = fluent.ThemeData();
