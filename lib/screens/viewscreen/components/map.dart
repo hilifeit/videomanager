@@ -6,9 +6,10 @@ import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class MapScreen extends StatefulWidget {
-  final bool? isvisible;
+  final bool isvisible, draw;
   final MapController controller;
-  MapScreen({this.isvisible = true, required this.controller});
+  MapScreen(
+      {this.isvisible = true, required this.controller, this.draw = false});
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -72,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
                     CustomPaint(
                       size: Size(constraint.maxWidth, constraint.maxHeight),
                       painter: Painter(
-                        files: fileService.files,
+                        files: widget.draw ? fileService.files : [],
                         // currentIndex: 0,
                         // data: geoFiles,
                         // sample: 100,
@@ -177,7 +178,7 @@ class _MapScreenState extends State<MapScreen> {
       // TODO: accrding to design
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Visibility(
-        visible: widget.isvisible!,
+        visible: widget.isvisible,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
