@@ -11,15 +11,42 @@ class SearchBox extends ConsumerWidget {
     final searchService = ref.watch(searchChangeNotifierProvider);
 
     return SearchField<Result>(
-        suggestionState: Suggestion.expand,
+        emptyWidget: Padding(
+          padding: EdgeInsets.all(15.r),
+          child: Column(
+            children: const [
+              Icon(
+                Icons.error,
+                color: primaryColor,
+              ),
+              Text('Your search did not match any documents.', maxLines: 2),
+            ],
+          ),
+        ),
+        searchStyle: kTextStyleInterMedium,
+        searchInputDecoration: InputDecoration(
+          prefixIcon:
+              Icon(Videomanager.search, color: Colors.black, size: 15.sp),
+          fillColor: secondaryColor,
+          filled: true,
+          contentPadding: EdgeInsets.only(left: 10.5.w, top: 9.h, bottom: 11.h),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.r),
+            borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.r),
+            borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
+          ),
+          hintText: 'Search',
+          hintStyle: kTextStyleInterMedium,
+        ),
         focusNode: focus,
         itemHeight: 80.h,
         // hasOverlay: false,
         onSubmit: (result) async {
           await searchService.search(result);
-          // ignore: use_build_context_synchronously
           FocusScope.of(context).unfocus();
-          // ignore: use_build_context_synchronously
           FocusScope.of(context).requestFocus(focus);
         },
         onSuggestionTap: (item) {

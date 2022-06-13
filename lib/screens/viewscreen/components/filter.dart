@@ -15,6 +15,7 @@ class Filter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -42,6 +43,7 @@ class Filter extends StatelessWidget {
             itemBuilder: (_, index) {
               return ExpansionTile(
 
+
                   // tilePadding: EdgeInsets.only(left: 0,right: 10),
                   childrenPadding: EdgeInsets.only(left: 57.w),
                   leading: Consumer(builder: (context, ref, c) {
@@ -65,6 +67,7 @@ class Filter extends StatelessWidget {
                     'State',
                     style: kTextStyleInterMedium.copyWith(fontSize: 16.sp),
                   ),
+
                   children: [
                     ListTile(
                       horizontalTitleGap: 0.r,
@@ -105,6 +108,7 @@ class Filter extends StatelessWidget {
               );
             },
             itemCount: 3,
+
           ),
         ),
       ],
