@@ -12,7 +12,10 @@ final checkBoxStateStateProvider = StateProvider<bool>((ref) {
 
 class Filter extends StatelessWidget {
   Filter({Key? key, required this.mapController}) : super(key: key);
-
+  final searchChangeNotifierProvider =
+      ChangeNotifierProvider<SearchService>((ref) {
+    return SearchService();
+  });
   final MapController mapController;
   FocusNode focus = FocusNode();
   @override
@@ -21,85 +24,101 @@ class Filter extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: fluent.ScaffoldPage(
           padding: EdgeInsets.zero,
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 29.w, top: 15.h, right: 21.33.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Filter',
-                        style: kTextStyleIbmSemiBold.copyWith(
-                            color: primaryColor)),
-                    SizedBox(
-                      height: 26.h,
-                    ),
-                    Consumer(builder: (context, ref, c) {
-                      final searchService =
-                          ref.watch(searchChangeNotifierProvider);
+          content: Container(
+            // color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 29.w, top: 15.h, right: 21.33.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Filter',
+                          style: kTextStyleIbmSemiBold.copyWith(
+                              color: primaryColor)),
+                      SizedBox(
+                        height: 26.h,
+                      ),
+                      Consumer(builder: (context, ref, c) {
+                        final searchService =
+                            ref.watch(searchChangeNotifierProvider);
 
-                      return SearchField<Result>(
-                          focusNode: focus,
-                          // hasOverlay: false,
-                          onSubmit: (result) async {
-                            await searchService.search(result);
-                            FocusScope.of(context).unfocus();
-                            FocusScope.of(context).requestFocus(focus);
-                          },
-                          onSuggestionTap: (item) {
-                            mapController.center = LatLng(
-                                item.item!.startCoordinate.lat,
-                                item.item!.startCoordinate.lng);
-                          },
-                          suggestions: searchService.results
-                              .map((e) => SearchFieldListItem<Result>(
-                                  e.filename,
-                                  item: e,
-                                  child: Text(e.filename)))
-                              .toList());
+                        return SearchField<Result>(
+                            focusNode: focus,
+                            itemHeight: 80.h,
+                            // hasOverlay: false,
+                            onSubmit: (result) async {
+                              await searchService.search(result);
+                              FocusScope.of(context).unfocus();
+                              FocusScope.of(context).requestFocus(focus);
+                            },
+                            onSuggestionTap: (item) {
+                              mapController.center = LatLng(
+                                  item.item!.startCoordinate.lat,
+                                  item.item!.startCoordinate.lng);
+                            },
+                            
+                            suggestions: searchService.results
+                                .map((e) => SearchFieldListItem<Result>(
+                                    e.filename,
+                                    item: e,
+                  
+                                    child:ListTile(
+                                        dense: true,
+                                        horizontalTitleGap: 0,
+                                        subtitle: Text('${e.area.area}, ${e.area.city}',style: kTextStyleIbmRegularBlack,),
 
-                      // fluent.SizedBox(
-                      //   child: fluent.AutoSuggestBox(
-                      //     showCursor: true,
-                      //     onChanged: (value, reason) async {
-                      //       await searchService.search(value);
-                      //     },
-                      //     onSelected: (value) {
-                      //       print(value);
-                      //     },
-                      //     foregroundDecoration: fluent.BoxDecoration(
-                      //         border: Border.all(color: Colors.transparent),
-                      //         borderRadius:
-                      //             fluent.BorderRadius.circular(4.r)),
-                      //     placeholder: "Search",
-                      //     // decoration: fluent.BoxDecoration(
-                      //     //   borderRadius: BorderRadius.circular(4),
-                      //     // ),
+                                        contentPadding: fluent.EdgeInsets.only(right: 10.w,bottom: 0,left: 0,top: 0),
+                                        leading:  Icon(Videomanager.video_file,color: primaryColor,size: 22.r,),
+                                        title:Text(e.filename,style: kTextStyleIbmRegularBlack.copyWith(fontSize: 16.sp),),
+                                        trailing: Text( 'State ${e.area.state}',style: kTextStyleIbmRegularBlack,),
+                                        ),
+                                    ))
+                                .toList());
 
-                      //     leadingIcon: fluent.Padding(
-                      //       padding: EdgeInsets.all(15.r),
-                      //       child: Icon(
-                      //         Videomanager.search,
-                      //         size: 18.r,
-                      //       ),
-                      //     ),
-                      //     placeholderStyle: kTextStyleInterMedium,
-                      //     style: kTextStyleInterMedium,
-                      //     items: searchService.results
-                      //         .map((e) => e.filename)
-                      //         .toList(),
-                      //   ),
-                      // );
-                    }),
-                    SizedBox(
-                      height: 29.h,
-                    ),
-                  ],
+                        // fluent.SizedBox(
+                        //   child: fluent.AutoSuggestBox(
+                        //     showCursor: true,
+                        //     onChanged: (value, reason) async {
+                        //       await searchService.search(value);
+                        //     },
+                        //     onSelected: (value) {
+                        //       print(value);
+                        //     },
+                        //     foregroundDecoration: fluent.BoxDecoration(
+                        //         border: Border.all(color: Colors.transparent),
+                        //         borderRadius:
+                        //             fluent.BorderRadius.circular(4.r)),
+                        //     placeholder: "Search",
+                        //     // decoration: fluent.BoxDecoration(
+                        //     //   borderRadius: BorderRadius.circular(4),
+                        //     // ),
+
+                        //     leadingIcon: fluent.Padding(
+                        //       padding: EdgeInsets.all(15.r),
+                        //       child: Icon(
+                        //         Videomanager.search,
+                        //         size: 18.r,
+                        //       ),
+                        //     ),
+                        //     placeholderStyle: kTextStyleInterMedium,
+                        //     style: kTextStyleInterMedium,
+                        //     items: searchService.results
+                        //         .map((e) => e.filename)
+                        //         .toList(),
+                        //   ),
+                        // );
+                      }),
+                      SizedBox(
+                        height: 29.h,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: ListView.separated(
+                Expanded(
+                    child: ListView.separated(
                   itemBuilder: (_, index) {
                     return ExpansionTile(
 
@@ -112,7 +131,7 @@ class Filter extends StatelessWidget {
                               // visualDensity: VisualDensity.adaptivePlatformDensity,
                               materialTapTargetSize:
                                   MaterialTapTargetSize.padded,
-                              side: BorderSide(
+                              side: const BorderSide(
                                 width: 1,
                                 color: secondaryColorText,
                               ),
@@ -143,7 +162,7 @@ class Filter extends StatelessWidget {
                                 child: Checkbox(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.padded,
-                                    side: BorderSide(
+                                    side: const BorderSide(
                                       width: 1,
                                       color: secondaryColorText,
                                     ),
@@ -172,9 +191,9 @@ class Filter extends StatelessWidget {
                     );
                   },
                   itemCount: 3,
-                ),
-              ),
-            ],
+                ),),
+              ],
+            ),
           ),
         ));
   }

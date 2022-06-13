@@ -32,3 +32,10 @@ final kTextStyleInterMedium = TextStyle(
   fontWeight: FontWeight.w500,
   color: Colors.black,
 );
+
+final kTextStyleIbmRegularBlack = TextStyle(
+  fontFamily: 'Ibm',
+  fontSize: 13.sp,
+  fontWeight: FontWeight.w400,
+  color:  Colors.black,
+);
