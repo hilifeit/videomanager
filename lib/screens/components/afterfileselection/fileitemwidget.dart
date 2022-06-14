@@ -13,27 +13,26 @@ class FileItemWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SizedBox(
-      height: 85.h,
-      child: GestureDetector(
-        onTap: () {},
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              item.icon,
-              size: 50.r,
-              color: const Color(0xffFFD782),
-            ),
-            SizedBox(
-              height: 7.h,
-            ),
-            Text(
-              item.title,
-              style: kTextStyleIbmRegularBlack.copyWith(fontSize: 16.sp),
-            ),
-          ],
-        ),
+    return InkWell(
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: () {},
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            item.icon,
+            size: 50.r,
+            color: const Color(0xffFFD782),
+          ),
+          SizedBox(
+            height: 7.h,
+          ),
+          Text(
+            item.title,
+            style: kTextStyleIbmRegularBlack.copyWith(fontSize: 16.sp),
+          ),
+        ],
       ),
     );
   }
