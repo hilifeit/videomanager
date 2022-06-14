@@ -2,9 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/components/contextmenu/contextmenu.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
+
+final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
+  return;
+});
 
 class MapScreen extends StatefulWidget {
   final bool isvisible, draw;
@@ -60,6 +64,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       body: Consumer(builder: (context, ref, c) {
         final fileService = ref.watch(fileDetailMiniServiceProvider);
+        final selectedFile = ref.watch(selectedFileProvider.state).state;
 
         return LayoutBuilder(builder: (context, constraint) {
           return MapLayoutBuilder(
@@ -69,11 +74,11 @@ class _MapScreenState extends State<MapScreen> {
               //   setState(() {});
               // });
 
-              transformer.controller.center = LatLng(
-                  fileService.files[10].location.coordinates[0][1],
-                  fileService.files[10].location.coordinates[0][0]);
+              // transformer.controller.center = LatLng(
+              //     fileService.files[10].location.coordinates[0][1],
+              //     fileService.files[10].location.coordinates[0][0]);
 
-              transformer.controller.zoom = 20;
+              // transformer.controller.zoom = 20;
               final markerWidgets = [
                 ClipRRect(
                   child: Stack(children: [
@@ -90,7 +95,9 @@ class _MapScreenState extends State<MapScreen> {
                                 Size(constraint.maxWidth, constraint.maxHeight),
                             painter: Painter(
                               context,
+                              ref,
                               files: widget.draw ? fileService.files : [],
+                              selectedFileProvider: selectedFileProvider,
                               // currentIndex: 0,
                               // data: geoFiles,
                               // sample: 100,
