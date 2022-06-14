@@ -1,6 +1,5 @@
-import 'package:videomanager/screens/components/componentmaker.dart';
-import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/holder/holder.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

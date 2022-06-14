@@ -87,7 +87,7 @@ class Painter extends CustomPainter {
               element.location.coordinates.first[0]));
 
           path.moveTo(start.dx, start.dy);
-          print(sampler);
+          // print(sampler);
           for (int i = 0; i < element.location.coordinates.length; i++) {
             Offset current = transformer.fromLatLngToXYCoords(LatLng(
                 element.location.coordinates[i].last,
