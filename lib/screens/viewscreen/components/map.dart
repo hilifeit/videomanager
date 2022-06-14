@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
+import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/components/contextmenu/contextmenu.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
@@ -64,23 +65,40 @@ class _MapScreenState extends State<MapScreen> {
           return MapLayoutBuilder(
             controller: widget.controller,
             builder: (context, transformer) {
-              transformer.controller.addListener(() {
-                setState(() {});
-              });
+              // transformer.controller.addListener(() {
+              //   setState(() {});
+              // });
+
+              transformer.controller.center = LatLng(
+                  fileService.files[10].location.coordinates[0][1],
+                  fileService.files[10].location.coordinates[0][0]);
+
+              transformer.controller.zoom = 20;
               final markerWidgets = [
                 ClipRRect(
                   child: Stack(children: [
-                    CustomPaint(
-                      size: Size(constraint.maxWidth, constraint.maxHeight),
-                      painter: Painter(
-                        files: widget.draw ? fileService.files : [],
-                        // currentIndex: 0,
-                        // data: geoFiles,
-                        // sample: 100,
-                        transformer: transformer,
-                        // selectedIndex: 0
-                      ),
-                    )
+                    CanvasTouchDetector(
+                        gesturesToOverride: const [
+                          GestureType.onTapUp,
+                          GestureType.onTapDown,
+                          GestureType.onSecondaryTapDown,
+                          GestureType.onSecondaryTapUp,
+                        ],
+                        builder: (context) {
+                          return CustomPaint(
+                            size:
+                                Size(constraint.maxWidth, constraint.maxHeight),
+                            painter: Painter(
+                              context,
+                              files: widget.draw ? fileService.files : [],
+                              // currentIndex: 0,
+                              // data: geoFiles,
+                              // sample: 100,
+                              transformer: transformer,
+                              // selectedIndex: 0
+                            ),
+                          );
+                        })
                   ]
 
                       // Transform.rotate(
@@ -96,32 +114,36 @@ class _MapScreenState extends State<MapScreen> {
                 )
               ];
               return GestureDetector(
-                onSecondaryTapUp: (details) {
-                  print('local :${details.localPosition}');
-                  print('global: ${details.globalPosition}');
-                  print(transformer.constraints);
-                  showMenu(
-                      context: context,
-                      position: RelativeRect.fromLTRB(
-                          details.localPosition.dx,
-                          details.localPosition.dy,
-                          transformer.constraints.maxWidth -
-                              details.localPosition.dx,
-                          0),
-                      items: [PopupMenuItem(child: Text('data'))]);
-                },
+                // onSecondaryTapUp: (details) {
+                //   print('local :${details.localPosition}');
+                //   print('global: ${details.globalPosition}');
+                //   print(transformer.constraints);
+                //   showMenu(
+                //       context: context,
+                //       position: RelativeRect.fromLTRB(
+                //           details.localPosition.dx,
+                //           details.localPosition.dy,
+                //           transformer.constraints.maxWidth -
+                //               details.localPosition.dx,
+                //           0),
+                //       items: [PopupMenuItem(child: Text('data'))]);
+                // },
                 behavior: HitTestBehavior.opaque,
                 onDoubleTap: _onDoubleTap,
                 onScaleStart: _onScaleStart,
                 onScaleUpdate: _onScaleUpdate,
+                // onTap: () {
+                //   showDialog(
+                //     context: context,
+                //     builder: (context) => Center(
+                //         child: Container(
+                //             color: Colors.white, child: ContextMenu())),
+                //   );
+                // },
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => Center(
-                        child: Container(
-                            color: Colors.white, child: ContextMenu())),
-                  );
+                  print("here");
                 },
+                onSecondaryTap: () {},
                 onTapUp: (details) {
                   final location =
                       transformer.fromXYCoordsToLatLng(details.localPosition);

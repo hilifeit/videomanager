@@ -1,203 +1,96 @@
 import 'dart:math';
+import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class Painter extends CustomPainter {
-  Painter({
+  Painter(
+    this.context, {
     required this.files,
     required this.transformer,
   });
   // List<GeoFile> data;
   // int currentIndex, selectedIndex;
   // int sample;
+  final BuildContext context;
   List<FileDetailMini> files;
   MapTransformer transformer;
   //final _random = Random();
   @override
   void paint(Canvas canvas, size) {
     var paint = Paint()..style = PaintingStyle.stroke;
-
-    // var lPaint = Paint();
-
+    var rpaint = Paint()..style = PaintingStyle.fill;
+    rpaint.style = PaintingStyle.fill;
+    rpaint.color = Colors.transparent;
     // lPaint.strokeWidth = 1;
 
     paint.style = PaintingStyle.stroke;
     paint.color = Colors.red;
     paint.strokeWidth = 3;
 
-    // for (int i = 0; i < 2; i++) {
+    var customCanvas = TouchyCanvas(context, canvas);
+    Rect visibleScreen = Rect.fromLTWH(
+        50,
+        50,
+        transformer.constraints.maxWidth - 50,
+        transformer.constraints.maxHeight - 50);
+
     for (var element in files) {
-      // print(files[0].boundingBox!.left.toString() +
-      //     " " +
-      //     files[0].boundingBox!.top.toString());
-      // var rect = Rect.fromLTRB(
-      //   transformer
-      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.left, files[0].boundingBox!.))
-      //       .dx,
-      //   transformer
-      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.top, 0))
-      //       .dx,
-      //   transformer
-      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.right, 0))
-      //       .dx,
-      //   transformer
-      //       .fromLatLngToXYCoords(LatLng(files[0].boundingBox!.bottom, 0))
-      //       .dx,
-      // );
+      // if (files.indexOf(element) == 10)
+      {
+        Offset topLeft = transformer.fromLatLngToXYCoords(LatLng(
+            element.boundingBox!.topLeft.dx, element.boundingBox!.topLeft.dy));
+        Offset topRight = transformer.fromLatLngToXYCoords(LatLng(
+            element.boundingBox!.topRight.dx,
+            element.boundingBox!.topRight.dy));
+        Offset bottomLeft = transformer.fromLatLngToXYCoords(LatLng(
+            element.boundingBox!.bottomLeft.dx,
+            element.boundingBox!.bottomLeft.dy));
 
-      // print(rect.left.toString() + rect.top.toString());
-      // canvas.drawRect(rect, paint);
-      Path path = Path();
-      Offset start = transformer.fromLatLngToXYCoords(LatLng(
-          element.location.coordinates.first[1],
-          element.location.coordinates.first[0]));
-      path.moveTo(start.dx, start.dy);
-      for (var elementLocation in element.location.coordinates) {
-        Offset current = transformer.fromLatLngToXYCoords(
-            LatLng(elementLocation.last, elementLocation.first));
-        path.lineTo(current.dx, current.dy);
+        var height = (topLeft - topRight).distance;
+        var width = (topLeft - bottomLeft).distance;
+
+        Rect item = Rect.fromCenter(
+            center: transformer.fromLatLngToXYCoords(LatLng(
+                element.boundingBox!.center.dx,
+                element.boundingBox!.center.dy)),
+            width: width,
+            height: height);
+
+        if (item.overlaps(visibleScreen)) {
+          customCanvas.drawRect(item, rpaint, onTapUp: (details) {
+            print(element.id);
+          });
+
+          Path path = Path();
+
+          Offset start = transformer.fromLatLngToXYCoords(LatLng(
+              element.location.coordinates.first[1],
+              element.location.coordinates.first[0]));
+
+          path.moveTo(start.dx, start.dy);
+          for (var elementLocation in element.location.coordinates) {
+            Offset current = transformer.fromLatLngToXYCoords(
+                LatLng(elementLocation.last, elementLocation.first));
+            path.lineTo(current.dx, current.dy);
+          }
+          // path.close();
+          customCanvas.drawPath(path, paint, onTapUp: (details) {
+            print(element.id);
+          }, onSecondaryTapUp: (detail) {
+            showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(25, 25, 0, 0),
+                items: [PopupMenuItem(child: Text("tets"))]);
+          });
+        }
       }
-      path.close();
-      canvas.drawPath(path, paint);
     }
-    // canvas.drawRect(
-    //     Rect.fromLTWH(5, 5, transformer.constraints.maxWidth - 10,
-    //         transformer.constraints.maxHeight - 10),
-    //     paint);
-    // for (int j = 0; j < data.length; j++) {
-    //   paint.color = data[j].color;
-    //   paint.strokeWidth = 3; //
-
-    //   lPaint.color = data[j].color;
-    //   // if (j == selectedIndex)
-    //   {
-    //     final offset = data[j]
-    //         .geoData
-    //         .map((e) => transformer.fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
-    //         .toList();
-    //     // print(offset);
-    //     // if (selectedIndex != j) {
-    //     //   paint.color = data[j].color.withOpacity(0.3);
-    //     //   paint.strokeWidth = 2.5;
-    //     // } else {
-
-    //     // }
-    //     Path path = Path();
-    //     path.moveTo(offset[0].dx, offset[0].dy);
-    //     for (int i = 0; i < data[j].geoData.length; i += sample) {
-    //       if (i < offset.length - sample) {
-    //         if (i < currentIndex) {
-    //           if (!data[j].geoData[i].duplicate) {
-    //             paint.color = paint.color = Colors.blue;
-    //             path.lineTo(offset[i].dx, offset[i].dy);
-    //             canvas.drawLine(
-    //               offset[i],
-    //               offset[i + sample],
-    //               paint,
-    //             );
-    //           } else {
-    //             paint.color = paint.color = Colors.red;
-    //             path.lineTo(offset[i].dx, offset[i].dy);
-    //             canvas.drawLine(
-    //               offset[i],
-    //               offset[i + sample],
-    //               paint,
-    //             );
-    //           }
-    //         } else {
-    //           if (data[j].isLine) {
-    //             if (data[j].geoData[i].duplicate) {
-    //               paint.color = Colors.red;
-    //             } else {
-    //               // paint.color = data[j].color;
-    //               paint.color = Colors.grey;
-    //             }
-    //             path.lineTo(offset[i].dx, offset[i].dy);
-
-    //             //  path.relativeLineTo(offset[i].dx, offset[i].dy);
-    //             canvas.drawLine(
-    //               offset[i],
-    //               offset[i + sample],
-    //               paint,
-    //             );
-    //           } else {
-    //             paint.strokeWidth = 2;
-    //             // path.lineTo(offset[i].dx, offset[i].dy);
-
-    //             // canvas.drawPath(path, paint);
-
-    //             canvas.drawCircle(offset[i], 1.5, paint);
-    //           }
-    //         }
-    //       }
-    //     }
-    // print(path.);
-    //canvas.drawPath(path, paint);
-    //  canvas.drawPath(path, paint);
-    // var rect = Rect.fromLTRB(
-    //   transformer
-    //       .fromLatLngToXYCoords(LatLng(data[j].boundingBox!.left, 0))
-    //       .dx,
-    //   transformer
-    //       .fromLatLngToXYCoords(LatLng(data[j].boundingBox!.top, 0))
-    //       .dx,
-    //   transformer
-    //       .fromLatLngToXYCoords(LatLng(data[j].boundingBox!.right, 0))
-    //       .dx,
-    //   transformer
-    //       .fromLatLngToXYCoords(LatLng(data[j].boundingBox!.bottom, 0))
-    //       .dx,
-    // );
-    // canvas.drawRect(rect, paint);
   }
-
-  // Offset left = Offset(
-  //     data[j].boundingBox!.topLeft.dx, data[j].boundingBox!.topLeft.dy);
-  // canvas.drawCircle(, 2, paint);
-  // canvas.drawLine(
-  //     transformer.fromLatLngToXYCoords(LatLng(left.dx, left.dy)),
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.topRight.dx,
-  //         data[j].boundingBox!.topRight.dy)),
-  //     lPaint);
-  // canvas.drawLine(
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.topRight.dx,
-  //         data[j].boundingBox!.topRight.dy)),
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.bottomRight.dx,
-  //         data[j].boundingBox!.bottomRight.dy)),
-  //     lPaint);
-  // canvas.drawLine(
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.topLeft.dx,
-  //         data[j].boundingBox!.topLeft.dy)),
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.bottomLeft.dx,
-  //         data[j].boundingBox!.bottomLeft.dy)),
-  //     lPaint);
-  // canvas.drawLine(
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.bottomLeft.dx,
-  //         data[j].boundingBox!.bottomLeft.dy)),
-  //     transformer.fromLatLngToXYCoords(LatLng(
-  //         data[j].boundingBox!.bottomRight.dx,
-  //         data[j].boundingBox!.bottomRight.dy)),
-  //     lPaint);
-
-  //canvas.drawRect(boundingBox(data), lPaint);
-
-  //canvas..drawRect(a, lPaint);
-
-  // canvas.drawCircle(centroid(data), 5, lPaint);
-
-  // paint.color = Colors.blue;
-  // paint.strokeWidth = 6;
-  // canvas.drawCircle(data[currentIndex], 10, paint);
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 
   Rect boundingBoxOffset(List<Offset> list) {
