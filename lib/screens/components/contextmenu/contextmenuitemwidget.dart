@@ -10,7 +10,7 @@ CustomContextMenuItems({required this.title, required this.icon, required this.i
 }
 
 class ContextMenuItem extends ConsumerWidget {
-   ContextMenuItem({required this.item, Key? key}) : super(key: key);
+   const ContextMenuItem({required this.item, Key? key}) : super(key: key);
   final CustomContextMenuItems item;
 
   @override

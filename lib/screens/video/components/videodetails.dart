@@ -2,8 +2,9 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 
 class VideoDetails extends StatelessWidget {
-  final bool? pathvis;
-  const VideoDetails({Key? key, this.pathvis = false}) : super(key: key);
+  const VideoDetails({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +32,10 @@ class VideoDetails extends StatelessWidget {
                           title: 'Duration', details: '00:05:00'),
                     ],
                   ),
-                  if (pathvis!)
-                    const VideoDetailText(
-                      title: 'Path',
-                      details: 'adjadnad',
-                    ),
+                  const VideoDetailText(
+                    title: 'Path',
+                    details: 'adjadnad',
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
@@ -49,10 +49,9 @@ class VideoDetails extends StatelessWidget {
                       ),
                     ],
                   ),
-VideoDetailText(
+                  const VideoDetailText(
                     title: 'Date',
                     details: '2072-12-13',
-
                   ),
                 ],
               ),
@@ -71,7 +70,6 @@ VideoDetailText(
                     right: 5.w,
                     child: IconButton(
                         onPressed: () async {
-                          print('ok');
                           await showDialog(
                               context: context,
                               builder: (_) {

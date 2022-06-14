@@ -49,10 +49,52 @@ class _VideoState extends State<Video> {
                     children: [
                       Expanded(
                           flex: 4,
-                          child: CustomVideoPlayer(controller: _controller1)),
+                          child: Stack(
+                      children: [
+                        CustomVideoPlayer(controller: _controller1),
+                        Positioned(
+                            top: 20.h,
+                            left: 19.w,
+                            child: SizedBox(
+                              width: 105.77.w,
+                              height: 38.26.h,
+                              child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                child: Center(
+                                    child: Text(
+                                  'Left',
+                                  style: kTextStyleInterMedium.copyWith(
+                                      color: Colors.white),
+                                )),
+                              ),
+                            )),
+                        
+                      ],
+                    ),),
                     ],
                   )),
-                  Expanded(child: CustomVideoPlayer(controller: _controller2)),
+                  Expanded(child: Stack(
+                      children: [
+                        CustomVideoPlayer(controller: _controller2),
+                        Positioned(
+                            top: 20.h,
+                            right: 24.32.w,
+                            child: SizedBox(
+                              width: 105.77.w,
+                              height: 38.26.h,
+                              child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                child: Center(
+                                    child: Text(
+                                  'Right',
+                                  style: kTextStyleInterMedium.copyWith(
+                                      color: Colors.white),
+                                )),
+                              ),
+                            )),
+                        
+                      ],
+                    ),),
                 ],
               ),
             ),
