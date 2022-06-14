@@ -26,31 +26,34 @@ class MenuItemWidget extends ConsumerWidget {
         onTap: (() {
           ref.read(indexState.state).state = item.id;
         }),
-        child: Card(
-          elevation: 0,
-          color: Colors.transparent,
-          child: Column(
-            children: [
-              Icon(
-                item.icon,
-                color:
-                    index == item.id ? Colors.white : const Color(0xffd1d1d1),
-                size: 18.r,
-              ),
-              SizedBox(
-                height: 5.82.h,
-              ),
-              Center(
-                child: Text(
+        child: SizedBox(
+          width: 89.w,
+          height: 53.23.h,
+          child: Card(
+            elevation: 0,
+            color: Colors.transparent,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  item.icon,
+                  color:
+                      index == item.id ? Colors.white : const Color(0xffd1d1d1),
+                  size: 18.r,
+                ),
+                SizedBox(
+                  height: 5.82.h,
+                ),
+                Text(
                   item.title,
                   style: kTextStyleIbmSemiBold.copyWith(
                     fontSize: 17.sp.sm,
                     color:
                         index == item.id ? Colors.white : const Color(0xffd1d1d1),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

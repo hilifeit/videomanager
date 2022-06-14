@@ -8,7 +8,7 @@ List<CustomContextMenuItems> items = [
 ];
 
 class ContextMenu extends StatelessWidget {
-   ContextMenu({Key? key}) : super(key: key);
+   const ContextMenu({Key? key}) : super(key: key);
 
     
 

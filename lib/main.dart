@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/componentmaker.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/holder/holder.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
               themeMode: ThemeMode.light,
               darkTheme: ThemeData(brightness: Brightness.dark),
               theme: lightTheme,
-              home: Holder()),
+              home: ComponentMaker()),
         );
       },
     );
