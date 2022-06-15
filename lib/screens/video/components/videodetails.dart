@@ -2,14 +2,12 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 
 class VideoDetails extends StatelessWidget {
-  const VideoDetails({
-    Key? key,
-  }) : super(key: key);
-
+  const VideoDetails({Key? key, this.showMap = true}) : super(key: key);
+  final bool showMap;
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xffF8F8F8).withOpacity(0.8),
+      color: const Color(0xffF8F8F8).withOpacity(!showMap ? 0.95 : 0.8),
       child: Row(
         children: [
           Expanded(
@@ -57,35 +55,36 @@ class VideoDetails extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Stack(
-              children: [
-                MapScreen(
-                  controller: MapController(location: home),
-                  isvisible: false,
-                ),
-                Positioned(
-                    bottom: 5.h,
-                    right: 5.w,
-                    child: IconButton(
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (_) {
-                                return AlertDialog(
-                                  content: SizedBox(
-                                      // width: 1.sw,
-                                      child: MapScreen(
-                                    controller: MapController(location: home),
-                                  )),
-                                );
-                              });
-                        },
-                        icon: const Icon(Icons.fullscreen)))
-              ],
-            ),
-          )
+          if (showMap)
+            Expanded(
+              flex: 2,
+              child: Stack(
+                children: [
+                  MapScreen(
+                    controller: MapController(location: home),
+                    isvisible: false,
+                  ),
+                  Positioned(
+                      bottom: 5.h,
+                      right: 5.w,
+                      child: IconButton(
+                          onPressed: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    content: SizedBox(
+                                        // width: 1.sw,
+                                        child: MapScreen(
+                                      controller: MapController(location: home),
+                                    )),
+                                  );
+                                });
+                          },
+                          icon: const Icon(Icons.fullscreen)))
+                ],
+              ),
+            )
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -196,7 +197,41 @@ class _MapScreenState extends State<MapScreen> {
                           );
                         },
                       ),
-                      ...markerWidgets
+                      ...markerWidgets,
+                      Positioned(
+                        left: 0,
+                        bottom: 0,
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onDoubleTap: () {},
+                            onTap: () {
+                              transformer.controller.center = LatLng(
+                                  selectedFile!.boundingBox!.center.dx,
+                                  selectedFile.boundingBox!.center.dy);
+                            },
+                            onScaleStart: (detail) {},
+                            onScaleEnd: (detail) {},
+                            child: Stack(
+                              children: [
+                                AnimatedOpacity(
+                                  opacity: selectedFile == null ? 0 : 1,
+                                  duration: Duration(milliseconds: 300),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: SizedBox(
+                                        width: 613.sw(),
+                                        height: 188.sh(),
+                                        child: const VideoDetails(
+                                          showMap: false,
+                                        )),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
