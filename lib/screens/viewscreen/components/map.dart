@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
@@ -12,10 +13,13 @@ final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
 });
 
 class MapScreen extends StatefulWidget {
-  final bool isvisible, draw;
+  final bool isvisible, draw, miniMap;
   final MapController controller;
   MapScreen(
-      {this.isvisible = true, required this.controller, this.draw = false});
+      {this.isvisible = true,
+      required this.controller,
+      this.draw = false,
+      this.miniMap = true});
 
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -183,55 +187,65 @@ class _MapScreenState extends State<MapScreen> {
                   },
                   child: Stack(
                     children: [
-                      Map(
-                        controller: widget.controller,
-                        builder: (context, x, y, z) {
-                          //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
-                          //Google Maps
-                          final url =
-                              'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
+                      Stack(
+                        children: [
+                          Map(
+                            controller: widget.controller,
+                            builder: (context, x, y, z) {
+                              //Legal notice: This url is only used for demo and educational purposes. You need a license key for production use.
+                              //Google Maps
+                              final url =
+                                  'https://www.google.com/maps/vt/pb=!1m4!1m3!1i$z!2i$x!3i$y!2m3!1e0!2sm!3i420120488!3m7!2sen!5e1105!12m4!1e68!2m2!1sset!2sRoadmap!4e0!5m1!1e0!23i4111425';
 
-                          return CachedNetworkImage(
-                            imageUrl: url,
-                            fit: BoxFit.cover,
-                          );
-                        },
+                              return CachedNetworkImage(
+                                imageUrl: url,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                          Container(
+                            color: Colors.black.withOpacity(0.1),
+                          ),
+                        ],
                       ),
                       ...markerWidgets,
-                      Positioned(
-                        left: 0,
-                        bottom: 0,
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onDoubleTap: () {},
-                            onTap: () {
-                              transformer.controller.center = LatLng(
-                                  selectedFile!.boundingBox!.center.dx,
-                                  selectedFile.boundingBox!.center.dy);
-                            },
-                            onScaleStart: (detail) {},
-                            onScaleEnd: (detail) {},
-                            child: Stack(
-                              children: [
-                                AnimatedOpacity(
-                                  opacity: selectedFile == null ? 0 : 1,
-                                  duration: Duration(milliseconds: 300),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: SizedBox(
-                                        width: 613.sw(),
-                                        height: 188.sh(),
-                                        child: const VideoDetails(
-                                          showMap: false,
-                                        )),
+                      if (widget.miniMap)
+                        Positioned(
+                          left: 0,
+                          bottom: 0,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onDoubleTap: () {},
+                              onTap: () async {
+                                transformer.controller.center = LatLng(
+                                    selectedFile!.boundingBox!.center.dx,
+                                    selectedFile.boundingBox!.center.dy);
+                                await Clipboard.setData(
+                                    ClipboardData(text: selectedFile.id));
+                              },
+                              onScaleStart: (detail) {},
+                              onScaleEnd: (detail) {},
+                              child: Stack(
+                                children: [
+                                  AnimatedOpacity(
+                                    opacity: selectedFile == null ? 0 : 1,
+                                    duration: Duration(milliseconds: 300),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: SizedBox(
+                                          width: 613.sw(),
+                                          height: 188.sh(),
+                                          child: const VideoDetails(
+                                            showMap: false,
+                                          )),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
                 ),
