@@ -32,6 +32,12 @@ final kTextStyleInterMedium = TextStyle(
   fontWeight: FontWeight.w500,
   color: Colors.black,
 );
+final kTextStyleInterSemiBold = TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 14.sp,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
 
 final kTextStyleIbmRegularBlack = TextStyle(
   fontFamily: 'Ibm',
