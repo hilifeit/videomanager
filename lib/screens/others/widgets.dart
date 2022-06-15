@@ -12,12 +12,14 @@ class Button extends StatelessWidget {
     this.fontSize = 14.5,
     this.primary = true,
     this.kLabelTextStyle,
+    this.color,
   }) : super(key: key);
   final Function? onPressed;
   final String? label;
   final double? fontSize;
   final bool? primary;
   final TextStyle? kLabelTextStyle;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,7 +46,7 @@ class Button extends StatelessWidget {
                 backgroundColor: MaterialStateColor.resolveWith((states) =>
                     primary!
                         ? const Color(0xff40667D)
-                        : Theme.of(context).scaffoldBackgroundColor)),
+                        : color!)),
             onPressed: onPressed != null
                 ? () {
                     onPressed!();

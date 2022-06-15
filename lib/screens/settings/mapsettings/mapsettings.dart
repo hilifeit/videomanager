@@ -87,27 +87,74 @@ class MapsSettings extends ConsumerWidget {
                         top: 14.sh(),
                         bottom: 14.sh(),
                       ),
-                      child: Row(children: [
-                        const VideoDetailText(title: 'Latitude',details: '75.55',),
-                        SizedBox(width: 11.sw()),
-                        const VideoDetailText(title: 'Longitutde',details: '75.55',),
-                      ],),
+                      child: Row(
+                        children: [
+                          const VideoDetailText(
+                            title: 'Latitude',
+                            details: '75.55',
+                          ),
+                          SizedBox(width: 11.sw()),
+                          const VideoDetailText(
+                            title: 'Longitutde',
+                            details: '75.55',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                SizedBox(
+                  SizedBox(
                     height: 23.sh(),
                   ),
                   const TextWithSlider(
                       text: 'Suggestion / Result Count', max: '0', min: '500'),
-                      SizedBox(
+                  SizedBox(
                     height: 23.sh(),
                   ),
                   const TextWithSlider(
-                      text: 'Original Mini Map Quality', max: '120', min: '720'),
+                      text: 'Original Mini Map Quality',
+                      max: '120',
+                      min: '720'),
+                  SizedBox(
+                    height: 96.sh(),
+                  ),
+                  Row(children: [
+                    Container(
+                      width: 126.sw(),
+                      height: 46.sh(),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.sr()),
+                          border: Border.all(color: Colors.black)),
+                      child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Cancel',
+                            style: kTextStyleIbmMedium.copyWith(
+                                color: Colors.black, fontSize: 17.ssp()),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 60.sw(),
+                    ),
+                    Container(
+                      width: 126.sw(),
+                      height: 46.sh(),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateColor.resolveWith(
+                                (states) => Theme.of(context).primaryColor)),
+                        onPressed: () {},
+                        child: Text(
+                          'Apply',
+                          style: kTextStyleIbmMedium.copyWith(
+                              color: Colors.white, fontSize: 17.ssp()),
+                        ),
+                      ),
+                    ),
+                  ]),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
