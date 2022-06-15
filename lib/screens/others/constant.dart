@@ -38,6 +38,12 @@ var kTextStyleInterSemiBold = TextStyle(
   fontWeight: FontWeight.w600,
   color: Colors.black,
 );
+var kTextStyleInterRegular = TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 14.sp,
+  fontWeight: FontWeight.w400,
+  color: Colors.black,
+);
 
 var kTextStyleIbmRegularBlack = TextStyle(
   fontFamily: 'Ibm',
