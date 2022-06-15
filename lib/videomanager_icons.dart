@@ -44,4 +44,9 @@ class Videomanager {
   static const IconData users = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData video_file = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData volume = IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData location_setting = IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData maps = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData usersettings = IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData video = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData videoedit = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

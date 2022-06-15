@@ -4,38 +4,44 @@ const primaryColor = Color(0xff40667D);
 
 const secondaryColorText = Color(0xffBABABA);
 const secondaryColor = Color(0xffF2F2F2);
-
-final kTextStyleIbmSemiBold = TextStyle(
+const lightWhite = Color(0xffd1d1d1);
+var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 16.sp,
   fontWeight: FontWeight.w600,
   color: const Color(0xffBABABA),
 );
 
-final kTextStyleIbmMedium = TextStyle(
+var kTextStyleIbmMedium = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 16.sp,
   fontWeight: FontWeight.w500,
   color: const Color(0xffBABABA),
 );
 
-final kTextStyleIbmRegular = TextStyle(
+var kTextStyleIbmRegular = TextStyle(
   fontFamily: 'Ibm',
-  fontSize: 16.sp,
+  fontSize: 16.ssp(),
   fontWeight: FontWeight.w400,
   color: const Color(0xffBABABA),
 );
 
-final kTextStyleInterMedium = TextStyle(
+var kTextStyleInterMedium = TextStyle(
   fontFamily: 'Inter',
   fontSize: 14.sp,
   fontWeight: FontWeight.w500,
   color: Colors.black,
 );
+var kTextStyleInterSemiBold = TextStyle(
+  fontFamily: 'Inter',
+  fontSize: 14.sp,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
 
-final kTextStyleIbmRegularBlack = TextStyle(
+var kTextStyleIbmRegularBlack = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 13.sp,
   fontWeight: FontWeight.w400,
-  color:  Colors.black,
+  color: Colors.black,
 );

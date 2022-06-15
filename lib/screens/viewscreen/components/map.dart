@@ -71,9 +71,9 @@ class _MapScreenState extends State<MapScreen> {
           return MapLayoutBuilder(
             controller: widget.controller,
             builder: (context, transformer) {
-              // transformer.controller.addListener(() {
-              //   setState(() {});
-              // });
+              transformer.controller.addListener(() {
+                setState(() {});
+              });
 
               // transformer.controller.center = LatLng(
               //     fileService.files[10].location.coordinates[0][1],
@@ -219,7 +219,9 @@ class _MapScreenState extends State<MapScreen> {
               child: CustomFloatingActionButton(
                   icon: Videomanager.location,
                   onPressed: () {
-                    _gotoDefault();
+                    setState(() {
+                      _gotoDefault();
+                    });
                   },
                   roundShape: true,
                   tooltip: 'My location'),
@@ -233,7 +235,9 @@ class _MapScreenState extends State<MapScreen> {
               child: CustomFloatingActionButton(
                   icon: Icons.add,
                   onPressed: () {
-                    widget.controller.zoom += 1;
+                    setState(() {
+                      widget.controller.zoom += 1;
+                    });
                   },
                   tooltip: 'Zoom in'),
             ),
@@ -243,7 +247,9 @@ class _MapScreenState extends State<MapScreen> {
               child: CustomFloatingActionButton(
                   icon: Icons.remove,
                   onPressed: () {
-                    widget.controller.zoom -= 1;
+                    setState(() {
+                      widget.controller.zoom -= 1;
+                    });
                   },
                   tooltip: "Zoom out"),
             ),
