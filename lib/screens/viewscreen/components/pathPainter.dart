@@ -24,7 +24,7 @@ class Painter extends CustomPainter {
 
     final selectedFile = ref.watch(selectedFileProvider);
 
-    var paint = Paint()..style = PaintingStyle.stroke;
+    var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
     rpaint.color = Colors.red.withOpacity(0.01);
@@ -35,12 +35,9 @@ class Painter extends CustomPainter {
     paint.strokeWidth = 3;
 
     var customCanvas = TouchyCanvas(context, canvas);
-    Rect visibleScreen = Rect.fromLTWH(
-        50,
-        50,
-        transformer.constraints.maxWidth - 50,
-        transformer.constraints.maxHeight - 50);
-
+    Rect visibleScreen = Rect.fromLTWH(0, 0, transformer.constraints.maxWidth,
+        transformer.constraints.maxHeight - 5);
+    // canvas.drawRect(visibleScreen, paint);
     for (var element in files) {
       // if (files.indexOf(element) == 10)
       {
@@ -64,21 +61,21 @@ class Painter extends CustomPainter {
             height: height);
 
         if (item.overlaps(visibleScreen)) {
-          customCanvas.drawRect(
-            item,
-            rpaint,
-            onTapUp: (details) {
-              ref.read(selectedFileProvider.state).state = element;
-            },
-            onSecondaryTapUp: (detail) {
-              print(detail.localPosition);
-              // showMenu(
-              //     context: context,
-              //     position:
-              //         RelativeRect.fromLTRB(detail.localPosition.dx, 0, 0, 0),
-              //     items: [PopupMenuItem(child: Text("tets"))]);
-            },
-          );
+          // customCanvas.drawRect(
+          //   item,
+          //   rpaint,
+          //   onTapUp: (details) {
+          //     // ref.read(selectedFileProvider.state).state = element;
+          //   },
+          //   onSecondaryTapUp: (detail) {
+          //     print(detail.localPosition);
+          //     // showMenu(
+          //     //     context: context,
+          //     //     position:
+          //     //         RelativeRect.fromLTRB(detail.localPosition.dx, 0, 0, 0),
+          //     //     items: [PopupMenuItem(child: Text("tets"))]);
+          //   },
+          // );
           // canvas.drawRect(item, paint);
           Path path = Path();
 
@@ -96,7 +93,7 @@ class Painter extends CustomPainter {
             path.lineTo(current.dx, current.dy);
           }
 
-          paint.strokeWidth = 3;
+          paint.strokeWidth = 5;
           paint.color = Colors.red;
           customCanvas.drawPath(path, paint, onTapUp: (details) {
             ref.read(selectedFileProvider.state).state = element;
