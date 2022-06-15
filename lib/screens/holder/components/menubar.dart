@@ -24,7 +24,7 @@ class MenuBar extends ConsumerWidget {
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
-    final height=101.h;
+    final height = 101.h;
     return Container(
       height: height,
       width: double.infinity,
@@ -58,37 +58,38 @@ class MenuBar extends ConsumerWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                    radius: 30.r,
+                    radius: 30.sr(),
                     backgroundColor: Colors.teal,
                     child: Container()),
                 SizedBox(
                   width: 18.w,
                 ),
                 PopupMenuButton(
-                offset: Offset(0, height/2 +22.sp),
-                  itemBuilder: (BuildContext context) { return [PopupMenuItem(child: Text('Change here'))]; },
-                  child:Row(
-                      children: [
-                        SizedBox(
-                          width: 180.w,
-                          child: Text(
-                            maxLines: 2,
-                            'Suman Dangol ascasdasdasdasdazsccccccccccccccccccccccc dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 17.sp, color: Colors.white),
-                          ),
+                  offset: Offset(0, height / 2 + 22.sp),
+                  itemBuilder: (BuildContext context) {
+                    return [PopupMenuItem(child: Text('Change here'))];
+                  },
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 180.sw(),
+                        child: Text(
+                          maxLines: 2,
+                          'Suman Dangol ascasdasdasdasdazsccccccccccccccccccccccc dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas',
+                          style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 17.ssp(min: 10), color: Colors.white),
                         ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        Icon(
-                          (button)?Videomanager.down:Videomanager.up,
-                          color: Colors.white,
-                          size: 15.r,
-                        )
-                      ],
-                    ),
-                  
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      Icon(
+                        (button) ? Videomanager.down : Videomanager.up,
+                        color: Colors.white,
+                        size: 15.r,
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

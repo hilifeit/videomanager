@@ -75,11 +75,10 @@ class VideoDetails extends StatelessWidget {
                               builder: (_) {
                                 return AlertDialog(
                                   content: SizedBox(
-                                      width: 1.sw,
+                                      // width: 1.sw,
                                       child: MapScreen(
-                                        controller:
-                                            MapController(location: home),
-                                      )),
+                                    controller: MapController(location: home),
+                                  )),
                                 );
                               });
                         },

@@ -1,6 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
-
 class CustomMenuItem {
   CustomMenuItem({required this.title, required this.icon, required this.id});
   String title;
@@ -20,6 +19,7 @@ class MenuItemWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(indexState.state).state;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -47,9 +47,10 @@ class MenuItemWidget extends ConsumerWidget {
                 Text(
                   item.title,
                   style: kTextStyleIbmSemiBold.copyWith(
-                    fontSize: 17.sp.sm,
-                    color:
-                        index == item.id ? Colors.white : const Color(0xffd1d1d1),
+                    fontSize: 17.sp,
+                    color: index == item.id
+                        ? Colors.white
+                        : const Color(0xffd1d1d1),
                   ),
                 )
               ],

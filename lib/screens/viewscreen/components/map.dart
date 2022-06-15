@@ -61,6 +61,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(20.mw());
     return Scaffold(
       body: Consumer(builder: (context, ref, c) {
         final fileService = ref.watch(fileDetailMiniServiceProvider);
@@ -79,6 +80,7 @@ class _MapScreenState extends State<MapScreen> {
               //     fileService.files[10].location.coordinates[0][0]);
 
               // transformer.controller.zoom = 20;
+
               final markerWidgets = [
                 ClipRRect(
                   child: Stack(children: [

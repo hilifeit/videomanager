@@ -17,6 +17,7 @@ export 'package:videomanager/screens/others/theme.dart';
 export 'package:videomanager/screens/others/validator.dart';
 export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
+export 'package:videomanager/screens/components/helper/extension.dart';
 //
 
 const baseURL = "http://localhost:5000/api/";
