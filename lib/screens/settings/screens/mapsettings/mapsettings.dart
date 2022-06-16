@@ -11,186 +11,185 @@ class MapSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 15.sh(), left: 81.sw()),
-              child: Text(
-                'Map Settings',
-                style: kTextStyleInterSemiBold.copyWith(
-                    fontSize: 21.ssp(), color: primaryColor),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
-              child: Container(
-                width: 816.sw(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Padding(
+          padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
+          child: Container(
+            width: 816.sw(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+            'Map Settings',
+            style: kTextStyleInterSemiBold.copyWith(
+                fontSize: 21.ssp(), color: primaryColor),
+          ),
+          SizedBox(
+            height: 43.sh(),
+          ),
+                TextWithSlider(
+                  text: 'Zoom Factor',
+                  max: '0',
+                  min: '10',
+                  value: mapSetting.zoom,
+                ),
+                SizedBox(
+                  height: 23.sh(),
+                ),
+                 TextWithDDownButton(
+                  value: mapSetting.stroke,
+                  text: 'Stroke Width'),
+                SizedBox(
+                  height: 23.sh(),
+                ),
+                 TextWithDDownButton(
+                  value: mapSetting.scroll,
+                  text: 'Scroll Zoom in'),
+                SizedBox(
+                  height: 23.sh(),
+                ),
+                Text(
+                  'Sample Quality',
+                  style:
+                      kTextStyleInterRegular.copyWith(fontSize: 22.ssp()),
+                ),
+                SizedBox(
+                  height: 18.sh(),
+                ),
+                TextWithSlider(
+                  text: 'Original Map Quality',
+                  min: '120',
+                  max: '720',
+                  value: mapSetting.sample.original.toDouble(),
+                ),
+                SizedBox(
+                  height: 33.sh(),
+                ),
+                TextWithSlider(
+                    text: 'View Map Quality',
+                    max: '120',
+                    min: '720',
+                    value: mapSetting.sample.view.toDouble()),
+                SizedBox(
+                  height: 33.sh(),
+                ),
+                TextWithSlider(
+                  text: 'Original Mini Map Quality',
+                  max: '120',
+                  min: '720',
+                  value: mapSetting.sample.miniMap.toDouble(),
+                ),
+                SizedBox(
+                  height: 56.sh(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextWithSlider(
-                      text: 'Zoom Factor',
-                      max: '0',
-                      min: '10',
-                      value: mapSetting.zoom,
-                    ),
-                    SizedBox(
-                      height: 23.sh(),
-                    ),
-                    const TextWithDDownButton(text: 'Stroke Width'),
-                    SizedBox(
-                      height: 23.sh(),
-                    ),
-                    const TextWithDDownButton(text: 'Scroll Zoom in'),
-                    SizedBox(
-                      height: 23.sh(),
-                    ),
                     Text(
-                      'Sample Quality',
-                      style:
-                          kTextStyleInterRegular.copyWith(fontSize: 22.ssp()),
+                      'Map Default Location',
+                      style: kTextStyleInterRegular.copyWith(
+                          fontSize: 16.ssp(), color: Colors.black),
                     ),
-                    SizedBox(
-                      height: 18.sh(),
-                    ),
-                    TextWithSlider(
-                      text: 'Original Map Quality',
-                      min: '120',
-                      max: '720',
-                      value: mapSetting.sample.original.toDouble(),
-                    ),
-                    SizedBox(
-                      height: 33.sh(),
-                    ),
-                    TextWithSlider(
-                        text: 'View Map Quality',
-                        max: '120',
-                        min: '720',
-                        value: mapSetting.sample.view.toDouble()),
-                    SizedBox(
-                      height: 33.sh(),
-                    ),
-                    TextWithSlider(
-                      text: 'Original Mini Map Quality',
-                      max: '120',
-                      min: '720',
-                      value: mapSetting.sample.miniMap.toDouble(),
-                    ),
-                    SizedBox(
-                      height: 56.sh(),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Map Default Location',
-                          style: kTextStyleInterRegular.copyWith(
-                              fontSize: 16.ssp(), color: Colors.black),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 7.sw()),
-                          child: Switch(
-                              activeColor: Theme.of(context).primaryColor,
-                              value: mapSetting.defaultLocation.enabled,
-                              onChanged: (valueS) {}),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 22.sh(),
-                    ),
-                    if (mapSetting.defaultLocation.enabled) ...[
-                      Container(
-                        width: 816.sw(),
-                        height: 49.sh(),
-                        decoration: BoxDecoration(
-                            color: lightWhite.withOpacity(0.22),
-                            borderRadius: BorderRadius.circular(4.sr())),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: 32.sw(),
-                            top: 14.sh(),
-                            bottom: 14.sh(),
-                          ),
-                          child: Row(
-                            children: [
-                              VideoDetailText(
-                                title: 'Latitude',
-                                details:
-                                    mapSetting.defaultLocation.lat.toString(),
-                              ),
-                              SizedBox(width: 11.sw()),
-                              VideoDetailText(
-                                title: 'Longitutde',
-                                details:
-                                    mapSetting.defaultLocation.lng.toString(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 23.sh(),
-                      ),
-                    ],
-                    TextWithSlider(
-                      text: 'Suggestion / Result Count',
-                      max: '50',
-                      min: '500',
-                      value: mapSetting.filterCount.toDouble(),
-                    ),
-                    SizedBox(
-                      height: 23.sh(),
-                    ),
-                    SizedBox(
-                      height: 96.sh(),
-                    ),
-                    Row(children: [
-                      Container(
-                        width: 126.sw(),
-                        height: 46.sh(),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.sr()),
-                            border: Border.all(color: Colors.black)),
-                        child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Cancel',
-                              style: kTextStyleIbmMedium.copyWith(
-                                  color: Colors.black, fontSize: 17.ssp()),
-                            )),
-                      ),
-                      SizedBox(
-                        width: 60.sw(),
-                      ),
-                      SizedBox(
-                        width: 126.sw(),
-                        height: 46.sh(),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) => Theme.of(context).primaryColor)),
-                          onPressed: () {
-                            // var settingService =
-                            //     ref.read(settingChangeNotifierProvider);
-                            // settingService.updateSetting(
-                            //     mapSetting: mapSetting..filterCount = 0);
-                          },
-                          child: Text(
-                            'Apply',
-                            style: kTextStyleIbmMedium.copyWith(
-                                color: Colors.white, fontSize: 17.ssp()),
-                          ),
-                        ),
-                      ),
-                    ]),
-                    SizedBox(height: 120.sh()),
+                    Padding(
+                      padding: EdgeInsets.only(right: 7.sw()),
+                      child: Switch(
+                          activeColor: Theme.of(context).primaryColor,
+                          value: mapSetting.defaultLocation.enabled,
+                          onChanged: (valueS) {}),
+                    )
                   ],
                 ),
-              ),
+                SizedBox(
+                  height: 22.sh(),
+                ),
+                if (mapSetting.defaultLocation.enabled) ...[
+                  Container(
+                    width: 816.sw(),
+                    height: 49.sh(),
+                    decoration: BoxDecoration(
+                        color: lightWhite.withOpacity(0.22),
+                        borderRadius: BorderRadius.circular(4.sr())),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: 32.sw(),
+                        top: 14.sh(),
+                        bottom: 14.sh(),
+                      ),
+                      child: Row(
+                        children: [
+                          VideoDetailText(
+                            title: 'Latitude',
+                            details:
+                                mapSetting.defaultLocation.lat.toString(),
+                          ),
+                          SizedBox(width: 11.sw()),
+                          VideoDetailText(
+                            title: 'Longitutde',
+                            details:
+                                mapSetting.defaultLocation.lng.toString(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 23.sh(),
+                  ),
+                ],
+                TextWithSlider(
+                  text: 'Suggestion / Result Count',
+                  max: '50',
+                  min: '500',
+                  value: mapSetting.filterCount.toDouble(),
+                ),
+                SizedBox(
+                  height: 23.sh(),
+                ),
+                SizedBox(
+                  height: 96.sh(),
+                ),
+                Row(children: [
+                  Container(
+                    width: 126.sw(),
+                    height: 46.sh(),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.sr()),
+                        border: Border.all(color: Colors.black)),
+                    child: TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Cancel',
+                          style: kTextStyleIbmMedium.copyWith(
+                              color: Colors.black, fontSize: 17.ssp()),
+                        )),
+                  ),
+                  SizedBox(
+                    width: 60.sw(),
+                  ),
+                  SizedBox(
+                    width: 126.sw(),
+                    height: 46.sh(),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Theme.of(context).primaryColor)),
+                      onPressed: () {
+                        // var settingService =
+                        //     ref.read(settingChangeNotifierProvider);
+                        // settingService.updateSetting(
+                        //     mapSetting: mapSetting..filterCount = 0);
+                      },
+                      child: Text(
+                        'Apply',
+                        style: kTextStyleIbmMedium.copyWith(
+                            color: Colors.white, fontSize: 17.ssp()),
+                      ),
+                    ),
+                  ),
+                ]),
+                SizedBox(height: 120.sh()),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -250,7 +249,7 @@ class _TextWithSliderState extends State<TextWithSlider> {
                         overlayShape: SliderComponentShape.noOverlay,
                         trackHeight: 7.sh(),
                         thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 12.sr()),
+                            RoundSliderThumbShape(enabledThumbRadius: 10.sr()),
                         thumbColor: const Color(0xff9FC6DD)),
                     child: Slider(
                       activeColor: Theme.of(context).primaryColor,
@@ -281,12 +280,13 @@ class _TextWithSliderState extends State<TextWithSlider> {
 }
 
 class TextWithDDownButton extends StatelessWidget {
-  const TextWithDDownButton({
+  TextWithDDownButton({
     Key? key,
     required this.text,
+    required this.value
   }) : super(key: key);
   final String text;
-
+ final double value;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -298,7 +298,28 @@ class TextWithDDownButton extends StatelessWidget {
             text,
             style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
           ),
-          Placeholder(fallbackWidth: 106.sw(), fallbackHeight: 49.sh()),
+          SizedBox(
+            width: 106.sw(),
+            height: 49.sh(),
+            child: Container(
+              color: lightWhite.withOpacity(0.22),
+              child: Expanded(
+                child: Center(
+                  child: DropdownButton<double>(
+                    underline: Container(),
+                    value: value,
+                      items:  <double>[value,20]
+                  .map<DropdownMenuItem<double>>((double value) {
+                        return DropdownMenuItem<double>(
+                  value: value,
+                  child: Text(value.toString()),
+                        );
+                      }).toList(),
+                      onChanged: (val) {}),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
