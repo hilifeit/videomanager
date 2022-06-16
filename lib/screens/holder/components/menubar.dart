@@ -24,7 +24,7 @@ class MenuBar extends ConsumerWidget {
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
-    final height = 101.h;
+    final height = 101.sh();
     return Container(
       height: height,
       width: double.infinity,
@@ -34,7 +34,7 @@ class MenuBar extends ConsumerWidget {
           Expanded(
             flex: 5,
             child: Padding(
-              padding: EdgeInsets.only(top: 26.h, left: 36.w, bottom: 13.h),
+              padding: EdgeInsets.only(top: 26.sh(), left: 36.sw(), bottom: 13.sh()),
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -45,7 +45,7 @@ class MenuBar extends ConsumerWidget {
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(
-                    width: 100.w,
+                    width: 100.sw(),
                   );
                 },
                 itemCount: 4,
@@ -54,7 +54,7 @@ class MenuBar extends ConsumerWidget {
           ),
           // Spacer(),
           Padding(
-            padding: EdgeInsets.only(top: 13.h, right: 61.08.w, bottom: 13.h),
+            padding: EdgeInsets.only(top: 13.sh(), right: 61.08.sw(), bottom: 13.sh()),
             child: Row(
               children: [
                 CircleAvatar(
@@ -62,10 +62,10 @@ class MenuBar extends ConsumerWidget {
                     backgroundColor: Colors.teal,
                     child: Container()),
                 SizedBox(
-                  width: 18.w,
+                  width: 18.sw(),
                 ),
                 PopupMenuButton(
-                  offset: Offset(0, height / 2 + 22.sp),
+                  offset: Offset(0, height / 2 + 22.ssp()),
                   itemBuilder: (BuildContext context) {
                     return [PopupMenuItem(child: Text('Change here'))];
                   },
@@ -81,12 +81,12 @@ class MenuBar extends ConsumerWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 20.w,
+                        width: 20.sw(),
                       ),
                       Icon(
                         (button) ? Videomanager.down : Videomanager.up,
                         color: Colors.white,
-                        size: 15.r,
+                        size: 15.sr(),
                       )
                     ],
                   ),

@@ -22,15 +22,15 @@ class FileItemWidget extends ConsumerWidget {
         children: [
           Icon(
             item.icon,
-            size: 50.r,
+            size: 50.sr(),
             color: const Color(0xffFFD782),
           ),
           SizedBox(
-            height: 7.h,
+            height: 7.sh(),
           ),
           Text(
             item.title,
-            style: kTextStyleIbmRegularBlack.copyWith(fontSize: 16.sp),
+            style: kTextStyleIbmRegularBlack.copyWith(fontSize: 16.ssp()),
           ),
         ],
       ),

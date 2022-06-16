@@ -20,11 +20,11 @@ class SettingsBar extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 15.h, left: 43.w),
+            padding: EdgeInsets.only(top: 15.sh(), left: 43.sw()),
             child: Text(
               'Settings',
               style: kTextStyleIbmSemiBold.copyWith(
-                  color: primaryColor, fontSize: 21.sp),
+                  color: primaryColor, fontSize: 21.ssp()),
             ),
           ),
           SizedBox(height: 39.sh()),

@@ -135,7 +135,7 @@ class MapsSettings extends ConsumerWidget {
                     SizedBox(
                       width: 60.sw(),
                     ),
-                    Container(
+                    SizedBox(
                       width: 126.sw(),
                       height: 46.sh(),
                       child: ElevatedButton(
@@ -199,7 +199,9 @@ class TextWithSlider extends StatelessWidget {
                         overlayShape: SliderComponentShape.noOverlay,
                         trackHeight: 7.sh(),
                         thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 12.sr())),
+                            RoundSliderThumbShape(enabledThumbRadius: 12.sr()),
+                            thumbColor: const Color(0xff9FC6DD)
+                            ),
                     child: Slider(
                       activeColor: Theme.of(context).primaryColor,
                       inactiveColor: lightWhite,

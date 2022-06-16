@@ -15,10 +15,10 @@ class ContextMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 147.h,
-      width: 150.w,
+      height: 147.sh(),
+      width: 150.sw(),
       child: Padding(
-        padding: EdgeInsets.only(left: 10.w),
+        padding: EdgeInsets.only(left: 10.sw()),
         child: ListView.separated(itemBuilder: (context,index){
           return ContextMenuItem(item: items[index], );
         }, separatorBuilder: (context, index){

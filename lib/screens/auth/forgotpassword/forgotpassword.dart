@@ -15,10 +15,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(12.sr()),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 105.w),
+        padding: EdgeInsets.symmetric(horizontal: 105.sw()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -27,17 +27,17 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 98.h,
+                    height: 98.sh(),
                   ),
                   Text(
                     'Reset Password',
                     style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 25.sp,
+                      fontSize: 25.ssp(),
                       color: Colors.black,
                     ),
                   ),
                   SizedBox(
-                    height: 17.h,
+                    height: 17.sh(),
                   ),
                   Text(
                     'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
@@ -48,7 +48,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               ),
             ),
             SizedBox(
-              height: 84.h,
+              height: 84.sh(),
             ),
             Column(
               children: [
@@ -61,7 +61,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                 ),
                 SizedBox(
-                  height: 63.5.h,
+                  height: 63.5.sh(),
                 ),
                 Button(
                   onPressed: () {
@@ -73,14 +73,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                 ),
                 SizedBox(
-                  height: 22.h,
+                  height: 22.sh(),
                 ),
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: Consumer(builder: (context, ref, c) {
                     return GestureDetector(
                       onTap: () {
-                        ref.read(AuthStateProvider.state).state = true;
+                        ref.read(authStateProvider.state).state = true;
                       },
                       child: Align(
                         alignment: Alignment.bottomRight,

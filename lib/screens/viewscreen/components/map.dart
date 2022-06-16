@@ -204,8 +204,8 @@ class _MapScreenState extends State<MapScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             SizedBox(
-              height: 54.r,
-              width: 54.r,
+              height: 54.sr(),
+              width: 54.sr(),
               child: CustomFloatingActionButton(
                   icon: Videomanager.location,
                   onPressed: () {
@@ -217,11 +217,11 @@ class _MapScreenState extends State<MapScreen> {
                   tooltip: 'My location'),
             ),
             SizedBox(
-              height: 32.h,
+              height: 32.sh(),
             ),
             SizedBox(
-              height: 54.r,
-              width: 54.r,
+              height: 54.sr(),
+              width: 54.sr(),
               child: CustomFloatingActionButton(
                   icon: Icons.add,
                   onPressed: () {
@@ -232,8 +232,8 @@ class _MapScreenState extends State<MapScreen> {
                   tooltip: 'Zoom in'),
             ),
             SizedBox(
-              height: 54.r,
-              width: 54.r,
+              height: 54.sr(),
+              width: 54.sr(),
               child: CustomFloatingActionButton(
                   icon: Icons.remove,
                   onPressed: () {
@@ -244,7 +244,7 @@ class _MapScreenState extends State<MapScreen> {
                   tooltip: "Zoom out"),
             ),
             SizedBox(
-              height: 19.h,
+              height: 19.sh(),
             ),
           ],
         ),
@@ -260,7 +260,7 @@ class _MapScreenState extends State<MapScreen> {
     return FloatingActionButton(
       shape: RoundedRectangleBorder(
           borderRadius:
-              !roundShape ? BorderRadius.zero : BorderRadius.circular(100.r)),
+              !roundShape ? BorderRadius.zero : BorderRadius.circular(100.sr())),
       backgroundColor: Colors.white,
       onPressed: () {
         onPressed();
@@ -268,7 +268,7 @@ class _MapScreenState extends State<MapScreen> {
       tooltip: tooltip!,
       child: Icon(
         icon,
-        size: 28.r,
+        size: 28.sr(),
         color: Colors.black,
       ),
     );

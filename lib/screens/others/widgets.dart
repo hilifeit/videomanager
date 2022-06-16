@@ -94,7 +94,7 @@ class InputTextField extends StatelessWidget {
             children: [
               Text(title!, style: kTextStyleIbmSemiBold),
               SizedBox(
-                height: 9.5.h,
+                height: 9.5.sh(),
               ),
             ],
           ),
@@ -111,13 +111,13 @@ class InputTextField extends StatelessWidget {
             fillColor: fillColor,
             filled: true,
             contentPadding:
-                EdgeInsets.only(left: 19.5.w, top: 16.h, bottom: 17.h),
+                EdgeInsets.only(left: 19.5.sw(), top: 16.sh(), bottom: 17.sh()),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: BorderRadius.circular(5.sr()),
               borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: BorderRadius.circular(5.sr()),
               borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
             ),
             hintText: isVisible ? 'Enter ${title!.toLowerCase()}' : '$title',
