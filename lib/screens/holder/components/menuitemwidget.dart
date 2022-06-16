@@ -35,15 +35,15 @@ class MenuItemWidget extends ConsumerWidget {
               Icon(
                 item.icon,
                 color: index == item.id ? Colors.white : lightWhite,
-                size: 18.r,
+                size: 18.sr(),
               ),
               SizedBox(
-                height: 5.82.h,
+                height: 5.82.sh(),
               ),
               Text(
                 item.title,
                 style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 17.sp.sm,
+                  fontSize: 17.ssp(),
                   color: index == item.id ? Colors.white : lightWhite,
                 ),
               )

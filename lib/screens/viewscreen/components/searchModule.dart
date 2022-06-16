@@ -26,23 +26,23 @@ class SearchBox extends ConsumerWidget {
         searchStyle: kTextStyleInterMedium,
         searchInputDecoration: InputDecoration(
           prefixIcon:
-              Icon(Videomanager.search, color: Colors.black, size: 15.sp),
+              Icon(Videomanager.search, color: Colors.black, size: 15.ssp()),
           fillColor: secondaryColor,
           filled: true,
-          contentPadding: EdgeInsets.only(left: 10.5.w, top: 9.h, bottom: 11.h),
+          contentPadding: EdgeInsets.only(left: 10.5.sw(), top: 9.sh(), bottom: 11.sh()),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.r),
+            borderRadius: BorderRadius.circular(5.sr()),
             borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.r),
+            borderRadius: BorderRadius.circular(5.sr()),
             borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
           ),
           hintText: 'Search',
           hintStyle: kTextStyleInterMedium,
         ),
         focusNode: focus,
-        itemHeight: 80.h,
+        itemHeight: 80.sh(),
         // hasOverlay: false,
         onSubmit: (result) async {
           await searchService.search(result);
@@ -67,16 +67,16 @@ class SearchBox extends ConsumerWidget {
                       style: kTextStyleIbmRegularBlack,
                     ),
                     contentPadding: EdgeInsets.only(
-                        right: 10.w, bottom: 0, left: 0, top: 0),
+                        right: 10.sw(), bottom: 0, left: 0, top: 0),
                     leading: Icon(
                       Videomanager.video_file,
                       color: primaryColor,
-                      size: 22.r,
+                      size: 22.sr(),
                     ),
                     title: Text(
                       e.filename,
                       style:
-                          kTextStyleIbmRegularBlack.copyWith(fontSize: 16.sp),
+                          kTextStyleIbmRegularBlack.copyWith(fontSize: 16.ssp()),
                     ),
                     trailing: Text(
                       'State ${e.area.state}',

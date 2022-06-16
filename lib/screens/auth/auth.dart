@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:videomanager/screens/auth/forgotpassword/forgotpassword.dart';
 import 'package:videomanager/screens/auth/login/login.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 
-final AuthStateProvider = StateProvider<bool>((ref) {
+final authStateProvider = StateProvider<bool>((ref) {
   return true;
 });
 
@@ -13,7 +12,7 @@ class AuthScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final formState = ref.watch(AuthStateProvider.state).state;
+    final formState = ref.watch(authStateProvider.state).state;
     return Scaffold(
       body: Column(
         // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,9 +22,9 @@ class AuthScreen extends ConsumerWidget {
                 color: const Color(0xff40667D),
                 child: Center(
                   child: SizedBox(
-                    height: 700.h,
-                    width: 700.w,
-                    child: formState ? Login() : ForgotPassword(),
+                    height: 700.sh(),
+                    width: 700.sw(),
+                    child: formState ? Login() : const ForgotPassword(),
                   ),
                 )),
           )

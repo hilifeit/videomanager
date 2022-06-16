@@ -53,11 +53,11 @@ class _VideoState extends State<Video> {
                       children: [
                         CustomVideoPlayer(controller: _controller1),
                         Positioned(
-                            top: 20.h,
-                            left: 19.w,
+                            top: 20.sh(),
+                            left: 19.sw(),
                             child: SizedBox(
-                              width: 105.77.w,
-                              height: 38.26.h,
+                              width: 105.77.sw(),
+                              height: 38.26.sh(),
                               child: Container(
                                 color: Colors.black.withOpacity(0.5),
                                 child: Center(
@@ -77,11 +77,11 @@ class _VideoState extends State<Video> {
                       children: [
                         CustomVideoPlayer(controller: _controller2),
                         Positioned(
-                            top: 20.h,
-                            right: 24.32.w,
+                            top: 20.sh(),
+                            right: 24.32.sw(),
                             child: SizedBox(
-                              width: 105.77.w,
-                              height: 38.26.h,
+                              width: 105.77.sw(),
+                              height: 38.26.sh(),
                               child: Container(
                                 color: Colors.black.withOpacity(0.5),
                                 child: Center(

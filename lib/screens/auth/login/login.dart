@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:videomanager/screens/auth/auth.dart';
-import 'package:videomanager/screens/others/responsive.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 final passwordvisibileProvider = StateProvider<bool>((ref) {
@@ -9,7 +8,6 @@ final passwordvisibileProvider = StateProvider<bool>((ref) {
 final checkBoxStateProvider = StateProvider<bool>((ref) {
   return false;
 });
-ResponsiveMeasurement responsive = ResponsiveMeasurement();
 
 class Login extends ConsumerWidget {
   Login({Key? key}) : super(key: key);
@@ -23,7 +21,7 @@ class Login extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(12.sr()),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,22 +31,22 @@ class Login extends ConsumerWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 98.h,
+                  height: 98.sh(),
                 ),
                 Text(
                   'LOGIN WITH',
                   style: kTextStyleIbmMedium.copyWith(
-                    fontSize: 25.sp,
+                    fontSize: 25.ssp(),
                     color: Colors.black,
                   ),
                 ),
                 SizedBox(
-                  height: 17.h,
+                  height: 17.sh(),
                 ),
                 Text(
                   'EZSALES',
                   style: kTextStyleIbmMedium.copyWith(
-                    fontSize: 25.sp,
+                    fontSize: 25.ssp(),
                     color: Colors.black,
                   ),
                 ),
@@ -56,10 +54,10 @@ class Login extends ConsumerWidget {
             ),
           ),
           SizedBox(
-            height: 93.h,
+            height: 93.sh(),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 105.w),
+            padding: EdgeInsets.symmetric(horizontal: 105.sw()),
             child: Form(
               key: formKey,
               child: Column(
@@ -70,7 +68,7 @@ class Login extends ConsumerWidget {
                     validator: (val) => validateUserName(val!),
                   ),
                   SizedBox(
-                    height: 25.5.h,
+                    height: 25.5.sh(),
                   ),
                   InputTextField(
                     isVisible: true,
@@ -78,7 +76,7 @@ class Login extends ConsumerWidget {
                     validator: (val) => validatePassword(val!),
                   ),
                   SizedBox(
-                    height: 25.5.h,
+                    height: 25.5.sh(),
                   ),
                   Button(
                     onPressed: () {
@@ -91,7 +89,7 @@ class Login extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(
-                    height: responsive.resp(22.h, min: 20, max: 25),
+                    height: 22.sh(),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,7 +99,7 @@ class Login extends ConsumerWidget {
                           Consumer(builder: (context, ref, c) {
                             return Checkbox(
                                 side: BorderSide(
-                                  width: 1,
+                                  width: 1.sw(),
                                   color: secondaryColorText,
                                 ),
                                 activeColor: primaryColor,
@@ -122,7 +120,7 @@ class Login extends ConsumerWidget {
                         child: Consumer(builder: (context, ref, c) {
                           return GestureDetector(
                             onTap: () {
-                              ref.read(AuthStateProvider.state).state = false;
+                              ref.read(authStateProvider.state).state = false;
                             },
                             child: Text(
                               'Forgot Password?',
@@ -195,8 +193,8 @@ class Login extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const CircularProgressIndicator(),
-                const SizedBox(
-                  height: 20,
+                 SizedBox(
+                  height: 20.sh(),
                 ),
                 Text("Filtering from ${entities.length} files")
               ],

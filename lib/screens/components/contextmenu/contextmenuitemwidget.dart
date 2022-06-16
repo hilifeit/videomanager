@@ -16,7 +16,7 @@ class ContextMenuItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      height: 49.h,
+      height: 49.sh(),
       child: GestureDetector(
               onTap: () {
               },
@@ -25,11 +25,11 @@ class ContextMenuItem extends ConsumerWidget {
                 children: [
                   Icon(
                     item.icon,
-                    size: 20.r,
+                    size: 20.sr(),
                     color: primaryColor,
                   ),
                   SizedBox(
-                    width: 15.w,
+                    width: 15.sw(),
                   ),
                   Text(
                     item.title,

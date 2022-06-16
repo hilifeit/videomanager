@@ -20,20 +20,20 @@ class Filter extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 29.w, top: 15.h, right: 21.33.w),
+          padding: EdgeInsets.only(left: 29.sw(), top: 15.sh(), right: 21.33.sw()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Filter',
                   style: kTextStyleIbmSemiBold.copyWith(color: primaryColor)),
               SizedBox(
-                height: 26.h,
+                height: 26.sh(),
               ),
               SearchBox(
                 mapController: mapController,
               ),
               SizedBox(
-                height: 29.h,
+                height: 29.sh(),
               ),
             ],
           ),
@@ -45,7 +45,7 @@ class Filter extends StatelessWidget {
 
 
                   // tilePadding: EdgeInsets.only(left: 0,right: 10),
-                  childrenPadding: EdgeInsets.only(left: 57.w),
+                  childrenPadding: EdgeInsets.only(left: 57.sw()),
                   leading: Consumer(builder: (context, ref, c) {
                     final checked =
                         ref.watch(checkBoxStateStateProvider.state).state;
@@ -65,7 +65,7 @@ class Filter extends StatelessWidget {
                   }),
                   title: Text(
                     'State',
-                    style: kTextStyleInterMedium.copyWith(fontSize: 16.sp),
+                    style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
                   ),
 
                   children: [
@@ -96,7 +96,7 @@ class Filter extends StatelessWidget {
                       }),
                       title: Text(
                         'State 1',
-                        style: kTextStyleInterMedium.copyWith(fontSize: 16.sp),
+                        style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
                       ),
                     ),
                   ]);

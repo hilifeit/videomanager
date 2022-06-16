@@ -81,7 +81,7 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                           });
                         });
                         return LinearProgressIndicator(
-                          minHeight: 4.h,
+                          minHeight: 4.sh(),
                           color: Colors.white,
                           backgroundColor: Color(0xffeaeaea).withAlpha(150),
                           value: progress,
@@ -90,10 +90,10 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                     ),
                   ),
                   SizedBox(
-                    height: 8.h,
+                    height: 8.sh(),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    padding: EdgeInsets.symmetric(horizontal: 10.sw()),
                     child: Row(
                       children: [
                         iconButton(
@@ -101,12 +101,12 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                             left: widget.left,
                             right: widget.right),
                         SizedBox(
-                          width: 8.w,
+                          width: 8.sw(),
                         ),
                         Text(
                           '5:07 / 15:28',
                           style: kTextStyleInterMedium.copyWith(
-                              fontSize: 14.sp,
+                              fontSize: 14.ssp(),
                               color: Color(0xffeaeaea).withAlpha(180)),
                         )
                       ],

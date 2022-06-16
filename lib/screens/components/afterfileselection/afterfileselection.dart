@@ -1,5 +1,4 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:videomanager/screens/components/afterfileselection/fileitemwidget.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -16,8 +15,8 @@ class AfterFileSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 188.h,
-      width: 935.w,
+      height: 188.sh(),
+      width: 935.sw(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -26,7 +25,7 @@ class AfterFileSelection extends StatelessWidget {
             style: kTextStyleIbmRegular.copyWith(color: Colors.black),
           ),
           SizedBox(
-            height: 20.h,
+            height: 20.sh(),
           ),
           Expanded(
             child: ListView.separated(
@@ -36,7 +35,7 @@ class AfterFileSelection extends StatelessWidget {
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(
-                    width: 50.w,
+                    width: 50.sw(),
                   );
                 },
                 itemCount: items.length),

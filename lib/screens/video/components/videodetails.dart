@@ -13,7 +13,7 @@ class VideoDetails extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Padding(
-              padding: EdgeInsets.only(left: 31.04.w, right: 108.05.w),
+              padding: EdgeInsets.only(left: 31.04.sw(), right: 108.05.sw()),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,7 @@ class VideoDetails extends StatelessWidget {
                     children: [
                       const VideoDetailText(title: 'Size', details: '1.2GB'),
                       SizedBox(
-                        width: 21.79.w,
+                        width: 21.79.sw(),
                       ),
                       const VideoDetailText(
                           title: 'Duration', details: '00:05:00'),
@@ -65,8 +65,8 @@ class VideoDetails extends StatelessWidget {
                     isvisible: false,
                   ),
                   Positioned(
-                      bottom: 5.h,
-                      right: 5.w,
+                      bottom: 5.sh(),
+                      right: 5.sw(),
                       child: IconButton(
                           onPressed: () async {
                             await showDialog(
@@ -107,14 +107,14 @@ class VideoDetailText extends StatelessWidget {
         TextSpan(
             text: '$title:',
             style: kTextStyleInterMedium.copyWith(
-                fontSize: 18.sp, color: Colors.black.withOpacity(0.8))),
+                fontSize: 18.ssp(), color: Colors.black.withOpacity(0.8))),
         WidgetSpan(
             child: SizedBox(
-          width: 21.79.w,
+          width: 21.79.sw(),
         )),
         TextSpan(
             text: '$details',
-            style: kTextStyleInterMedium.copyWith(fontSize: 18.sp)),
+            style: kTextStyleInterMedium.copyWith(fontSize: 18.ssp())),
       ]),
       // '$title : $details',
       // style: kTextStyleInterMedium.copyWith(fontSize: 18.sp),

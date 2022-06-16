@@ -6,12 +6,12 @@ class SelectFiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 1006.w,
-      height: 188.h,
+      width: 1006.sw(),
+      height: 188.sh(),
       child: Container(
         color: primaryColor.withOpacity(0.15),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.h),
+          padding: EdgeInsets.symmetric(vertical: 20.sh()),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -25,17 +25,17 @@ class SelectFiles extends StatelessWidget {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(2.r))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(2.sr()))),
                   primary: primaryColor,
-                  minimumSize: const Size(103,28),
-                  maximumSize: const Size(103,28),
+                  minimumSize:  Size(103.sw(),28.sh()),
+                  maximumSize: Size(103.sw(),28.sh()),
                 ),
                 
                   onPressed: () {},
                   child: Text(
                     'Select Files',
                     style: kTextStyleInterMedium.copyWith(
-                        color: Colors.white, fontSize: 15.sp),
+                        color: Colors.white, fontSize: 15.ssp()),
                   ))
             ],
           ),
