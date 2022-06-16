@@ -1,6 +1,7 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/settingsbar.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/mapsettings.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 
 final settingIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -12,7 +13,7 @@ class SettingsHolder extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsindex = ref.watch(settingIndexProvider.state).state;
-
+    final settings = ref.watch(settingChangeNotifierProvider).setting;
     return Scaffold(
       body: Row(
         children: [
@@ -21,20 +22,19 @@ class SettingsHolder extends ConsumerWidget {
             settingsIndexState: settingIndexProvider,
           )),
           Expanded(
-            flex: 5,
-            child: AnimatedIndexedStack(index: settingsindex, children: [
-              const MapsSettings(),
-              Container(
-                color: Colors.amber,
-              ),
-              Container(
-                color: Colors.teal,
-              ),
-              Container(
-                color: Colors.blue,
-              ),
-            ]),
-          ),
+              key: Key(settingsindex.toString()),
+              flex: 5,
+              child: (() {
+                if (settingsindex == 0) {
+                  return MapsSettings(
+                    mapsSettings: settings!.mapSetting,
+                  );
+                }
+
+                return Container(
+                  color: Colors.amber,
+                );
+              }())),
         ],
       ),
     );

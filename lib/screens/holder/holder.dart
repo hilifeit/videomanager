@@ -9,7 +9,7 @@ final IndexProvider = StateProvider<int>((ref) {
 });
 
 class Holder extends ConsumerWidget {
-  Holder({Key? key}) : super(key: key);
+  const Holder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,11 +21,15 @@ class Holder extends ConsumerWidget {
           MenuBar(
             indexState: IndexProvider,
           ),
-          Expanded(
-            child: AnimatedIndexedStack(
-                index: index,
-                children: [ViewScreen(), Video(), Container(), SettingsHolder()]),
-          )
+          index != 3
+              ? Expanded(
+                  child: AnimatedIndexedStack(index: index, children: [
+                    ViewScreen(),
+                    Video(),
+                    Container(),
+                  ]),
+                )
+              : const Expanded(child: SettingsHolder())
         ],
       ),
     );
