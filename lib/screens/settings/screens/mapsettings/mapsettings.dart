@@ -1,11 +1,12 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 
 import 'package:videomanager/screens/video/components/videodetails.dart';
 
-class MapsSettings extends ConsumerWidget {
-  MapsSettings({Key? key, required this.mapsSettings}) : super(key: key);
-  final MapSetting mapsSettings;
+class MapSettings extends ConsumerWidget {
+  MapSettings({Key? key, required this.mapSetting}) : super(key: key);
+  final MapSetting mapSetting;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -32,7 +33,7 @@ class MapsSettings extends ConsumerWidget {
                       text: 'Zoom Factor',
                       max: '0',
                       min: '10',
-                      value: mapsSettings.zoom,
+                      value: mapSetting.zoom,
                     ),
                     SizedBox(
                       height: 23.sh(),
@@ -57,7 +58,7 @@ class MapsSettings extends ConsumerWidget {
                       text: 'Original Map Quality',
                       min: '120',
                       max: '720',
-                      value: mapsSettings.sample.original.toDouble(),
+                      value: mapSetting.sample.original.toDouble(),
                     ),
                     SizedBox(
                       height: 33.sh(),
@@ -66,7 +67,7 @@ class MapsSettings extends ConsumerWidget {
                         text: 'View Map Quality',
                         max: '120',
                         min: '720',
-                        value: mapsSettings.sample.view.toDouble()),
+                        value: mapSetting.sample.view.toDouble()),
                     SizedBox(
                       height: 33.sh(),
                     ),
@@ -74,7 +75,7 @@ class MapsSettings extends ConsumerWidget {
                       text: 'Original Mini Map Quality',
                       max: '120',
                       min: '720',
-                      value: mapsSettings.sample.miniMap.toDouble(),
+                      value: mapSetting.sample.miniMap.toDouble(),
                     ),
                     SizedBox(
                       height: 56.sh(),
@@ -91,7 +92,7 @@ class MapsSettings extends ConsumerWidget {
                           padding: EdgeInsets.only(right: 7.sw()),
                           child: Switch(
                               activeColor: Theme.of(context).primaryColor,
-                              value: mapsSettings.defaultLocation.enabled,
+                              value: mapSetting.defaultLocation.enabled,
                               onChanged: (valueS) {}),
                         )
                       ],
@@ -99,7 +100,7 @@ class MapsSettings extends ConsumerWidget {
                     SizedBox(
                       height: 22.sh(),
                     ),
-                    if (mapsSettings.defaultLocation.enabled) ...[
+                    if (mapSetting.defaultLocation.enabled) ...[
                       Container(
                         width: 816.sw(),
                         height: 49.sh(),
@@ -117,13 +118,13 @@ class MapsSettings extends ConsumerWidget {
                               VideoDetailText(
                                 title: 'Latitude',
                                 details:
-                                    mapsSettings.defaultLocation.lat.toString(),
+                                    mapSetting.defaultLocation.lat.toString(),
                               ),
                               SizedBox(width: 11.sw()),
                               VideoDetailText(
                                 title: 'Longitutde',
                                 details:
-                                    mapsSettings.defaultLocation.lng.toString(),
+                                    mapSetting.defaultLocation.lng.toString(),
                               ),
                             ],
                           ),
@@ -137,7 +138,7 @@ class MapsSettings extends ConsumerWidget {
                       text: 'Suggestion / Result Count',
                       max: '50',
                       min: '500',
-                      value: mapsSettings.filterCount.toDouble(),
+                      value: mapSetting.filterCount.toDouble(),
                     ),
                     SizedBox(
                       height: 23.sh(),
@@ -170,7 +171,12 @@ class MapsSettings extends ConsumerWidget {
                           style: ButtonStyle(
                               backgroundColor: MaterialStateColor.resolveWith(
                                   (states) => Theme.of(context).primaryColor)),
-                          onPressed: () {},
+                          onPressed: () {
+                            // var settingService =
+                            //     ref.read(settingChangeNotifierProvider);
+                            // settingService.updateSetting(
+                            //     mapSetting: mapSetting..filterCount = 0);
+                          },
                           child: Text(
                             'Apply',
                             style: kTextStyleIbmMedium.copyWith(
@@ -250,7 +256,7 @@ class _TextWithSliderState extends State<TextWithSlider> {
                       activeColor: Theme.of(context).primaryColor,
                       thumbColor: const Color(0xff9FC6DD),
                       inactiveColor: lightWhite,
-                      value: value,
+                      value: widget.value,
                       onChanged: (val) {
                         // widget.onChanged(val);
                         setState(() {

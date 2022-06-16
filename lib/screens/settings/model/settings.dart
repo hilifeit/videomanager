@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:videomanager/screens/settings/screens/locationsettings/models/locationsetting.dart';
-import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
 import 'package:videomanager/screens/settings/screens/usersettings/models/usersetting.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
 

@@ -29,7 +29,7 @@ class Holder extends ConsumerWidget {
                     Container(),
                   ]),
                 )
-              : const Expanded(child: SettingsHolder())
+              : Expanded(child: SettingsHolder())
         ],
       ),
     );
