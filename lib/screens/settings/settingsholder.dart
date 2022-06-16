@@ -2,6 +2,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/settingsbar.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/mapsettings.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
+import 'package:videomanager/screens/settings/screens/videosettings/videosettings.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
 final settingIndexProvider = StateProvider<int>((ref) {
@@ -30,6 +31,11 @@ class SettingsHolder extends ConsumerWidget {
                 if (settingsindex == 0) {
                   return MapSettings(
                     mapSetting: setting.mapSetting,
+                  );
+                }
+                if (settingsindex == 1) {
+                  return VideoSettings(
+                    videoSetting: setting.videoSetting,
                   );
                 }
 

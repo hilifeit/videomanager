@@ -37,7 +37,7 @@ class CustomSlider extends ConsumerWidget {
             child: Row(
               children: [
                 Text(
-                  min.toString(),
+                  min.toInt().toString(),
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
@@ -47,7 +47,7 @@ class CustomSlider extends ConsumerWidget {
                         overlayShape: SliderComponentShape.noOverlay,
                         trackHeight: 7.sh(),
                         thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 12.sr()),
+                            RoundSliderThumbShape(enabledThumbRadius: 8.sr()),
                         thumbColor: const Color(0xff9FC6DD)),
                     child: Slider(
                       min: min,
@@ -65,7 +65,7 @@ class CustomSlider extends ConsumerWidget {
                   ),
                 ),
                 Text(
-                  max.toString(),
+                  max.toInt().toString(),
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
