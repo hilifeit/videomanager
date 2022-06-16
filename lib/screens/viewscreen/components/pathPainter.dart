@@ -17,9 +17,10 @@ class Painter extends CustomPainter {
   final BuildContext context;
   final WidgetRef ref;
   final StateProvider<FileDetailMini?> selectedFileProvider;
+  bool debug = true;
   List<FileDetailMini> files;
   MapTransformer transformer;
-  //final _random = Random();
+
   @override
   void paint(Canvas canvas, size) {
     var sampler = map(transformer.controller.zoom.toInt(), 7, 17, 1, 5);
@@ -30,7 +31,6 @@ class Painter extends CustomPainter {
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
     rpaint.color = Colors.red.withOpacity(0.01);
-    // lPaint.strokeWidth = 1;
 
     paint.style = PaintingStyle.stroke;
 
@@ -39,9 +39,8 @@ class Painter extends CustomPainter {
     var customCanvas = TouchyCanvas(context, canvas);
     Rect visibleScreen = Rect.fromLTWH(0, 0, transformer.constraints.maxWidth,
         transformer.constraints.maxHeight - 5);
-    Rect test = Rect.fromLTWH(100, 100, 100, 100);
-    canvas.drawRect(test, paint);
-    // canvas.drawRect(visibleScreen, paint);
+
+    var visibleFiles = 0, totalDataUsedForPaint = 0;
     for (var element in files) {
       // if (files.indexOf(element) == 10)
       {
@@ -65,122 +64,110 @@ class Painter extends CustomPainter {
             height: height);
 
         if (item.overlaps(visibleScreen)) {
-          // customCanvas.drawRect(
-          //   item,
-          //   rpaint,
-          //   onTapUp: (details) {
-          //     ref.read(selectedFileProvider.state).state = element;
-          //   },
-          //   onSecondaryTapUp: (detail) {
-          //     print(detail.localPosition);
-          //     // showMenu(
-          //     //     context: context,
-          //     //     position:
-          //     //         RelativeRect.fromLTRB(detail.localPosition.dx, 0, 0, 0),
-          //     //     items: [PopupMenuItem(child: Text("tets"))]);
-          //   },
-          // );
-          // canvas.drawRect(item, paint);
+          visibleFiles++;
           Path path = Path();
+          Function tap, tapSecondary;
+          tap = () {
+            ref.read(selectedFileProvider.state).state = element;
+          };
+          tapSecondary = (TapUpDetails detail) {
+            tap();
+            showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                    detail.globalPosition.dx,
+                    detail.globalPosition.dy,
+                    detail.globalPosition.dx + 1,
+                    detail.globalPosition.dy + 1),
+                items: [PopupMenuItem(child: Text('test'))]);
+          };
 
-          Offset start = transformer.fromLatLngToXYCoords(LatLng(
-              element.location.coordinates.first[1],
-              element.location.coordinates.first[0]));
-
-          // path.moveTo(start.dx, start.dy);
-          // print(sampler);
           List<Offset> points = [];
           for (int i = 0; i < element.location.coordinates.length; i++) {
             Offset current = transformer.fromLatLngToXYCoords(LatLng(
                 element.location.coordinates[i].last,
                 element.location.coordinates[i].first));
             points.add(current);
-            // path.lineTo(current.dx, current.dy);
-            // path.transform(Matrix4.fromFloat64List(_m4storage));
           }
-          bool shouldDraw = true;
-          // for (int i = 0; i < points.length; i++) {
-          //   if (i != 0 && i < points.length - 1) {
-          //     var distance = (points[i - 1] - points[i]).distance;
-          //     if (distance > 200) shouldDraw = false;
-          //   }
-          // }
-          // var a = canvas.drawPoints(PointMode.polygon, points, paint);
-
+          totalDataUsedForPaint += points.length;
           paint.strokeWidth = 3;
           paint.style = PaintingStyle.stroke;
           paint.color = Colors.red;
-          if (shouldDraw) {
-            path.addPolygon(points, false);
-            Paint newPaint = Paint()
-              ..color = Theme.of(context).primaryColor.withOpacity(0.1);
-            customCanvas.drawRect(path.getBounds(), newPaint,
-                onTapUp: ((details) {
-              ref.read(selectedFileProvider.state).state = element;
-            }));
-          }
 
-          // var newpath = path.shift(Offset(1, 1));
-          // var newpath1 = path.shift(Offset(-1, -1));
-          // customCanvas.drawPath(newpath, paint, onTapUp: (details) {
-          //   ref.read(selectedFileProvider.state).state = element;
-          // });
-          // customCanvas.drawPath(newpath1, paint, onTapUp: (detail) {
-          //   ref.read(selectedFileProvider.state).state = element;
-          // });
-          // path.transform(Float64List.fromList(
-          //     [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
+          path.addPolygon(points, false);
+          Paint newPaint = Paint()
+            ..color = Theme.of(context).primaryColor.withOpacity(0.1);
+
           customCanvas.drawPath(path, paint, onTapUp: (details) {
-            ref.read(selectedFileProvider.state).state = element;
-          }, onSecondaryTapUp: (detail) {});
+            tap();
+          }, onSecondaryTapUp: (detail) {
+            tapSecondary(detail);
+          });
+
           if (selectedFile != null) {
             if (selectedFile.id == element.id) {
               paint.strokeWidth = 6;
               paint.color = Theme.of(context).primaryColor;
               customCanvas.drawPath(path, paint, onTapUp: (details) {
-                ref.read(selectedFileProvider.state).state = element;
+                tap();
               }, onSecondaryTapUp: (detail) {});
               paint.color = Colors.red;
               paint.strokeWidth = 3;
               customCanvas.drawPath(path, paint, onTapUp: (details) {
-                // ref.read(selectedFileProvider.state).state = element;
-              }, onSecondaryTapUp: (detail) {});
+                // tap();
+              }, onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+
+              newPaint.style = PaintingStyle.stroke;
+              newPaint.color = Theme.of(context).primaryColor;
+              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+              newPaint.style = PaintingStyle.fill;
+              newPaint.color = Colors.transparent;
+              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            } else {
+              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
             }
+          } else {
+            customCanvas.drawRect(path.getBounds(), newPaint,
+                onTapUp: ((details) {
+              tap();
+            }), onSecondaryTapUp: (detail) {
+              tapSecondary(detail);
+            });
           }
           // path.close();
         }
       }
     }
+    if (debug) {
+      canvas.drawRect(
+          Rect.fromLTWH(0, 0, size.width, 40),
+          paint
+            ..color = Colors.white.withOpacity(0.8)
+            ..style = PaintingStyle.fill);
+      drawText(canvas,
+          text:
+              "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint",
+          position: Offset(10, 10));
+    }
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-
-  // @override
-  // bool hitTest(Offset position) {
-  //   // print(position);
-  //   // return true;
-  // }
-
-  Rect boundingBoxOffset(List<Offset> list) {
-    double minX = double.infinity;
-    double maxX = 0;
-    double minY = double.infinity;
-    double maxY = 0;
-    for (int i = 0; i < list.length; i++) {
-      minX = min(minX, list[i].dx);
-      minY = min(minY, list[i].dy);
-      maxX = max(maxX, list[i].dx);
-      maxY = max(maxY, list[i].dy);
-    }
-
-    //var space = 5;
-    var rec = Rect.fromLTWH(minX, minY, (maxX - minX), (maxY - minY));
-
-    //print(rec);
-    return rec;
+    return false;
   }
 
   double indicativeAngle(List<Offset> points) {
@@ -199,5 +186,16 @@ class Painter extends CustomPainter {
     y = y / points.length;
 
     return Offset(x, y);
+  }
+
+  drawText(canvas, {required String text, required Offset position}) {
+    TextSpan span = TextSpan(
+        style: TextStyle(color: Colors.red, fontSize: 16.ssp()), text: text);
+    TextPainter tp = TextPainter(
+        text: span,
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr);
+    tp.layout();
+    tp.paint(canvas, position);
   }
 }

@@ -66,7 +66,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(20.mw());
     return Scaffold(
       body: Consumer(builder: (context, ref, c) {
         final fileService = ref.watch(fileDetailMiniServiceProvider);
@@ -105,76 +104,18 @@ class _MapScreenState extends State<MapScreen> {
                               ref,
                               files: widget.draw ? fileService.files : [],
                               selectedFileProvider: selectedFileProvider,
-                              // currentIndex: 0,
-                              // data: geoFiles,
-                              // sample: 100,
                               transformer: transformer,
-                              // selectedIndex: 0
                             ),
                           );
                         })
-                  ]
-
-                      // Transform.rotate(
-                      //   angle: 0.58,
-                      //   child: Container(
-                      //     color: Colors.red,
-                      //     width: 100,
-                      //     height: 100,
-                      //   ),
-                      // )
-
-                      ),
+                  ]),
                 )
               ];
               return GestureDetector(
-                // onSecondaryTapUp: (details) {
-                //   print('local :${details.localPosition}');
-                //   print('global: ${details.globalPosition}');
-                //   print(transformer.constraints);
-                //   showMenu(
-                //       context: context,
-                //       position: RelativeRect.fromLTRB(
-                //           details.localPosition.dx,
-                //           details.localPosition.dy,
-                //           transformer.constraints.maxWidth -
-                //               details.localPosition.dx,
-                //           0),
-                //       items: [PopupMenuItem(child: Text('data'))]);
-                // },
                 behavior: HitTestBehavior.opaque,
                 onDoubleTap: _onDoubleTap,
                 onScaleStart: _onScaleStart,
                 onScaleUpdate: _onScaleUpdate,
-                // onTap: () {
-                //   showDialog(
-                //     context: context,
-                //     builder: (context) => Center(
-                //         child: Container(
-                //             color: Colors.white, child: ContextMenu())),
-                //   );
-                // },
-                onTap: () {
-                  print("here");
-                },
-                onSecondaryTap: () {},
-                onTapUp: (details) {
-                  final location =
-                      transformer.fromXYCoordsToLatLng(details.localPosition);
-
-                  //final clicked = transformer.fromLatLngToXYCoords(location);
-                  //print('${location.longitude}, ${location.latitude}');
-                  //print('${clicked.dx}, ${clicked.dy}');
-                  //print('${details.localPosition.dx}, ${details.localPosition.dy}');
-
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (context) => AlertDialog(
-                  //     content: Text(
-                  //         'You have clicked on (${location.longitude}, ${location.latitude}).'),
-                  //   ),
-                  // );
-                },
                 child: Listener(
                   behavior: HitTestBehavior.opaque,
                   onPointerSignal: (event) {
