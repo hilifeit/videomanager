@@ -63,6 +63,7 @@ class VideoDetails extends StatelessWidget {
                   MapScreen(
                     controller: MapController(location: home),
                     isvisible: false,
+                    miniMap: true,
                   ),
                   Positioned(
                       bottom: 5.sh(),
@@ -73,11 +74,16 @@ class VideoDetails extends StatelessWidget {
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
+                                    contentPadding: EdgeInsets.zero,
                                     content: SizedBox(
-                                        // width: 1.sw,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .8,
                                         child: MapScreen(
-                                      controller: MapController(location: home),
-                                    )),
+                                          miniMap: true,
+                                          controller:
+                                              MapController(location: home),
+                                        )),
                                   );
                                 });
                           },

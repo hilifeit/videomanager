@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -37,6 +39,8 @@ class Painter extends CustomPainter {
     var customCanvas = TouchyCanvas(context, canvas);
     Rect visibleScreen = Rect.fromLTWH(0, 0, transformer.constraints.maxWidth,
         transformer.constraints.maxHeight - 5);
+    Rect test = Rect.fromLTWH(100, 100, 100, 100);
+    canvas.drawRect(test, paint);
     // canvas.drawRect(visibleScreen, paint);
     for (var element in files) {
       // if (files.indexOf(element) == 10)
@@ -65,7 +69,7 @@ class Painter extends CustomPainter {
           //   item,
           //   rpaint,
           //   onTapUp: (details) {
-          //     // ref.read(selectedFileProvider.state).state = element;
+          //     ref.read(selectedFileProvider.state).state = element;
           //   },
           //   onSecondaryTapUp: (detail) {
           //     print(detail.localPosition);
@@ -83,37 +87,67 @@ class Painter extends CustomPainter {
               element.location.coordinates.first[1],
               element.location.coordinates.first[0]));
 
-          path.moveTo(start.dx, start.dy);
+          // path.moveTo(start.dx, start.dy);
           // print(sampler);
+          List<Offset> points = [];
           for (int i = 0; i < element.location.coordinates.length; i++) {
             Offset current = transformer.fromLatLngToXYCoords(LatLng(
                 element.location.coordinates[i].last,
                 element.location.coordinates[i].first));
+            points.add(current);
+            // path.lineTo(current.dx, current.dy);
+            // path.transform(Matrix4.fromFloat64List(_m4storage));
+          }
+          bool shouldDraw = true;
+          // for (int i = 0; i < points.length; i++) {
+          //   if (i != 0 && i < points.length - 1) {
+          //     var distance = (points[i - 1] - points[i]).distance;
+          //     if (distance > 200) shouldDraw = false;
+          //   }
+          // }
+          // var a = canvas.drawPoints(PointMode.polygon, points, paint);
 
-            path.lineTo(current.dx, current.dy);
+          paint.strokeWidth = 3;
+          paint.style = PaintingStyle.stroke;
+          paint.color = Colors.red;
+          if (shouldDraw) {
+            path.addPolygon(points, false);
+            Paint newPaint = Paint()
+              ..color = Theme.of(context).primaryColor.withOpacity(0.1);
+            customCanvas.drawRect(path.getBounds(), newPaint,
+                onTapUp: ((details) {
+              ref.read(selectedFileProvider.state).state = element;
+            }));
           }
 
-          paint.strokeWidth = 5;
-          paint.color = Colors.red;
+          // var newpath = path.shift(Offset(1, 1));
+          // var newpath1 = path.shift(Offset(-1, -1));
+          // customCanvas.drawPath(newpath, paint, onTapUp: (details) {
+          //   ref.read(selectedFileProvider.state).state = element;
+          // });
+          // customCanvas.drawPath(newpath1, paint, onTapUp: (detail) {
+          //   ref.read(selectedFileProvider.state).state = element;
+          // });
+          // path.transform(Float64List.fromList(
+          //     [100, 0, 0, 0, 0, 100, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
           customCanvas.drawPath(path, paint, onTapUp: (details) {
             ref.read(selectedFileProvider.state).state = element;
           }, onSecondaryTapUp: (detail) {});
           if (selectedFile != null) {
             if (selectedFile.id == element.id) {
               paint.strokeWidth = 6;
-              paint.color = Colors.red;
+              paint.color = Theme.of(context).primaryColor;
               customCanvas.drawPath(path, paint, onTapUp: (details) {
                 ref.read(selectedFileProvider.state).state = element;
               }, onSecondaryTapUp: (detail) {});
-              paint.color = Colors.white;
-              paint.strokeWidth = 2;
+              paint.color = Colors.red;
+              paint.strokeWidth = 3;
               customCanvas.drawPath(path, paint, onTapUp: (details) {
                 // ref.read(selectedFileProvider.state).state = element;
               }, onSecondaryTapUp: (detail) {});
             }
           }
           // path.close();
-
         }
       }
     }
@@ -123,6 +157,12 @@ class Painter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
+
+  // @override
+  // bool hitTest(Offset position) {
+  //   // print(position);
+  //   // return true;
+  // }
 
   Rect boundingBoxOffset(List<Offset> list) {
     double minX = double.infinity;

@@ -2,7 +2,6 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 
-
 class Video extends StatefulWidget {
   @override
   _VideoState createState() => _VideoState();
@@ -65,15 +64,15 @@ class _VideoState extends State<Video> {
                                   'Left',
                                   style: kTextStyleInterMedium.copyWith(
                                       color: Colors.white),
-                                )),
-                              ),
-                            )),
-                        
-                      ],
-                    ),),
+
+                                )),)))
+                          ],
+                        ),
+                      ),
                     ],
                   )),
-                  Expanded(child: Stack(
+                  Expanded(
+                    child: Stack(
                       children: [
                         CustomVideoPlayer(controller: _controller2),
                         Positioned(
@@ -92,9 +91,9 @@ class _VideoState extends State<Video> {
                                 )),
                               ),
                             )),
-                        
                       ],
-                    ),),
+                    ),
+                  ),
                 ],
               ),
             ),
