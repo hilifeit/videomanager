@@ -47,6 +47,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   touchable: ^1.0.2
+  get_storage: ^2.0.3
 
 
 

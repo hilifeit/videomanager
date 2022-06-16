@@ -1,5 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/settingsitemwidget.dart';
+import 'package:videomanager/screens/settings/components/settingsitemwidget.dart';
 
 class SettingsBar extends ConsumerWidget {
   SettingsBar({required this.settingsIndexState, Key? key}) : super(key: key);

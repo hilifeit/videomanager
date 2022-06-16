@@ -41,7 +41,7 @@ extension responsiveInt on int {
   ssp({double? min}) {
     var value = this;
     var val = calculateResult(value, value.sp, min: min);
-    print("$value $val");
+    // print("$value $val");
     return val;
   }
 

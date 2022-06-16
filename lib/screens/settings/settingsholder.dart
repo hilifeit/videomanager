@@ -1,6 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/mapsettings/mapsettings.dart';
-import 'package:videomanager/screens/settings/settingsbar.dart';
+import 'package:videomanager/screens/settings/components/settingsbar.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/mapsettings.dart';
 
 final settingIndexProvider = StateProvider<int>((ref) {
   return 0;

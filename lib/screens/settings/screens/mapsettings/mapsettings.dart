@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 
 class MapsSettings extends ConsumerWidget {
@@ -6,6 +7,10 @@ class MapsSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final settingService = ref.watch(settingChangeNotifierProvider);
+    // settingService.setdefaultSetting();
+    final setting = ref.watch(settingChangeNotifierProvider).setting;
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,8 +30,12 @@ class MapsSettings extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TextWithSlider(
-                      text: 'Zoom Factor', max: '0', min: '10'),
+                  TextWithSlider(
+                    text: 'Zoom Factor',
+                    max: '0',
+                    min: '10',
+                    value: setting!.mapSetting.zoom,
+                  ),
                   SizedBox(
                     height: 23.sh(),
                   ),
@@ -45,13 +54,29 @@ class MapsSettings extends ConsumerWidget {
                   SizedBox(
                     height: 18.sh(),
                   ),
-                  const TextWithSlider(
-                      text: 'Original Map Quality', min: '120', max: '720'),
+                  TextWithSlider(
+                    text: 'Original Map Quality',
+                    min: '120',
+                    max: '720',
+                    value: setting.mapSetting.sample.original.toDouble(),
+                  ),
                   SizedBox(
                     height: 33.sh(),
                   ),
-                  const TextWithSlider(
-                      text: 'View Map Quality', max: '120', min: '720'),
+                  TextWithSlider(
+                      text: 'View Map Quality',
+                      max: '120',
+                      min: '720',
+                      value: setting.mapSetting.sample.view.toDouble()),
+                  SizedBox(
+                    height: 33.sh(),
+                  ),
+                  TextWithSlider(
+                    text: 'Original Mini Map Quality',
+                    max: '120',
+                    min: '720',
+                    value: setting.mapSetting.sample.miniMap.toDouble(),
+                  ),
                   SizedBox(
                     height: 56.sh(),
                   ),
@@ -67,7 +92,7 @@ class MapsSettings extends ConsumerWidget {
                         padding: EdgeInsets.only(right: 7.sw()),
                         child: Switch(
                             activeColor: Theme.of(context).primaryColor,
-                            value: true,
+                            value: setting.mapSetting.defaultLocation.enabled,
                             onChanged: (valueS) {}),
                       )
                     ],
@@ -75,45 +100,49 @@ class MapsSettings extends ConsumerWidget {
                   SizedBox(
                     height: 22.sh(),
                   ),
-                  Container(
-                    width: 816.sw(),
-                    height: 49.sh(),
-                    decoration: BoxDecoration(
-                        color: lightWhite.withOpacity(0.22),
-                        borderRadius: BorderRadius.circular(4.sr())),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: 32.sw(),
-                        top: 14.sh(),
-                        bottom: 14.sh(),
-                      ),
-                      child: Row(
-                        children: [
-                          const VideoDetailText(
-                            title: 'Latitude',
-                            details: '75.55',
-                          ),
-                          SizedBox(width: 11.sw()),
-                          const VideoDetailText(
-                            title: 'Longitutde',
-                            details: '75.55',
-                          ),
-                        ],
+                  if (setting.mapSetting.defaultLocation.enabled) ...[
+                    Container(
+                      width: 816.sw(),
+                      height: 49.sh(),
+                      decoration: BoxDecoration(
+                          color: lightWhite.withOpacity(0.22),
+                          borderRadius: BorderRadius.circular(4.sr())),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: 32.sw(),
+                          top: 14.sh(),
+                          bottom: 14.sh(),
+                        ),
+                        child: Row(
+                          children: [
+                            VideoDetailText(
+                              title: 'Latitude',
+                              details: setting.mapSetting.defaultLocation.lat
+                                  .toString(),
+                            ),
+                            SizedBox(width: 11.sw()),
+                            VideoDetailText(
+                              title: 'Longitutde',
+                              details: setting.mapSetting.defaultLocation.lng
+                                  .toString(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                    SizedBox(
+                      height: 23.sh(),
+                    ),
+                  ],
+                  TextWithSlider(
+                    text: 'Suggestion / Result Count',
+                    max: '50',
+                    min: '500',
+                    value: setting.mapSetting.filterCount.toDouble(),
                   ),
                   SizedBox(
                     height: 23.sh(),
                   ),
-                  const TextWithSlider(
-                      text: 'Suggestion / Result Count', max: '0', min: '500'),
-                  SizedBox(
-                    height: 23.sh(),
-                  ),
-                  const TextWithSlider(
-                      text: 'Original Mini Map Quality',
-                      max: '120',
-                      min: '720'),
                   SizedBox(
                     height: 96.sh(),
                   ),
@@ -161,16 +190,31 @@ class MapsSettings extends ConsumerWidget {
   }
 }
 
-class TextWithSlider extends StatelessWidget {
-  const TextWithSlider({
+class TextWithSlider extends StatefulWidget {
+  TextWithSlider({
     Key? key,
     required this.text,
     required this.min,
     required this.max,
+    this.value = 0.0,
   }) : super(key: key);
   final String text;
   final String min;
   final String max;
+  final double value;
+
+  @override
+  State<TextWithSlider> createState() => _TextWithSliderState();
+}
+
+class _TextWithSliderState extends State<TextWithSlider> {
+  double value = 0.0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  value = widget.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +222,7 @@ class TextWithSlider extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          text,
+          widget.text,
           style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
         ),
         SizedBox(
@@ -189,7 +233,7 @@ class TextWithSlider extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  min,
+                  widget.min,
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
@@ -200,18 +244,23 @@ class TextWithSlider extends StatelessWidget {
                         trackHeight: 7.sh(),
                         thumbShape:
                             RoundSliderThumbShape(enabledThumbRadius: 12.sr()),
-                            thumbColor: const Color(0xff9FC6DD)
-                            ),
+                        thumbColor: const Color(0xff9FC6DD)),
                     child: Slider(
                       activeColor: Theme.of(context).primaryColor,
+                      thumbColor: const Color(0xff9FC6DD),
                       inactiveColor: lightWhite,
-                      value: 0.2,
-                      onChanged: (value) {},
+                      value: value,
+                      onChanged: (val) {
+                        // widget.onChanged(val);
+                        setState(() {
+                          value = val;
+                        });
+                      },
                     ),
                   ),
                 ),
                 Text(
-                  max,
+                  widget.max,
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
