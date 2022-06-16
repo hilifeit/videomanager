@@ -4,6 +4,7 @@ var lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
     primaryColor: primaryColor,
+    toggleableActiveColor: primaryColor,
     inputDecorationTheme: InputDecorationTheme(
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.0),

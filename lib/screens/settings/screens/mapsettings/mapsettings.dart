@@ -1,4 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
@@ -7,6 +9,7 @@ import 'package:videomanager/screens/video/components/videodetails.dart';
 class MapSettings extends ConsumerWidget {
   MapSettings({Key? key, required this.mapSetting}) : super(key: key);
   final MapSetting mapSetting;
+  late MapSetting temp;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -29,10 +32,11 @@ class MapSettings extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextWithSlider(
+                    CustomSlider(
                       text: 'Zoom Factor',
-                      max: '0',
-                      min: '10',
+                      max: 10,
+                      min: 0,
+                      onChanged: (val) {},
                       value: mapSetting.zoom,
                     ),
                     SizedBox(
@@ -54,27 +58,30 @@ class MapSettings extends ConsumerWidget {
                     SizedBox(
                       height: 18.sh(),
                     ),
-                    TextWithSlider(
+                    CustomSlider(
                       text: 'Original Map Quality',
-                      min: '120',
-                      max: '720',
+                      min: 0,
+                      max: 720,
+                      onChanged: (val) {},
                       value: mapSetting.sample.original.toDouble(),
                     ),
                     SizedBox(
                       height: 33.sh(),
                     ),
-                    TextWithSlider(
+                    CustomSlider(
                         text: 'View Map Quality',
-                        max: '120',
-                        min: '720',
+                        max: 720,
+                        min: 0,
+                        onChanged: (val) {},
                         value: mapSetting.sample.view.toDouble()),
                     SizedBox(
                       height: 33.sh(),
                     ),
-                    TextWithSlider(
+                    CustomSlider(
                       text: 'Original Mini Map Quality',
-                      max: '120',
-                      min: '720',
+                      max: 120,
+                      min: 0,
+                      onChanged: (val) {},
                       value: mapSetting.sample.miniMap.toDouble(),
                     ),
                     SizedBox(
@@ -91,9 +98,9 @@ class MapSettings extends ConsumerWidget {
                         Padding(
                           padding: EdgeInsets.only(right: 7.sw()),
                           child: Switch(
-                              activeColor: Theme.of(context).primaryColor,
+                              // activeColor: Theme.of(context).primaryColor,
                               value: mapSetting.defaultLocation.enabled,
-                              onChanged: (valueS) {}),
+                              onChanged: (value) {}),
                         )
                       ],
                     ),
@@ -134,11 +141,12 @@ class MapSettings extends ConsumerWidget {
                         height: 23.sh(),
                       ),
                     ],
-                    TextWithSlider(
+                    CustomSlider(
                       text: 'Suggestion / Result Count',
-                      max: '50',
-                      min: '500',
+                      max: 10,
+                      min: 0,
                       value: mapSetting.filterCount.toDouble(),
+                      onChanged: (val) {},
                     ),
                     SizedBox(
                       height: 23.sh(),
@@ -192,114 +200,6 @@ class MapSettings extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TextWithSlider extends StatefulWidget {
-  TextWithSlider({
-    Key? key,
-    required this.text,
-    required this.min,
-    required this.max,
-    required this.value,
-  }) : super(key: key);
-  final String text;
-  final String min;
-  final String max;
-  final double value;
-
-  @override
-  State<TextWithSlider> createState() => _TextWithSliderState();
-}
-
-class _TextWithSliderState extends State<TextWithSlider> {
-  double value = 0.0;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    //  value = widget.value;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          widget.text,
-          style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
-        ),
-        SizedBox(
-          height: 16.sh(),
-          width: 546.63.sw(),
-          child: Padding(
-            padding: EdgeInsets.only(right: 32.37.sw()),
-            child: Row(
-              children: [
-                Text(
-                  widget.min,
-                  style: kTextStyleIbmRegular.copyWith(
-                      fontSize: 14.ssp(), color: Colors.black),
-                ),
-                Expanded(
-                  child: SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                        overlayShape: SliderComponentShape.noOverlay,
-                        trackHeight: 7.sh(),
-                        thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 12.sr()),
-                        thumbColor: const Color(0xff9FC6DD)),
-                    child: Slider(
-                      activeColor: Theme.of(context).primaryColor,
-                      thumbColor: const Color(0xff9FC6DD),
-                      inactiveColor: lightWhite,
-                      value: widget.value,
-                      onChanged: (val) {
-                        // widget.onChanged(val);
-                        setState(() {
-                          value = val;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Text(
-                  widget.max,
-                  style: kTextStyleIbmRegular.copyWith(
-                      fontSize: 14.ssp(), color: Colors.black),
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class TextWithDDownButton extends StatelessWidget {
-  const TextWithDDownButton({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 343.sw(),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            text,
-            style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
-          ),
-          Placeholder(fallbackWidth: 106.sw(), fallbackHeight: 49.sh()),
-        ],
       ),
     );
   }
