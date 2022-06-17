@@ -20,7 +20,7 @@ class TextWithDDownButton<T> extends ConsumerStatefulWidget {
 }
 
 class _TextWithDDownButtonState<T> extends ConsumerState<TextWithDDownButton> {
-  late T value;
+  late dynamic value;
   @override
   void initState() {
     super.initState();
