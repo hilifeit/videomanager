@@ -48,8 +48,10 @@ class MapSettings extends ConsumerWidget {
               text: 'Scroll Zoom in',
               value: 0,
             ),
+            SizedBox(height: 42.sh(),),
+            Text('Sample Quality',style: kTextStyleInterRegular.copyWith(fontSize: 22.ssp()),),
             SizedBox(
-              height: 23.sh(),
+              height: 18.sh(),
             ),
             CustomSlider(
               text: 'Original Map Quality',

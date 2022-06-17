@@ -41,6 +41,7 @@ class CustomSlider extends ConsumerWidget {
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
+                SizedBox(width: 10.sw()),
                 Expanded(
                   child: SliderTheme(
                     data: SliderTheme.of(context).copyWith(
@@ -64,6 +65,7 @@ class CustomSlider extends ConsumerWidget {
                     ),
                   ),
                 ),
+                SizedBox(width: 10.sw(),),
                 Text(
                   max.toInt().toString(),
                   style: kTextStyleIbmRegular.copyWith(
