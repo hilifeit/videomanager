@@ -3,7 +3,7 @@ class LocationSetting {
         required this.starvaFile,
     });
 
-    final bool starvaFile;
+     bool starvaFile;
 
     LocationSetting copyWith({
         required bool starvaFile,

@@ -71,15 +71,19 @@ class InputTextField extends StatelessWidget {
   Function()? onTap;
   final Icon? prefixIcon;
   final TextStyle? hintStyle;
+  final TextStyle? style;
+  String value;
 
   InputTextField(
       {Key? key,
       required this.title,
+      this.value='',
       this.hintStyle,
       this.validator,
       required this.isVisible,
       this.fillColor,
       this.prefixIcon,
+      this.style,
       this.onTap})
       : super(key: key);
 
@@ -100,12 +104,13 @@ class InputTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
-          style: kTextStyleIbmMedium.copyWith(color: Colors.black),
+          style: style??kTextStyleIbmMedium.copyWith(color: Colors.black),
           onTap: onTap,
           //controller: TextEditingController(text: ''),
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: (val) {},
+          initialValue: value,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
             fillColor: fillColor,
@@ -122,6 +127,7 @@ class InputTextField extends StatelessWidget {
             ),
             hintText: isVisible ? 'Enter ${title!.toLowerCase()}' : '$title',
             hintStyle: hintStyle,
+            
           ),
         ),
       ],
