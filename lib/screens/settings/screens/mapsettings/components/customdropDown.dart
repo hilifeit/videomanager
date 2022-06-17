@@ -1,23 +1,31 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
-class TextWithDDownButton extends ConsumerStatefulWidget {
-  TextWithDDownButton({Key? key, required this.text, required this.value})
+class TextWithDDownButton<T> extends ConsumerStatefulWidget {
+  const TextWithDDownButton(
+      {Key? key,
+      required this.text,
+      required this.value,
+      required this.onChanged,
+      required this.values,
+      required this.helperText})
       : super(key: key);
   final String text;
-  final double value;
-
+  final T value;
+  final Function(dynamic val) onChanged;
+  final List<T> values;
+  final String helperText;
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _TextWithDDownButtonState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _TextWithDDownButtonState();
 }
 
-class _TextWithDDownButtonState extends ConsumerState<TextWithDDownButton> {
-  double value = 0;
+class _TextWithDDownButtonState<T> extends ConsumerState<TextWithDDownButton> {
+  late T value;
   @override
   void initState() {
     super.initState();
     value = widget.value;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +43,14 @@ class _TextWithDDownButtonState extends ConsumerState<TextWithDDownButton> {
             height: 49.sh(),
             child: Container(
               color: lightWhite.withOpacity(0.22),
-              child: DropdownButton<double>(
+              child: DropdownButton<T>(
                   selectedItemBuilder: (context) {
                     return [
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 15.sw(), vertical: 12.sh()),
                         child: Text(
-                          "0",
+                          "$value ${widget.helperText}",
                           style: kTextStyleInterRegular.copyWith(
                               fontSize: 18.ssp()),
                         ),
@@ -59,14 +67,18 @@ class _TextWithDDownButtonState extends ConsumerState<TextWithDDownButton> {
                       color: Colors.black,
                     ),
                   ),
-                  items: <double>[widget.value, 20]
-                      .map<DropdownMenuItem<double>>((double value) {
-                    return DropdownMenuItem<double>(
+                  items: widget.values.map<DropdownMenuItem<T>>((value) {
+                    return DropdownMenuItem<T>(
                       value: value,
-                      child: Text(value.toInt().toString()),
+                      child: Text(value.toString()),
                     );
                   }).toList(),
-                  onChanged: (val) {}),
+                  onChanged: (val) {
+                    setState(() {
+                      value = val as T;
+                    });
+                    widget.onChanged(val);
+                  }),
             ),
           ),
         ],

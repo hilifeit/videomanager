@@ -20,16 +20,16 @@ class MapSetting {
   });
 
   double zoom;
-  double stroke;
-  double scroll;
+  int stroke;
+  int scroll;
   Sample sample;
   DefaultLocation defaultLocation;
   int filterCount;
 
   MapSetting copyWith({
     required double zoom,
-    required double stroke,
-    required double scroll,
+    required int stroke,
+    required int scroll,
     required Sample sample,
     required DefaultLocation defaultLocation,
     required int filterCount,
@@ -45,8 +45,8 @@ class MapSetting {
 
   factory MapSetting.fromJson(Map<String, dynamic> json) => MapSetting(
         zoom: json["zoom"].toDouble(),
-        stroke: json["stroke"].toDouble(),
-        scroll: json["scroll"].toDouble(),
+        stroke: json["stroke"],
+        scroll: json["scroll"],
         sample: Sample.fromJson(json["sample"]),
         defaultLocation: DefaultLocation.fromJson(json["defaultLocation"]),
         filterCount: json["filterCount"],

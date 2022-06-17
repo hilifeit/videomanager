@@ -10,7 +10,7 @@ import 'package:videomanager/screens/video/components/videodetails.dart';
 class MapSettings extends ConsumerWidget {
   MapSettings({Key? key, required this.mapSetting}) : super(key: key);
   final MapSetting mapSetting;
-  late MapSetting temp;
+  late MapSetting temp = MapSetting.fromJson(mapSetting.toJson());
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -33,22 +33,32 @@ class MapSettings extends ConsumerWidget {
               text: 'Zoom Factor',
               max: 10,
               min: 0,
-              onChanged: (val) {},
+              onChanged: (val) {
+                temp.zoom = val;
+              },
               value: mapSetting.zoom,
             ),
             SizedBox(
               height: 23.sh(),
             ),
-            TextWithDDownButton(
+            TextWithDDownButton<int>(
+              values: List.generate(10, (index) => index),
               text: 'Stroke Width',
               value: 0,
+              helperText: "px",
+              onChanged: (val) {
+                // print(val);
+              },
             ),
             SizedBox(
               height: 23.sh(),
             ),
-            TextWithDDownButton(
+            TextWithDDownButton<int>(
+              values: List.generate(11, (index) => index * 10),
               text: 'Scroll Zoom in',
               value: 0,
+              helperText: "%",
+              onChanged: (val) {},
             ),
             SizedBox(
               height: 42.sh(),
@@ -91,7 +101,7 @@ class MapSettings extends ConsumerWidget {
             ),
             CustomSwitch(
               text: 'Map Default Location',
-              space: 593.sw(),
+              space: 0.sw(),
               value: mapSetting.defaultLocation.enabled,
               onChanged: (va) {},
             ),
@@ -143,7 +153,13 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 96.sh(),
             ),
-            const OutlineAndElevatedButton(),
+            OutlineAndElevatedButton(
+              onApply: () {
+                var setting = ref.read(settingChangeNotifierProvider);
+
+                setting.updateSetting(mapSetting: temp);
+              },
+            ),
             SizedBox(height: 120.sh()),
           ]),
         ),

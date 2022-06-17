@@ -1,10 +1,9 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
 class OutlineAndElevatedButton extends StatelessWidget {
-  const OutlineAndElevatedButton({
-    Key? key,
-  }) : super(key: key);
-
+  const OutlineAndElevatedButton({Key? key, required this.onApply})
+      : super(key: key);
+  final Function onApply;
   @override
   Widget build(BuildContext context) {
     return Row(children: [
@@ -33,6 +32,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
               backgroundColor: MaterialStateColor.resolveWith(
                   (states) => Theme.of(context).primaryColor)),
           onPressed: () {
+            onApply();
             // var settingService =
             //     ref.read(settingChangeNotifierProvider);
             // settingService.updateSetting(

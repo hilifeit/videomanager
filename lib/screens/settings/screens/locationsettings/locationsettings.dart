@@ -4,7 +4,8 @@ import 'package:videomanager/screens/settings/components/outlineandelevatedbutto
 import 'package:videomanager/screens/settings/screens/locationsettings/models/locationsetting.dart';
 
 class LocationSettings extends ConsumerWidget {
-  const LocationSettings({required this.locationSetting, Key? key}) : super(key: key);
+  const LocationSettings({required this.locationSetting, Key? key})
+      : super(key: key);
   final LocationSetting locationSetting;
 
   @override
@@ -12,45 +13,42 @@ class LocationSettings extends ConsumerWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          
-         padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
-         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Location Settings',
-              style: kTextStyleInterSemiBold.copyWith(
-                  fontSize: 21.ssp(), color: primaryColor),
-            ),
-            SizedBox(
-              height: 43.sh(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
+          child: SizedBox(
+            width: 816.sw(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Allow Starva File Upload',
-                  style: kTextStyleInterRegular.copyWith(
-                      fontSize: 16.ssp(), color: Colors.black),
+                  'Location Settings',
+                  style: kTextStyleInterSemiBold.copyWith(
+                      fontSize: 21.ssp(), color: primaryColor),
                 ),
-                CustomSwitch(value: locationSetting.starvaFile,
-                onChanged: (va){},
+                SizedBox(
+                  height: 43.sh(),
                 ),
+                CustomSwitch(
+                  value: locationSetting.starvaFile,
+                  text: "Allow Starva File Upload",
+                  onChanged: (va) {},
+                  space: 566.sw(),
+                ),
+                SizedBox(
+                  height: 85.sw(),
+                ),
+                OutlineAndElevatedButton(
+                  onApply: () {},
+                ),
+                // OutlineAndElevatedButton(
+                //   width: 126.sw(),
+                //     height: 46.sh(),
+                //   space: 60.sw(),
+                // ),
               ],
             ),
-            SizedBox(height: 85.sw(),),
-            const OutlineAndElevatedButton(),
-            // OutlineAndElevatedButton(
-            //   width: 126.sw(),
-            //     height: 46.sh(),
-            //   space: 60.sw(),
-            // ),
-
-          ],
-         ),
           ),
+        ),
       ),
     );
   }
 }
-

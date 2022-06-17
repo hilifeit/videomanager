@@ -9,7 +9,7 @@ final Setting setting = Setting(
   mapSetting: MapSetting(
       zoom: 1.0,
       stroke: 1,
-      scroll: 1.0,
+      scroll: 1,
       sample: Sample(miniMap: 1, original: 1, view: 1),
       defaultLocation: DefaultLocation(enabled: false, lat: 1.0, lng: 1.0),
       filterCount: 1),

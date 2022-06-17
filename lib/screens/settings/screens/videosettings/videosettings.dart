@@ -13,10 +13,12 @@ class VideoSettings extends ConsumerWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 15.sh(), left: 73.sw()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
+          child: SizedBox(
+            // width: MediaQuery.of(context).size.width * .35,
+            width: 816.sw(),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 'Video Settings',
                 style: kTextStyleInterSemiBold.copyWith(
@@ -38,9 +40,7 @@ class VideoSettings extends ConsumerWidget {
                     'Stream Quality',
                     style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
                   ),
-                  SizedBox(
-                    width: 200.sw(),
-                  ),
+                  const Spacer(),
                   VideoQualitySelect(
                     value: videoSetting.videoQuality,
                     onChanged: (value) {},
@@ -50,31 +50,27 @@ class VideoSettings extends ConsumerWidget {
               SizedBox(
                 height: 44.sh(),
               ),
-              
-                  CustomSwitch(
-                    text: 'Allow Mini Map In Full Screen',
-                    space: 535.sw(),
-                      value: videoSetting.allowMinMapFScreen,
-                      onChanged: (val) {}),
-
-                
-              
+              CustomSwitch(
+                  text: 'Allow Mini Map In Full Screen',
+                  space: 535.sw(),
+                  value: videoSetting.allowMinMapFScreen,
+                  onChanged: (val) {}),
               SizedBox(
                 height: 56.36.sh(),
               ),
-              
-                  CustomSwitch(
-                    value: videoSetting.videoFScreen,
-                    onChanged: (val) {},
-                    text: 'Video In Full Screen ',
-                    space: 603.sw(),
-                  ),
-            
+              CustomSwitch(
+                value: videoSetting.videoFScreen,
+                onChanged: (val) {},
+                text: 'Video In Full Screen ',
+                space: 603.sw(),
+              ),
               SizedBox(
                 height: 55.sh(),
               ),
-              const OutlineAndElevatedButton(),
-            ]
+              OutlineAndElevatedButton(
+                onApply: () {},
+              ),
+            ]),
           ),
         ),
       ),

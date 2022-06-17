@@ -35,9 +35,10 @@ class _CustomSwitchState extends ConsumerState<CustomSwitch> {
           style: kTextStyleInterRegular.copyWith(
               color: Colors.black, fontSize: 16.ssp()),
         ),
-        SizedBox(
-          width: widget.space,
-        ),
+        Spacer(),
+        // SizedBox(
+        //   width: widget.space,
+        // ),
         Padding(
           padding: EdgeInsets.only(right: 7.sw()),
           child: Switch(

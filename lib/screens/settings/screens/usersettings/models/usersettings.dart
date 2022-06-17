@@ -16,38 +16,60 @@ class UserSettings extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-              'User Settings',
-              style: kTextStyleInterSemiBold.copyWith(
-                  fontSize: 21.ssp(), color: primaryColor),
-            ),
-            SizedBox(
-              height: 43.sh(),
-            ),
-            Row(children: [
-              Text('Number of video per user', style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),),
-            SizedBox(width: 121.sw(),
-            ),
-            Placeholder(
-              fallbackWidth: 106.sw(),
-              fallbackHeight: 49.sh(),)
-            ],),
-            SizedBox(height: 27.sh(),),
-            Row(children: [
-              Text('Add user',style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),),
-              SizedBox(width: 335.sw(),),
-              InkWell(
-                onTap: (){},
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  radius: 12.sr(),
-                  child: Icon(Icons.add,color: Colors.white,size: 20.ssp(),),
-                ),
+                'User Settings',
+                style: kTextStyleInterSemiBold.copyWith(
+                    fontSize: 21.ssp(), color: primaryColor),
               ),
-            ],),
-            SizedBox(
-              height: 105.sh(),
-            ),
-           const OutlineAndElevatedButton()
+              SizedBox(
+                height: 43.sh(),
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Number of video per user',
+                    style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
+                  ),
+                  SizedBox(
+                    width: 121.sw(),
+                  ),
+                  Placeholder(
+                    fallbackWidth: 106.sw(),
+                    fallbackHeight: 49.sh(),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 27.sh(),
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Add user',
+                    style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
+                  ),
+                  SizedBox(
+                    width: 335.sw(),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      radius: 12.sr(),
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 20.ssp(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 105.sh(),
+              ),
+              OutlineAndElevatedButton(
+                onApply: () {},
+              )
             ],
           ),
         ),

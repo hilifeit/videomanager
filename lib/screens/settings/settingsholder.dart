@@ -27,7 +27,6 @@ class SettingsHolder extends ConsumerWidget {
             settingsIndexState: settingIndexProvider,
           )),
           Expanded(
-              key: Key(settingsindex.toString()),
               flex: 5,
               child: (() {
                 if (settingsindex == 0) {
