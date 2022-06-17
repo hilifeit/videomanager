@@ -40,6 +40,7 @@ class VideoSettings extends ConsumerWidget {
                     width: 200.sw(),
                   ),
                   VideoQualitySelect(
+                    value: videoSetting.videoQuality,
                     onChanged: (value) {},
                   )
                 ],

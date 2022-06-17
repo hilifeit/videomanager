@@ -1,32 +1,40 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
-class CustomSlider extends ConsumerWidget {
-  CustomSlider(
+class CustomSlider extends ConsumerStatefulWidget {
+  const CustomSlider(
       {Key? key,
       required this.text,
       required this.min,
       required this.max,
       required this.value,
-      required this.onChanged})
+      required this.onChanged,
+      this.isDiscrete = false})
       : super(key: key);
   final String text;
   final double min;
   final double max;
   final double value;
-  final sliderState = StateProvider<double>((ref) {
-    return 0;
-  });
+  final bool isDiscrete;
   final Function(double val) onChanged;
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _CustomSliderState();
+}
+
+class _CustomSliderState extends ConsumerState<CustomSlider> {
+  double value = 0.0;
+  @override
+  void initState() {
+    super.initState();
+    value = widget.value;
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final valueState = ref.watch(sliderState.state).state;
-
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          text,
+          widget.text,
           style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
         ),
         SizedBox(
@@ -37,7 +45,7 @@ class CustomSlider extends ConsumerWidget {
             child: Row(
               children: [
                 Text(
-                  min.toInt().toString(),
+                  widget.min.toInt().toString(),
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
@@ -45,29 +53,46 @@ class CustomSlider extends ConsumerWidget {
                 Expanded(
                   child: SliderTheme(
                     data: SliderTheme.of(context).copyWith(
-                        overlayShape: SliderComponentShape.noOverlay,
-                        trackHeight: 7.sh(),
-                        thumbShape:
-                            RoundSliderThumbShape(enabledThumbRadius: 8.sr()),
-                        thumbColor: const Color(0xff9FC6DD)),
+                      // overlayShape: SliderComponentShape.noOverlay,
+                      valueIndicatorColor:
+                          Theme.of(context).primaryColor.withOpacity(0.15),
+                      showValueIndicator: widget.isDiscrete
+                          ? ShowValueIndicator.onlyForDiscrete
+                          : ShowValueIndicator.onlyForContinuous,
+                      valueIndicatorTextStyle:
+                          kTextStyleIbmRegular.copyWith(color: Colors.black),
+                      // valueIndicatorShape: const RoundSliderOverlayShape(),
+                      // trackHeight: 7.sh(),
+                      // thumbShape:
+                      //     RoundSliderThumbShape(enabledThumbRadius: 8.sr()),
+                      // thumbColor: const Color(0xff9FC6DD))
+                    ),
                     child: Slider(
-                      min: min,
-                      max: max,
+                      label: value.round().toString(),
+                      divisions: widget.isDiscrete
+                          ? (widget.max - widget.min).toInt()
+                          : null,
+                      min: widget.min,
+                      max: widget.max,
                       activeColor: Theme.of(context).primaryColor,
                       thumbColor: const Color(0xff9FC6DD),
                       inactiveColor: lightWhite,
-                      value: valueState,
+                      value: value,
                       onChanged: (val) {
                         // widget.onChanged(val);
-                        ref.read(sliderState.state).state = val;
-                        onChanged(val);
+                        setState(() {
+                          value = val;
+                        });
+                        widget.onChanged(val);
                       },
                     ),
                   ),
                 ),
-                SizedBox(width: 10.sw(),),
+                SizedBox(
+                  width: 10.sw(),
+                ),
                 Text(
-                  max.toInt().toString(),
+                  widget.max.toInt().toString(),
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 14.ssp(), color: Colors.black),
                 ),
