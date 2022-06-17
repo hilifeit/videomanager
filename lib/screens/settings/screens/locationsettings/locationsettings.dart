@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/locationsettings/models/locationsetting.dart';
 
 class LocationSettings extends ConsumerWidget {
@@ -27,7 +28,7 @@ class LocationSettings extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Map Default Location',
+                  'Allow Starva File Upload',
                   style: kTextStyleInterRegular.copyWith(
                       fontSize: 16.ssp(), color: Colors.black),
                 ),
@@ -41,45 +42,13 @@ class LocationSettings extends ConsumerWidget {
               ],
             ),
             SizedBox(height: 85.sw(),),
-            Row(children: [
-              Container(
-                width: 126.sw(),
-                height: 46.sh(),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.sr()),
-                    border: Border.all(color: Colors.black)),
-                child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Cancel',
-                      style: kTextStyleIbmMedium.copyWith(
-                          color: Colors.black, fontSize: 17.ssp()),
-                    )),
-              ),
-              SizedBox(
-                width: 60.sw(),
-              ),
-              SizedBox(
-                width: 126.sw(),
-                height: 46.sh(),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith(
-                          (states) => Theme.of(context).primaryColor)),
-                  onPressed: () {
-                    // var settingService =
-                    //     ref.read(settingChangeNotifierProvider);
-                    // settingService.updateSetting(
-                    //     mapSetting: mapSetting..defaultLocation.enabled = false);
-                  },
-                  child: Text(
-                    'Apply',
-                    style: kTextStyleIbmMedium.copyWith(
-                        color: Colors.white, fontSize: 17.ssp()),
-                  ),
-                ),
-              ),
-            ])
+            OutlineAndElevatedButton(),
+            // OutlineAndElevatedButton(
+            //   width: 126.sw(),
+            //     height: 46.sh(),
+            //   space: 60.sw(),
+            // ),
+
           ],
          ),
           ),
@@ -87,3 +56,4 @@ class LocationSettings extends ConsumerWidget {
     );
   }
 }
+

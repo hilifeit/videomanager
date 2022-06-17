@@ -3,6 +3,7 @@ import 'package:videomanager/screens/settings/components/settingsbar.dart';
 import 'package:videomanager/screens/settings/screens/locationsettings/locationsettings.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/mapsettings.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
+import 'package:videomanager/screens/settings/screens/usersettings/models/usersettings.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/videosettings.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
@@ -37,6 +38,11 @@ class SettingsHolder extends ConsumerWidget {
                 if (settingsindex == 1) {
                   return VideoSettings(
                     videoSetting: setting.videoSetting,
+                  );
+                }
+                if (settingsindex == 2) {
+                  return UserSettings(
+                    userSetting: setting.userSetting,
                   );
                 }
                 if (settingsindex == 3) {

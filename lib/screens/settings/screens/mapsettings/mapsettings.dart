@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
@@ -147,45 +148,9 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 96.sh(),
             ),
-            Row(children: [
-              Container(
-                width: 126.sw(),
-                height: 46.sh(),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.sr()),
-                    border: Border.all(color: Colors.black)),
-                child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Cancel',
-                      style: kTextStyleIbmMedium.copyWith(
-                          color: Colors.black, fontSize: 17.ssp()),
-                    )),
-              ),
-              SizedBox(
-                width: 60.sw(),
-              ),
-              SizedBox(
-                width: 126.sw(),
-                height: 46.sh(),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith(
-                          (states) => Theme.of(context).primaryColor)),
-                  onPressed: () {
-                    // var settingService =
-                    //     ref.read(settingChangeNotifierProvider);
-                    // settingService.updateSetting(
-                    //     mapSetting: mapSetting..defaultLocation.enabled = false);
-                  },
-                  child: Text(
-                    'Apply',
-                    style: kTextStyleIbmMedium.copyWith(
-                        color: Colors.white, fontSize: 17.ssp()),
-                  ),
-                ),
-              ),
-            ]),
+            OutlineAndElevatedButton(
+       
+            ),
             SizedBox(height: 120.sh()),
           ]),
         ),
@@ -193,3 +158,5 @@ class MapSettings extends ConsumerWidget {
     ));
   }
 }
+
+

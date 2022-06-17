@@ -51,6 +51,7 @@ class CustomSlider extends ConsumerWidget {
                             RoundSliderThumbShape(enabledThumbRadius: 8.sr()),
                         thumbColor: const Color(0xff9FC6DD)),
                     child: Slider(
+                      label: 'ref.read(sliderState.state).state.toString()',
                       min: min,
                       max: max,
                       activeColor: Theme.of(context).primaryColor,
