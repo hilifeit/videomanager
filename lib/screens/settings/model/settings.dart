@@ -45,7 +45,7 @@ class Setting {
   Map<String, dynamic> toJson() => {
         "mapSetting": mapSetting.toJson(),
         "videoSetting": videoSetting.toJson(),
-        "userSettings": userSetting.toJson(),
-        "locationSettings": locationSetting.toJson()
+        "userSetting": userSetting.toJson(),
+        "locationSetting": locationSetting.toJson()
       };
 }

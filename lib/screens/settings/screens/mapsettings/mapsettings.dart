@@ -10,7 +10,9 @@ import 'package:videomanager/screens/video/components/videodetails.dart';
 class MapSettings extends ConsumerWidget {
   MapSettings({Key? key, required this.mapSetting}) : super(key: key);
   final MapSetting mapSetting;
+
   late MapSetting temp = MapSetting.fromJson(mapSetting.toJson());
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(

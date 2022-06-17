@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:flutter/cupertino.dart';
 
 class CustomSwitch extends ConsumerStatefulWidget {
   const CustomSwitch({
@@ -41,8 +42,9 @@ class _CustomSwitchState extends ConsumerState<CustomSwitch> {
         // ),
         Padding(
           padding: EdgeInsets.only(right: 7.sw()),
-          child: Switch(
-              // activeColor: Theme.of(context).primaryColor,
+          child: CupertinoSwitch(
+              activeColor: Theme.of(context).primaryColor.withAlpha(64),
+              thumbColor: Theme.of(context).primaryColor,
               value: value,
               onChanged: (val) {
                 setState(() {

@@ -40,8 +40,8 @@ class SettingService extends ChangeNotifier {
   }
 
   load() async {
-    var storedData = await storage.read(settingStorageKey);
-
+    var storedData = storage.read(settingStorageKey);
+    // print(storedData);
     if (storedData == null) {
       setdefaultSetting();
     } else {
