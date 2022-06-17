@@ -20,7 +20,6 @@ class _VideoQualitySelectState extends ConsumerState<VideoQualitySelect> {
   int value = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     value = widget.value;
   }
@@ -53,6 +52,10 @@ class _VideoQualitySelectState extends ConsumerState<VideoQualitySelect> {
           child: Center(
             child: Text(
               item.text,
+              style: value == item.id
+                  ? kTextStyleInterRegular.copyWith(
+                      fontSize: 18.ssp(), color: Theme.of(context).primaryColor)
+                  : kTextStyleInterRegular.copyWith(fontSize: 18.ssp()),
             ),
           ),
         ));

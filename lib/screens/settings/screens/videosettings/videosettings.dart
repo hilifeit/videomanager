@@ -3,10 +3,12 @@ import 'package:videomanager/screens/settings/components/customswitch.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/components/videoqualityselect.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 
 class VideoSettings extends ConsumerWidget {
-  const VideoSettings({required this.videoSetting, Key? key}) : super(key: key);
+  VideoSettings({required this.videoSetting, Key? key}) : super(key: key);
   final VideoSetting videoSetting;
+  late VideoSetting temp = VideoSetting.fromJson(videoSetting.toJson());
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,11 +27,29 @@ class VideoSettings extends ConsumerWidget {
                     fontSize: 21.ssp(), color: primaryColor),
               ),
               SizedBox(
-                height: 39.sh(),
+                height: 12.sh(),
               ),
-              Text(
-                'Video Server Url',
-                style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
+              Row(
+                children: [
+                  Text(
+                    'Video  Url',
+                                        style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
+
+                  ),
+                  Spacer(),
+                  Text(
+                    'https:// ',
+                    style: kTextStyleIbmSemiBold.copyWith(
+                        fontSize: 18.ssp(), color: secondaryColorText),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: InputTextField(
+                      value: videoSetting.videourl,
+                      style: kTextStyleIbmSemiBold.copyWith(fontSize: 18.ssp(),color: Colors.black),
+                      
+                      title: 'title', isVisible: false)),
+                ],
               ),
               SizedBox(
                 height: 39.sh(),
@@ -43,7 +63,9 @@ class VideoSettings extends ConsumerWidget {
                   const Spacer(),
                   VideoQualitySelect(
                     value: videoSetting.videoQuality,
-                    onChanged: (value) {},
+                    onChanged: (val) {
+                      temp.videoQuality = val;
+                    },
                   ),
                 ],
               ),
@@ -54,13 +76,17 @@ class VideoSettings extends ConsumerWidget {
                   text: 'Allow Mini Map In Full Screen',
                   space: 535.sw(),
                   value: videoSetting.allowMinMapFScreen,
-                  onChanged: (val) {}),
+                  onChanged: (val) {
+                    temp.allowMinMapFScreen = val;
+                  }),
               SizedBox(
                 height: 56.36.sh(),
               ),
               CustomSwitch(
                 value: videoSetting.videoFScreen,
-                onChanged: (val) {},
+                onChanged: (val) {
+                  temp.videoFScreen = val;
+                },
                 text: 'Video In Full Screen ',
                 space: 603.sw(),
               ),
@@ -68,7 +94,11 @@ class VideoSettings extends ConsumerWidget {
                 height: 55.sh(),
               ),
               OutlineAndElevatedButton(
-                onApply: () {},
+                onApply: () {
+                  var setting = ref.read(settingChangeNotifierProvider);
+
+                  setting.updateSetting(videoSetting: temp);
+                },
               ),
             ]),
           ),

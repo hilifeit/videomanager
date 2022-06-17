@@ -46,10 +46,10 @@ class MapSettings extends ConsumerWidget {
             TextWithDDownButton<int>(
               values: List.generate(10, (index) => index),
               text: 'Stroke Width',
-              value: 0,
+              value: mapSetting.stroke,
               helperText: "px",
               onChanged: (val) {
-                // print(val);
+                temp.stroke = val;
               },
             ),
             SizedBox(
@@ -58,9 +58,9 @@ class MapSettings extends ConsumerWidget {
             TextWithDDownButton<int>(
               values: List.generate(11, (index) => index * 10),
               text: 'Scroll Zoom in',
-              value: 0,
+              value: mapSetting.scroll,
               helperText: "%",
-              onChanged: (val) {},
+              onChanged: (val) {temp.scroll = val;},
             ),
             SizedBox(
               height: 42.sh(),
@@ -76,7 +76,7 @@ class MapSettings extends ConsumerWidget {
               text: 'Original Map Quality',
               min: 0,
               max: 720,
-              onChanged: (val) {},
+              onChanged: (val) {temp.sample.original = val.toInt();},
               value: mapSetting.sample.original.toDouble(),
             ),
             SizedBox(
@@ -86,7 +86,7 @@ class MapSettings extends ConsumerWidget {
                 text: 'View Map Quality',
                 max: 720,
                 min: 0,
-                onChanged: (val) {},
+                onChanged: (val) {temp.sample.view = val.toInt();},
                 value: mapSetting.sample.view.toDouble()),
             SizedBox(
               height: 33.sh(),
@@ -95,7 +95,7 @@ class MapSettings extends ConsumerWidget {
               text: 'Original Mini Map Quality',
               max: 120,
               min: 0,
-              onChanged: (val) {},
+              onChanged: (val) {temp.sample.miniMap = val.toInt();},
               value: mapSetting.sample.miniMap.toDouble(),
             ),
             SizedBox(
@@ -105,7 +105,7 @@ class MapSettings extends ConsumerWidget {
               text: 'Map Default Location',
               space: 0.sw(),
               value: mapSetting.defaultLocation.enabled,
-              onChanged: (va) {},
+              onChanged: (val) {temp.defaultLocation.enabled = val;},
             ),
             SizedBox(
               height: 22.sh(),
@@ -147,7 +147,7 @@ class MapSettings extends ConsumerWidget {
               max: 10,
               min: 0,
               value: mapSetting.filterCount.toDouble(),
-              onChanged: (val) {},
+              onChanged: (val) {temp.filterCount = val.toInt();},
             ),
             SizedBox(
               height: 23.sh(),

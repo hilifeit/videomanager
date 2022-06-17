@@ -75,12 +75,12 @@ class CustomSlider extends StatelessWidget {
           text,
           style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
         ),
-        Consumer(
-          builder: (context, ref, c) {
-            final currentValue = ref.watch(valueProvider.state).state;
-            return Text(" (${currentValue.toInt().toString()})");
-          },
-        ),
+        // Consumer(
+        //   builder: (context, ref, c) {
+        //     final currentValue = ref.watch(valueProvider.state).state;
+        //     return Text(" (${currentValue.toInt().toString()})");
+        //   },
+        // ),
         Spacer(),
         SizedBox(
           height: 16.sh(),
@@ -101,13 +101,13 @@ class CustomSlider extends StatelessWidget {
                     return SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                           // overlayShape: SliderComponentShape.noOverlay,
-                          valueIndicatorColor:
-                              Theme.of(context).primaryColor.withOpacity(0.5),
-                          showValueIndicator: isDiscrete
-                              ? ShowValueIndicator.onlyForDiscrete
-                              : ShowValueIndicator.onlyForContinuous,
-                          valueIndicatorTextStyle: kTextStyleIbmRegular
-                              .copyWith(color: Colors.black),
+                          // valueIndicatorColor:
+                          //     Theme.of(context).primaryColor.withOpacity(0.5),
+                          // showValueIndicator: isDiscrete
+                          //     ? ShowValueIndicator.onlyForDiscrete
+                          //     : ShowValueIndicator.onlyForContinuous,
+                          // valueIndicatorTextStyle: kTextStyleIbmRegular
+                          //     .copyWith(color: Colors.black),
                           thumbShape: CustomSliderComponentShape(
                               currentValue: currentValue)),
                       child: Slider(
