@@ -16,6 +16,8 @@ class CustomSlider extends ConsumerStatefulWidget {
   final double value;
   final bool isDiscrete;
   final Function(double val) onChanged;
+
+  
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CustomSliderState();
 }
@@ -55,7 +57,7 @@ class _CustomSliderState extends ConsumerState<CustomSlider> {
                     data: SliderTheme.of(context).copyWith(
                       // overlayShape: SliderComponentShape.noOverlay,
                       valueIndicatorColor:
-                          Theme.of(context).primaryColor.withOpacity(0.15),
+                          Theme.of(context).primaryColor.withOpacity(0.5),
                       showValueIndicator: widget.isDiscrete
                           ? ShowValueIndicator.onlyForDiscrete
                           : ShowValueIndicator.onlyForContinuous,

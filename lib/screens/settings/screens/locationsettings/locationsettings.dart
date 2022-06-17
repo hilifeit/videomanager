@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/components/customswitch.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/locationsettings/models/locationsetting.dart';
 
@@ -32,17 +33,13 @@ class LocationSettings extends ConsumerWidget {
                   style: kTextStyleInterRegular.copyWith(
                       fontSize: 16.ssp(), color: Colors.black),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(right: 7.sw()),
-                  child: Switch(
-                      // activeColor: Theme.of(context).primaryColor,
-                      value: locationSetting.starvaFile,
-                      onChanged: (value) {}),
-                )
+                CustomSwitch(value: locationSetting.starvaFile,
+                onChanged: (va){},
+                ),
               ],
             ),
             SizedBox(height: 85.sw(),),
-            OutlineAndElevatedButton(),
+            const OutlineAndElevatedButton(),
             // OutlineAndElevatedButton(
             //   width: 126.sw(),
             //     height: 46.sh(),

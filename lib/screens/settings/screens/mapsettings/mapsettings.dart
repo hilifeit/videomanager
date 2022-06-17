@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/components/customswitch.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
@@ -49,8 +50,13 @@ class MapSettings extends ConsumerWidget {
               text: 'Scroll Zoom in',
               value: 0,
             ),
-            SizedBox(height: 42.sh(),),
-            Text('Sample Quality',style: kTextStyleInterRegular.copyWith(fontSize: 22.ssp()),),
+            SizedBox(
+              height: 42.sh(),
+            ),
+            Text(
+              'Sample Quality',
+              style: kTextStyleInterRegular.copyWith(fontSize: 22.ssp()),
+            ),
             SizedBox(
               height: 18.sh(),
             ),
@@ -83,22 +89,11 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 56.sh(),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Map Default Location',
-                  style: kTextStyleInterRegular.copyWith(
-                      fontSize: 16.ssp(), color: Colors.black),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 7.sw()),
-                  child: Switch(
-                      // activeColor: Theme.of(context).primaryColor,
-                      value: mapSetting.defaultLocation.enabled,
-                      onChanged: (value) {}),
-                )
-              ],
+            CustomSwitch(
+              text: 'Map Default Location',
+              space: 593.sw(),
+              value: mapSetting.defaultLocation.enabled,
+              onChanged: (va) {},
             ),
             SizedBox(
               height: 22.sh(),
@@ -148,9 +143,7 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 96.sh(),
             ),
-            OutlineAndElevatedButton(
-       
-            ),
+            const OutlineAndElevatedButton(),
             SizedBox(height: 120.sh()),
           ]),
         ),
@@ -158,5 +151,3 @@ class MapSettings extends ConsumerWidget {
     ));
   }
 }
-
-

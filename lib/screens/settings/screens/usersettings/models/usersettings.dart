@@ -47,7 +47,7 @@ class UserSettings extends ConsumerWidget {
             SizedBox(
               height: 105.sh(),
             ),
-           OutlineAndElevatedButton()
+           const OutlineAndElevatedButton()
             ],
           ),
         ),

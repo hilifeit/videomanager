@@ -1,10 +1,24 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
-class TextWithDDownButton extends StatelessWidget {
+class TextWithDDownButton extends ConsumerStatefulWidget {
   TextWithDDownButton({Key? key, required this.text, required this.value})
       : super(key: key);
   final String text;
   final double value;
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _TextWithDDownButtonState();
+}
+
+class _TextWithDDownButtonState extends ConsumerState<TextWithDDownButton> {
+  double value = 0;
+  @override
+  void initState() {
+    super.initState();
+    value = widget.value;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -13,7 +27,7 @@ class TextWithDDownButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            text,
+            widget.text,
             style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
           ),
           SizedBox(
@@ -37,7 +51,7 @@ class TextWithDDownButton extends StatelessWidget {
                   },
                   // isExpanded: true,
                   underline: Container(),
-                  value: value,
+                  value: widget.value,
                   icon: Expanded(
                     child: Icon(
                       Videomanager.down,
@@ -45,7 +59,7 @@ class TextWithDDownButton extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  items: <double>[value, 20]
+                  items: <double>[widget.value, 20]
                       .map<DropdownMenuItem<double>>((double value) {
                     return DropdownMenuItem<double>(
                       value: value,
