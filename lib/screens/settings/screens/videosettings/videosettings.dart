@@ -109,10 +109,14 @@ class VideoSettings extends ConsumerWidget {
                     OutlineAndElevatedButton(
                       onApply: () {
                         if (_formKey.currentState!.validate()) {
-                          var setting = ref.read(settingChangeNotifierProvider);
-
-                          setting.updateSetting(videoSetting: temp);
+                          return true;
                         }
+                        return false;
+                      },
+                      onSucess: () {
+                        var setting = ref.read(settingChangeNotifierProvider);
+
+                        setting.updateSetting(videoSetting: temp);
                       },
                     ),
                   ]),

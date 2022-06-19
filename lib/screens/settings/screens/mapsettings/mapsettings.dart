@@ -2,6 +2,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/customswitch.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/mapdefault.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
@@ -132,7 +133,8 @@ class MapSettings extends ConsumerWidget {
               height: 96.sh(),
             ),
             OutlineAndElevatedButton(
-              onApply: () {
+              onApply: () {},
+              onSucess: () {
                 var setting = ref.read(settingChangeNotifierProvider);
 
                 setting.updateSetting(mapSetting: temp);

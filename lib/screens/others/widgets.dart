@@ -115,6 +115,14 @@ class InputTextField extends StatelessWidget {
             prefixIcon: prefixIcon,
             fillColor: fillColor,
             filled: true,
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
             contentPadding:
                 EdgeInsets.only(left: 19.5.sw(), top: 16.sh(), bottom: 17.sh()),
             enabledBorder: OutlineInputBorder(

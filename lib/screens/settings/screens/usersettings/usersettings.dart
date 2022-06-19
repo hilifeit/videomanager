@@ -40,7 +40,8 @@ class UserSettings extends ConsumerWidget {
                   height: 105.sh(),
                 ),
                 OutlineAndElevatedButton(
-                  onApply: () {
+                  onApply: () {},
+                  onSucess: () {
                     var setting = ref.read(settingChangeNotifierProvider);
 
                     setting.updateSetting(userSetting: temp);

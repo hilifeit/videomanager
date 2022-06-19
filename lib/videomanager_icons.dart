@@ -12,6 +12,10 @@
 ///       - asset: fonts/Videomanager.ttf
 ///
 /// 
+/// * Elusive, Copyright (C) 2013 by Aristeides Stathopoulos
+///         Author:    Aristeides Stathopoulos
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://aristeides.com/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -50,7 +54,7 @@ class Videomanager {
   static const IconData video = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData videoedit = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData refresh = IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData selectcheckbox = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData check = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData usersoutline = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData videooutline = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData add_user_svgrepo_com_1 = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);

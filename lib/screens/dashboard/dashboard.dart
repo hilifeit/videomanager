@@ -56,6 +56,7 @@ class CustomCard extends StatelessWidget {
     required this.text,
     required this.color,
     required this.icon,
+    this.isvisible = true,
   }) : super(key: key);
   final double height;
   final double width;
@@ -63,6 +64,7 @@ class CustomCard extends StatelessWidget {
   final String text;
   final Color color;
   final IconData icon;
+  bool isvisible;
 
   @override
   Widget build(BuildContext context) {
@@ -75,27 +77,37 @@ class CustomCard extends StatelessWidget {
           color: color,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 number.toString(),
                 style: kTextStyleInterMedium.copyWith(
-                  fontSize: 37.ssp(),
+                  fontSize: 37.ssp(min: 18),
                 ),
               ),
+              if (!isvisible)
+                Icon(
+                  icon,
+                  color: Colors.black,
+                  size: 24.sr(min: 14),
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    icon,
-                    color: Colors.black,
-                    size: 24.sr(),
-                  ),
-                  SizedBox(
-                    width: 19.36.sw(),
-                  ),
+                  if (isvisible) ...[
+                    Icon(
+                      icon,
+                      color: Colors.black,
+                      size: 24.sr(),
+                    ),
+                    SizedBox(
+                      width: 19.36.sw(),
+                    ),
+                  ],
                   Text(
                     text,
-                    style: kTextStyleInterMedium.copyWith(fontSize: 24.ssp()),
+                    style: kTextStyleInterMedium.copyWith(
+                        fontSize: 24.ssp(min: 14)),
                   ),
                 ],
               ),
