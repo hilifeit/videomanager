@@ -1,12 +1,18 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
 class OutlineAndElevatedButton extends StatelessWidget {
-  const OutlineAndElevatedButton({Key? key, required this.onApply})
+   OutlineAndElevatedButton({Key? key, required this.onApply,  this.text, this.center= false})
       : super(key: key);
   final Function onApply;
+   String? text;
+   bool center;
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Row(
+
+      mainAxisAlignment: center?MainAxisAlignment.center:MainAxisAlignment.start,
+
+      children: [
       Container(
         width: 126.sw(),
         height: 46.sh(),
@@ -39,7 +45,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
             //     mapSetting: mapSetting..defaultLocation.enabled = false);
           },
           child: Text(
-            'Apply',
+            text??'Apply',
             style: kTextStyleIbmMedium.copyWith(
                 color: Colors.white, fontSize: 17.ssp()),
           ),

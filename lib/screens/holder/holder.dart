@@ -1,6 +1,8 @@
+import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
+import 'package:videomanager/screens/users/users.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 
@@ -24,9 +26,9 @@ class Holder extends ConsumerWidget {
           index != 3
               ? Expanded(
                   child: AnimatedIndexedStack(index: index, children: [
-                    ViewScreen(),
+                    DashBoard(),
+                    Users(),
                     Video(),
-                    Container(),
                   ]),
                 )
               : Expanded(child: SettingsHolder())
