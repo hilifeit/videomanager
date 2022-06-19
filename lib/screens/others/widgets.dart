@@ -1,6 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
-
 const double minButtonHeight = 45;
 const double buttonHeight = 55;
 
@@ -43,10 +42,8 @@ class Button extends StatelessWidget {
         //.h,
         child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStateColor.resolveWith((states) =>
-                    primary!
-                        ? const Color(0xff40667D)
-                        : color!)),
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => primary! ? const Color(0xff40667D) : color!)),
             onPressed: onPressed != null
                 ? () {
                     onPressed!();
@@ -73,18 +70,19 @@ class InputTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextStyle? style;
   String value;
-
+  final Function(String) onChanged;
   InputTextField(
       {Key? key,
       required this.title,
-      this.value='',
+      this.value = '',
       this.hintStyle,
       this.validator,
       required this.isVisible,
       this.fillColor,
       this.prefixIcon,
       this.style,
-      this.onTap})
+      this.onTap,
+      required this.onChanged})
       : super(key: key);
 
   @override
@@ -104,12 +102,14 @@ class InputTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
-          style: style??kTextStyleIbmMedium.copyWith(color: Colors.black),
+          style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
           onTap: onTap,
           //controller: TextEditingController(text: ''),
           validator: validator,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          onChanged: (val) {},
+          autovalidateMode: AutovalidateMode.always,
+          onChanged: (val) {
+            onChanged(val);
+          },
           initialValue: value,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
@@ -127,7 +127,6 @@ class InputTextField extends StatelessWidget {
             ),
             hintText: isVisible ? 'Enter ${title!.toLowerCase()}' : '$title',
             hintStyle: hintStyle,
-            
           ),
         ),
       ],

@@ -66,6 +66,7 @@ class Login extends ConsumerWidget {
                     isVisible: true,
                     title: 'USERNAME',
                     validator: (val) => validateUserName(val!),
+                    onChanged: (String) {},
                   ),
                   SizedBox(
                     height: 25.5.sh(),
@@ -74,6 +75,7 @@ class Login extends ConsumerWidget {
                     isVisible: true,
                     title: 'PASSWORD',
                     validator: (val) => validatePassword(val!),
+                    onChanged: (String) {},
                   ),
                   SizedBox(
                     height: 25.5.sh(),
@@ -193,7 +195,7 @@ class Login extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const CircularProgressIndicator(),
-                 SizedBox(
+                SizedBox(
                   height: 20.sh(),
                 ),
                 Text("Filtering from ${entities.length} files")

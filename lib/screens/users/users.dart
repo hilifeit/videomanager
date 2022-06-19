@@ -81,6 +81,7 @@ class Users extends StatelessWidget {
                                   style: kTextStyleIbmSemiBold.copyWith(
                                       fontSize: 16.ssp(), color: Colors.black),
                                   validator: (val) => validateUserName(val!),
+                                  onChanged: (val) {},
                                 ),
                                 SizedBox(
                                   height: 14.sh(),
@@ -94,7 +95,8 @@ class Users extends StatelessWidget {
                                       border: Border.all(
                                         color: secondaryColor,
                                       ),
-                                      borderRadius: BorderRadius.circular(5.sr()),
+                                      borderRadius:
+                                          BorderRadius.circular(5.sr()),
                                       color: Colors.white),
                                   child: DropdownButton<String>(
                                       selectedItemBuilder: (context) {
@@ -120,7 +122,8 @@ class Users extends StatelessWidget {
                                         ),
                                       ),
                                       items: values
-                                          .map<DropdownMenuItem<String>>((value) {
+                                          .map<DropdownMenuItem<String>>(
+                                              (value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
@@ -140,6 +143,7 @@ class Users extends StatelessWidget {
                                   style: kTextStyleIbmSemiBold.copyWith(
                                       fontSize: 16.ssp(), color: Colors.black),
                                   validator: (val) => validateEmail(val!),
+                                  onChanged: (val) {},
                                 ),
                                 SizedBox(height: 14.sh()),
                                 InputTextField(
@@ -149,6 +153,7 @@ class Users extends StatelessWidget {
                                   style: kTextStyleIbmSemiBold.copyWith(
                                       fontSize: 16.ssp(), color: Colors.black),
                                   validator: (val) => validatePassword(val!),
+                                  onChanged: (val) {},
                                 ),
                                 SizedBox(height: 14.sh()),
                                 InputTextField(
@@ -158,6 +163,7 @@ class Users extends StatelessWidget {
                                   style: kTextStyleIbmSemiBold.copyWith(
                                       fontSize: 16.ssp(), color: Colors.black),
                                   validator: (val) => validatePhone(val!),
+                                  onChanged: (val) {},
                                 ),
                                 SizedBox(
                                   height: 60.sh(),
@@ -165,15 +171,13 @@ class Users extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.center,
                                   child: OutlineAndElevatedButton(
-                                    center: true,
-                                    text: 'Add',
-                                    onApply: (){}),
+                                      center: true,
+                                      text: 'Add',
+                                      onApply: () {}),
                                 ),
                                 SizedBox(height: 20.sh()),
                               ],
-                            ))
-                      ,
-                      
+                            )),
                       ],
                     ),
                   ),

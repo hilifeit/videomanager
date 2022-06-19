@@ -26,7 +26,8 @@ class Holder extends ConsumerWidget {
           index != 3
               ? Expanded(
                   child: AnimatedIndexedStack(index: index, children: [
-                    DashBoard(),
+                    ViewScreen(),
+                    // DashBoard(),
                     Users(),
                     Video(),
                   ]),
