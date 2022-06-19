@@ -16,7 +16,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
         child: TextButton(
             onPressed: () {},
             child: Text(
-              'Cancel',
+              'Reset',
               style: kTextStyleIbmMedium.copyWith(
                   color: Colors.black, fontSize: 17.ssp()),
             )),

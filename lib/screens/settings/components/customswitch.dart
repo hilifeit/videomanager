@@ -1,8 +1,8 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:flutter/cupertino.dart';
 
-class CustomSwitch extends ConsumerStatefulWidget {
-  const CustomSwitch({
+class CustomSwitch extends StatelessWidget {
+  CustomSwitch({
     required this.value,
     required this.onChanged,
     required this.space,
@@ -15,44 +15,41 @@ class CustomSwitch extends ConsumerStatefulWidget {
   final double space;
   final String text;
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CustomSwitchState();
-}
-
-class _CustomSwitchState extends ConsumerState<CustomSwitch> {
-  bool value = true;
-  @override
-  void initState() {
-    super.initState();
-    value = widget.value;
-  }
+  late final valueProvider = StateProvider<bool>((ref) {
+    return value;
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
-          widget.text,
+          text,
           style: kTextStyleInterRegular.copyWith(
               color: Colors.black, fontSize: 16.ssp()),
         ),
-        Spacer(),
+        const Spacer(),
         // SizedBox(
         //   width: widget.space,
         // ),
-        Padding(
-          padding: EdgeInsets.only(right: 7.sw()),
-          child: CupertinoSwitch(
-              activeColor: Theme.of(context).primaryColor.withAlpha(64),
-              thumbColor: Theme.of(context).primaryColor,
-              value: value,
-              onChanged: (val) {
-                setState(() {
-                  value = val;
-                });
-                widget.onChanged(val);
-              }),
-        ),
+        Consumer(builder: (context, ref, c) {
+          final selectedValue = ref.watch(valueProvider.state).state;
+          return Padding(
+            padding: EdgeInsets.only(right: 7.sw()),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: CupertinoSwitch(
+                  activeColor: Theme.of(context).primaryColor.withAlpha(64),
+                  thumbColor: Theme.of(context).primaryColor,
+                  value: selectedValue,
+                  onChanged: (val) {
+                    ref.read(valueProvider.state).state = selectedValue;
+
+                    onChanged(val);
+                  }),
+            ),
+          );
+        }),
       ],
     );
   }

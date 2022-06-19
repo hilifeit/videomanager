@@ -2,6 +2,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/customswitch.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/components/mapdefault.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -43,8 +44,8 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 23.sh(),
             ),
-            TextWithDDownButton<int>(
-              values: List.generate(10, (index) => index),
+            CustomDropDown<int>(
+              values: const [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
               text: 'Stroke Width',
               value: mapSetting.stroke,
               helperText: "px",
@@ -55,12 +56,14 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 23.sh(),
             ),
-            TextWithDDownButton<int>(
-              values: List.generate(11, (index) => index * 10),
+            CustomDropDown<int>(
+              values: const [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
               text: 'Scroll Zoom in',
               value: mapSetting.scroll,
               helperText: "%",
-              onChanged: (val) {temp.scroll = val;},
+              onChanged: (val) {
+                temp.scroll = val;
+              },
             ),
             SizedBox(
               height: 42.sh(),
@@ -76,7 +79,9 @@ class MapSettings extends ConsumerWidget {
               text: 'Original Map Quality',
               min: 0,
               max: 720,
-              onChanged: (val) {temp.sample.original = val.toInt();},
+              onChanged: (val) {
+                temp.sample.original = val.toInt();
+              },
               value: mapSetting.sample.original.toDouble(),
             ),
             SizedBox(
@@ -86,7 +91,9 @@ class MapSettings extends ConsumerWidget {
                 text: 'View Map Quality',
                 max: 720,
                 min: 0,
-                onChanged: (val) {temp.sample.view = val.toInt();},
+                onChanged: (val) {
+                  temp.sample.view = val.toInt();
+                },
                 value: mapSetting.sample.view.toDouble()),
             SizedBox(
               height: 33.sh(),
@@ -95,59 +102,28 @@ class MapSettings extends ConsumerWidget {
               text: 'Original Mini Map Quality',
               max: 120,
               min: 0,
-              onChanged: (val) {temp.sample.miniMap = val.toInt();},
+              onChanged: (val) {
+                temp.sample.miniMap = val.toInt();
+              },
               value: mapSetting.sample.miniMap.toDouble(),
             ),
             SizedBox(
               height: 56.sh(),
             ),
-            CustomSwitch(
-              text: 'Map Default Location',
-              space: 0.sw(),
-              value: mapSetting.defaultLocation.enabled,
-              onChanged: (val) {temp.defaultLocation.enabled = val;},
+            MapDefaultLocation(
+              temp: temp,
             ),
             SizedBox(
-              height: 22.sh(),
+              height: 23.sh(),
             ),
-            if (mapSetting.defaultLocation.enabled) ...[
-              Container(
-                width: 816.sw(),
-                height: 49.sh(),
-                decoration: BoxDecoration(
-                    color: lightWhite.withOpacity(0.22),
-                    borderRadius: BorderRadius.circular(4.sr())),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 32.sw(),
-                    top: 14.sh(),
-                    bottom: 14.sh(),
-                  ),
-                  child: Row(
-                    children: [
-                      VideoDetailText(
-                        title: 'Latitude',
-                        details: mapSetting.defaultLocation.lat.toString(),
-                      ),
-                      SizedBox(width: 11.sw()),
-                      VideoDetailText(
-                        title: 'Longitutde',
-                        details: mapSetting.defaultLocation.lng.toString(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 23.sh(),
-              ),
-            ],
             CustomSlider(
               text: 'Suggestion / Result Count',
               max: 10,
               min: 0,
               value: mapSetting.filterCount.toDouble(),
-              onChanged: (val) {temp.filterCount = val.toInt();},
+              onChanged: (val) {
+                temp.filterCount = val.toInt();
+              },
             ),
             SizedBox(
               height: 23.sh(),

@@ -32,23 +32,23 @@ class VideoSettings extends ConsumerWidget {
               Row(
                 children: [
                   Text(
-                    'Video  Url',
-                                        style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
-
+                    'Video Server Url',
+                    style: kTextStyleInterRegular.copyWith(fontSize: 16.ssp()),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
-                    'https:// ',
+                    'http://  ',
                     style: kTextStyleIbmSemiBold.copyWith(
                         fontSize: 18.ssp(), color: secondaryColorText),
                   ),
                   Expanded(
-                    flex: 2,
-                    child: InputTextField(
-                      value: videoSetting.videourl,
-                      style: kTextStyleIbmSemiBold.copyWith(fontSize: 18.ssp(),color: Colors.black),
-                      
-                      title: 'title', isVisible: false)),
+                      flex: 2,
+                      child: InputTextField(
+                          value: videoSetting.videourl,
+                          style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 18.ssp(), color: Colors.black),
+                          title: 'title',
+                          isVisible: false)),
                 ],
               ),
               SizedBox(

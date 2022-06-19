@@ -15,7 +15,10 @@ final Setting setting = Setting(
       filterCount: 1),
   userSetting: UserSetting(videoPerUser: 120),
   videoSetting: VideoSetting(
-      videoQuality: 0, allowMinMapFScreen: true, videoFScreen: true, videourl: 'youtube.com'),
+      videoQuality: 0,
+      allowMinMapFScreen: true,
+      videoFScreen: true,
+      videourl: 'youtube.com'),
   locationSetting: LocationSetting(starvaFile: true),
 );
 

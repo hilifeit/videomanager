@@ -3,7 +3,7 @@ import 'package:videomanager/screens/settings/components/settingsbar.dart';
 import 'package:videomanager/screens/settings/screens/locationsettings/locationsettings.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/mapsettings.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
-import 'package:videomanager/screens/settings/screens/usersettings/models/usersettings.dart';
+import 'package:videomanager/screens/settings/screens/usersettings/usersettings.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/videosettings.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
