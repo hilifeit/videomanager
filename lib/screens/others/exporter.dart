@@ -1,4 +1,5 @@
 import 'package:get_storage/get_storage.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlng/latlng.dart';
 
@@ -15,6 +16,7 @@ export 'package:video_player/video_player.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
+export 'dart:convert';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/screens/others/theme.dart';
@@ -23,9 +25,15 @@ export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
 //
 
-const baseURL = "http://localhost:5000/api/";
+const baseURL = "http://192.168.16.106:5000/api/";
 final client = http.Client();
 
 final LatLng home = LatLng(27.7251933, 85.3411312);
 
 final storage = GetStorage();
+
+final snackVisibleProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+

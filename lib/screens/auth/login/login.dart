@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:videomanager/screens/auth/auth.dart';
+import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 final passwordvisibileProvider = StateProvider<bool>((ref) {
   return true;
@@ -14,10 +16,12 @@ class Login extends ConsumerWidget {
   Login({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late String username, password;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checked = ref.watch(checkBoxStateProvider.state).state;
+    final userService = ref.watch(userChangeProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -67,7 +71,9 @@ class Login extends ConsumerWidget {
                     isVisible: true,
                     title: 'USERNAME',
                     validator: (val) => validateUserName(val!),
-                    onChanged: (val) {},
+                    onChanged: (val) {
+                      username = val;
+                    },
                   ),
                   SizedBox(
                     height: 25.5.sh(),
@@ -76,15 +82,87 @@ class Login extends ConsumerWidget {
                     isVisible: true,
                     title: 'PASSWORD',
                     validator: (val) => validatePassword(val!),
-                    onChanged: (val) {},
+                    onChanged: (val) {
+                      password = val;
+                    },
                   ),
                   SizedBox(
                     height: 25.5.sh(),
                   ),
                   Button(
-                    onPressed: () {
-                      // if (formKey.currentState!.validate()) {}
-                      populateDirectories(context, ref, single: false);
+                    onPressed: () async {
+                      final userService = ref.read(userChangeProvider);
+                      if (formKey.currentState!.validate()) {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return Center(
+                                child: Container(
+                                  // color: Colors.teal,
+                                  height: 50,
+                                  width: 50,
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
+                                ),
+                              );
+                            });
+                        try {
+                          bool? status = await userService.login(
+                            username: username,
+                            password: password,
+                          );
+                          Navigator.pop(context);
+                          
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => const Holder(),
+                            ),
+                          );
+                        } catch (e, s) {
+                          Navigator.pop(context);
+                          CustomKeys()
+                              .ref!
+                              .read(snackVisibleProvider.state)
+                              .state = true;
+
+                          var closed = await CustomKeys()
+                              .messengerKey
+                              .currentState!
+                              .showSnackBar(SnackBar(
+                                duration: Duration(seconds: 1),
+                                content: const Text(
+                                  'Login Sucessful',
+                                ),
+                                onVisible: () {},
+                              ))
+                              .closed;
+
+                          CustomKeys()
+                              .ref!
+                              .read(snackVisibleProvider.state)
+                              .state = false;
+                              
+
+                          //  showDialog(
+                          //       // barrierDismissible: false,
+                          //       context: context,
+                          //       builder: (context) {
+                          //         return Center(
+                          //           child: Container(
+                          //             // color: Colors.teal,
+                          //             height: 50,
+                          //             width: 50,
+                          //             child: Center(child: Text('Error')),
+                          //           ),
+                          //         );
+                          //       });
+                          print('$e $s');
+                        }
+                      }
+
+                      //populateDirectories(context, ref, single: false);
                     },
                     label: 'Login',
                     kLabelTextStyle: kTextStyleIbmMedium.copyWith(

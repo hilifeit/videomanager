@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:touchable/touchable.dart';
-import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';

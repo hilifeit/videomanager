@@ -71,7 +71,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
                                   style: kTextStyleInterSemiBold.copyWith(
                                       fontSize: 20.ssp(),
                                       color: Theme.of(context).primaryColor),
-                                )),
+                                )), 
                           ],
                         );
                       });

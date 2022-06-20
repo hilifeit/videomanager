@@ -1,4 +1,6 @@
+import 'package:videomanager/screens/auth/login/login.dart';
 import 'package:videomanager/screens/holder/holder.dart';
+import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 void main() async {
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
               builder: (_, home) {
                 return home!;
               },
-              home: const Holder()),
+              home: Scaffold(body:  Loader())),
         );
       },
     );

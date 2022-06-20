@@ -1,8 +1,9 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+// import 'package:videomanager/screens/users/component/userService.dart';
 
-class AddUser extends StatelessWidget {
+class AddUser extends ConsumerWidget {
   AddUser({
     Key? key,
     required this.formKey,
@@ -15,7 +16,9 @@ class AddUser extends StatelessWidget {
   final List values;
   final ScrollController _scrollController = ScrollController();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref ) {
+    // final userService = ref.watch(userChangeProvider);  
+    
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -28,8 +31,9 @@ class AddUser extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                
                 Text(
-                  'Add User',
+                   'Add User',
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 32.ssp(), color: Colors.black),
                 ),

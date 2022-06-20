@@ -8,9 +8,7 @@ import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 final indexProvider = StateProvider<int>((ref) {
   return 0;
 });
-final snackVisibleProvider = StateProvider<bool>((ref) {
-  return false;
-});
+
 
 class Holder extends ConsumerWidget {
   const Holder({Key? key}) : super(key: key);
@@ -27,39 +25,20 @@ class Holder extends ConsumerWidget {
             indexState: indexProvider,
           ),
           Expanded(
-            child: Stack(
-              children: [
-                index != 3
+            child:index != 3
                     ? AnimatedIndexedStack(index: index, children: [
                         ViewScreen(),
                         Users(),
                         Video(),
                       ])
                     : const SettingsHolder(),
-                // if (snackVisible)
-
-                Consumer(builder: (context, ref, c) {
-                  final snackVisible =
-                      ref.watch(snackVisibleProvider.state).state;
-                  return Positioned(
-                    top: 10,
-                    right: 10,
-                    child: SizedBox(
-                      width: snackVisible ? 300 : 1,
-                      height: snackVisible ? 55 : 1,
-                      child: ScaffoldMessenger(
-                          key: CustomKeys().messengerKey,
-                          child: const Scaffold(
-                            backgroundColor: Colors.transparent,
-                          )),
-                    ),
-                  );
-                })
-              ],
-            ),
           )
         ],
       ),
     );
   }
 }
+
+
+
+
