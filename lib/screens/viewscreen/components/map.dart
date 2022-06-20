@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
@@ -15,7 +16,7 @@ final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
 class MapScreen extends StatefulWidget {
   final bool isvisible, draw, miniMap;
   final MapController controller;
-  MapScreen(
+  const MapScreen(
       {this.isvisible = true,
       required this.controller,
       this.draw = false,
@@ -171,7 +172,7 @@ class _MapScreenState extends State<MapScreen> {
                                 children: [
                                   AnimatedOpacity(
                                     opacity: selectedFile == null ? 0 : 1,
-                                    duration: Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 300),
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: SizedBox(
@@ -224,10 +225,25 @@ class _MapScreenState extends State<MapScreen> {
               width: 54.sr(),
               child: CustomFloatingActionButton(
                   icon: Icons.add,
-                  onPressed: () {
-                    setState(() {
-                      widget.controller.zoom += 1;
-                    });
+                  onPressed: () async {
+                    widget.controller.zoom += 1;
+                    CustomKeys().ref!.read(snackVisibleProvider.state).state =
+                        true;
+
+                    var closed = await CustomKeys()
+                        .messengerKey
+                        .currentState!
+                        .showSnackBar(SnackBar(
+                          content: const Text(
+                            'test',
+                          ),
+                          onVisible: () {},
+                        ))
+                        .closed;
+
+                    CustomKeys().ref!.read(snackVisibleProvider.state).state =
+                        false;
+                    setState(() {});
                   },
                   tooltip: 'Zoom in'),
             ),
@@ -259,8 +275,9 @@ class _MapScreenState extends State<MapScreen> {
       String? tooltip}) {
     return FloatingActionButton(
       shape: RoundedRectangleBorder(
-          borderRadius:
-              !roundShape ? BorderRadius.zero : BorderRadius.circular(100.sr())),
+          borderRadius: !roundShape
+              ? BorderRadius.zero
+              : BorderRadius.circular(100.sr())),
       backgroundColor: Colors.white,
       onPressed: () {
         onPressed();

@@ -35,7 +35,7 @@ class FileService extends ChangeNotifier {
       } else {
         throw response.statusCode;
       }
-    } catch (e, s) {
+    } catch (e) {
       throw "$e";
     }
   }

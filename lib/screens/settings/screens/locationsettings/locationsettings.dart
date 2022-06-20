@@ -4,6 +4,7 @@ import 'package:videomanager/screens/settings/components/outlineandelevatedbutto
 import 'package:videomanager/screens/settings/screens/locationsettings/models/locationsetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
+// ignore: must_be_immutable
 class LocationSettings extends ConsumerWidget {
   LocationSettings({required this.locationSetting, Key? key}) : super(key: key);
   final LocationSetting locationSetting;

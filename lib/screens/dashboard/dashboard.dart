@@ -6,7 +6,7 @@ List<CustomCard> items = [
       width: 229.sw(),
       number: 15,
       text: 'Users',
-      color: Color(0xffBADBEF),
+      color: const Color(0xffBADBEF),
       icon: Videomanager.usersoutline),
 ];
 
@@ -25,7 +25,7 @@ class DashBoard extends StatelessWidget {
                 CustomCard(
                   height: 139.sh(),
                   width: 229.sw(),
-                  color: Color(0xffBADBEF),
+                  color: const Color(0xffBADBEF),
                   icon: Videomanager.usersoutline,
                   number: 15,
                   text: 'Users',
@@ -33,7 +33,7 @@ class DashBoard extends StatelessWidget {
                 CustomCard(
                   height: 139.sh(),
                   width: 302.sw(),
-                  color: Color(0xffBADBEF),
+                  color: const Color(0xffBADBEF),
                   icon: Videomanager.videooutline,
                   number: 15,
                   text: 'Video Assigned',
@@ -48,7 +48,7 @@ class DashBoard extends StatelessWidget {
 }
 
 class CustomCard extends StatelessWidget {
-  CustomCard({
+  const CustomCard({
     Key? key,
     required this.height,
     required this.width,
@@ -64,7 +64,7 @@ class CustomCard extends StatelessWidget {
   final String text;
   final Color color;
   final IconData icon;
-  bool isvisible;
+  final bool isvisible;
 
   @override
   Widget build(BuildContext context) {

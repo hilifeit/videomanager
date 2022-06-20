@@ -4,7 +4,7 @@ import 'package:videomanager/screens/settings/components/settingsitemwidget.dart
 class SettingsBar extends ConsumerWidget {
   SettingsBar({required this.settingsIndexState, Key? key}) : super(key: key);
 
-  List<SettingItem> items = [
+  final List<SettingItem> items = [
     SettingItem(title: 'Map Settings', icon: Videomanager.maps, id: 0),
     SettingItem(title: 'Video Settings', icon: Videomanager.video, id: 1),
     SettingItem(title: 'User Settings', icon: Videomanager.usersettings, id: 2),

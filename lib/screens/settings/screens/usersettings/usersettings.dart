@@ -4,6 +4,7 @@ import 'package:videomanager/screens/settings/screens/mapsettings/components/sli
 import 'package:videomanager/screens/settings/screens/usersettings/models/usersetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
+// ignore: must_be_immutable
 class UserSettings extends ConsumerWidget {
   UserSettings({required this.userSetting, Key? key}) : super(key: key);
   final UserSetting userSetting;

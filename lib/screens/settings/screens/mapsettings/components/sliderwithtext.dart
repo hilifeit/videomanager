@@ -6,7 +6,7 @@ class CustomSliderComponentShape extends SliderComponentShape {
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
     // TODO: implement getPreferredSize
-    return Size(10, 10);
+    return const Size(10, 10);
   }
 
   @override
@@ -21,7 +21,7 @@ class CustomSliderComponentShape extends SliderComponentShape {
       required double value,
       required double textScaleFactor,
       required Size sizeWithOverflow}) {
-    Paint paint = Paint()..color = Color(0xff9FC6DD);
+    Paint paint = Paint()..color = const Color(0xff9FC6DD);
     // drawText(context.canvas,
     //     text: currentValue.toInt().toString(), position: center);
     Path path = Path();
@@ -81,7 +81,7 @@ class CustomSlider extends StatelessWidget {
         //     return Text(" (${currentValue.toInt().toString()})");
         //   },
         // ),
-        Spacer(),
+        const Spacer(),
         SizedBox(
           height: 16.sh(),
           width: 546.63.sw(),

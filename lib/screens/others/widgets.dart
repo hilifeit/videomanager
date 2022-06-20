@@ -64,12 +64,12 @@ class InputTextField extends StatelessWidget {
   final String? title;
   Color? fillColor = Colors.transparent;
   bool isVisible = true;
-  String? Function(String? val)? validator;
-  Function()? onTap;
+  final String? Function(String? val)? validator;
+  final Function()? onTap;
   final Icon? prefixIcon;
   final TextStyle? hintStyle;
   final TextStyle? style;
-  String value;
+  final String value;
   final Function(String) onChanged;
   InputTextField(
       {Key? key,

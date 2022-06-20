@@ -1,11 +1,10 @@
-import 'package:videomanager/screens/components/contextmenu/contextmenu.dart';
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
 
-  List<CustomMenuItem> items = [
+  final List<CustomMenuItem> items = [
     CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
     CustomMenuItem(title: 'Users', icon: Videomanager.users, id: 1),
     CustomMenuItem(title: 'Outlets', icon: Videomanager.outlets, id: 2),
@@ -20,7 +19,7 @@ class MenuBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final index = ref.watch(indexState.state).state;
+    // final index = ref.watch(indexState.state).state;
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
@@ -34,7 +33,8 @@ class MenuBar extends ConsumerWidget {
           Expanded(
             flex: 5,
             child: Padding(
-              padding: EdgeInsets.only(top: 26.sh(), left: 36.sw(), bottom: 13.sh()),
+              padding:
+                  EdgeInsets.only(top: 26.sh(), left: 36.sw(), bottom: 13.sh()),
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -54,7 +54,8 @@ class MenuBar extends ConsumerWidget {
           ),
           // Spacer(),
           Padding(
-            padding: EdgeInsets.only(top: 13.sh(), right: 61.08.sw(), bottom: 13.sh()),
+            padding: EdgeInsets.only(
+                top: 13.sh(), right: 61.08.sw(), bottom: 13.sh()),
             child: Row(
               children: [
                 CircleAvatar(
@@ -67,7 +68,7 @@ class MenuBar extends ConsumerWidget {
                 PopupMenuButton(
                   offset: Offset(0, height / 2 + 22.ssp()),
                   itemBuilder: (BuildContext context) {
-                    return [PopupMenuItem(child: Text('Change here'))];
+                    return [const PopupMenuItem(child: Text('Change here'))];
                   },
                   child: Row(
                     children: [

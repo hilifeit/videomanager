@@ -1,7 +1,7 @@
 String? validateEmailphone(String value) {
-  Pattern pattern =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regExp = new RegExp(pattern as String);
+  // Pattern pattern =
+  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter mobile number or email address';
   }
@@ -16,7 +16,7 @@ String? validateEmailphone(String value) {
 String? validateEmail(String value) {
   Pattern pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regExp = new RegExp(pattern as String);
+  RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter email address';
   } else if (!regExp.hasMatch(value)) {
@@ -27,7 +27,7 @@ String? validateEmail(String value) {
 }
 
 String? validatePassword(String value) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
 
   if (value.isEmpty) {
     return 'Please enter password';
@@ -39,7 +39,7 @@ String? validatePassword(String value) {
 }
 
 String? validateConfirmPassword(String value, String password) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
 
   if (value.isEmpty) {
     return 'Please enter password';
@@ -51,41 +51,41 @@ String? validateConfirmPassword(String value, String password) {
 }
 
 String? validateRegisterPassword(String value) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  RegExp regExp = new RegExp(pattern as String);
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter password';
   } else {
-    String error_msg = 'Your password must contain';
+    String errorMsg = 'Your password must contain';
     bool error = false;
 
     bool hasUppercase = value.contains(RegExp(r'[A-Z]'));
 
     if (!hasUppercase) {
-      error_msg += 'at least one uppercase,';
+      errorMsg += 'at least one uppercase,';
       error = true;
     }
     bool hasLowercase = value.contains(RegExp(r'[a-z]'));
     if (!hasLowercase) {
-      error_msg += ' one lowercase,';
+      errorMsg += ' one lowercase,';
       error = true;
     }
 
     bool hasDigits = value.contains(RegExp(r'[0-9]'));
 
     if (!hasDigits) {
-      error_msg += ' one number,';
+      errorMsg += ' one number,';
       error = true;
     }
 
     bool hasSpecialCharacters =
         value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
     if (!hasSpecialCharacters) {
-      error_msg += ' one special character';
+      errorMsg += ' one special character';
       error = true;
     }
     if (value.length < 8) {
-      error_msg += ' and must be of atleast 8 characters ';
+      errorMsg += ' and must be of atleast 8 characters ';
       error = true;
     }
     if (hasSpecialCharacters &&
@@ -93,10 +93,10 @@ String? validateRegisterPassword(String value) {
         hasLowercase &&
         hasUppercase &&
         value.length < 8) {
-      error_msg = 'Your password must be of atleast 8 characters';
+      errorMsg = 'Your password must be of atleast 8 characters';
     }
     if (error) {
-      return error_msg;
+      return errorMsg;
     } else {
       return null;
     }
@@ -104,8 +104,8 @@ String? validateRegisterPassword(String value) {
 }
 
 String? validatePhone(String value) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  RegExp regExp = RegExp(pattern as String);
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter mobile number';
   } else if (value.length < 10) {
@@ -116,8 +116,8 @@ String? validatePhone(String value) {
 }
 
 String? validateUserName(String value, {String label = "username"}) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  RegExp regExp = new RegExp(pattern as String);
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter $label';
   } else if (value.length < 3) {
@@ -140,8 +140,8 @@ String? validateUserName(String value, {String label = "username"}) {
 // }
 
 String? validateLastName(String value) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  RegExp regExp = new RegExp(pattern as String);
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter last name';
   } else {
@@ -150,8 +150,8 @@ String? validateLastName(String value) {
 }
 
 String? validatePin(String value) {
-  Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  RegExp regExp = new RegExp(pattern as String);
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter code';
   } else if (value.length < 6) {

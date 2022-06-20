@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:videomanager/screens/auth/auth.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -66,7 +67,7 @@ class Login extends ConsumerWidget {
                     isVisible: true,
                     title: 'USERNAME',
                     validator: (val) => validateUserName(val!),
-                    onChanged: (String) {},
+                    onChanged: (val) {},
                   ),
                   SizedBox(
                     height: 25.5.sh(),
@@ -75,7 +76,7 @@ class Login extends ConsumerWidget {
                     isVisible: true,
                     title: 'PASSWORD',
                     validator: (val) => validatePassword(val!),
-                    onChanged: (String) {},
+                    onChanged: (val) {},
                   ),
                   SizedBox(
                     height: 25.5.sh(),
@@ -153,7 +154,7 @@ class Login extends ConsumerWidget {
       // User canceled the picker
 
     } else {
-      List<String> drives = [];
+      // List<String> drives = [];
       List<String> finalDrives = [];
       if (!single) {
         // var p = await Process.run(
@@ -206,7 +207,7 @@ class Login extends ConsumerWidget {
       //   print(element);
       // });
       // final List<FileThumb> files = [];
-      final Iterable<File> iterablefiles = entities.whereType<File>();
+      // final Iterable<File> iterablefiles = entities.whereType<File>();
       // ignore: avoid_function_literals_in_foreach_calls
 
       //   FolderStructure tempData =

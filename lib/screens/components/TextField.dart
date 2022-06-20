@@ -1,18 +1,20 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
-  TextEditingController? textEditingController;
-  String? hintText;
-  double? hintFontSize;
-  Icon? prefixIcon;
-  Color? fillColor;
-  String? errorText;
-  bool? obsecureText;
-  String? labelText;
-  Function(String? input)? onChanged;
+  final TextEditingController? textEditingController;
+  final String? hintText;
+  final double? hintFontSize;
+  final Icon? prefixIcon;
+  final Color? fillColor;
+  final String? errorText;
+  final bool? obsecureText;
+  final String? labelText;
+  final Function(String? input)? onChanged;
 
-  AppTextField(
-      {this.textEditingController,
+  const AppTextField(
+      {Key? key,
+      this.textEditingController,
       this.hintText,
       this.hintFontSize,
       this.prefixIcon,
@@ -20,7 +22,8 @@ class AppTextField extends StatelessWidget {
       this.errorText,
       this.labelText,
       this.obsecureText,
-      this.onChanged});
+      this.onChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +37,13 @@ class AppTextField extends StatelessWidget {
                 height: 4,
               ),
         TextFormField(
-        scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          scrollPadding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           controller: textEditingController,
           onChanged: onChanged,
           obscureText: obsecureText ?? false ? true : false,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(16),
+            contentPadding: const EdgeInsets.all(16),
             prefixIcon: prefixIcon,
             hintStyle: TextStyle(
                 fontSize: hintFontSize ?? 14,

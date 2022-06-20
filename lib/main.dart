@@ -11,7 +11,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  // todo: asdsad
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,10 @@ class MyApp extends StatelessWidget {
               themeMode: ThemeMode.light,
               darkTheme: ThemeData(brightness: Brightness.dark),
               theme: lightTheme,
-              home: Holder()),
+              builder: (_, home) {
+                return home!;
+              },
+              home: const Holder()),
         );
       },
     );

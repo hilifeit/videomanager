@@ -2,7 +2,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 
 var percentFactor = 25;
 
-extension responsiveDouble on double {
+extension ResponsiveDouble on double {
   sw({double? min}) {
     double value = this;
 
@@ -26,7 +26,7 @@ extension responsiveDouble on double {
   }
 }
 
-extension responsiveInt on int {
+extension ResponsiveInt on int {
   sw({double? min}) {
     var value = this;
 

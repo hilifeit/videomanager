@@ -1,13 +1,10 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/components/customswitch.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
-import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/mapdefault.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsetting_model.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
-import 'package:videomanager/screens/video/components/videodetails.dart';
 
 class MapSettings extends ConsumerWidget {
   MapSettings({Key? key, required this.mapSetting}) : super(key: key);

@@ -27,7 +27,7 @@ class DottedBoxPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double width = size.width;
-    int x = (width / 5).toInt();
+    int x = width ~/ 5;
     double remx = (width % 5);
     double w;
     if (remx > 5) {
@@ -40,8 +40,8 @@ class DottedBoxPainter extends CustomPainter {
     // print('width = $width and x = $x and remx = $remx and w= $w');
 
     double height = size.height;
-    int y = (height / 5).toInt();
-    double remy = (height % 5);
+    int y = height ~/ 5;
+    // double remy = (height % 5);
     double h;
     if (remx > 5) {
       h = (y + 1) * 5;
@@ -81,7 +81,6 @@ class DottedBoxPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     return false;
   }
 }

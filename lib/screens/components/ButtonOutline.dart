@@ -1,18 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:videomanager/screens/others/exporter.dart';
 
 class AppButtonOutline extends StatelessWidget {
-  void Function()? onPressedFunction;
-  String? text;
-  BuildContext context;
-  double? width;
-  double? height;
+  final Function()? onPressedFunction;
+  final String? text;
+  final BuildContext context;
+  final double? width;
+  final double? height;
 
-  AppButtonOutline(
-      {required this.onPressedFunction,
+  const AppButtonOutline(
+      {Key? key,
+      required this.onPressedFunction,
       required this.text,
       required this.context,
       this.width,
-      this.height});
+      this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +22,13 @@ class AppButtonOutline extends StatelessWidget {
       buttonColor: Theme.of(context).primaryColor,
       splashColor: Theme.of(context).splashColor,
       textTheme: ButtonTextTheme.primary,
-      height: height??40,
-      minWidth: width??200,
-
+      height: height ?? 40,
+      minWidth: width ?? 200,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          side :BorderSide(width: 1, color: Theme.of(context).primaryColor),
-            shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(8.0))
-        ),
-
+            side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0))),
         onPressed: onPressedFunction ?? () {},
         child: Text(
           text ?? "does something",
