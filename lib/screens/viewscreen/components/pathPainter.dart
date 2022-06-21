@@ -22,6 +22,7 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, size) {
+    DateTime start = DateTime.now();
     var sampler = map(transformer.controller.zoom.toInt(), 7, 17, 1, 5);
 
     final selectedFile = ref.watch(selectedFileProvider);
@@ -48,8 +49,9 @@ class Painter extends CustomPainter {
         visibleFilesList.add(element);
       }
     }
+
     sampleLength =
-        map(files.length - visibleFilesList.length, 0, files.length, 1, 49);
+        map(files.length - visibleFilesList.length, 0, files.length, 0, 49);
 
     for (var element in visibleFilesList) {
       // if (files.indexOf(element) == 10)
@@ -78,17 +80,22 @@ class Painter extends CustomPainter {
             element.location.coordinates.first.last,
             element.location.coordinates.first.first));
         points.add(start);
-        for (int i = 1;
-            i < element.location.coordinates.length;
-            i = i + (50 ~/ sampleLength)) {
-          // print('$i');
-          // if (i < sampleLength - 1) {
-          Offset current = transformer.fromLatLngToXYCoords(LatLng(
-              element.location.coordinates[i].last,
-              element.location.coordinates[i].first));
-          points.add(current);
-          // }
+        if (sampleLength != 0) {
+          for (int i = 1;
+              i < element.location.coordinates.length;
+              i = i + (50 ~/ sampleLength)) {
+            // print('$i');
+            // if (i < sampleLength - 1) {
+
+            Offset current = transformer.fromLatLngToXYCoords(LatLng(
+                element.location.coordinates[i].last,
+                element.location.coordinates[i].first));
+            points.add(current);
+
+            // }
+          }
         }
+
         Offset end = transformer.fromLatLngToXYCoords(LatLng(
             element.location.coordinates.last.last,
             element.location.coordinates.last.first));
@@ -125,38 +132,39 @@ class Painter extends CustomPainter {
 
             newPaint.style = PaintingStyle.stroke;
             newPaint.color = Theme.of(context).primaryColor;
-            customCanvas.drawRect(path.getBounds(), newPaint,
-                onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            // customCanvas.drawRect(path.getBounds(), newPaint,
+            //     onTapUp: ((details) {
+            //   tap();
+            // }), onSecondaryTapUp: (detail) {
+            //   tapSecondary(detail);
+            // });
             newPaint.style = PaintingStyle.fill;
             newPaint.color = Colors.transparent;
-            customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            // customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+            //   tap();
+            // }), onSecondaryTapUp: (detail) {
+            //   tapSecondary(detail);
+            // });
           } else {
-            customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            // customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+            //   tap();
+            // }), onSecondaryTapUp: (detail) {
+            //   tapSecondary(detail);
+            // });
           }
         } else {
-          customCanvas.drawRect(path.getBounds(), newPaint,
-              onTapUp: ((details) {
-            tap();
-          }), onSecondaryTapUp: (detail) {
-            tapSecondary(detail);
-          });
+          // customCanvas.drawRect(path.getBounds(), newPaint,
+          //     onTapUp: ((details) {
+          //   tap();
+          // }), onSecondaryTapUp: (detail) {
+          //   tapSecondary(detail);
+          // });
         }
         // path.close();
 
       }
     }
+
     if (debug) {
       canvas.drawRect(
           Rect.fromLTWH(0, 0, size.width, 40),
@@ -168,6 +176,7 @@ class Painter extends CustomPainter {
               "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint Samples Used:$sampleLength",
           position: const Offset(10, 10));
     }
+    print(DateTime.now().difference(start).inMilliseconds);
   }
 
   @override
