@@ -92,6 +92,7 @@ class Login extends ConsumerWidget {
                   Button(
                     onPressed: () async {
                       final userService = ref.read(userChangeProvider);
+
                       if (formKey.currentState!.validate()) {
                         showDialog(
                             barrierDismissible: false,
@@ -113,7 +114,7 @@ class Login extends ConsumerWidget {
                             password: password,
                           );
                           Navigator.pop(context);
-                          
+
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -131,10 +132,16 @@ class Login extends ConsumerWidget {
                               .messengerKey
                               .currentState!
                               .showSnackBar(SnackBar(
-                                duration: Duration(seconds: 1),
-                                content: const Text(
-                                  'Login Sucessful',
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5.sw(),
+                                  vertical: 4.sh(),
                                 ),
+                                backgroundColor: Color(0xffE4CBCD),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(4.sr())),
+                                duration: Duration(seconds: 2),
+                                content: CustomSnackBar(e: e),
                                 onVisible: () {},
                               ))
                               .closed;
@@ -143,21 +150,6 @@ class Login extends ConsumerWidget {
                               .ref!
                               .read(snackVisibleProvider.state)
                               .state = false;
-                              
-
-                          //  showDialog(
-                          //       // barrierDismissible: false,
-                          //       context: context,
-                          //       builder: (context) {
-                          //         return Center(
-                          //           child: Container(
-                          //             // color: Colors.teal,
-                          //             height: 50,
-                          //             width: 50,
-                          //             child: Center(child: Text('Error')),
-                          //           ),
-                          //         );
-                          //       });
                           print('$e $s');
                         }
                       }
@@ -399,6 +391,55 @@ class Login extends ConsumerWidget {
       //   Navigator.pop(context);
       // }
     }
+  }
+}
+
+class CustomSnackBar extends StatelessWidget {
+  const CustomSnackBar({
+    Key? key,
+    required this.e,
+  }) : super(key: key);
+
+  final Object e;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44.sh(),
+      width: 345.sw(),
+      child: Row(
+        children: [
+          Container(
+            height: 26.sh(),
+            width: 3.sh(),
+            decoration: BoxDecoration(
+              color: danger,
+              borderRadius:
+                  BorderRadius.circular(8.sr()),
+            ),
+          ),
+          SizedBox(
+            width: 11.6.sw(),
+          ),
+          CircleAvatar(
+            radius: 13.sr(),
+            backgroundColor: danger,
+            child: Icon(
+              Icons.close_sharp,
+              size: 20.sr(),
+            ),
+          ),
+          SizedBox(
+            width: 15.sw(),
+          ),
+          Text(
+            '$e',
+            style: kTextStyleInterMedium.copyWith(
+                fontSize: 18.ssp(), color: danger),
+          ),
+        ],
+      ),
+    );
   }
 }
 

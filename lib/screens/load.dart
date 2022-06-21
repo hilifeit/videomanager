@@ -18,8 +18,8 @@ class Loader extends ConsumerWidget {
             top: 10,
             right: 10,
             child: SizedBox(
-              height: 50,
-              width: 500,
+              height: 44,
+              width: 345,
               // width: snackVisible ? 300 : 1,
               // height: snackVisible ? 55 : 1,
               child: ScaffoldMessenger(

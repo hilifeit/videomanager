@@ -5,6 +5,9 @@ const primaryColor = Color(0xff40667D);
 const secondaryColorText = Color(0xffBABABA);
 const secondaryColor = Color(0xffF2F2F2);
 const lightWhite = Color(0xffd1d1d1);
+const danger = Color(0xffDC3545);
+
+
 var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 16.sp,
