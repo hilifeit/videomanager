@@ -1,5 +1,12 @@
-import 'package:videomanager/screens/auth/login/login.dart';
+import 'package:videomanager/screens/auth/auth.dart';
+import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+
+final loginStateProvider = StateProvider<bool>((ref) {
+  bool? isLoggedIn = storage.read("users");
+  isLoggedIn = isLoggedIn ?? true;
+  return isLoggedIn;
+});
 
 class Loader extends ConsumerWidget {
   const Loader({Key? key}) : super(key: key);
@@ -7,15 +14,22 @@ class Loader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomKeys().init(ref);
+    final isLogin = ref.watch(loginStateProvider.state).state;
     return Stack(
       children: [
-        Login(),
+        isLogin ? const AuthScreen() : const Holder(),
+        // AnimatedCrossFade(
+        //     firstChild: const AuthScreen(),
+        //     secondChild: const Holder(),
+        //     crossFadeState:
+        //         isLogin ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+        //     duration: const Duration(milliseconds: 800)),
         // if (snackVisible)
 
         Consumer(builder: (context, ref, c) {
           final snackVisible = ref.watch(snackVisibleProvider.state).state;
           return Positioned(
-            top: 10,
+            top: 120.sh(),
             right: 10,
             child: SizedBox(
               height: 44,

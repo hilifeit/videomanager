@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:videomanager/screens/auth/auth.dart';
-import 'package:videomanager/screens/holder/holder.dart';
+import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 
@@ -98,8 +98,8 @@ class Login extends ConsumerWidget {
                             barrierDismissible: false,
                             context: context,
                             builder: (context) {
-                              return Center(
-                                child: Container(
+                              return const Center(
+                                child: SizedBox(
                                   // color: Colors.teal,
                                   height: 50,
                                   width: 50,
@@ -113,43 +113,14 @@ class Login extends ConsumerWidget {
                             username: username,
                             password: password,
                           );
+                          snack.success("Login Succesful");
+                          ref.read(loginStateProvider.state).state = false;
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
-
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => const Holder(),
-                            ),
-                          );
                         } catch (e, s) {
                           Navigator.pop(context);
-                          CustomKeys()
-                              .ref!
-                              .read(snackVisibleProvider.state)
-                              .state = true;
+                          snack.error(e);
 
-                          var closed = await CustomKeys()
-                              .messengerKey
-                              .currentState!
-                              .showSnackBar(SnackBar(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 5.sw(),
-                                  vertical: 4.sh(),
-                                ),
-                                backgroundColor: Color(0xffE4CBCD),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(4.sr())),
-                                duration: Duration(seconds: 2),
-                                content: CustomSnackBar(e: e),
-                                onVisible: () {},
-                              ))
-                              .closed;
-
-                          CustomKeys()
-                              .ref!
-                              .read(snackVisibleProvider.state)
-                              .state = false;
                           print('$e $s');
                         }
                       }
@@ -394,54 +365,7 @@ class Login extends ConsumerWidget {
   }
 }
 
-class CustomSnackBar extends StatelessWidget {
-  const CustomSnackBar({
-    Key? key,
-    required this.e,
-  }) : super(key: key);
 
-  final Object e;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 44.sh(),
-      width: 345.sw(),
-      child: Row(
-        children: [
-          Container(
-            height: 26.sh(),
-            width: 3.sh(),
-            decoration: BoxDecoration(
-              color: danger,
-              borderRadius:
-                  BorderRadius.circular(8.sr()),
-            ),
-          ),
-          SizedBox(
-            width: 11.6.sw(),
-          ),
-          CircleAvatar(
-            radius: 13.sr(),
-            backgroundColor: danger,
-            child: Icon(
-              Icons.close_sharp,
-              size: 20.sr(),
-            ),
-          ),
-          SizedBox(
-            width: 15.sw(),
-          ),
-          Text(
-            '$e',
-            style: kTextStyleInterMedium.copyWith(
-                fontSize: 18.ssp(), color: danger),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
   // formatBytes(bytes, {int decimals = 2}) {
   //   if (bytes == 0) return '0 Bytes';

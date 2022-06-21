@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
+import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class MenuBar extends ConsumerWidget {
@@ -68,7 +69,14 @@ class MenuBar extends ConsumerWidget {
                 PopupMenuButton(
                   offset: Offset(0, height / 2 + 22.ssp()),
                   itemBuilder: (BuildContext context) {
-                    return [const PopupMenuItem(child: Text('Change here'))];
+                    return [
+                      PopupMenuItem(
+                          onTap: () {
+                            storage.remove('users');
+                            ref.read(loginStateProvider.state).state = true;
+                          },
+                          child: const Text('Logout'))
+                    ];
                   },
                   child: Row(
                     children: [

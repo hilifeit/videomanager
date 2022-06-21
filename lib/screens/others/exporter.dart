@@ -2,6 +2,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlng/latlng.dart';
+import 'package:videomanager/screens/components/snackbar/customsnackbar.dart';
+
+export 'dart:convert';
 
 export 'package:file_picker/file_picker.dart';
 export 'package:flutter/material.dart';
@@ -16,7 +19,6 @@ export 'package:video_player/video_player.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
-export 'dart:convert';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/screens/others/theme.dart';
@@ -36,4 +38,4 @@ final snackVisibleProvider = StateProvider<bool>((ref) {
   return false;
 });
 
-
+final CustomSnackBar snack = CustomSnackBar();
