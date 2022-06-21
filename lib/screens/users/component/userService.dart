@@ -10,9 +10,20 @@ const String userStorageKey = "users";
 class UserService extends ChangeNotifier {
 //   load() async {
 //  user = UserModel.fromJson(json.decode(str));
+
+  UserService() {
+    load();
+  }
   late UserModel user;
 
+  UserModel? get userTemp => user;
 //   }
+  load() async {
+    final userJson = storage.read(userStorageKey);
+    if (userJson != null) {
+      user = UserModel.fromJson(userJson);
+    }
+  }
 
   store() async {
     await storage.write(userStorageKey, user.toJson());

@@ -1,12 +1,10 @@
-import 'package:videomanager/screens/auth/login/login.dart';
-import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  storage.erase();
+  // storage.erase();
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
   runApp(const MyApp());
 }
@@ -30,7 +28,7 @@ class MyApp extends StatelessWidget {
               builder: (_, home) {
                 return home!;
               },
-              home: Scaffold(body: Loader())),
+              home: const Scaffold(body: Loader())),
         );
       },
     );

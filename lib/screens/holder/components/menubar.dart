@@ -76,7 +76,7 @@ class MenuBar extends ConsumerWidget {
                       PopupMenuItem(
                           onTap: () async {
                             print('ok');
-                            Future.delayed(Duration(milliseconds: 1), () {
+                            Future.delayed(const Duration(milliseconds: 1), () {
                               return showDialog(
                                   context: context,
                                   builder: (context) {
@@ -101,7 +101,8 @@ class MenuBar extends ConsumerWidget {
                         width: 180.sw(),
                         child: Text(
                           maxLines: 2,
-                          userName.user.username,
+                          // userName.user.username,
+                          "test",
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 17.ssp(min: 10), color: Colors.white),
                         ),
