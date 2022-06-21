@@ -1,4 +1,3 @@
-import 'package:videomanager/screens/auth/auth.dart';
 import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -17,7 +16,8 @@ class Loader extends ConsumerWidget {
     final isLogin = ref.watch(loginStateProvider.state).state;
     return Stack(
       children: [
-        isLogin ? const AuthScreen() : const Holder(),
+        const Holder(),
+        // isLogin ? const AuthScreen() : const Holder(),
         // AnimatedCrossFade(
         //     firstChild: const AuthScreen(),
         //     secondChild: const Holder(),

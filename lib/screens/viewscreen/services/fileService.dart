@@ -29,6 +29,7 @@ class FileService extends ChangeNotifier {
         await Future.forEach<FileDetailMini>(files, (element) {
           element.boundingBox = boundingBoxOffset(element.location.coordinates);
         });
+        print(files.length);
         // print(
         //     "${files[0].boundingBox!.left.toString()} ${files[0].boundingBox!.top.toString()}");
         notifyListeners();

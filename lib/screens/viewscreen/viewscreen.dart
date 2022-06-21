@@ -24,7 +24,7 @@ class ViewScreen extends StatelessWidget {
             Expanded(
                 flex: 5,
                 child: MapScreen(
-                  draw: false,
+                  draw: true,
                   controller: controller,
                   isvisible: true,
                 ))
