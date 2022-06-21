@@ -84,7 +84,7 @@ class MenuBar extends ConsumerWidget {
                         width: 180.sw(),
                         child: Text(
                           maxLines: 2,
-                          'Suman Dangol ascasdasdasdasdazsccccccccccccccccccccccc dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas',
+                          'Suman Dangol',
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 17.ssp(min: 10), color: Colors.white),
                         ),

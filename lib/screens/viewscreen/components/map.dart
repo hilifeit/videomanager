@@ -226,22 +226,7 @@ class _MapScreenState extends State<MapScreen> {
                   icon: Icons.add,
                   onPressed: () async {
                     widget.controller.zoom += 1;
-                    CustomKeys().ref!.read(snackVisibleProvider.state).state =
-                        true;
 
-                    var closed = await CustomKeys()
-                        .messengerKey
-                        .currentState!
-                        .showSnackBar(SnackBar(
-                          content: const Text(
-                            'test',
-                          ),
-                          onVisible: () {},
-                        ))
-                        .closed;
-
-                    CustomKeys().ref!.read(snackVisibleProvider.state).state =
-                        false;
                     setState(() {});
                   },
                   tooltip: 'Zoom in'),
