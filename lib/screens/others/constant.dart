@@ -6,7 +6,10 @@ const secondaryColorText = Color(0xffBABABA);
 const secondaryColor = Color(0xffF2F2F2);
 const lightWhite = Color(0xffd1d1d1);
 const danger = Color(0xffDC3545);
-
+const dangerSecondary = Color(0xffE4CBCD);
+const sucess = Color(0xff28A745);
+const sucessSecondary = Color(0xffC9DCCD);
+const primarySecondary = Color(0xffCDD2D6);
 
 var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',

@@ -18,10 +18,12 @@ final Setting setting = Setting(
       videoQuality: 0,
       allowMinMapFScreen: true,
       videoFScreen: true,
-      videourl: 'youtube.com'),
+      videourl: 'https://youtube.com'),
   locationSetting: LocationSetting(starvaFile: true),
 );
-
+final defaultSettingProvider = StateProvider<Setting>((ref) {
+  return setting;
+});
 final settingChangeNotifierProvider =
     ChangeNotifierProvider<SettingService>((ref) {
   // SettingService service = SettingService();

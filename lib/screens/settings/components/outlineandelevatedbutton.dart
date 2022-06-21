@@ -1,16 +1,21 @@
+import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class OutlineAndElevatedButton extends StatelessWidget {
   OutlineAndElevatedButton({
     Key? key,
     required this.onApply,
-    this.text,
+    this.text = 'Apply',
     this.center = false,
     required this.onSucess,
+    required this.onReset,
+    this.show = true,
+    this.reset = false,
   }) : super(key: key);
-  final Function onApply, onSucess;
-  String? text;
-  bool center;
+  final Function onApply, onSucess, onReset;
+  String text;
+  bool center, reset;
+  bool show;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -18,25 +23,43 @@ class OutlineAndElevatedButton extends StatelessWidget {
             center ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           Container(
-            width: 126.sw(),
-            height: 46.sh(),
+            width: show ? 126.sw() : 86.sw(),
+            height: show ? 46.sh() : 31.sh(),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.sr()),
                 border: Border.all(color: Colors.black)),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (!show) {
+                    Navigator.pop(context);
+                  } else if (reset) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomDialogBox(
+                              reset: reset,
+                              onApply: onApply,
+                              onSucess: onSucess,
+                              onReset: onReset);
+                        });
+
+                    // onReset();
+                  }
+                },
                 child: Text(
                   center ? 'Cancel' : 'Reset',
                   style: kTextStyleIbmMedium.copyWith(
-                      color: Colors.black, fontSize: 17.ssp()),
+                    color: Colors.black,
+                    fontSize: show ? 17.ssp() : 12.ssp(),
+                  ),
                 )),
           ),
           SizedBox(
-            width: 60.sw(),
+            width: show ? 60.sw() : 40.98.sw(),
           ),
           SizedBox(
-            width: 126.sw(),
-            height: 46.sh(),
+            width: show ? 126.sw() : 86.sw(),
+            height: show ? 46.sh() : 31.sh(),
             child: ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateColor.resolveWith(
@@ -44,48 +67,36 @@ class OutlineAndElevatedButton extends StatelessWidget {
               onPressed: () async {
                 bool? status = await onApply();
                 status = status ?? true;
-                if (status) {
+
+                if (reset && !show) {
+                  print('reset');
+                  onReset();
+                  Navigator.pop(context);
+                }
+
+                if (status && show) {
                   showDialog(
                       context: (context),
                       builder: (context) {
-                        return AlertDialog(
-                          title: const Text('Apply changes'),
-                          content:
-                              const Text('Do you want to apply the changes?'),
-                          actions: [
-                            TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(
-                                  'Cancel',
-                                  style: kTextStyleInterSemiBold.copyWith(
-                                      fontSize: 20.ssp(),
-                                      color: Theme.of(context).primaryColor),
-                                )),
-                            TextButton(
-                                onPressed: () async {
-                                  await onSucess();
-                                  Navigator.pop(context, onApply());
-                                },
-                                child: Text(
-                                  'Confirm',
-                                  style: kTextStyleInterSemiBold.copyWith(
-                                      fontSize: 20.ssp(),
-                                      color: Theme.of(context).primaryColor),
-                                )), 
-                          ],
-                        );
+                        return CustomDialogBox(
+                            onApply: onApply,
+                            onSucess: onSucess,
+                            onReset: () {});
                       });
+                } else if (!status) {}
+                if (status && !show && !reset) {
+                  // onReset();
+                  await onSucess();
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context, onApply());
                 }
-
-                // var settingService =
-                //     ref.read(settingChangeNotifierProvider);
-                // settingService.updateSetting(
-                //     mapSetting: mapSetting..defaultLocation.enabled = false);
               },
               child: Text(
-                text ?? 'Apply',
+                text,
                 style: kTextStyleIbmMedium.copyWith(
-                    color: Colors.white, fontSize: 17.ssp()),
+                  color: Colors.white,
+                  fontSize: show ? 17.ssp() : 12.ssp(),
+                ),
               ),
             ),
           ),

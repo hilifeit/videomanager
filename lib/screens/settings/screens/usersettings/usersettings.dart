@@ -12,6 +12,7 @@ class UserSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final defaultSetting = ref.watch(defaultSettingProvider.state).state;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -41,6 +42,13 @@ class UserSettings extends ConsumerWidget {
                   height: 105.sh(),
                 ),
                 OutlineAndElevatedButton(
+                  reset: true,
+                  onReset: () {
+                    var setting = ref.read(settingChangeNotifierProvider);
+
+                    setting.updateSetting(
+                        userSetting: defaultSetting.userSetting);
+                  },
                   onApply: () {},
                   onSucess: () {
                     var setting = ref.read(settingChangeNotifierProvider);

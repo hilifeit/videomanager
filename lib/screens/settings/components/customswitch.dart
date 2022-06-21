@@ -44,7 +44,6 @@ class CustomSwitch extends StatelessWidget {
                   value: selectedValue,
                   onChanged: (val) {
                     ref.read(valueProvider.state).state = selectedValue;
-
                     onChanged(val);
                   }),
             ),

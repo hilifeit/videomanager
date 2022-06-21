@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 const double minButtonHeight = 45;
@@ -71,6 +72,7 @@ class InputTextField extends StatelessWidget {
   final TextStyle? style;
   final String value;
   final Function(String) onChanged;
+  bool isdigits;
   InputTextField(
       {Key? key,
       required this.title,
@@ -82,6 +84,7 @@ class InputTextField extends StatelessWidget {
       this.prefixIcon,
       this.style,
       this.onTap,
+      this.isdigits = false,
       required this.onChanged})
       : super(key: key);
 
@@ -102,6 +105,11 @@ class InputTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          inputFormatters: [
+            isdigits
+                ? FilteringTextInputFormatter.digitsOnly
+                : FilteringTextInputFormatter.singleLineFormatter
+          ],
           style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
           onTap: onTap,
           //controller: TextEditingController(text: ''),

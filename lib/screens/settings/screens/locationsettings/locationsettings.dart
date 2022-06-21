@@ -10,9 +10,14 @@ class LocationSettings extends ConsumerWidget {
   final LocationSetting locationSetting;
   late LocationSetting temp =
       LocationSetting.fromJson(locationSetting.toJson());
+  late final valueProvider = StateProvider<bool>((ref) {
+    return temp.starvaFile;
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final starvaFile = ref.watch(valueProvider.state).state;
+    final defaultSetting = ref.watch(defaultSettingProvider.state).state;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -31,9 +36,10 @@ class LocationSettings extends ConsumerWidget {
                   height: 43.sh(),
                 ),
                 CustomSwitch(
-                  value: locationSetting.starvaFile,
+                  value: starvaFile,
                   text: "Allow Starva File Upload",
                   onChanged: (val) {
+                    ref.read(valueProvider.state).state = val;
                     temp.starvaFile = val;
                   },
                   space: 566.sw(),
@@ -42,6 +48,13 @@ class LocationSettings extends ConsumerWidget {
                   height: 85.sw(),
                 ),
                 OutlineAndElevatedButton(
+                  reset: true,
+                  onReset: () {
+                    var setting = ref.read(settingChangeNotifierProvider);
+
+                    setting.updateSetting(
+                        locationSetting: defaultSetting.locationSetting);
+                  },
                   onApply: () {},
                   onSucess: () {
                     var setting = ref.read(settingChangeNotifierProvider);

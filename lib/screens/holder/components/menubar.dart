@@ -1,6 +1,8 @@
+import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
@@ -21,6 +23,7 @@ class MenuBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
+    final userName = ref.watch(userChangeProvider);
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
@@ -71,9 +74,23 @@ class MenuBar extends ConsumerWidget {
                   itemBuilder: (BuildContext context) {
                     return [
                       PopupMenuItem(
-                          onTap: () {
-                            storage.remove('users');
-                            ref.read(loginStateProvider.state).state = true;
+                          onTap: () async {
+                            print('ok');
+                            Future.delayed(Duration(milliseconds: 1), () {
+                              return showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CustomDialogBox(
+                                        onApply: () {},
+                                        onSucess: () {
+                                          storage.remove('users');
+                                          ref
+                                              .read(loginStateProvider.state)
+                                              .state = true;
+                                        },
+                                        onReset: () {});
+                                  });
+                            });
                           },
                           child: const Text('Logout'))
                     ];
@@ -84,7 +101,7 @@ class MenuBar extends ConsumerWidget {
                         width: 180.sw(),
                         child: Text(
                           maxLines: 2,
-                          'Suman Dangol ascasdasdasdasdazsccccccccccccccccccccccc dwaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaas',
+                          userName.user.username,
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 17.ssp(min: 10), color: Colors.white),
                         ),

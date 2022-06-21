@@ -10,8 +10,17 @@ class VideoSettings extends ConsumerWidget {
   final VideoSetting videoSetting;
   late VideoSetting temp = VideoSetting.fromJson(videoSetting.toJson());
   final _formKey = GlobalKey<FormState>();
+  late final miniMapValueProvider = StateProvider<bool>((ref) {
+    return temp.allowMinMapFScreen;
+  });
+  late final fullSValueProvider = StateProvider<bool>((ref) {
+    return temp.videoFScreen;
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final miniMap = ref.watch(miniMapValueProvider.state).state;
+    final fullScreen = ref.watch(fullSValueProvider.state).state;
+    final defaultSetting = ref.watch(defaultSettingProvider.state).state;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -88,16 +97,18 @@ class VideoSettings extends ConsumerWidget {
                     CustomSwitch(
                         text: 'Allow Mini Map In Full Screen',
                         space: 535.sw(),
-                        value: videoSetting.allowMinMapFScreen,
+                        value: miniMap,
                         onChanged: (val) {
+                          ref.read(miniMapValueProvider.state).state = val;
                           temp.allowMinMapFScreen = val;
                         }),
                     SizedBox(
                       height: 56.36.sh(),
                     ),
                     CustomSwitch(
-                      value: videoSetting.videoFScreen,
+                      value: fullScreen,
                       onChanged: (val) {
+                        ref.read(fullSValueProvider.state).state = val;
                         temp.videoFScreen = val;
                       },
                       text: 'Video In Full Screen ',
@@ -107,6 +118,14 @@ class VideoSettings extends ConsumerWidget {
                       height: 55.sh(),
                     ),
                     OutlineAndElevatedButton(
+                    
+                      reset: true,
+                      onReset: () {
+                        var setting = ref.read(settingChangeNotifierProvider);
+
+                        setting.updateSetting(
+                            videoSetting: defaultSetting.videoSetting);
+                      },
                       onApply: () {
                         if (_formKey.currentState!.validate()) {
                           return true;

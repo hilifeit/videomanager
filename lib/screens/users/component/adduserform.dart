@@ -16,9 +16,9 @@ class AddUser extends ConsumerWidget {
   final List values;
   final ScrollController _scrollController = ScrollController();
   @override
-  Widget build(BuildContext context,WidgetRef ref ) {
-    // final userService = ref.watch(userChangeProvider);  
-    
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final userService = ref.watch(userChangeProvider);
+
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -31,9 +31,8 @@ class AddUser extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 Text(
-                   'Add User',
+                  'Add User',
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 32.ssp(), color: Colors.black),
                 ),
@@ -122,11 +121,12 @@ class AddUser extends ConsumerWidget {
                           fillColor: Colors.white,
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
-                          validator: (val) => validatePassword(val!),
+                          validator: (val) => validateRegisterPassword(val!),
                           onChanged: (String) {},
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
+                          isdigits: true,
                           title: 'Mobile Number',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -141,6 +141,7 @@ class AddUser extends ConsumerWidget {
                         Align(
                           alignment: Alignment.center,
                           child: OutlineAndElevatedButton(
+                            onReset: () {},
                             center: true,
                             text: 'Add',
                             onApply: () {

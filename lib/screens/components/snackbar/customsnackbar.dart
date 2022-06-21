@@ -4,19 +4,19 @@ import 'package:videomanager/screens/others/exporter.dart';
 class CustomSnackBar {
   success(dynamic message) {
     showSnackBar(
-        color: Colors.green,
+        color: sucessSecondary,
         content: CustomSnackBarContent(
-          icon: Icons.check_circle,
+          icon: Videomanager.sucess,
           message: message.toString(),
-          color: Colors.green,
+          color: sucess,
         ));
   }
 
   error(dynamic message) {
     showSnackBar(
-        color: danger.withAlpha(127),
+        color: dangerSecondary,
         content: CustomSnackBarContent(
-          icon: Icons.close_sharp,
+          icon: Videomanager.close,
           message: message.toString(),
           color: danger,
         ));
@@ -24,10 +24,10 @@ class CustomSnackBar {
 
   info(dynamic message) {
     showSnackBar(
-        color: primaryColor,
+        color: primarySecondary,
         content: CustomSnackBarContent(
           color: primaryColor,
-          icon: Icons.dangerous,
+          icon: Videomanager.info,
           message: message.toString(),
         ));
   }

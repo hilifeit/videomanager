@@ -5,11 +5,20 @@ final userChangeProvider = ChangeNotifierProvider<UserService>((ref) {
   return UserService();
 });
 
+const String userStorageKey = "users";
+
 class UserService extends ChangeNotifier {
 //   load() async {
 //  user = UserModel.fromJson(json.decode(str));
   late UserModel user;
+
 //   }
+
+  store() async {
+    await storage.write(userStorageKey, user.toJson());
+    // print(user.mobile);
+  }
+
   fetch() async {
     try {
       var response = await client.get(Uri.parse("${baseURL}api/user"),
@@ -36,16 +45,14 @@ class UserService extends ChangeNotifier {
             "password": password,
           }));
       if (response.statusCode == 200) {
-
         var temp = userModelFromJson(response.body);
+        user = temp;
+        store();
         notifyListeners();
-  
+
         return true;
       } else {
-        var error = jsonDecode(
-          response.body
-
-        );
+        var error = jsonDecode(response.body);
         print(error);
         throw error['message'];
       }

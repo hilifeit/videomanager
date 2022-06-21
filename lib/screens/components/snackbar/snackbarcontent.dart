@@ -30,14 +30,10 @@ class CustomSnackBarContent extends StatelessWidget {
           SizedBox(
             width: 11.6.sw(),
           ),
-          CircleAvatar(
-            radius: 13.sr(),
-            backgroundColor: color,
-            child: Icon(
-              icon,
-              size: 20.sr(),
-              // color: Colors.white,
-            ),
+          Icon(
+            icon,
+            size: 26.sr(),
+            color: color,
           ),
           SizedBox(
             width: 15.sw(),
