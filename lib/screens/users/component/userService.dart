@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
 
 final userChangeProvider = ChangeNotifierProvider<UserService>((ref) {
@@ -77,6 +78,35 @@ class UserService extends ChangeNotifier {
         var temp = userModelFromJson(response.body);
         user = temp;
         store();
+        notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
+  Future<bool> add({required AddNewUser addUser}) async {
+    try {
+      var response = await client.post(Uri.parse("${baseURL}user"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "username": addUser.userName,
+            "password": addUser.password,
+            "mobile": addUser.mobile,
+            "name": addUser.name,
+            "role": addUser.role,
+            "email": addUser.email
+          }));
+      if (response.statusCode == 201) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
         notifyListeners();
 
         return true;

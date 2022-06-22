@@ -24,6 +24,8 @@ class Loader extends ConsumerWidget {
         //     crossFadeState:
         //         isLogin ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         //     duration: const Duration(milliseconds: 800)),
+
+        
         // if (snackVisible)
 
         Consumer(builder: (context, ref, c) {

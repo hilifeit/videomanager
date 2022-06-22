@@ -114,7 +114,7 @@ class InputTextField extends StatelessWidget {
           onTap: onTap,
           //controller: TextEditingController(text: ''),
           validator: validator,
-          autovalidateMode: AutovalidateMode.always,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           onChanged: (val) {
             onChanged(val);
           },

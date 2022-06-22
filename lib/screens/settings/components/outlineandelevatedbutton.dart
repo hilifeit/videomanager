@@ -86,9 +86,9 @@ class OutlineAndElevatedButton extends StatelessWidget {
                 } else if (!status) {}
                 if (status && !show && !reset) {
                   // onReset();
+                  print('true');
+                  Navigator.pop(context);
                   await onSucess();
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context, onApply());
                 }
               },
               child: Text(

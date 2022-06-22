@@ -49,6 +49,7 @@ dependencies:
   touchable: ^1.0.2
   get_storage: ^2.0.3
   data_table_2: ^2.3.2
+  intl: ^0.17.0
 
 
 
@@ -110,7 +111,15 @@ flutter:
         - asset: assets/fonts/Inter-Regular.ttf
           weight: 400 
         - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600 
+    - family: PublicSans
+      fonts:
+        - asset: assets/fonts/PublicSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PublicSans-Regular.ttf
           weight: 400 
+        - asset: assets/fonts/PublicSans-SemiBold.ttf
+          weight: 600 
     - family: Videomanager
       fonts:
         - asset: assets/fonts/Videomanager.ttf
