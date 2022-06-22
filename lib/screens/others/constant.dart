@@ -57,3 +57,21 @@ var kTextStyleIbmRegularBlack = TextStyle(
   fontWeight: FontWeight.w400,
   color: Colors.black,
 );
+var kTextStyleTableTitle = TextStyle(
+  fontFamily: 'PublicSans',
+  fontSize: 12.ssp(),
+  fontWeight: FontWeight.w600,
+  color: Color(0xff566A7F),
+);
+var kTextStyleTableName = TextStyle(
+  fontFamily: 'PublicSans',
+  fontSize: 15.ssp(),
+  fontWeight: FontWeight.w600,
+  color: Color(0xff697A8D),
+);
+var kTextStyleTableSubtitle = TextStyle(
+  fontFamily: 'PublicSans',
+  fontSize: 13.ssp(),
+  fontWeight: FontWeight.w400,
+  color: Color(0xffA1ACB8),
+);

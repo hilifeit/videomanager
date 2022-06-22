@@ -2,13 +2,13 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/component/userTable.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
+import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
 
 class Users extends StatelessWidget {
   Users({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final String value = 'User';
-  final List values = ['User', 'Manager', 'Admin'];
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,41 @@ class Users extends StatelessWidget {
               flex: 2,
               child: Column(
                 children: [
-                  Expanded(flex: 2, child: UserTable()),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        left: 36.sw(),
+                        top: 37.sh(),
+                        right: 36.sw(),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Users',
+                                style: kTextStyleIbmSemiBold.copyWith(
+                                  fontSize: 20.ssp(),
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Spacer(),
+                              SizedBox(
+                                height: 67.sh(),
+                                width: 194.sw(),
+                                child: SearchBox(),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 18.sh(),
+                          ),
+                          Expanded(child: UserTable()),
+                        ],
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: UserStats(),
                   )
@@ -28,7 +62,7 @@ class Users extends StatelessWidget {
               )),
           Expanded(
               flex: 1,
-              child: AddUser(formKey: formKey, value: value, values: values))
+              child: AddUser(formKey: formKey,))
         ],
       ),
     );

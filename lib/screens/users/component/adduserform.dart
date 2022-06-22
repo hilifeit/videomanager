@@ -1,23 +1,39 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/usermodel.dart';
 // import 'package:videomanager/screens/users/component/userService.dart';
+
+class AddNewUser {
+  String? userName = '';
+  int? role = 0;
+  String? name = '';
+  String? email = '';
+  String? password = '';
+  int? mobile = 0;
+}
 
 class AddUser extends ConsumerWidget {
   AddUser({
     Key? key,
     required this.formKey,
-    required this.value,
-    required this.values,
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
-  final String value;
-  final List values;
+
   final ScrollController _scrollController = ScrollController();
+
+  final List<CustomMenuItem> menus = [
+    CustomMenuItem(label: "User", value: 2),
+    CustomMenuItem(label: "Manager", value: 1),
+    CustomMenuItem(label: "Admin", value: 0),
+  ];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final userService = ref.watch(userChangeProvider);
+
+    AddNewUser addNewUser = AddNewUser();
 
     return Scrollbar(
       controller: _scrollController,
@@ -87,7 +103,11 @@ class AddUser extends ConsumerWidget {
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
                           validator: (val) => validateUserName(val!),
-                          onChanged: (String) {},
+                          onChanged: (val) {
+                            // addUser!.username = val;
+                            addNewUser.userName = val;
+                            print(addNewUser.userName);
+                          },
                         ),
                         SizedBox(
                           height: 14.sh(),
@@ -96,13 +116,27 @@ class AddUser extends ConsumerWidget {
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        DropDown(
-                            value: value,
-                            onChanged: (val) {},
-                            values: values,
+                        CustomMenuDropDown(
+                            value: menus[0],
+                            onChanged: (val) {
+                              // addNewUser.role = val.value;
+                              print(val.value);
+                            },
+                            values: menus,
                             helperText: ''),
                         SizedBox(
                           height: 6.sh(),
+                        ),
+                        InputTextField(
+                          title: 'Name',
+                          isVisible: true,
+                          fillColor: Colors.white,
+                          style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 16.ssp(), color: Colors.black),
+                          validator: (val) => validateLastName(val!),
+                          onChanged: (val) {
+                            addNewUser.name = val;
+                          },
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
@@ -112,7 +146,9 @@ class AddUser extends ConsumerWidget {
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
                           validator: (val) => validateEmail(val!),
-                          onChanged: (String) {},
+                          onChanged: (val) {
+                            addNewUser.email = val;
+                          },
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
@@ -121,8 +157,10 @@ class AddUser extends ConsumerWidget {
                           fillColor: Colors.white,
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
-                          validator: (val) => validateRegisterPassword(val!),
-                          onChanged: (String) {},
+                          // validator: (val) => validateRegisterPassword(val!),
+                          onChanged: (val) {
+                            addNewUser.password = val;
+                          },
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
@@ -133,7 +171,9 @@ class AddUser extends ConsumerWidget {
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
                           validator: (val) => validatePhone(val!),
-                          onChanged: (String) {},
+                          onChanged: (val) {
+                            addNewUser.mobile = int.parse(val);
+                          },
                         ),
                         SizedBox(
                           height: 60.sh(),
@@ -148,7 +188,14 @@ class AddUser extends ConsumerWidget {
                               if (formKey.currentState!.validate()) return true;
                               return false;
                             },
-                            onSucess: () {},
+                            onSucess: () {
+                              var user = ref.read(userChangeProvider);
+
+                              user.add(addUser: addNewUser);
+                              snack.success("User Added Sucessfully");
+                              formKey.currentState!.reset();
+                              ref.read(userChangeProvider).fetchAll();
+                            },
                           ),
                         ),
                         SizedBox(height: 120.sh()),

@@ -143,7 +143,7 @@ String? validateLastName(String value) {
   // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
   // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
-    return 'Please enter last name';
+    return 'Please enter name';
   } else {
     return null;
   }
