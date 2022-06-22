@@ -22,7 +22,7 @@ class Painter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, size) {
-    DateTime start = DateTime.now();
+    // DateTime start = DateTime.now();
     var sampler = map(transformer.controller.zoom.toInt(), 7, 17, 1, 5);
 
     final selectedFile = ref.watch(selectedFileProvider);
@@ -132,33 +132,33 @@ class Painter extends CustomPainter {
 
             newPaint.style = PaintingStyle.stroke;
             newPaint.color = Theme.of(context).primaryColor;
-            // customCanvas.drawRect(path.getBounds(), newPaint,
-            //     onTapUp: ((details) {
-            //   tap();
-            // }), onSecondaryTapUp: (detail) {
-            //   tapSecondary(detail);
-            // });
+            customCanvas.drawRect(path.getBounds(), newPaint,
+                onTapUp: ((details) {
+              tap();
+            }), onSecondaryTapUp: (detail) {
+              tapSecondary(detail);
+            });
             newPaint.style = PaintingStyle.fill;
             newPaint.color = Colors.transparent;
-            // customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-            //   tap();
-            // }), onSecondaryTapUp: (detail) {
-            //   tapSecondary(detail);
-            // });
+            customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+              tap();
+            }), onSecondaryTapUp: (detail) {
+              tapSecondary(detail);
+            });
           } else {
-            // customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-            //   tap();
-            // }), onSecondaryTapUp: (detail) {
-            //   tapSecondary(detail);
-            // });
+            customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+              tap();
+            }), onSecondaryTapUp: (detail) {
+              tapSecondary(detail);
+            });
           }
         } else {
-          // customCanvas.drawRect(path.getBounds(), newPaint,
-          //     onTapUp: ((details) {
-          //   tap();
-          // }), onSecondaryTapUp: (detail) {
-          //   tapSecondary(detail);
-          // });
+          customCanvas.drawRect(path.getBounds(), newPaint,
+              onTapUp: ((details) {
+            tap();
+          }), onSecondaryTapUp: (detail) {
+            tapSecondary(detail);
+          });
         }
         // path.close();
 
@@ -176,12 +176,12 @@ class Painter extends CustomPainter {
               "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint Samples Used:$sampleLength",
           position: const Offset(10, 10));
     }
-    print(DateTime.now().difference(start).inMilliseconds);
+    // print(DateTime.now().difference(start).inMilliseconds);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 
   Rect getRect(Rect boundingBox) {

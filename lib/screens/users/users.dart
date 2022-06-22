@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
+import 'package:videomanager/screens/users/component/userTable.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 
 class Users extends StatelessWidget {
@@ -11,15 +12,15 @@ class Users extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           Expanded(
               flex: 2,
               child: Column(
                 children: [
-                  const Expanded(flex: 2, child: Placeholder()),
+                  Expanded(flex: 2, child: UserTable()),
                   Expanded(
                     child: UserStats(),
                   )

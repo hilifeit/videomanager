@@ -13,10 +13,13 @@ class UserService extends ChangeNotifier {
 
   UserService() {
     load();
+    fetchAll();
   }
   late UserModel user;
 
   UserModel? get userTemp => user;
+
+  List<UserModel> users = [];
 //   }
   load() async {
     final userJson = storage.read(userStorageKey);
@@ -30,19 +33,35 @@ class UserService extends ChangeNotifier {
     // print(user.mobile);
   }
 
-  fetch() async {
+  Future<UserModel> fetchOne(String id) async {
     try {
-      var response = await client.get(Uri.parse("${baseURL}api/user"),
+      var response = await client.get(Uri.parse("${baseURL}api/user/$id"),
           headers: {"Content-Type": "application/json"});
       if (response.statusCode == 200) {
         UserModel temp = userModelFromJson(response.body);
-        user = temp;
+        return temp;
         notifyListeners();
       } else {
         throw response.statusCode;
       }
     } catch (e) {
       throw "$e";
+    }
+  }
+
+  fetchAll() async {
+    try {
+      var response = await client.get(Uri.parse("${baseURL}user"),
+          headers: {"Content-Type": "application/json"});
+      if (response.statusCode == 200) {
+        var temp = userModelListFromJson(response.body);
+        users = temp;
+        notifyListeners();
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e, s) {
+      throw "$e $s";
     }
   }
 

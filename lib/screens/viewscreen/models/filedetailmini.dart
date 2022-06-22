@@ -13,33 +13,32 @@ String fileDetailMiniToJson(List<FileDetailMini> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class FileDetailMini {
-  FileDetailMini({
-    required this.id,
-    required this.filename,
-    required this.location,
-  });
+  FileDetailMini(
+      {required this.id,
+      required this.filename,
+      required this.location,
+      required this.area});
 
   final String id;
   final String filename;
   final Location location;
+  final Area area;
   Rect? boundingBox;
 
   FileDetailMini copyWith({
     required String id,
     required String filename,
     required Location location,
+    required Area area,
   }) =>
       FileDetailMini(
-        id: id,
-        filename: filename,
-        location: location,
-      );
+          id: id, filename: filename, location: location, area: area);
 
   factory FileDetailMini.fromJson(Map<String, dynamic> json) => FileDetailMini(
-        id: json["_id"],
-        filename: json["filename"],
-        location: Location.fromJson(json["location"]),
-      );
+      id: json["_id"],
+      filename: json["filename"],
+      location: Location.fromJson(json["location"]),
+      area: Area.fromJson(json["area"]));
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -76,5 +75,34 @@ class Location {
         "type": type,
         "coordinates": List<dynamic>.from(
             coordinates.map((x) => List<dynamic>.from(x.map((x) => x)))),
+      };
+}
+
+class Area {
+  Area({
+    required this.state,
+    required this.city,
+    required this.area,
+  });
+
+  final int state;
+  final String city, area;
+
+  Area copyWith({
+    required String type,
+    required List<List<double>> coordinates,
+  }) =>
+      Area(state: state, city: city, area: area);
+
+  factory Area.fromJson(Map<String, dynamic> json) => Area(
+        area: json["area"],
+        city: json["city"],
+        state: json["state"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "area": area,
+        "city": city,
+        "state": state,
       };
 }

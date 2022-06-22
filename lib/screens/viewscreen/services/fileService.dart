@@ -26,8 +26,16 @@ class FileService extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         files = fileDetailMiniFromJson(response.body).toList();
+        List<int> states = [];
+        List<String> district = [];
         await Future.forEach<FileDetailMini>(files, (element) {
           element.boundingBox = boundingBoxOffset(element.location.coordinates);
+          // if (!states.contains(element.area.state)) {
+          //   states.add(element.area.state);
+          // }
+          // if (!states.contains(element.area.state)) {
+          //   states.add(element.area.state);
+          // }
         });
 
         // print(
@@ -36,8 +44,8 @@ class FileService extends ChangeNotifier {
       } else {
         throw response.statusCode;
       }
-    } catch (e) {
-      throw "$e";
+    } catch (e, s) {
+      throw "$e $s";
     }
   }
 
