@@ -14,21 +14,26 @@ class Users extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Row(
+      body: Stack(
         children: [
-          Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  Expanded(flex: 2, child: UserTable()),
-                  Expanded(
-                    child: UserStats(),
-                  )
-                ],
-              )),
-          Expanded(
-              flex: 1,
-              child: AddUser(formKey: formKey, value: value, values: values))
+          Row(
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      Expanded(flex: 2, child: UserTable()),
+                      Expanded(
+                        child: UserStats(),
+                      )
+                    ],
+                  )),
+              Expanded(
+                  flex: 1,
+                  child:
+                      AddUser(formKey: formKey, value: value, values: values))
+            ],
+          ),
         ],
       ),
     );

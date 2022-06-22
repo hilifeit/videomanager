@@ -40,7 +40,6 @@ class UserService extends ChangeNotifier {
       if (response.statusCode == 200) {
         UserModel temp = userModelFromJson(response.body);
         return temp;
-        notifyListeners();
       } else {
         throw response.statusCode;
       }
