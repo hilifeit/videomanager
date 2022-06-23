@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/magnifier.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
@@ -85,32 +86,28 @@ class _MapScreenState extends State<MapScreen> {
 
               // transformer.controller.zoom = 20;
 
-              final markerWidgets = [
-                ClipRRect(
-                  child: Stack(children: [
-                    CanvasTouchDetector(
-                        gesturesToOverride: const [
-                          GestureType.onTapUp,
-                          GestureType.onTapDown,
-                          GestureType.onSecondaryTapDown,
-                          GestureType.onSecondaryTapUp,
-                        ],
-                        builder: (context) {
-                          return CustomPaint(
-                            size:
-                                Size(constraint.maxWidth, constraint.maxHeight),
-                            painter: Painter(
-                              context,
-                              ref,
-                              files: widget.draw ? fileService.files : [],
-                              selectedFileProvider: selectedFileProvider,
-                              transformer: transformer,
-                            ),
-                          );
-                        })
-                  ]),
-                )
-              ];
+              final markerWidgets = ClipRRect(
+                child: CanvasTouchDetector(
+                    gesturesToOverride: const [
+                      GestureType.onTapUp,
+                      GestureType.onTapDown,
+                      GestureType.onSecondaryTapDown,
+                      GestureType.onSecondaryTapUp,
+                    ],
+                    builder: (context) {
+                      return CustomPaint(
+                        size: Size(constraint.maxWidth, constraint.maxHeight),
+                        painter: Painter(
+                          context,
+                          ref,
+                          files: widget.draw ? fileService.files : [],
+                          selectedFileProvider: selectedFileProvider,
+                          transformer: transformer,
+                        ),
+                      );
+                    }),
+              );
+
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onDoubleTap: _onDoubleTap,
@@ -149,7 +146,7 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                         ],
                       ),
-                      ...markerWidgets,
+                      markerWidgets,
                       if (widget.miniMap)
                         Positioned(
                           left: 0,
