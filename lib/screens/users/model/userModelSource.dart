@@ -1,8 +1,9 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:intl/intl.dart';
-import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
+
+enum Roles { user, manager, admin }
 
 class UserModelSource extends DataTableSource {
   UserModelSource(
@@ -36,7 +37,7 @@ class UserModelSource extends DataTableSource {
         DateFormat('yyyy-MM-dd').format(user.createdAt),
         style: kTextStyleTableSubtitle,
       )),
-      DataCell(Status(color: color, status: status)),
+      DataCell(Text(getRole(user.role))),
       DataCell(
         PopupMenuButton(
             // offset: Offset(0, height / 2 + 22.ssp()),
@@ -45,7 +46,7 @@ class UserModelSource extends DataTableSource {
                 PopupMenuItem(onTap: () async {}, child: const Text('Action'))
               ];
             },
-            child: Icon(Icons.more_vert)),
+            child: const Icon(Icons.more_vert)),
       ),
     ]);
   }
@@ -59,6 +60,12 @@ class UserModelSource extends DataTableSource {
   @override
   // TODO: implement selectedRowCount
   int get selectedRowCount => 0;
+
+  String getRole(int value) {
+    var role = Roles.values.elementAt(value);
+    return role.name.replaceFirst(
+        role.name.characters.first, role.name.characters.first.toUpperCase());
+  }
 }
 
 class Status extends StatelessWidget {

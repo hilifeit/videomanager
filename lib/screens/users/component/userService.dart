@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
 
 final userChangeProvider = ChangeNotifierProvider<UserService>((ref) {
@@ -77,8 +78,12 @@ class UserService extends ChangeNotifier {
           }));
       if (response.statusCode == 200) {
         var temp = userModelFromJson(response.body);
+        if (temp.role == Roles.user.index) {
+          throw "Normal Users cannot login in Video Manager";
+        }
         user = temp;
         store();
+
         notifyListeners();
 
         return true;

@@ -15,7 +15,7 @@ class CustomSnackBarContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 44.sh(),
+      height: 60.sh(),
       width: 345.sw(),
       child: Row(
         children: [
@@ -38,10 +38,13 @@ class CustomSnackBarContent extends StatelessWidget {
           SizedBox(
             width: 15.sw(),
           ),
-          Text(
-            message.toString(),
-            style: kTextStyleInterMedium.copyWith(
-                fontSize: 18.ssp(), color: color),
+          Expanded(
+            child: Text(
+              message.toString(),
+              maxLines: 2,
+              style: kTextStyleInterMedium.copyWith(
+                  fontSize: 16.ssp(), color: color),
+            ),
           ),
         ],
       ),

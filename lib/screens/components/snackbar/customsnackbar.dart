@@ -39,6 +39,7 @@ class CustomSnackBar {
           .messengerKey
           .currentState!
           .showSnackBar(SnackBar(
+            // behavior: SnackBarBehavior.floating,
             padding: EdgeInsets.symmetric(
               horizontal: 5.sw(),
               vertical: 4.sh(),

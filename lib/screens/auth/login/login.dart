@@ -113,6 +113,7 @@ class Login extends ConsumerWidget {
                             username: username,
                             password: password,
                           );
+
                           snack.success("Login Succesful");
                           ref.read(loginStateProvider.state).state = false;
                           // ignore: use_build_context_synchronously
