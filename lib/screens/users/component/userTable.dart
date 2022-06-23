@@ -42,7 +42,7 @@ class UserTable extends ConsumerWidget {
           )),
           DataColumn(
               label: Text(
-            "STATUS",
+            "ROLE",
             style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
           )),
           DataColumn(

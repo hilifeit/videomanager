@@ -1,10 +1,15 @@
+import 'package:videomanager/screens/auth/auth.dart';
 import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 final loginStateProvider = StateProvider<bool>((ref) {
-  bool? isLoggedIn = storage.read("users");
-  isLoggedIn = isLoggedIn ?? true;
-  return isLoggedIn;
+  var user = storage.read("users");
+  if (user != null) {
+    ref.read(userChangeProvider);
+    return false;
+  }
+  return true;
 });
 
 class Loader extends ConsumerWidget {
@@ -16,8 +21,7 @@ class Loader extends ConsumerWidget {
     final isLogin = ref.watch(loginStateProvider.state).state;
     return Stack(
       children: [
-        const Holder(),
-        // isLogin ? const AuthScreen() : const Holder(),
+        isLogin ? const AuthScreen() : const Holder(),
         // AnimatedCrossFade(
         //     firstChild: const AuthScreen(),
         //     secondChild: const Holder(),
@@ -25,7 +29,6 @@ class Loader extends ConsumerWidget {
         //         isLogin ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         //     duration: const Duration(milliseconds: 800)),
 
-        
         // if (snackVisible)
 
         Consumer(builder: (context, ref, c) {

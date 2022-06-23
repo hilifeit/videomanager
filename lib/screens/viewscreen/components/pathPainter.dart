@@ -148,6 +148,7 @@ class Painter extends CustomPainter {
                             data: {"useable": !element.isUseable})) {
                           fileminiService.updateOneFileUsable(
                               element, !element.isUseable);
+                          ref.read(selectedFileProvider.state).state = null;
                           snack.success("Status Updated Succesfully");
                         }
                       } catch (e) {
