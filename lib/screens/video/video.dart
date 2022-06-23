@@ -3,6 +3,9 @@ import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 
 class Video extends StatefulWidget {
+  const Video({Key? key, required this.pathLeft, required this.pathRight})
+      : super(key: key);
+  final String pathLeft, pathRight;
   @override
   _VideoState createState() => _VideoState();
 }
@@ -14,17 +17,19 @@ class _VideoState extends State<Video> {
   @override
   void initState() {
     super.initState();
-    _controller1 = VideoPlayerController.network(
-        'http://192.168.1.10:8000/video/long-sample.mp4')
+    _controller1 = VideoPlayerController.network(widget.pathLeft)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
+      }).catchError((e) {
+        print(e);
       });
-    _controller2 = VideoPlayerController.network(
-        'http://192.168.1.10:8000/video/long-sample.mp4')
+    _controller2 = VideoPlayerController.network(widget.pathRight)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
+      }).catchError((e) {
+        print(e);
       });
 
     //   _controller.addListener(() {
@@ -47,25 +52,25 @@ class _VideoState extends State<Video> {
                       child: Column(
                     children: [
                       Expanded(
-                          flex: 4,
-                          child: Stack(
-                      children: [
-                        CustomVideoPlayer(controller: _controller1),
-                        Positioned(
-                            top: 20.sh(),
-                            left: 19.sw(),
-                            child: SizedBox(
-                              width: 105.77.sw(),
-                              height: 38.26.sh(),
-                              child: Container(
-                                color: Colors.black.withOpacity(0.5),
-                                child: Center(
-                                    child: Text(
-                                  'Left',
-                                  style: kTextStyleInterMedium.copyWith(
-                                      color: Colors.white),
-
-                                )),)))
+                        flex: 4,
+                        child: Stack(
+                          children: [
+                            CustomVideoPlayer(controller: _controller1),
+                            Positioned(
+                                top: 20.sh(),
+                                left: 19.sw(),
+                                child: SizedBox(
+                                    width: 105.77.sw(),
+                                    height: 38.26.sh(),
+                                    child: Container(
+                                      color: Colors.black.withOpacity(0.5),
+                                      child: Center(
+                                          child: Text(
+                                        'Left',
+                                        style: kTextStyleInterMedium.copyWith(
+                                            color: Colors.white),
+                                      )),
+                                    )))
                           ],
                         ),
                       ),

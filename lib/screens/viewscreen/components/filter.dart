@@ -1,26 +1,21 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
-
-final checkBoxCountryStateProvider = StateProvider<bool>((ref) {
-  return false;
-});
-final checkBoxStateStateProvider = StateProvider<bool>((ref) {
-  return false;
-});
+import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 
 class Filter extends StatelessWidget {
-  Filter({Key? key, required this.mapController}) : super(key: key);
+  const Filter({Key? key, required this.mapController}) : super(key: key);
 
   final MapController mapController;
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 29.sw(), top: 15.sh(), right: 21.33.sw()),
+          padding:
+              EdgeInsets.only(left: 29.sw(), top: 15.sh(), right: 21.33.sw()),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -43,12 +38,10 @@ class Filter extends StatelessWidget {
             itemBuilder: (_, index) {
               return ExpansionTile(
 
-
                   // tilePadding: EdgeInsets.only(left: 0,right: 10),
                   childrenPadding: EdgeInsets.only(left: 57.sw()),
                   leading: Consumer(builder: (context, ref, c) {
-                    final checked =
-                        ref.watch(checkBoxStateStateProvider.state).state;
+                    final checked = ref.watch(filterServiceProvider);
                     return Checkbox(
                         // visualDensity: VisualDensity.adaptivePlatformDensity,
                         materialTapTargetSize: MaterialTapTargetSize.padded,
@@ -57,48 +50,47 @@ class Filter extends StatelessWidget {
                           color: secondaryColorText,
                         ),
                         activeColor: primaryColor,
-                        value: checked,
+                        value: checked.onlyNotUsable,
                         onChanged: (value) {
-                          ref.read(checkBoxStateStateProvider.state).state =
-                              value!;
+                          checked.toggleUsable(value!);
+                          ref.read(selectedFileProvider.state).state = null;
                         });
                   }),
                   title: Text(
-                    'State',
+                    'Only Damaged',
                     style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
                   ),
-
-                  children: [
-                    ListTile(
-                      horizontalTitleGap: 0.r,
-                      // contentPadding: EdgeInsets.only(left: 0),
-                      leading: Consumer(builder: (context, ref, c) {
-                        final checked =
-                            ref.watch(checkBoxStateStateProvider.state).state;
-                        return SizedBox(
-                          width: 15,
-                          height: 15,
-                          child: Checkbox(
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.padded,
-                              side: const BorderSide(
-                                width: 1,
-                                color: secondaryColorText,
-                              ),
-                              activeColor: primaryColor,
-                              value: checked,
-                              onChanged: (value) {
-                                ref
-                                    .read(checkBoxStateStateProvider.state)
-                                    .state = value!;
-                              }),
-                        );
-                      }),
-                      title: Text(
-                        'State 1',
-                        style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
-                      ),
-                    ),
+                  children: const [
+                    // ListTile(
+                    //   horizontalTitleGap: 0.r,
+                    //   // contentPadding: EdgeInsets.only(left: 0),
+                    //   leading: Consumer(builder: (context, ref, c) {
+                    //     final checked =
+                    //         ref.watch(checkBoxStateStateProvider.state).state;
+                    //     return SizedBox(
+                    //       width: 15,
+                    //       height: 15,
+                    //       child: Checkbox(
+                    //           materialTapTargetSize:
+                    //               MaterialTapTargetSize.padded,
+                    //           side: const BorderSide(
+                    //             width: 1,
+                    //             color: secondaryColorText,
+                    //           ),
+                    //           activeColor: primaryColor,
+                    //           value: checked,
+                    //           onChanged: (value) {
+                    //             ref
+                    //                 .read(checkBoxStateStateProvider.state)
+                    //                 .state = value!;
+                    //           }),
+                    //     );
+                    //   }),
+                    //   title: Text(
+                    //     'State 1',
+                    //     style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+                    //   ),
+                    // ),
                   ]);
             },
             separatorBuilder: (_, index) {
@@ -107,8 +99,7 @@ class Filter extends StatelessWidget {
                 thickness: 0.5,
               );
             },
-            itemCount: 3,
-
+            itemCount: 1,
           ),
         ),
       ],

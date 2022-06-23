@@ -176,9 +176,11 @@ class _MapScreenState extends State<MapScreen> {
                                       padding: const EdgeInsets.all(16.0),
                                       child: SizedBox(
                                           width: 613.sw(),
-                                          height: 188.sh(),
-                                          child: const VideoDetails(
+                                          height: 180.sh(),
+                                          child: VideoDetails(
+                                            isDetailed: false,
                                             showMap: false,
+                                            miniDetail: selectedFile,
                                           )),
                                     ),
                                   ),

@@ -18,7 +18,7 @@ final Setting setting = Setting(
       videoQuality: 0,
       allowMinMapFScreen: true,
       videoFScreen: true,
-      videourl: 'https://youtube.com'),
+      videourl: 'http://192.168.16.106:8000'),
   locationSetting: LocationSetting(starvaFile: true),
 );
 final defaultSettingProvider = StateProvider<Setting>((ref) {

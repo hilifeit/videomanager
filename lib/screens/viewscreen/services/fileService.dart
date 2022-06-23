@@ -49,6 +49,34 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  updateOneFileUsable(FileDetailMini file, bool value) {
+    files[files.indexOf(file)].isUseable = value;
+    notifyListeners();
+  }
+
+  Future<bool> edit(FileDetailMini file, {dynamic data}) async {
+    try {
+      var response = await client.put(Uri.parse("${baseURL}file/${file.id}"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data));
+      if (response.statusCode == 200) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
+
+        // notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
   Rect boundingBoxOffset(List<List<double>> list) {
     double minX = double.infinity;
     double maxX = 0;

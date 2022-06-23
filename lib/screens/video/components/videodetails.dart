@@ -1,9 +1,14 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class VideoDetails extends StatelessWidget {
-  const VideoDetails({Key? key, this.showMap = true}) : super(key: key);
-  final bool showMap;
+  const VideoDetails(
+      {Key? key, this.showMap = true, this.isDetailed = true, this.miniDetail})
+      : super(key: key);
+  final bool showMap, isDetailed;
+  final FileDetailMini? miniDetail;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,44 +18,56 @@ class VideoDetails extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Padding(
-              padding: EdgeInsets.only(left: 31.04.sw(), right: 108.05.sw()),
+              padding: EdgeInsets.only(left: 31.04.sw(), right: 80.05.sw()),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const VideoDetailText(
-                      title: 'Video Name', details: 'Kupondole_left.mp4'),
-                  Row(
-                    children: [
-                      const VideoDetailText(title: 'Size', details: '1.2GB'),
-                      SizedBox(
-                        width: 21.79.sw(),
-                      ),
-                      const VideoDetailText(
-                          title: 'Duration', details: '00:05:00'),
-                    ],
-                  ),
-                  const VideoDetailText(
+                  VideoDetailText(
+                      title: 'Video Name',
+                      details: !isDetailed
+                          ? miniDetail != null
+                              ? miniDetail!.filename
+                              : ''
+                          : ''),
+                  if (miniDetail == null)
+                    Row(
+                      children: [
+                        const VideoDetailText(title: 'Size', details: '1.2GB'),
+                        SizedBox(
+                          width: 21.79.sw(),
+                        ),
+                        const VideoDetailText(
+                            title: 'Duration', details: '00:05:00'),
+                      ],
+                    ),
+                  VideoDetailText(
                     title: 'Path',
-                    details: 'adjadnad',
+                    details: !isDetailed
+                        ? miniDetail != null
+                            ? miniDetail!.path
+                            : ''
+                        : '',
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      VideoDetailText(
-                        title: 'Start Time',
-                        details: '00:05:00',
-                      ),
-                      VideoDetailText(
-                        title: 'End Time',
-                        details: '00:11:00',
-                      ),
-                    ],
-                  ),
-                  const VideoDetailText(
-                    title: 'Date',
-                    details: '2072-12-13',
-                  ),
+                  if (miniDetail == null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        VideoDetailText(
+                          title: 'Start Time',
+                          details: '00:05:00',
+                        ),
+                        VideoDetailText(
+                          title: 'End Time',
+                          details: '00:11:00',
+                        ),
+                      ],
+                    ),
+                  if (miniDetail == null)
+                    const VideoDetailText(
+                      title: 'Date',
+                      details: '2072-12-13',
+                    ),
                 ],
               ),
             ),
@@ -61,9 +78,10 @@ class VideoDetails extends StatelessWidget {
               child: Stack(
                 children: [
                   MapScreen(
+                    draw: false,
                     controller: MapController(location: home),
                     isvisible: false,
-                    miniMap: true,
+                    miniMap: false,
                   ),
                   Positioned(
                       bottom: 5.sh(),

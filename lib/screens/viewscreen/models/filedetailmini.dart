@@ -17,12 +17,16 @@ class FileDetailMini {
       {required this.id,
       required this.filename,
       required this.location,
-      required this.area});
+      required this.path,
+      required this.isUseable
+      // required this.area
+      });
 
   final String id;
-  final String filename;
+  final String filename, path;
   final Location location;
-  final Area area;
+  bool isUseable;
+  // final Area area;
   Rect? boundingBox;
 
   FileDetailMini copyWith({
@@ -32,17 +36,28 @@ class FileDetailMini {
     required Area area,
   }) =>
       FileDetailMini(
-          id: id, filename: filename, location: location, area: area);
+          id: id,
+          filename: filename,
+          location: location,
+          path: path,
+          isUseable: isUseable
+          // area: area
+          );
 
   factory FileDetailMini.fromJson(Map<String, dynamic> json) => FileDetailMini(
       id: json["_id"],
       filename: json["filename"],
       location: Location.fromJson(json["location"]),
-      area: Area.fromJson(json["area"]));
+      isUseable: json["useable"],
+      path: json["path"]
+      // area: Area.fromJson(json["area"])
+      );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "filename": filename,
+        "path": path,
+        "useable": isUseable,
         "location": location.toJson(),
       };
 }
