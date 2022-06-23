@@ -59,6 +59,8 @@ class Videomanager {
   static const IconData videooutline = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData add_user_svgrepo_com_1 = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData edit_1 = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData card = IconData(0xe824, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData refresh_1 = IconData(0xe825, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData info = IconData(0xe845, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData sucess = IconData(0xe846, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close = IconData(0xe847, fontFamily: _kFontFam, fontPackage: _kFontPkg);

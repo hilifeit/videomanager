@@ -58,10 +58,11 @@ class UserService extends ChangeNotifier {
         users = temp;
         notifyListeners();
       } else {
-        throw response.statusCode;
+        // print(response.statusCode);
+        if (response.statusCode == 404) throw 'Not Found';
       }
-    } catch (e, s) {
-      throw "$e $s";
+    } catch (e) {
+      throw "$e ";
     }
   }
 

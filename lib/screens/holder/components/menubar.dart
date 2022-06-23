@@ -103,6 +103,7 @@ class MenuBar extends ConsumerWidget {
                           maxLines: 2,
                           // userName.user.username,
                           "test",
+
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 17.ssp(min: 10), color: Colors.white),
                         ),

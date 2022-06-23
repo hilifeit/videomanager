@@ -5,26 +5,25 @@ const double minButtonHeight = 45;
 const double buttonHeight = 55;
 
 class Button extends StatelessWidget {
-  const Button({
+   Button({
     Key? key,
-    this.onPressed,
-    this.label,
-    this.fontSize = 14.5,
-    this.primary = true,
-    this.kLabelTextStyle,
-    this.color,
+    required this.onPressed,
+    required this.label,
+     this.primary = true,
+    required this.kLabelTextStyle,
+     this.color,
   }) : super(key: key);
-  final Function? onPressed;
-  final String? label;
-  final double? fontSize;
-  final bool? primary;
-  final TextStyle? kLabelTextStyle;
+  final Function onPressed;
+  final String label;
+  
+  final bool primary;
+  final TextStyle kLabelTextStyle;
   final Color? color;
   @override
   Widget build(BuildContext context) {
     return Container(
         //constraints: BoxConstraints(minHeight: minButtonHeight),
-        decoration: primary!
+        decoration: primary
             ? BoxDecoration(boxShadow: [
                 BoxShadow(
                     offset: const Offset(0, 4),
@@ -44,14 +43,14 @@ class Button extends StatelessWidget {
         child: ElevatedButton(
             style: ButtonStyle(
                 backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => primary! ? const Color(0xff40667D) : color!)),
+                    (states) => primary ? const Color(0xff40667D) : color!)),
             onPressed: onPressed != null
                 ? () {
-                    onPressed!();
+                    onPressed();
                   }
                 : () {},
             child: Text(
-              label!,
+              label,
               //textScaleFactor: textScaleFactor,
 
               style: kLabelTextStyle,
