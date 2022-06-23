@@ -6,10 +6,12 @@ const secondaryColorText = Color(0xffBABABA);
 const secondaryColor = Color(0xffF2F2F2);
 const lightWhite = Color(0xffd1d1d1);
 const danger = Color(0xffDC3545);
+final dangerWO = Color(0xffDC3545).withOpacity(0.16);
 const dangerSecondary = Color(0xffE4CBCD);
 const sucess = Color(0xff28A745);
 const sucessSecondary = Color(0xffC9DCCD);
 const primarySecondary = Color(0xffCDD2D6);
+const cardHeader = Color(0xff697A8D);
 
 var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',
@@ -61,7 +63,7 @@ var kTextStyleTableTitle = TextStyle(
   fontFamily: 'PublicSans',
   fontSize: 12.ssp(),
   fontWeight: FontWeight.w600,
-  color: Color(0xff566A7F),
+  color: Colors.white,
 );
 var kTextStyleTableName = TextStyle(
   fontFamily: 'PublicSans',

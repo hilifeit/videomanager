@@ -13,12 +13,12 @@ class UserTable extends ConsumerWidget {
       // width: double.infinity,
       child: PaginatedDataTable2(
         empty: const Text("No data!"),
-        headingRowHeight: 38.sh(),
-        dataRowHeight: 56.sh(),
+        headingRowHeight: 49.sh(),
+        dataRowHeight: 73.sh(),
         wrapInCard: false,
 
-        headingRowColor:
-            MaterialStateColor.resolveWith((states) => Color(0xfffbfbfb)),
+        headingRowColor: MaterialStateColor.resolveWith(
+            (states) => Theme.of(context).primaryColor),
 
         // headingRowColor:
         //     MaterialStateColor.resolveWith((states) => const Color(0xfffbfbfb)),
@@ -38,6 +38,16 @@ class UserTable extends ConsumerWidget {
           DataColumn(
               label: Text(
             "JOINING DATE",
+            style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+          )),
+          DataColumn(
+              label: Text(
+            "STATUS",
+            style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+          )),
+          DataColumn(
+              label: Text(
+            "ACTION",
             style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
           )),
         ],

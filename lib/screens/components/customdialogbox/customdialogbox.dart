@@ -7,12 +7,13 @@ class CustomDialogBox extends StatelessWidget {
       required this.onApply,
       required this.onSucess,
       required this.onReset,
-      this.text = 'Confirm?',
+      this.textFirst = 'Are you sure you want to ',
+      this.textSecond = 'Assign this video?',
       this.applyText = 'Yes',
       this.reset})
       : super(key: key);
   final Function onApply, onSucess, onReset;
-  final String text, applyText;
+  final String textFirst, textSecond, applyText;
   bool? reset;
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class CustomDialogBox extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                text,
+                textFirst + textSecond,
                 textAlign: TextAlign.center,
                 style: kTextStyleInterRegular.copyWith(
                   fontSize: 16.ssp(),
@@ -41,13 +42,14 @@ class CustomDialogBox extends StatelessWidget {
               ),
               Spacer(),
               OutlineAndElevatedButton(
-                  reset: reset ?? false,
-                  text: applyText,
-                  show: false,
-                  center: true,
-                  onApply: onApply,
-                  onSucess: onSucess,
-                  onReset: onReset,)
+                reset: reset ?? false,
+                text: applyText,
+                show: false,
+                center: true,
+                onApply: onApply,
+                onSucess: onSucess,
+                onReset: onReset,
+              )
             ],
           ),
         ),

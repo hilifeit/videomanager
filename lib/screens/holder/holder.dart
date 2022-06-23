@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
@@ -8,7 +9,6 @@ import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 final indexProvider = StateProvider<int>((ref) {
   return 0;
 });
-
 
 class Holder extends ConsumerWidget {
   const Holder({Key? key}) : super(key: key);
@@ -25,20 +25,16 @@ class Holder extends ConsumerWidget {
             indexState: indexProvider,
           ),
           Expanded(
-            child:index != 3
-                    ? AnimatedIndexedStack(index: index, children: [
-                        ViewScreen(),
-                        Users(),
-                        Video(),
-                      ])
-                    : const SettingsHolder(),
+            child: index != 3
+                ? AnimatedIndexedStack(index: index, children: [
+                    ViewScreen(),
+                    Users(),
+                    DashBoard(),
+                  ])
+                : const SettingsHolder(),
           )
         ],
       ),
     );
   }
 }
-
-
-
-
