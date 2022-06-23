@@ -24,74 +24,172 @@ class DashBoard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TargetCard(),
-              UsersCard(),
-              AssignedVideoCard(),
+              const TargetCard(),
+              const UsersCard(),
+              const AssignedVideoCard(),
             ],
           ),
           Row(
             children: [
+              const OutletCard(),
               Card(
-                color: Color(0xffEFF9FF),
+                color: const Color(0xfffffdeb),
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 14.sh(),
-                      left: 19.sw(),
-                      right: 18.93.sh(),
-                      bottom: 17.sh()),
-                  child: Column(
+                      top: 20.sh(),
+                      left: 21.sw(),
+                      right: 25.sw(),
+                      bottom: 20.sh()),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Outlet',
-                        style: kTextStyleIbmSemiBold.copyWith(
-                            fontSize: 15.ssp(), color: cardHeader),
-                      ),
-                      SizedBox(
-                        height: 8.sh(),
-                      ),
-                      Text(
-                        '104',
-                        style: kTextStyleIbmSemiBold.copyWith(
-                            fontSize: 26.ssp(), color: cardHeader),
-                      ),
-                      SizedBox(
-                        height: 5.sh(),
-                      ),
-                      Container(
-                        height: 22.sh(),
-                        width: 53.sw(),
-                        color: Theme.of(context).primaryColor.withOpacity(0.16),
-                        child: Center(
-                          child: Text(
-                            '+34%',
-                            style: kTextStyleIbmMedium.copyWith(
-                                fontSize: 13.ssp(),
-                                color: Theme.of(context).primaryColor),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              width: 42.sw(),
+                              height: 42.sh(),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  6.sr(),
+                                ),
+                                color:
+                                    const Color(0xff696CFF).withOpacity(0.16),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 12.sh(),
+                                  horizontal: 9.sw(),
+                                ),
+                                child: const Image(
+                                    image: AssetImage(
+                                        'assets/images/credit-card.png')),
+                              )),
+                          SizedBox(
+                            height: 16.sh(),
                           ),
-                        ),
+                          Text(
+                            'Junk File',
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 15.ssp(), color: cardHeader),
+                          ),
+                          SizedBox(
+                            height: 2.2.sh(),
+                          ),
+                          Text('200',
+                              style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 22.ssp(),
+                                color: Color(0xff566a7f),
+                              )),
+                          SizedBox(
+                            height: 8.8.sh(),
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.arrow_upward,
+                                size: 9.58.ssp(),
+                              )
+                            ],
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        height: 18.sh(),
-                      ),
-                      Text(
-                        'Outlet Reach',
-                        style: kTextStyleIbmRegular.copyWith(
-                            fontSize: 13.ssp(), color: Color(0xffA1ACB8)),
-                      ),
-                      SizedBox(
-                        height: 3.sh(),
-                      ),
-                      // LinearProgressIndicator(
-                      //   backgroundColor: Color(0xffECEEF1),
-                      // )
+                      const Icon(Icons.more_vert),
                     ],
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ]),
+      ),
+    );
+  }
+}
+
+class OutletCard extends StatelessWidget {
+  const OutletCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: const Color(0xffEFF9FF),
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: 14.sh(), left: 19.sw(), right: 18.93.sh(), bottom: 17.sh()),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Outlet',
+              style: kTextStyleIbmSemiBold.copyWith(
+                  fontSize: 15.ssp(), color: cardHeader),
+            ),
+            SizedBox(
+              height: 8.sh(),
+            ),
+            Text(
+              '104',
+              style: kTextStyleIbmSemiBold.copyWith(
+                  fontSize: 26.ssp(), color: cardHeader),
+            ),
+            SizedBox(
+              height: 5.sh(),
+            ),
+            Container(
+              height: 22.sh(),
+              width: 53.sw(),
+              color: Theme.of(context).primaryColor.withOpacity(0.16),
+              child: Center(
+                child: Text(
+                  '+34%',
+                  style: kTextStyleIbmMedium.copyWith(
+                      fontSize: 13.ssp(),
+                      color: Theme.of(context).primaryColor),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 18.sh(),
+            ),
+            Text(
+              'Outlet Reach',
+              style: kTextStyleIbmRegular.copyWith(
+                  fontSize: 13.ssp(), color: const Color(0xffA1ACB8)),
+            ),
+            SizedBox(
+              height: 3.sh(),
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  height: 8.sh(),
+                  width: 89.sw(),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(7.sr())),
+                    child: const LinearProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+                      value: 0.5,
+                      backgroundColor: Color(0xffECEEF1),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 9.39.sw(),
+                ),
+                Text(
+                  '50%',
+                  style: kTextStyleIbmRegular.copyWith(
+                    fontSize: 13.ssp(),
+                    color: cardHeader,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -105,7 +203,7 @@ class AssignedVideoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color(0xfffffdeb),
+      color: const Color(0xfffffdeb),
       child: Padding(
         padding: EdgeInsets.only(
             top: 20.sh(), left: 21.sw(), right: 25.sw(), bottom: 20.sh()),
@@ -118,7 +216,7 @@ class AssignedVideoCard extends StatelessWidget {
                 Container(
                   width: 42.sw(),
                   height: 42.sh(),
-                  color: Color(0xffafafaf),
+                  color: const Color(0xffafafaf),
                 ),
                 SizedBox(
                   height: 16.sh(),
@@ -147,11 +245,11 @@ class AssignedVideoCard extends StatelessWidget {
                 Text(
                   'More video to be assigned',
                   style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 10.ssp(), color: Color(0xffff3e1d)),
+                      fontSize: 10.ssp(), color: const Color(0xffff3e1d)),
                 ),
               ],
             ),
-            Icon(Icons.more_vert),
+            const Icon(Icons.more_vert),
           ],
         ),
       ),
@@ -167,7 +265,7 @@ class UsersCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color(0xfffff0f0),
+      color: const Color(0xfffff0f0),
       child: Padding(
         padding: EdgeInsets.only(
             top: 20.sh(), left: 21.sw(), right: 25.81.sw(), bottom: 10.sh()),
@@ -180,7 +278,7 @@ class UsersCard extends StatelessWidget {
                 Container(
                   width: 42.sw(),
                   height: 42.sh(),
-                  color: Color(0xffafafaf),
+                  color: const Color(0xffafafaf),
                 ),
                 SizedBox(
                   height: 16.sh(),
@@ -213,7 +311,7 @@ class UsersCard extends StatelessWidget {
             SizedBox(
               width: 17.69.sw(),
             ),
-            Icon(Icons.more_vert),
+            const Icon(Icons.more_vert),
           ],
         ),
       ),
@@ -229,7 +327,7 @@ class TargetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Color(0xfffbfbfb),
+      color: const Color(0xfffbfbfb),
       child: Padding(
         padding: EdgeInsets.only(
             top: 19.sh(), left: 24.sw(), bottom: 20.sh(), right: 35.79.sw()),
@@ -272,7 +370,7 @@ class TargetCard extends StatelessWidget {
                   Text(
                     '78% of target',
                     style: kTextStyleIbmRegular.copyWith(
-                        fontSize: 13.ssp(), color: Color(0xffA1ACB8)),
+                        fontSize: 13.ssp(), color: const Color(0xffA1ACB8)),
                   ),
                   SizedBox(
                     height: 10.sh(),
