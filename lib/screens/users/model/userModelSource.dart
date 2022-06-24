@@ -4,9 +4,8 @@ import 'package:videomanager/screens/components/customdialogbox/customdialogbox.
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
-import 'package:videomanager/screens/users/users.dart';
 
-enum Roles { user, manager, admin }
+enum Roles { user, manager, superAdmin }
 
 class UserModelSource extends DataTableSource {
   UserModelSource(
@@ -44,56 +43,57 @@ class UserModelSource extends DataTableSource {
       DataCell(
         Consumer(builder: (context, ref, c) {
           final thisUser = ref.watch(userChangeProvider).user.role;
-          return PopupMenuButton(
-              // offset: Offset(0, height / 2 + 22.ssp()),
-              itemBuilder: (BuildContext context) {
-                return [
-                  if (thisUser > user.role)
-                    PopupMenuItem(
-                        onTap: () {
-                          ref.read(userChangeProvider).selectUser(user);
-                        },
-                        child: CustomPopUpMenuItemChild(
-                          icon: Videomanager.edit,
-                          text: 'Edit',
-                        )),
-                  if (thisUser > user.role)
-                    PopupMenuItem(
-                        onTap: () {
-                          // ref.read(userChangeProvider).selectUser(user);
-                        },
-                        child: CustomPopUpMenuItemChild(
-                          icon: Videomanager.lock,
-                          text: 'Reset Password',
-                        )),
-                  if (thisUser > user.role)
-                    PopupMenuItem(
-                        onTap: () {
-                          Future.delayed(const Duration(milliseconds: 1), () {
-                            return showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CustomDialogBox(
-                                      onApply: () {},
-                                      onSucess: () {
-                                        ref
-                                            .read(userChangeProvider)
-                                            .delete(id: user.id);
-                                        ref.read(userChangeProvider).fetchAll();
-                                      },
-                                      onReset: () {});
-                                });
-                          });
+          return (thisUser > user.role)
+              ? PopupMenuButton(
+                  offset: const Offset(0, 0),
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      PopupMenuItem(
+                          onTap: () {
+                            ref.read(userChangeProvider).selectUser(user);
+                          },
+                          child: CustomPopUpMenuItemChild(
+                            icon: Videomanager.edit,
+                            text: 'Edit',
+                          )),
+                      PopupMenuItem(
+                          onTap: () {
+                            // ref.read(userChangeProvider).selectUser(user);
+                          },
+                          child: CustomPopUpMenuItemChild(
+                            icon: Videomanager.lock,
+                            text: 'Reset Password',
+                          )),
+                      PopupMenuItem(
+                          onTap: () {
+                            Future.delayed(const Duration(milliseconds: 1), () {
+                              return showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CustomDialogBox(
+                                        onApply: () {},
+                                        onSucess: () {
+                                          ref
+                                              .read(userChangeProvider)
+                                              .delete(id: user.id);
+                                          ref
+                                              .read(userChangeProvider)
+                                              .fetchAll();
+                                        },
+                                        onReset: () {});
+                                  });
+                            });
 
-                          //ref.read(userChangeProvider).delete(id: user.id);
-                        },
-                        child: CustomPopUpMenuItemChild(
-                          icon: Videomanager.delete,
-                          text: 'Delete',
-                        )),
-                ];
-              },
-              child: const Icon(Icons.more_vert));
+                            //ref.read(userChangeProvider).delete(id: user.id);
+                          },
+                          child: CustomPopUpMenuItemChild(
+                            icon: Videomanager.delete,
+                            text: 'Delete',
+                          )),
+                    ];
+                  },
+                  child: const Icon(Icons.more_vert))
+              : const Text("No Permission");
         }),
       ),
     ]);

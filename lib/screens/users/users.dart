@@ -5,8 +5,6 @@ import 'package:videomanager/screens/users/component/userTable.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
 
- 
-
 class Users extends StatelessWidget {
   Users({Key? key}) : super(key: key);
 
@@ -14,7 +12,6 @@ class Users extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: Row(
@@ -34,6 +31,7 @@ class Users extends StatelessWidget {
                         child: Column(
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   'Users',
@@ -65,14 +63,13 @@ class Users extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                     ),
-                                  ); 
+                                  );
                                 }),
                                 SizedBox(
                                   width: 16.sw(),
                                 ),
                                 SizedBox(
-                                  height: 67.sh(),
-                                  width: 194.sw(),
+                                  width: 300.sw(),
                                   child: SearchBox(),
                                 ),
                               ],
@@ -92,13 +89,11 @@ class Users extends StatelessWidget {
                 )),
             Expanded(
                 flex: 1,
-                child: Consumer(
-                  builder: (context,ref,c) {
-                    return AddUser(
-                      formKey: formKey,
-                    );
-                  }
-                ))
+                child: Consumer(builder: (context, ref, c) {
+                  return AddUser(
+                    formKey: formKey,
+                  );
+                }))
           ],
         ));
   }

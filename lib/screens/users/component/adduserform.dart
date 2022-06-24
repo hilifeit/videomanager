@@ -2,7 +2,6 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/usermodel.dart';
 // import 'package:videomanager/screens/users/component/userService.dart';
 
 class AddNewUser {
@@ -36,7 +35,6 @@ class AddUser extends ConsumerWidget {
   final List<CustomMenuItem> menus = [
     CustomMenuItem(label: "User", value: 0),
     CustomMenuItem(label: "Manager", value: 1),
-    CustomMenuItem(label: "Admin", value: 2),
   ];
   bool edit = false;
   @override
@@ -156,7 +154,7 @@ class AddUser extends ConsumerWidget {
                               child: const Text('User'),
                             ),
                           ),
-                        if (userRole == 2)
+                        if (userRole >= 2)
                           CustomMenuDropDown(
                               value: menus[edit ? addNewUser.role : 0],
                               onChanged: (val) {

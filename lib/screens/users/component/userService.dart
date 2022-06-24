@@ -53,8 +53,10 @@ class UserService extends ChangeNotifier {
 
   fetchAll() async {
     try {
-      var response = await client.get(Uri.parse("${baseURL}user"),
-          headers: {"x-access-token": user.accessToken});
+      var response = await client.get(Uri.parse("${baseURL}user"), headers: {
+        "Content-Type": "application/json",
+        "x-access-token": user.accessToken
+      });
       if (response.statusCode == 200) {
         var temp = userModelListFromJson(response.body);
         users = temp;
@@ -64,7 +66,7 @@ class UserService extends ChangeNotifier {
         if (response.statusCode == 404) throw 'Not Found';
       }
     } catch (e) {
-      throw "$e ";
+      throw "$e";
     }
   }
 
