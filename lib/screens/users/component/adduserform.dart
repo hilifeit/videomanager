@@ -12,13 +12,15 @@ class AddNewUser {
       this.name = '',
       this.email = '',
       this.password = '',
-      this.mobile = 0});
+      this.mobile = 0,
+      this.id = ''});
   String userName;
   int role;
   String name;
   String email;
   String password;
   int mobile;
+  String id;
 }
 
 class AddUser extends ConsumerWidget {
@@ -32,24 +34,26 @@ class AddUser extends ConsumerWidget {
   final ScrollController _scrollController = ScrollController();
 
   final List<CustomMenuItem> menus = [
-    CustomMenuItem(label: "User", value: 2),
+    CustomMenuItem(label: "User", value: 0),
     CustomMenuItem(label: "Manager", value: 1),
-    CustomMenuItem(label: "Admin", value: 0),
+    CustomMenuItem(label: "Admin", value: 2),
   ];
   bool edit = false;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final userService = ref.watch(userChangeProvider);
-    final user = ref.watch(userChangeProvider).selectedUser;
+    final selectedUser = ref.watch(userChangeProvider).selectedUser;
+    final userRole = ref.watch(userChangeProvider).user.role;
     AddNewUser addNewUser = AddNewUser();
-    if (user != null) {
+    if (selectedUser != null) {
       edit = true;
       addNewUser
-        ..userName = user.username
-        ..email = user.email
-        ..mobile = user.mobile
-        ..name = user.name
-        ..role = user.role;
+        ..userName = selectedUser.username
+        ..email = selectedUser.email
+        ..mobile = selectedUser.mobile
+        ..name = selectedUser.name
+        ..role = selectedUser.role
+        ..id = selectedUser.id;
     } else {
       edit = false;
     }
@@ -116,7 +120,7 @@ class AddUser extends ConsumerWidget {
                           height: 35.sh(),
                         ),
                         InputTextField(
-                          value: edit ? user!.username : '',
+                          value: edit ? addNewUser.userName : '',
                           title: 'Username',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -136,19 +140,36 @@ class AddUser extends ConsumerWidget {
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        CustomMenuDropDown(
-                            value: menus[0],
-                            onChanged: (val) {
-                              // addNewUser.role = val.value;
-                              print(val.value);
-                            },
-                            values: menus,
-                            helperText: ''),
+                        if (userRole == 1)
+                          Container(
+                            height: 55.sh(),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.sr(),
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 13.sw(), bottom: 17.sh(), top: 17.sh()),
+                              child: const Text('User'),
+                            ),
+                          ),
+                        if (userRole == 2)
+                          CustomMenuDropDown(
+                              value: menus[edit ? addNewUser.role : 0],
+                              onChanged: (val) {
+                                addNewUser.role = val.value;
+                                print(val.value);
+                              },
+                              values: menus,
+                              helperText: ''),
                         SizedBox(
                           height: 6.sh(),
                         ),
                         InputTextField(
-                          value: edit ? user!.name : '',
+                          value: edit ? addNewUser.name : '',
                           title: 'Name',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -215,12 +236,28 @@ class AddUser extends ConsumerWidget {
                             },
                             onSucess: () {
                               if (!edit) {
-                                var user = ref.read(userChangeProvider);
+                                try {
+                                  var user = ref.read(userChangeProvider);
 
-                                user.add(addUser: addNewUser);
-                                snack.success("User Added Sucessfully");
-                                formKey.currentState!.reset();
-                                ref.read(userChangeProvider).fetchAll();
+                                  user.add(addUser: addNewUser);
+                                  snack.success("User Added Sucessfully");
+                                  formKey.currentState!.reset();
+                                  ref.read(userChangeProvider).fetchAll();
+                                } catch (e) {
+                                  snack.error(e);
+                                }
+                              } else {
+                                try {
+                                  var user = ref.read(userChangeProvider);
+
+                                  user.edit(addUser: addNewUser);
+                                  snack.success("User Edited Sucessfully");
+                                  formKey.currentState!.reset();
+                                  ref.read(userChangeProvider).fetchAll();
+                                  ref.read(userChangeProvider).selectUser(null);
+                                } catch (e) {
+                                  snack.error(e);
+                                }
                               }
                             },
                           ),
