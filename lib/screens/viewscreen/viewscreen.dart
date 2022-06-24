@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/magnifier.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
