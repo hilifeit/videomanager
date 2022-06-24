@@ -18,6 +18,7 @@ class UserService extends ChangeNotifier {
     fetchAll();
   }
   late UserModel user;
+  UserModel? selectedUser;
 
   UserModel? get userTemp => user;
 
@@ -53,7 +54,7 @@ class UserService extends ChangeNotifier {
   fetchAll() async {
     try {
       var response = await client.get(Uri.parse("${baseURL}user"),
-          headers: {"Content-Type": "application/json"});
+          headers: {"x-access-token": user.accessToken});
       if (response.statusCode == 200) {
         var temp = userModelListFromJson(response.body);
         users = temp;
@@ -65,6 +66,11 @@ class UserService extends ChangeNotifier {
     } catch (e) {
       throw "$e ";
     }
+  }
+
+  selectUser(UserModel? user) {
+    selectedUser = user;
+    notifyListeners();
   }
 
   Future<bool> login(
@@ -97,6 +103,29 @@ class UserService extends ChangeNotifier {
     }
   }
 
+  Future<bool> delete({required String id}) async {
+    try {
+      var response = await client.delete(
+        Uri.parse("${baseURL}user/$id"),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.statusCode == 200) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
+        notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
   Future<bool> add({required AddNewUser addUser}) async {
     try {
       var response = await client.post(Uri.parse("${baseURL}user"),
@@ -110,6 +139,35 @@ class UserService extends ChangeNotifier {
             "email": addUser.email
           }));
       if (response.statusCode == 201) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
+        notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
+  Future<bool> edit({required AddNewUser addUser}) async {
+    try {
+      var response = await client.put(Uri.parse("${baseURL}user/${addUser.id}"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "username": addUser.userName,
+            "password": addUser.password,
+            "mobile": addUser.mobile,
+            "name": addUser.name,
+            "role": addUser.role,
+            "email": addUser.email
+          }));
+      if (response.statusCode == 200) {
         // var temp = userModelListFromJson(response.body);
         // users = temp;
         // store();

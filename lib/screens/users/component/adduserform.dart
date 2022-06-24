@@ -6,12 +6,21 @@ import 'package:videomanager/screens/users/model/usermodel.dart';
 // import 'package:videomanager/screens/users/component/userService.dart';
 
 class AddNewUser {
-  String? userName = '';
-  int? role = 0;
-  String? name = '';
-  String? email = '';
-  String? password = '';
-  int? mobile = 0;
+  AddNewUser(
+      {this.userName = '',
+      this.role = 0,
+      this.name = '',
+      this.email = '',
+      this.password = '',
+      this.mobile = 0,
+      this.id = ''});
+  String userName;
+  int role;
+  String name;
+  String email;
+  String password;
+  int mobile;
+  String id;
 }
 
 class AddUser extends ConsumerWidget {
@@ -25,15 +34,29 @@ class AddUser extends ConsumerWidget {
   final ScrollController _scrollController = ScrollController();
 
   final List<CustomMenuItem> menus = [
-    CustomMenuItem(label: "User", value: 2),
+    CustomMenuItem(label: "User", value: 0),
     CustomMenuItem(label: "Manager", value: 1),
-    CustomMenuItem(label: "Admin", value: 0),
+    CustomMenuItem(label: "Admin", value: 2),
   ];
+  bool edit = false;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final userService = ref.watch(userChangeProvider);
-
+    final selectedUser = ref.watch(userChangeProvider).selectedUser;
+    final userRole = ref.watch(userChangeProvider).user.role;
     AddNewUser addNewUser = AddNewUser();
+    if (selectedUser != null) {
+      edit = true;
+      addNewUser
+        ..userName = selectedUser.username
+        ..email = selectedUser.email
+        ..mobile = selectedUser.mobile
+        ..name = selectedUser.name
+        ..role = selectedUser.role
+        ..id = selectedUser.id;
+    } else {
+      edit = false;
+    }
 
     return Scrollbar(
       controller: _scrollController,
@@ -48,7 +71,7 @@ class AddUser extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Add User',
+                  edit ? 'Edit User' : 'Add User',
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 32.ssp(), color: Colors.black),
                 ),
@@ -97,6 +120,7 @@ class AddUser extends ConsumerWidget {
                           height: 35.sh(),
                         ),
                         InputTextField(
+                          value: edit ? addNewUser.userName : '',
                           title: 'Username',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -116,18 +140,36 @@ class AddUser extends ConsumerWidget {
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        CustomMenuDropDown(
-                            value: menus[0],
-                            onChanged: (val) {
-                              // addNewUser.role = val.value;
-                              print(val.value);
-                            },
-                            values: menus,
-                            helperText: ''),
+                        if (userRole == 1)
+                          Container(
+                            height: 55.sh(),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.sr(),
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 13.sw(), bottom: 17.sh(), top: 17.sh()),
+                              child: const Text('User'),
+                            ),
+                          ),
+                        if (userRole == 2)
+                          CustomMenuDropDown(
+                              value: menus[edit ? addNewUser.role : 0],
+                              onChanged: (val) {
+                                addNewUser.role = val.value;
+                                print(val.value);
+                              },
+                              values: menus,
+                              helperText: ''),
                         SizedBox(
                           height: 6.sh(),
                         ),
                         InputTextField(
+                          value: edit ? addNewUser.name : '',
                           title: 'Name',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -140,6 +182,7 @@ class AddUser extends ConsumerWidget {
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
+                          value: edit ? addNewUser.email : '',
                           title: 'Email',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -151,19 +194,21 @@ class AddUser extends ConsumerWidget {
                           },
                         ),
                         SizedBox(height: 14.sh()),
-                        InputTextField(
-                          title: 'Password',
-                          isVisible: true,
-                          fillColor: Colors.white,
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 16.ssp(), color: Colors.black),
-                          // validator: (val) => validateRegisterPassword(val!),
-                          onChanged: (val) {
-                            addNewUser.password = val;
-                          },
-                        ),
+                        if (!edit)
+                          InputTextField(
+                            title: 'Password',
+                            isVisible: true,
+                            fillColor: Colors.white,
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 16.ssp(), color: Colors.black),
+                            // validator: (val) => validateRegisterPassword(val!),
+                            onChanged: (val) {
+                              addNewUser.password = val;
+                            },
+                          ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
+                          value: edit ? addNewUser.mobile.toString() : '',
                           isdigits: true,
                           title: 'Mobile Number',
                           isVisible: true,
@@ -181,20 +226,39 @@ class AddUser extends ConsumerWidget {
                         Align(
                           alignment: Alignment.center,
                           child: OutlineAndElevatedButton(
+                            edit: edit,
                             onReset: () {},
                             center: true,
-                            text: 'Add',
+                            text: edit ? 'Edit' : 'Add',
                             onApply: () {
                               if (formKey.currentState!.validate()) return true;
                               return false;
                             },
                             onSucess: () {
-                              var user = ref.read(userChangeProvider);
+                              if (!edit) {
+                                try {
+                                  var user = ref.read(userChangeProvider);
 
-                              user.add(addUser: addNewUser);
-                              snack.success("User Added Sucessfully");
-                              formKey.currentState!.reset();
-                              ref.read(userChangeProvider).fetchAll();
+                                  user.add(addUser: addNewUser);
+                                  snack.success("User Added Sucessfully");
+                                  formKey.currentState!.reset();
+                                  ref.read(userChangeProvider).fetchAll();
+                                } catch (e) {
+                                  snack.error(e);
+                                }
+                              } else {
+                                try {
+                                  var user = ref.read(userChangeProvider);
+
+                                  user.edit(addUser: addNewUser);
+                                  snack.success("User Edited Sucessfully");
+                                  formKey.currentState!.reset();
+                                  ref.read(userChangeProvider).fetchAll();
+                                  ref.read(userChangeProvider).selectUser(null);
+                                } catch (e) {
+                                  snack.error(e);
+                                }
+                              }
                             },
                           ),
                         ),
