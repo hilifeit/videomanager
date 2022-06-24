@@ -31,7 +31,7 @@ const baseURL = "http://192.168.16.106:5000/api/";
 // const baseURL = "http://localhost:5000/api/";
 final client = http.Client();
 
-final LatLng home = LatLng(27.7251933, 85.3411312);
+final LatLng home = LatLng(26.4721557, 87.32396419999999);
 
 final storage = GetStorage();
 

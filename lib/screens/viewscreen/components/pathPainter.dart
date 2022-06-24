@@ -13,6 +13,12 @@ import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 
+class FileWithDistance {
+  FileWithDistance({required this.file, required this.distance});
+  final FileDetailMini file;
+  final double distance;
+}
+
 class Painter extends CustomPainter {
   Painter(this.context, this.ref,
       {required this.files,
@@ -95,46 +101,26 @@ class Painter extends CustomPainter {
               items: [
                 PopupMenuItem(
                     onTap: () async {
-                      var paths = element.path.replaceAll("\\", "/").split("/");
+                      var firstVideoUrl = await getUrlFromFile(element);
+                      print(firstVideoUrl);
+                      if (firstVideoUrl.isNotEmpty) {
+                        var secondVideo = findFile(
+                            visibleFilesList: visibleFilesList,
+                            file: element,
+                            fileRect: item);
 
-                      var usebalepaths = paths.getRange(2, paths.length);
-                      String filePath = usebalepaths.join("/");
-                      String urlFound = '';
-                      bool found = false;
+                        var secondVideoUrl = await getUrlFromFile(secondVideo);
 
-                      await Future.forEach<Hdd>(Hdd.values, (element) async {
-                        String url =
-                            "${setting.videoSetting.videourl}/${element.name}/$filePath";
-                        if (!found) {
-                          try {
-                            var response = await client.head(Uri.parse(url));
-
-                            if (response.statusCode == 200) {
-                              {
-                                found = true;
-                                urlFound = url;
-
-                                return Future.value(url);
-                              }
-                            } else {
-                              // print(response.statusCode);
-                            }
-                          } catch (e) {
-                            snack.error(e.toString());
-                          }
-                        }
-                      });
-                      if (found) {
                         showDialog(
                             context: context,
                             builder: (_) {
                               return Video(
-                                pathLeft: urlFound,
-                                pathRight: urlFound,
+                                pathLeft: firstVideoUrl,
+                                pathRight: secondVideoUrl,
                               );
                             });
                       } else {
-                        snack.error('Video not found!');
+                        snack.error("Video not found!");
                       }
                     },
                     child: const Text('Play Video')),
@@ -273,6 +259,57 @@ class Painter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
+  }
+
+  FileDetailMini findFile(
+      {required List<FileDetailMini> visibleFilesList,
+      required FileDetailMini file,
+      required Rect fileRect,
+      double minimumDistance = 50}) {
+    List<FileWithDistance> distances = [];
+    for (var e in visibleFilesList) {
+      Rect testElement = getRect(e.boundingBox!);
+      double distance = (testElement.center - fileRect.center).distance.abs();
+
+      if (distance < minimumDistance) {
+        if (e != file) {
+          distances.add(FileWithDistance(file: e, distance: distance));
+        }
+      }
+    }
+    distances.sort((a, b) => a.distance.compareTo(b.distance));
+    return distances.first.file;
+  }
+
+  Future<String> getUrlFromFile(FileDetailMini file) async {
+    var paths = file.path.replaceAll("\\", "/").split("/");
+
+    var usebalepaths = paths.getRange(2, paths.length);
+    String filePath = usebalepaths.join("/");
+    String urlFound = '';
+    bool found = false;
+
+    await Future.forEach<Hdd>(Hdd.values, (element) async {
+      String url = "${setting.videoSetting.videourl}/${element.name}/$filePath";
+      if (!found) {
+        try {
+          var response = await client.head(Uri.parse(url));
+
+          if (response.statusCode == 200) {
+            {
+              found = true;
+              urlFound = url;
+            }
+          } else {
+            // print(response.statusCode);
+          }
+        } catch (e) {
+          // snack.error(e.toString());
+        }
+      }
+    });
+
+    return Future.value(urlFound);
   }
 
   Rect getRect(Rect boundingBox) {
