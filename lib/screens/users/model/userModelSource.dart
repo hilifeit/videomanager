@@ -1,7 +1,9 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:intl/intl.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/users.dart';
 
 enum Roles { user, manager, admin }
 
@@ -39,14 +41,23 @@ class UserModelSource extends DataTableSource {
       )),
       DataCell(Text(getRole(user.role))),
       DataCell(
-        PopupMenuButton(
-            // offset: Offset(0, height / 2 + 22.ssp()),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(onTap: () async {}, child: const Text('Action'))
-              ];
-            },
-            child: const Icon(Icons.more_vert)),
+        Consumer(builder: (context, ref, c) {
+          return PopupMenuButton(
+              // offset: Offset(0, height / 2 + 22.ssp()),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                      onTap: () {
+                        ref.read(userChangeProvider).selectUser(user);
+                      },
+                      child: CustomPopUpMenuItemChild(
+                        icon: Videomanager.edit,
+                        text: 'Edit',
+                      ))
+                ];
+              },
+              child: const Icon(Icons.more_vert));
+        }),
       ),
     ]);
   }
@@ -65,6 +76,45 @@ class UserModelSource extends DataTableSource {
     var role = Roles.values.elementAt(value);
     return role.name.replaceFirst(
         role.name.characters.first, role.name.characters.first.toUpperCase());
+  }
+}
+
+class CustomPopUpMenuItemChild extends StatelessWidget {
+  CustomPopUpMenuItemChild({
+    Key? key,
+    this.width,
+    required this.icon,
+    required this.text,
+  }) : super(key: key);
+  double? width;
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 48.sh(),
+      width: width ?? 180.sw(),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Theme.of(context).primaryColor,
+            size: 17.6.sr(),
+          ),
+          SizedBox(
+            width: 21.3.sw(),
+          ),
+          Text(
+            text,
+            style: kTextStyleIbmRegular.copyWith(
+              fontSize: 16.ssp(),
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

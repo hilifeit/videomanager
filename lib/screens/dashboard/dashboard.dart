@@ -1,4 +1,5 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 List<CustomCard> items = [
@@ -384,7 +385,30 @@ class TargetCard extends StatelessWidget {
                               (states) => EdgeInsets.zero),
                           backgroundColor: MaterialStateColor.resolveWith(
                               (states) => primaryColor)),
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Center(
+                                child: Container(
+                                  height: 539.sh(),
+                                  width: 593.sw(),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8.sr()),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 42.sh(),
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
                       child: Text(
                         'View Screenshot',
                         style: kTextStyleIbmRegular.copyWith(

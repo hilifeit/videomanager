@@ -18,6 +18,7 @@ class UserService extends ChangeNotifier {
     fetchAll();
   }
   late UserModel user;
+   UserModel? selectedUser;
 
   UserModel? get userTemp => user;
 
@@ -65,6 +66,11 @@ class UserService extends ChangeNotifier {
     } catch (e) {
       throw "$e ";
     }
+  }
+
+  selectUser(UserModel? user) {
+    selectedUser = user;
+    notifyListeners();
   }
 
   Future<bool> login(

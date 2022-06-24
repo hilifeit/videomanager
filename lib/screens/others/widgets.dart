@@ -5,17 +5,17 @@ const double minButtonHeight = 45;
 const double buttonHeight = 55;
 
 class Button extends StatelessWidget {
-   Button({
+  Button({
     Key? key,
     required this.onPressed,
     required this.label,
-     this.primary = true,
+    this.primary = true,
     required this.kLabelTextStyle,
-     this.color,
+    this.color,
   }) : super(key: key);
   final Function onPressed;
   final String label;
-  
+
   final bool primary;
   final TextStyle kLabelTextStyle;
   final Color? color;
@@ -104,6 +104,7 @@ class InputTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          controller: TextEditingController(text: value),
           inputFormatters: [
             isdigits
                 ? FilteringTextInputFormatter.digitsOnly
@@ -117,7 +118,6 @@ class InputTextField extends StatelessWidget {
           onChanged: (val) {
             onChanged(val);
           },
-          initialValue: value,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
             fillColor: fillColor,

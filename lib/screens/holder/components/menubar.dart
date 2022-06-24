@@ -23,7 +23,7 @@ class MenuBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
-    final userName = ref.watch(userChangeProvider).user;
+     final userName = ref.watch(userChangeProvider).user;
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed

@@ -5,6 +5,8 @@ import 'package:videomanager/screens/users/component/userTable.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
 
+ 
+
 class Users extends StatelessWidget {
   Users({Key? key}) : super(key: key);
 
@@ -12,6 +14,7 @@ class Users extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Row(
@@ -89,8 +92,12 @@ class Users extends StatelessWidget {
                 )),
             Expanded(
                 flex: 1,
-                child: AddUser(
-                  formKey: formKey,
+                child: Consumer(
+                  builder: (context,ref,c) {
+                    return AddUser(
+                      formKey: formKey,
+                    );
+                  }
                 ))
           ],
         ));

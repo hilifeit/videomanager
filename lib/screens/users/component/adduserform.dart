@@ -6,12 +6,19 @@ import 'package:videomanager/screens/users/model/usermodel.dart';
 // import 'package:videomanager/screens/users/component/userService.dart';
 
 class AddNewUser {
-  String? userName = '';
-  int? role = 0;
-  String? name = '';
-  String? email = '';
-  String? password = '';
-  int? mobile = 0;
+  AddNewUser(
+      {this.userName = '',
+      this.role = 0,
+      this.name = '',
+      this.email = '',
+      this.password = '',
+      this.mobile = 0});
+  String userName;
+  int role;
+  String name;
+  String email;
+  String password;
+  int mobile;
 }
 
 class AddUser extends ConsumerWidget {
@@ -29,11 +36,23 @@ class AddUser extends ConsumerWidget {
     CustomMenuItem(label: "Manager", value: 1),
     CustomMenuItem(label: "Admin", value: 0),
   ];
+  bool edit = false;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final userService = ref.watch(userChangeProvider);
-
+    final user = ref.watch(userChangeProvider).selectedUser;
     AddNewUser addNewUser = AddNewUser();
+    if (user != null) {
+      edit = true;
+      addNewUser
+        ..userName = user.username
+        ..email = user.email
+        ..mobile = user.mobile
+        ..name = user.name
+        ..role = user.role;
+    } else {
+      edit = false;
+    }
 
     return Scrollbar(
       controller: _scrollController,
@@ -48,7 +67,7 @@ class AddUser extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Add User',
+                  edit ? 'Edit User' : 'Add User',
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 32.ssp(), color: Colors.black),
                 ),
@@ -97,6 +116,7 @@ class AddUser extends ConsumerWidget {
                           height: 35.sh(),
                         ),
                         InputTextField(
+                          value: edit ? user!.username : '',
                           title: 'Username',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -128,6 +148,7 @@ class AddUser extends ConsumerWidget {
                           height: 6.sh(),
                         ),
                         InputTextField(
+                          value: edit ? user!.name : '',
                           title: 'Name',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -140,6 +161,7 @@ class AddUser extends ConsumerWidget {
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
+                          value: edit ? addNewUser.email : '',
                           title: 'Email',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -151,19 +173,21 @@ class AddUser extends ConsumerWidget {
                           },
                         ),
                         SizedBox(height: 14.sh()),
-                        InputTextField(
-                          title: 'Password',
-                          isVisible: true,
-                          fillColor: Colors.white,
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 16.ssp(), color: Colors.black),
-                          // validator: (val) => validateRegisterPassword(val!),
-                          onChanged: (val) {
-                            addNewUser.password = val;
-                          },
-                        ),
+                        if (!edit)
+                          InputTextField(
+                            title: 'Password',
+                            isVisible: true,
+                            fillColor: Colors.white,
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 16.ssp(), color: Colors.black),
+                            // validator: (val) => validateRegisterPassword(val!),
+                            onChanged: (val) {
+                              addNewUser.password = val;
+                            },
+                          ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
+                          value: edit ? addNewUser.mobile.toString() : '',
                           isdigits: true,
                           title: 'Mobile Number',
                           isVisible: true,
@@ -181,20 +205,23 @@ class AddUser extends ConsumerWidget {
                         Align(
                           alignment: Alignment.center,
                           child: OutlineAndElevatedButton(
+                            edit: edit,
                             onReset: () {},
                             center: true,
-                            text: 'Add',
+                            text: edit ? 'Edit' : 'Add',
                             onApply: () {
                               if (formKey.currentState!.validate()) return true;
                               return false;
                             },
                             onSucess: () {
-                              var user = ref.read(userChangeProvider);
+                              if (!edit) {
+                                var user = ref.read(userChangeProvider);
 
-                              user.add(addUser: addNewUser);
-                              snack.success("User Added Sucessfully");
-                              formKey.currentState!.reset();
-                              ref.read(userChangeProvider).fetchAll();
+                                user.add(addUser: addNewUser);
+                                snack.success("User Added Sucessfully");
+                                formKey.currentState!.reset();
+                                ref.read(userChangeProvider).fetchAll();
+                              }
                             },
                           ),
                         ),

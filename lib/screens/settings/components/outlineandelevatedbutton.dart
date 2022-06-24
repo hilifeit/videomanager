@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 class OutlineAndElevatedButton extends StatelessWidget {
   OutlineAndElevatedButton({
@@ -11,11 +12,13 @@ class OutlineAndElevatedButton extends StatelessWidget {
     required this.onReset,
     this.show = true,
     this.reset = false,
+    this.edit = false 
   }) : super(key: key);
   final Function onApply, onSucess, onReset;
   String text;
   bool center, reset;
   bool show;
+  bool edit;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,31 +31,34 @@ class OutlineAndElevatedButton extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4.sr()),
                 border: Border.all(color: Colors.black)),
-            child: TextButton(
-                onPressed: () {
-                  if (!show) {
-                    Navigator.pop(context);
-                  } else if (reset) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return CustomDialogBox(
-                              reset: reset,
-                              onApply: onApply,
-                              onSucess: onSucess,
-                              onReset: onReset);
-                        });
+            child: Consumer(builder: (context, ref, c) {
+              return TextButton(
+                  onPressed: () {
+                    if (edit)ref.read(userChangeProvider).selectUser(null);
+                    if (!show) {
+                      Navigator.pop(context);
+                    } else if (reset) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomDialogBox(
+                                reset: reset,
+                                onApply: onApply,
+                                onSucess: onSucess,
+                                onReset: onReset);
+                          });
 
-                    // onReset();
-                  }
-                },
-                child: Text(
-                  center ? 'Cancel' : 'Reset',
-                  style: kTextStyleIbmMedium.copyWith(
-                    color: Colors.black,
-                    fontSize: show ? 17.ssp() : 12.ssp(),
-                  ),
-                )),
+                      // onReset();
+                    }
+                  },
+                  child: Text(
+                    center ? 'Cancel' : 'Reset',
+                    style: kTextStyleIbmMedium.copyWith(
+                      color: Colors.black,
+                      fontSize: show ? 17.ssp() : 12.ssp(),
+                    ),
+                  ));
+            }),
           ),
           SizedBox(
             width: show ? 60.sw() : 40.98.sw(),
