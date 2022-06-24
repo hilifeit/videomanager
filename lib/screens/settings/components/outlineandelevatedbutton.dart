@@ -3,18 +3,18 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 
 class OutlineAndElevatedButton extends StatelessWidget {
-  OutlineAndElevatedButton({
-    Key? key,
-    required this.onApply,
-    this.text = 'Apply',
-    this.center = false,
-    required this.onSucess,
-    required this.onReset,
-    this.show = true,
-    this.reset = false,
-    this.edit = false, 
-    this.applyText=''
-  }) : super(key: key);
+  OutlineAndElevatedButton(
+      {Key? key,
+      required this.onApply,
+      this.text = 'Apply',
+      this.center = false,
+      required this.onSucess,
+      required this.onReset,
+      this.show = true,
+      this.reset = false,
+      this.edit = false,
+      this.applyText = ''})
+      : super(key: key);
   final Function onApply, onSucess, onReset;
   String text;
   bool center, reset;
@@ -36,7 +36,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
             child: Consumer(builder: (context, ref, c) {
               return TextButton(
                   onPressed: () {
-                    if (edit)ref.read(userChangeProvider).selectUser(null);
+                    if (edit) ref.read(userChangeProvider).selectUser(null);
                     if (!show) {
                       Navigator.pop(context);
                     } else if (reset) {
@@ -44,7 +44,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return CustomDialogBox(
-                              applyText: applyText,
+                                applyText: 'Yes',
                                 reset: reset,
                                 onApply: onApply,
                                 onSucess: onSucess,
