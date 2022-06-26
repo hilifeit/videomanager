@@ -7,6 +7,12 @@ import 'package:videomanager/screens/users/model/usermodel.dart';
 
 enum Roles { user, manager, superAdmin }
 
+String getRole(int value) {
+  var role = Roles.values.elementAt(value);
+  return role.name.replaceFirst(
+      role.name.characters.first, role.name.characters.first.toUpperCase());
+}
+
 class UserModelSource extends DataTableSource {
   UserModelSource(
       {required this.context,
@@ -42,8 +48,8 @@ class UserModelSource extends DataTableSource {
       DataCell(Text(getRole(user.role))),
       DataCell(
         Consumer(builder: (context, ref, c) {
-          final thisUser = ref.watch(userChangeProvider).user.role;
-          return (thisUser > user.role)
+          final thisUser = ref.watch(userChangeProvider).user;
+          return (thisUser.role > user.role || thisUser.id == user.id)
               ? PopupMenuButton(
                   offset: const Offset(0, 0),
                   itemBuilder: (BuildContext context) {
@@ -56,40 +62,47 @@ class UserModelSource extends DataTableSource {
                             icon: Videomanager.edit,
                             text: 'Edit',
                           )),
-                      PopupMenuItem(
-                          onTap: () {
-                            // ref.read(userChangeProvider).selectUser(user);
-                          },
-                          child: CustomPopUpMenuItemChild(
-                            icon: Videomanager.lock,
-                            text: 'Reset Password',
-                          )),
-                      PopupMenuItem(
-                          onTap: () {
-                            Future.delayed(const Duration(milliseconds: 1), () {
-                              return showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return CustomDialogBox(
-                                        onApply: () {},
-                                        onSucess: () {
-                                          ref
-                                              .read(userChangeProvider)
-                                              .delete(id: user.id);
-                                          ref
-                                              .read(userChangeProvider)
-                                              .fetchAll();
-                                        },
-                                        onReset: () {});
-                                  });
-                            });
+                      if (thisUser.id != user.id)
+                        PopupMenuItem(
+                            onTap: () {
+                              // ref.read(userChangeProvider).selectUser(user);
+                            },
+                            child: CustomPopUpMenuItemChild(
+                              icon: Videomanager.lock,
+                              text: 'Reset Password',
+                            )),
+                      if (thisUser.id != user.id)
+                        PopupMenuItem(
+                            onTap: () {
+                              Future.delayed(const Duration(milliseconds: 1),
+                                  () {
+                                return showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CustomDialogBox(
+                                          textSecond: 'delete this user?',
+                                          onApply: () {},
+                                          onSucess: () {
+                                            ref
+                                                .read(userChangeProvider)
+                                                .delete(id: user.id);
 
-                            //ref.read(userChangeProvider).delete(id: user.id);
-                          },
-                          child: CustomPopUpMenuItemChild(
-                            icon: Videomanager.delete,
-                            text: 'Delete',
-                          )),
+                                            ref
+                                                .read(userChangeProvider)
+                                                .fetchAll();
+                                            snack.success(
+                                                'User Deleted Sucessfully');
+                                          },
+                                          onReset: () {});
+                                    });
+                              });
+
+                              //ref.read(userChangeProvider).delete(id: user.id);
+                            },
+                            child: CustomPopUpMenuItemChild(
+                              icon: Videomanager.delete,
+                              text: 'Delete',
+                            )),
                     ];
                   },
                   child: const Icon(Icons.more_vert))
@@ -108,12 +121,6 @@ class UserModelSource extends DataTableSource {
   @override
   // TODO: implement selectedRowCount
   int get selectedRowCount => 0;
-
-  String getRole(int value) {
-    var role = Roles.values.elementAt(value);
-    return role.name.replaceFirst(
-        role.name.characters.first, role.name.characters.first.toUpperCase());
-  }
 }
 
 class CustomPopUpMenuItemChild extends StatelessWidget {

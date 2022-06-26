@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/auth/auth.dart';
+import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';

@@ -61,9 +61,13 @@ class UserService extends ChangeNotifier {
         var temp = userModelListFromJson(response.body);
         users = temp;
         notifyListeners();
-      } else {
+      } else if (response.statusCode == 403) {
         // print(response.statusCode);
-        if (response.statusCode == 404) throw 'Not Found';
+        throw 'Not Found';
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
       }
     } catch (e) {
       throw "$e";

@@ -6,6 +6,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
   OutlineAndElevatedButton(
       {Key? key,
       required this.onApply,
+      this.textSecond = '',
       this.text = 'Apply',
       this.center = false,
       required this.onSucess,
@@ -20,7 +21,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
   bool center, reset;
   bool show;
   bool edit;
-  String applyText;
+  String applyText, textSecond;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -44,6 +45,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return CustomDialogBox(
+                                textSecond: 'reset the following settings?',
                                 applyText: 'Yes',
                                 reset: reset,
                                 onApply: onApply,
@@ -88,6 +90,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
                       context: (context),
                       builder: (context) {
                         return CustomDialogBox(
+                            textSecond: textSecond,
                             onApply: onApply,
                             onSucess: onSucess,
                             onReset: () {});

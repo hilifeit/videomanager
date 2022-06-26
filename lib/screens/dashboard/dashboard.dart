@@ -18,92 +18,126 @@ class DashBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        width: 784.sw(),
-        height: 397.sh(),
-        child: Column(children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const TargetCard(),
-              const UsersCard(),
-              const AssignedVideoCard(),
-            ],
-          ),
-          Row(
-            children: [
-              const OutletCard(),
-              Card(
-                color: const Color(0xfffffdeb),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 20.sh(),
-                      left: 21.sw(),
-                      right: 25.sw(),
-                      bottom: 20.sh()),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              width: 42.sw(),
-                              height: 42.sh(),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  6.sr(),
-                                ),
-                                color:
-                                    const Color(0xff696CFF).withOpacity(0.16),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 12.sh(),
-                                  horizontal: 9.sw(),
-                                ),
-                                child: const Image(
-                                    image: AssetImage(
-                                        'assets/images/credit-card.png')),
-                              )),
-                          SizedBox(
-                            height: 16.sh(),
-                          ),
-                          Text(
-                            'Junk File',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 15.ssp(), color: cardHeader),
-                          ),
-                          SizedBox(
-                            height: 2.2.sh(),
-                          ),
-                          Text('200',
-                              style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 22.ssp(),
-                                color: Color(0xff566a7f),
-                              )),
-                          SizedBox(
-                            height: 8.8.sh(),
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.arrow_upward,
-                                size: 9.58.ssp(),
-                              )
-                            ],
-                          )
-                        ],
+      backgroundColor: Colors.amber,
+      body: Column(children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TargetCard(),
+            const UsersCard(),
+            const AssignedVideoCard(),
+          ],
+        ),
+        Row(
+          children: [
+            Container(
+              height: 539.sh(),
+              width: 593.sw(),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.sr()),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(left: 80.sw(), top: 9.sh()),
+                    height: 42.sh(),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.sr()),
+                          topRight: Radius.circular(8.sr())),
+                    ),
+                    child: Text(
+                      'Assign Users',
+                      style: kTextStyleIbmRegular.copyWith(
+                        fontSize: 16.ssp(),
+                        color: Colors.white,
                       ),
-                      const Icon(Icons.more_vert),
-                    ],
+                    ),
                   ),
+                  Expanded(child: Container(
+                    child:Column(
+                      children: [
+                        
+                      ],
+
+                    ),
+                  ))
+                ],
+              ),
+            ),
+            const OutletCard(),
+            Card(
+              color: const Color(0xfffffdeb),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: 20.sh(),
+                    left: 21.sw(),
+                    right: 25.sw(),
+                    bottom: 20.sh()),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            width: 42.sw(),
+                            height: 42.sh(),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                6.sr(),
+                              ),
+                              color: const Color(0xff696CFF).withOpacity(0.16),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 12.sh(),
+                                horizontal: 9.sw(),
+                              ),
+                              child: const Image(
+                                  image: AssetImage(
+                                      'assets/images/credit-card.png')),
+                            )),
+                        SizedBox(
+                          height: 16.sh(),
+                        ),
+                        Text(
+                          'Junk File',
+                          style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 15.ssp(), color: cardHeader),
+                        ),
+                        SizedBox(
+                          height: 2.2.sh(),
+                        ),
+                        Text('200',
+                            style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 22.ssp(),
+                              color: const Color(0xff566a7f),
+                            )),
+                        SizedBox(
+                          height: 8.8.sh(),
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_upward,
+                              size: 9.58.ssp(),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    const Icon(Icons.more_vert),
+                  ],
                 ),
-              )
-            ],
-          ),
-        ]),
-      ),
+              ),
+            )
+          ],
+        ),
+      ]),
     );
   }
 }
@@ -399,9 +433,25 @@ class TargetCard extends StatelessWidget {
                                   ),
                                   child: Column(
                                     children: [
-                                      Container(
-                                        height: 42.sh(),
-                                        color: Theme.of(context).primaryColor,
+                                      Expanded(
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                            left: 80.sw(),
+                                          ),
+                                          height: 42.sh(),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft:
+                                                    Radius.circular(8.sr()),
+                                                topRight:
+                                                    Radius.circular(8.sr())),
+                                          ),
+                                          child: const Expanded(
+                                              child:
+                                                  const Text('Assign Users')),
+                                        ),
                                       ),
                                     ],
                                   ),

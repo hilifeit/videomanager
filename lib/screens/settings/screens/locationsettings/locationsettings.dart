@@ -48,6 +48,7 @@ class LocationSettings extends ConsumerWidget {
                   height: 85.sw(),
                 ),
                 OutlineAndElevatedButton(
+                  textSecond: 'apply the following settings?',
                   reset: true,
                   onReset: () {
                     var setting = ref.read(settingChangeNotifierProvider);

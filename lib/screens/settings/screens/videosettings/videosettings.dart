@@ -118,7 +118,7 @@ class VideoSettings extends ConsumerWidget {
                       height: 55.sh(),
                     ),
                     OutlineAndElevatedButton(
-                    
+                      textSecond: 'apply the following settings?',
                       reset: true,
                       onReset: () {
                         var setting = ref.read(settingChangeNotifierProvider);

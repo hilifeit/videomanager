@@ -8,7 +8,7 @@ import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
 class Users extends StatelessWidget {
   Users({Key? key}) : super(key: key);
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class Users extends StatelessWidget {
                 flex: 1,
                 child: Consumer(builder: (context, ref, c) {
                   return AddUser(
-                    formKey: formKey,
+                   
                   );
                 }))
           ],

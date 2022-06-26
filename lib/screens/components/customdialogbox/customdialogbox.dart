@@ -8,7 +8,7 @@ class CustomDialogBox extends StatelessWidget {
       required this.onSucess,
       required this.onReset,
       this.textFirst = 'Are you sure you want to ',
-      this.textSecond = 'Assign this video?',
+      this.textSecond = '',
       this.applyText = 'Yes',
       this.reset})
       : super(key: key);

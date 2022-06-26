@@ -3,6 +3,7 @@ import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
 
 class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
@@ -23,7 +24,7 @@ class MenuBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
-     final userName = ref.watch(userChangeProvider).user;
+    final userName = ref.watch(userChangeProvider).user;
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
@@ -80,6 +81,7 @@ class MenuBar extends ConsumerWidget {
                                   context: context,
                                   builder: (context) {
                                     return CustomDialogBox(
+                                        textSecond: 'logout?',
                                         onApply: () {},
                                         onSucess: () {
                                           storage.remove('users');
@@ -91,7 +93,8 @@ class MenuBar extends ConsumerWidget {
                                   });
                             });
                           },
-                          child: const Text('Logout'))
+                          child: CustomPopUpMenuItemChild(
+                              icon: Videomanager.logout, text: 'Logout'))
                     ];
                   },
                   child: Row(

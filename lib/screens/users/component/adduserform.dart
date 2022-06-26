@@ -2,6 +2,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
 // import 'package:videomanager/screens/users/component/userService.dart';
 
 class AddNewUser {
@@ -22,13 +23,10 @@ class AddNewUser {
   String id;
 }
 
-class AddUser extends ConsumerWidget {
-  AddUser({
-    Key? key,
-    required this.formKey,
-  }) : super(key: key);
+final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final GlobalKey<FormState> formKey;
+class AddUser extends ConsumerWidget {
+  AddUser({Key? key}) : super(key: key);
 
   final ScrollController _scrollController = ScrollController();
 
@@ -41,7 +39,7 @@ class AddUser extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final userService = ref.watch(userChangeProvider);
     final selectedUser = ref.watch(userChangeProvider).selectedUser;
-    final userRole = ref.watch(userChangeProvider).user.role;
+    final thisUser = ref.watch(userChangeProvider).user;
     AddNewUser addNewUser = AddNewUser();
     if (selectedUser != null) {
       edit = true;
@@ -138,7 +136,7 @@ class AddUser extends ConsumerWidget {
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        if (userRole == 1)
+                        if (edit == true && thisUser.id == selectedUser!.id)
                           Container(
                             height: 55.sh(),
                             width: double.infinity,
@@ -150,19 +148,65 @@ class AddUser extends ConsumerWidget {
                             ),
                             child: Padding(
                               padding: EdgeInsets.only(
-                                  left: 13.sw(), bottom: 17.sh(), top: 17.sh()),
+                                  left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
+                              child: Text(getRole(selectedUser.role)),
+                            ),
+                          ),
+                        if (edit == true &&
+                            thisUser.role < 2 &&
+                            thisUser.id != selectedUser!.id)
+                          Container(
+                            height: 55.sh(),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.sr(),
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
+                              child: Text(getRole(selectedUser.role)),
+                            ),
+                          ),
+                        if (!edit && thisUser.role == 1)
+                          Container(
+                            height: 55.sh(),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.sr(),
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
                               child: const Text('User'),
                             ),
                           ),
-                        if (userRole >= 2)
-                          CustomMenuDropDown(
-                              value: menus[edit ? addNewUser.role : 0],
-                              onChanged: (val) {
-                                addNewUser.role = val.value;
-                                print(val.value);
-                              },
-                              values: menus,
-                              helperText: ''),
+                        if (edit)
+                          if (thisUser.role >= 2 &&
+                              thisUser.id != selectedUser!.id)
+                            CustomMenuDropDown(
+                                value: menus[edit ? addNewUser.role : 0],
+                                onChanged: (val) {
+                                  addNewUser.role = val.value;
+                                  print(val.value);
+                                },
+                                values: menus,
+                                helperText: ''),
+                        if (!edit)
+                          if (thisUser.role >= 2)
+                            CustomMenuDropDown(
+                                value: menus[edit ? addNewUser.role : 0],
+                                onChanged: (val) {
+                                  addNewUser.role = val.value;
+                                  print(val.value);
+                                },
+                                values: menus,
+                                helperText: ''),
                         SizedBox(
                           height: 6.sh(),
                         ),
@@ -224,6 +268,7 @@ class AddUser extends ConsumerWidget {
                         Align(
                           alignment: Alignment.center,
                           child: OutlineAndElevatedButton(
+                            textSecond: 'add this user?',
                             edit: edit,
                             onReset: () {},
                             center: true,
@@ -236,7 +281,6 @@ class AddUser extends ConsumerWidget {
                               if (!edit) {
                                 try {
                                   var user = ref.read(userChangeProvider);
-
                                   user.add(addUser: addNewUser);
                                   snack.success("User Added Sucessfully");
                                   formKey.currentState!.reset();
@@ -249,10 +293,11 @@ class AddUser extends ConsumerWidget {
                                   var user = ref.read(userChangeProvider);
 
                                   user.edit(addUser: addNewUser);
-                                  snack.success("User Edited Sucessfully");
+
                                   formKey.currentState!.reset();
-                                  ref.read(userChangeProvider).fetchAll();
                                   ref.read(userChangeProvider).selectUser(null);
+                                  ref.read(userChangeProvider).fetchAll();
+                                  snack.success("User Edited Sucessfully");
                                 } catch (e) {
                                   snack.error(e);
                                 }
