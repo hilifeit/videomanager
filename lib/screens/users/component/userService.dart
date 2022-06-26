@@ -22,7 +22,10 @@ class UserService extends ChangeNotifier {
 
   UserModel? get userTemp => user;
 
-  List<UserModel> users = [];
+  String errorMessage = '';
+
+  List<UserModel>? users = [];
+  List<UserModel>? get allUsers => users;
 //   }
   load() async {
     final userJson = storage.read(userStorageKey);
@@ -61,16 +64,18 @@ class UserService extends ChangeNotifier {
         var temp = userModelListFromJson(response.body);
         users = temp;
         notifyListeners();
-      } else if (response.statusCode == 403) {
-        // print(response.statusCode);
-        throw 'Not Found';
       } else {
         var error = jsonDecode(response.body);
-        print(error);
-        throw error['message'];
+        // print(error);
+        users = null;
+        errorMessage = error['message'];
+        notifyListeners();
+        throw errorMessage;
       }
     } catch (e) {
-      throw "$e";
+      errorMessage = e.toString();
+      notifyListeners();
+      throw errorMessage;
     }
   }
 

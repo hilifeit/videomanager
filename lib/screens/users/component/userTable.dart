@@ -9,10 +9,11 @@ class UserTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final users = ref.watch(userChangeProvider).users;
+    final errorMsg = ref.watch(userChangeProvider).errorMessage;
     return SizedBox(
       // width: double.infinity,
       child: PaginatedDataTable2(
-        empty: const Text("No data!"),
+        empty: users == null ? Text(errorMsg) : const Text("No data!"),
         headingRowHeight: 49.sh(),
         dataRowHeight: 73.sh(),
         wrapInCard: false,
@@ -52,7 +53,7 @@ class UserTable extends ConsumerWidget {
           )),
         ],
 
-        source: UserModelSource(context: context, users: users),
+        source: UserModelSource(context: context, users: users ?? []),
       ),
     );
   }

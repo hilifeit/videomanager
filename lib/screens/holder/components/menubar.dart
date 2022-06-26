@@ -85,9 +85,15 @@ class MenuBar extends ConsumerWidget {
                                         onApply: () {},
                                         onSucess: () {
                                           storage.remove('users');
-                                          ref
-                                              .read(loginStateProvider.state)
-                                              .state = true;
+                                          // ref
+                                          //     .read(loginStateProvider.state)
+                                          //     .state = true;
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const Loader()),
+                                              (route) => true);
                                         },
                                         onReset: () {});
                                   });

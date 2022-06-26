@@ -22,6 +22,7 @@ class UserModelSource extends DataTableSource {
 
   final BuildContext context;
   final List<UserModel> users;
+
   Color color;
   String status;
   @override
