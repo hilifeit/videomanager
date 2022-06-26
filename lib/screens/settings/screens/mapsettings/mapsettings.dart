@@ -34,7 +34,7 @@ class MapSettings extends ConsumerWidget {
             CustomSlider(
               text: 'Zoom Factor',
               max: 10,
-              min: 0,
+              min: 1,
               onChanged: (val) {
                 temp.zoom = val;
               },
@@ -77,7 +77,7 @@ class MapSettings extends ConsumerWidget {
             CustomSlider(
               text: 'Original Map Quality',
               min: 0,
-              max: 720,
+              max: 100,
               onChanged: (val) {
                 temp.sample.original = val.toInt();
               },
@@ -88,7 +88,7 @@ class MapSettings extends ConsumerWidget {
             ),
             CustomSlider(
                 text: 'View Map Quality',
-                max: 720,
+                max: 100,
                 min: 0,
                 onChanged: (val) {
                   temp.sample.view = val.toInt();
@@ -99,7 +99,7 @@ class MapSettings extends ConsumerWidget {
             ),
             CustomSlider(
               text: 'Original Mini Map Quality',
-              max: 120,
+              max: 100,
               min: 0,
               onChanged: (val) {
                 temp.sample.miniMap = val.toInt();
@@ -118,7 +118,7 @@ class MapSettings extends ConsumerWidget {
             CustomSlider(
               text: 'Suggestion / Result Count',
               max: 10,
-              min: 0,
+              min: 1,
               value: mapSetting.filterCount.toDouble(),
               onChanged: (val) {
                 temp.filterCount = val.toInt();

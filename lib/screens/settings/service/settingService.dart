@@ -7,10 +7,10 @@ import 'package:videomanager/screens/settings/screens/videosettings/models/video
 
 final Setting setting = Setting(
   mapSetting: MapSetting(
-      zoom: 1.0,
-      stroke: 1,
-      scroll: 10,
-      sample: Sample(miniMap: 1, original: 1, view: 1),
+      zoom: 1,
+      stroke: 3,
+      scroll: 40,
+      sample: Sample(miniMap: 50, original: 100, view: 50),
       defaultLocation: DefaultLocation(enabled: false, lat: 1.0, lng: 1.0),
       filterCount: 1),
   userSetting: UserSetting(videoPerUser: 120),

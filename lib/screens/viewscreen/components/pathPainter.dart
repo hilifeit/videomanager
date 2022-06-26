@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
@@ -39,8 +40,9 @@ class Painter extends CustomPainter {
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
+    final settingService = ref.watch(settingChangeNotifierProvider);
     final files = fileservice.files;
-
+    final stroke = settingService.setting.mapSetting.stroke.toDouble();
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
@@ -48,7 +50,7 @@ class Painter extends CustomPainter {
 
     paint.style = PaintingStyle.stroke;
 
-    paint.strokeWidth = 3;
+    paint.strokeWidth = stroke;
 
     var customCanvas = TouchyCanvas(context, canvas);
     Rect visibleScreen = Rect.fromLTWH(0, 0, transformer.constraints.maxWidth,
@@ -196,7 +198,7 @@ class Painter extends CustomPainter {
             element.location.coordinates.last.first));
         points.add(end);
         totalDataUsedForPaint += points.length;
-        paint.strokeWidth = 3;
+        paint.strokeWidth = stroke;
         paint.style = PaintingStyle.stroke;
         paint.color = element.isUseable ? Colors.red : Colors.black;
 
@@ -214,13 +216,13 @@ class Painter extends CustomPainter {
 
         if (selectedFile != null) {
           if (selectedFile.id == element.id) {
-            paint.strokeWidth = 6;
+            paint.strokeWidth = stroke * 2;
             paint.color = Theme.of(context).primaryColor;
             customCanvas.drawPath(path, paint, onTapUp: (details) {
               tap();
             }, onSecondaryTapUp: (detail) {});
             paint.color = Colors.red;
-            paint.strokeWidth = 3;
+            paint.strokeWidth = stroke;
             customCanvas.drawPath(path, paint, onTapUp: (details) {
               // tap();
             }, onSecondaryTapUp: (detail) {

@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
@@ -12,7 +14,7 @@ final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
   return;
 });
 
-class MapScreen extends StatefulWidget {
+class MapScreen extends ConsumerStatefulWidget {
   final bool isvisible, draw, miniMap;
   final MapController controller;
   const MapScreen(
@@ -22,17 +24,18 @@ class MapScreen extends StatefulWidget {
       this.miniMap = true});
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen> {
   void _gotoDefault() {
     widget.controller.center = LatLng(27.7251933, 85.3411312);
     setState(() {});
   }
 
   void _onDoubleTap() {
-    widget.controller.zoom += 0.5;
+    widget.controller.zoom +=
+        ref.read(settingChangeNotifierProvider).setting.mapSetting.zoom / 2;
     setState(() {});
   }
 
@@ -49,10 +52,12 @@ class _MapScreenState extends State<MapScreen> {
 
     if (scaleDiff > 0) {
       // widget.controller.zoom += 0.02;
-      widget.controller.zoom += 1;
+      widget.controller.zoom +=
+          ref.read(settingChangeNotifierProvider).setting.mapSetting.zoom;
       setState(() {});
     } else if (scaleDiff < 0) {
-      widget.controller.zoom -= 1;
+      widget.controller.zoom -=
+          ref.read(settingChangeNotifierProvider).setting.mapSetting.zoom;
       // widget.controller.zoom -= 0.02;
       setState(() {});
     } else {
@@ -117,7 +122,20 @@ class _MapScreenState extends State<MapScreen> {
                     if (event is PointerScrollEvent) {
                       final delta = event.scrollDelta;
 
-                      widget.controller.zoom -= delta.dy / 1000.0;
+                      widget.controller.zoom -= delta.dy /
+                          (1010 -
+                              mapDouble(
+                                  x: ref
+                                      .read(settingChangeNotifierProvider)
+                                      .setting
+                                      .mapSetting
+                                      .scroll
+                                      .toDouble(),
+                                  in_min: 10,
+                                  in_max: 100,
+                                  out_min: 10,
+                                  out_max: 1000));
+
                       setState(() {});
                     }
                   },
@@ -144,7 +162,7 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                         ],
                       ),
-                      markerWidgets,
+                      if (widget.draw) markerWidgets,
                       if (widget.miniMap)
                         Positioned(
                           left: 0,
@@ -222,7 +240,11 @@ class _MapScreenState extends State<MapScreen> {
               child: CustomFloatingActionButton(
                   icon: Icons.add,
                   onPressed: () async {
-                    widget.controller.zoom += 1;
+                    widget.controller.zoom += ref
+                        .read(settingChangeNotifierProvider)
+                        .setting
+                        .mapSetting
+                        .zoom;
 
                     setState(() {});
                   },
@@ -235,7 +257,11 @@ class _MapScreenState extends State<MapScreen> {
                   icon: Icons.remove,
                   onPressed: () {
                     setState(() {
-                      widget.controller.zoom -= 1;
+                      widget.controller.zoom -= ref
+                          .read(settingChangeNotifierProvider)
+                          .setting
+                          .mapSetting
+                          .zoom;
                     });
                   },
                   tooltip: "Zoom out"),
