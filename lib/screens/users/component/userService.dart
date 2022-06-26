@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
+import 'package:videomanager/screens/users/model/addnewusermodel.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
 
@@ -166,18 +167,11 @@ class UserService extends ChangeNotifier {
     }
   }
 
-  Future<bool> edit({required AddNewUser addUser}) async {
+  Future<bool> edit(
+      {required Map<String, dynamic> map, required String id}) async {
     try {
-      var response = await client.put(Uri.parse("${baseURL}user/${addUser.id}"),
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode({
-            "username": addUser.userName,
-            "password": addUser.password,
-            "mobile": addUser.mobile,
-            "name": addUser.name,
-            "role": addUser.role,
-            "email": addUser.email
-          }));
+      var response = await client.put(Uri.parse("${baseURL}user/$id"),
+          headers: {"Content-Type": "application/json"}, body: jsonEncode(map));
       if (response.statusCode == 200) {
         // var temp = userModelListFromJson(response.body);
         // users = temp;

@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';

@@ -1,3 +1,4 @@
+import 'package:map/map.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
 import 'package:videomanager/screens/viewscreen/services/searchService.dart';

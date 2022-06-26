@@ -1,4 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
+import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -9,12 +10,14 @@ class UserTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final userService = ref.watch(userChangeProvider);
-    final users = ref.watch(userChangeProvider).users;
-    final errorMsg = ref.watch(userChangeProvider).errorMessage;
+    final users = userService.users;
+    final errorMsg = userService.errorMessage;
     return SizedBox(
       // width: double.infinity,
       child: PaginatedDataTable2(
-        empty: users == null ? Text(errorMsg) : const Text("No data!"),
+        empty: users == null
+            ? CustomShowMessage.nodata()
+            : CustomShowMessage.nodata(),
         headingRowHeight: 49.sh(),
         dataRowHeight: 73.sh(),
         wrapInCard: false,
