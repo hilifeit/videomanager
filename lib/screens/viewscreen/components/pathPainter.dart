@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -134,7 +135,11 @@ class Painter extends CustomPainter {
                         snack.error("Video not found!");
                       }
                     },
-                    child: const Text('Play Video')),
+                    child: CustomPopUpMenuItemChild(
+                      icon: Videomanager.play_video,
+                      text: "Play Video",
+                      width: 137.sw(),
+                    )),
                 PopupMenuItem(
                     onTap: () async {
                       final fileminiService =
@@ -152,8 +157,16 @@ class Painter extends CustomPainter {
                         snack.error(e.toString());
                       }
                     },
-                    child:
-                        Text("Flag ${element.isUseable ? "Damaged" : "Fixed"}"))
+                    child: CustomPopUpMenuItemChild(
+                      icon: element.isUseable
+                          ? Videomanager.close
+                          : Videomanager.sucess,
+                      text: element.isUseable ? "Damaged" : "Fixed",
+                      width: 137.sw(),
+                    )
+
+                    // Text("Flag ${element.isUseable ? "Damaged" : "Fixed"}")
+                    )
               ]);
         };
 

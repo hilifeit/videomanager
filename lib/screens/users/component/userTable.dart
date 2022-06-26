@@ -8,6 +8,7 @@ class UserTable extends ConsumerWidget {
   final scrollController = ScrollController();
   @override
   Widget build(BuildContext context, ref) {
+    final userService = ref.watch(userChangeProvider);
     final users = ref.watch(userChangeProvider).users;
     final errorMsg = ref.watch(userChangeProvider).errorMessage;
     return SizedBox(
