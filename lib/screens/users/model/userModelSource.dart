@@ -33,7 +33,10 @@ class UserModelSource extends DataTableSource {
 
     final user = users[index];
 
-    return DataRow2.byIndex(index: index, cells: [
+    return DataRow2.byIndex(
+      
+      
+      index: index, cells: [
       DataCell(SizedBox(
         height: 41.sh(),
         child: TableUserCard(user: user),

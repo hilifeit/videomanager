@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
   await GetStorage.init();
-  // storage.erase();
+  //storage.erase();
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
   runApp(const MyApp());
 }

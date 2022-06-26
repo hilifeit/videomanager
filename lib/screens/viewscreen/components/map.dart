@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
@@ -144,7 +145,7 @@ class _MapScreenState extends State<MapScreen> {
                           ),
                         ],
                       ),
-                      markerWidgets,
+                      if (widget.draw) markerWidgets,
                       if (widget.miniMap)
                         Positioned(
                           left: 0,

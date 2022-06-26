@@ -12,7 +12,9 @@ class Button extends StatelessWidget {
     this.primary = true,
     required this.kLabelTextStyle,
     this.color,
+    this.width,
   }) : super(key: key);
+  double? width;
   final Function onPressed;
   final String label;
 
@@ -36,7 +38,7 @@ class Button extends StatelessWidget {
                 border: Border.all(
                   color: Theme.of(context).colorScheme.secondary,
                 )),
-        width: double.infinity,
+        width: width ?? double.infinity,
         height: buttonHeight.h,
 
         //.h,

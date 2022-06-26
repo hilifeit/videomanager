@@ -2,26 +2,27 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/addnewusermodel.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 // import 'package:videomanager/screens/users/component/userService.dart';
 
-class AddNewUser {
-  AddNewUser(
-      {this.userName = '',
-      this.role = 0,
-      this.name = '',
-      this.email = '',
-      this.password = '',
-      this.mobile = 0,
-      this.id = ''});
-  String userName;
-  int role;
-  String name;
-  String email;
-  String password;
-  int mobile;
-  String id;
-}
+// class AddNewUser {
+//   AddNewUser(
+//       {this.userName = '',
+//       this.role = 0,
+//       this.name = '',
+//       this.email = '',
+//       this.password = '',
+//       this.mobile = 0,
+//       this.id = ''});
+//   String userName;
+//   int role;
+//   String name;
+//   String email;
+//   String password;
+//   int mobile;
+//   String id;
+// }
 
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -193,7 +194,6 @@ class AddUser extends ConsumerWidget {
                                 value: menus[edit ? addNewUser.role : 0],
                                 onChanged: (val) {
                                   addNewUser.role = val.value;
-                                  print(val.value);
                                 },
                                 values: menus,
                                 helperText: ''),
@@ -203,7 +203,6 @@ class AddUser extends ConsumerWidget {
                                 value: menus[edit ? addNewUser.role : 0],
                                 onChanged: (val) {
                                   addNewUser.role = val.value;
-                                  print(val.value);
                                 },
                                 values: menus,
                                 helperText: ''),
@@ -277,27 +276,48 @@ class AddUser extends ConsumerWidget {
                               if (formKey.currentState!.validate()) return true;
                               return false;
                             },
-                            onSucess: () {
-                              if (!edit) {
-                                try {
-                                  var user = ref.read(userChangeProvider);
-                                  user.add(addUser: addNewUser);
-                                  snack.success("User Added Sucessfully");
-                                  formKey.currentState!.reset();
-                                  ref.read(userChangeProvider).fetchAll();
-                                } catch (e) {
-                                  snack.error(e);
+                            onSucess: () async {
+                              if (edit) {
+                                var addNewUserToJson = addNewUser.toJson();
+                                var selectedUserToJson = selectedUser!.toJson();
+                                Map<String, dynamic> test = {};
+
+                                for (var element in addNewUserToJson.entries) {
+                                  if (selectedUserToJson[element.key] !=
+                                      element.value) {
+                                    if (element.key != "password") {
+                                      test.addAll(
+                                          {element.key: element.value});
+                                    }
+                                  }
+                                }
+
+                                if (test.isEmpty) {
+                                  snack.info('No change');
+                                } else {
+                                  try {
+                                    var user = ref.read(userChangeProvider);
+
+                                    await user.edit(
+                                        map: test, id: addNewUser.id);
+
+                                    formKey.currentState!.reset();
+                                    ref
+                                        .read(userChangeProvider)
+                                        .selectUser(null);
+                                    ref.read(userChangeProvider).fetchAll();
+                                    snack.success("User Edited Sucessfully");
+                                  } catch (e) {
+                                    snack.error(e);
+                                  }
                                 }
                               } else {
                                 try {
                                   var user = ref.read(userChangeProvider);
-
-                                  user.edit(addUser: addNewUser);
-
+                                  await user.add(addUser: addNewUser);
+                                  snack.success("User Added Sucessfully");
                                   formKey.currentState!.reset();
-                                  ref.read(userChangeProvider).selectUser(null);
                                   ref.read(userChangeProvider).fetchAll();
-                                  snack.success("User Edited Sucessfully");
                                 } catch (e) {
                                   snack.error(e);
                                 }

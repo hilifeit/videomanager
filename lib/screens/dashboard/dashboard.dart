@@ -1,5 +1,6 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
+import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 List<CustomCard> items = [
@@ -57,12 +58,10 @@ class DashBoard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(child: Container(
-                    child:Column(
-                      children: [
-                        
-                      ],
-
+                  Expanded(
+                      child: Container(
+                    child: Column(
+                      children: [],
                     ),
                   ))
                 ],
@@ -420,44 +419,7 @@ class TargetCard extends StatelessWidget {
                           backgroundColor: MaterialStateColor.resolveWith(
                               (states) => primaryColor)),
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Center(
-                                child: Container(
-                                  height: 539.sh(),
-                                  width: 593.sw(),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8.sr()),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          padding: EdgeInsets.only(
-                                            left: 80.sw(),
-                                          ),
-                                          height: 42.sh(),
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft:
-                                                    Radius.circular(8.sr()),
-                                                topRight:
-                                                    Radius.circular(8.sr())),
-                                          ),
-                                          child: const Expanded(
-                                              child:
-                                                  const Text('Assign Users')),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
+                       
                       },
                       child: Text(
                         'View Screenshot',

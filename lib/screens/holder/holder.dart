@@ -2,6 +2,7 @@ import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/users.dart';
 import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 
@@ -16,6 +17,7 @@ class Holder extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     CustomKeys().init(ref);
     final index = ref.watch(indexProvider.state).state;
+    ref.read(userChangeProvider).fetchAll();
 
     return Scaffold(
       body: Column(
