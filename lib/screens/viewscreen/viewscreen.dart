@@ -1,4 +1,3 @@
-import 'package:videomanager/screens/components/magnifier.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
@@ -25,7 +24,7 @@ class ViewScreen extends StatelessWidget {
             Expanded(
                 flex: 5,
                 child: MapScreen(
-                  draw: false,
+                  draw: true,
                   controller: controller,
                   isvisible: true,
                 ))

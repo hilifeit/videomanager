@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 final fileDetailMiniServiceProvider =
@@ -94,5 +96,38 @@ class FileService extends ChangeNotifier {
 
     //print(rec);
     return rec;
+  }
+
+  Future<String> getUrlFromFile(FileDetailMini file) async {
+    var paths = file.path.replaceAll("\\", "/").split("/");
+
+    var usebalepaths = paths.getRange(2, paths.length);
+    String filePath = usebalepaths.join("/");
+    String urlFound = '';
+    bool found = false;
+
+    await Future.forEach<Hdd>(Hdd.values, (element) async {
+      final setting =
+          CustomKeys().ref!.watch(settingChangeNotifierProvider).setting;
+      String url = "${setting.videoSetting.videourl}/${element.name}/$filePath";
+      if (!found) {
+        try {
+          var response = await client.head(Uri.parse(url));
+
+          if (response.statusCode == 200) {
+            {
+              found = true;
+              urlFound = url;
+            }
+          } else {
+            // print(response.statusCode);
+          }
+        } catch (e) {
+          // snack.error(e.toString());
+        }
+      }
+    });
+
+    return Future.value(urlFound);
   }
 }

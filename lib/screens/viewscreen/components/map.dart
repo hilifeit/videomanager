@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:touchable/touchable.dart';
-import 'package:videomanager/screens/components/magnifier.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
@@ -100,7 +99,6 @@ class _MapScreenState extends State<MapScreen> {
                         painter: Painter(
                           context,
                           ref,
-                          files: widget.draw ? fileService.files : [],
                           selectedFileProvider: selectedFileProvider,
                           transformer: transformer,
                         ),

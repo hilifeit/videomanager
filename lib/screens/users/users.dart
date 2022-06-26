@@ -41,33 +41,10 @@ class Users extends StatelessWidget {
                                   ),
                                 ),
                                 const Spacer(),
-                                Consumer(builder: (context, WidgetRef ref, c) {
-                                  return InkWell(
-                                    onTap: (() async {
-                                      try {
-                                        await ref
-                                            .read(userChangeProvider)
-                                            .fetchAll();
-                                      } catch (e) {
-                                        print(e);
-                                        snack.error(e);
-                                      }
-                                    }),
-                                    child: CircleAvatar(
-                                      radius: 18.sr(),
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
-                                      child: Icon(
-                                        Videomanager.refresh_1,
-                                        size: 14.28.sr(),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  );
-                                }),
                                 SizedBox(
                                   width: 16.sw(),
                                 ),
+                                ButtonWithLoading(),
                                 SizedBox(
                                   width: 300.sw(),
                                   child: SearchBox(),
@@ -96,5 +73,40 @@ class Users extends StatelessWidget {
                 }))
           ],
         ));
+  }
+}
+
+class ButtonWithLoading extends ConsumerWidget {
+  ButtonWithLoading({Key? key}) : super(key: key);
+  final loadingStateProvider = StateProvider<bool>((ref) {
+    return false;
+  });
+  @override
+  Widget build(BuildContext context, ref) {
+    final loading = ref.watch(loadingStateProvider.state).state;
+    return InkWell(
+      onTap: (() async {
+        try {
+          ref.read(loadingStateProvider.state).state = true;
+          await ref.read(userChangeProvider).fetchAll();
+          ref.read(loadingStateProvider.state).state = false;
+        } catch (e) {
+          // print(e);
+          snack.error(e);
+          ref.read(loadingStateProvider.state).state = false;
+        }
+      }),
+      child: CircleAvatar(
+        radius: 18.sr(),
+        backgroundColor: Theme.of(context).primaryColor,
+        child: loading
+            ? const CircularProgressIndicator()
+            : Icon(
+                Videomanager.refresh_1,
+                size: 14.28.sr(),
+                color: Colors.white,
+              ),
+      ),
+    );
   }
 }

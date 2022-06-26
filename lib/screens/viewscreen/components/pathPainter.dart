@@ -4,10 +4,8 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:touchable/touchable.dart';
-import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -21,9 +19,7 @@ class FileWithDistance {
 
 class Painter extends CustomPainter {
   Painter(this.context, this.ref,
-      {required this.files,
-      required this.transformer,
-      required this.selectedFileProvider});
+      {required this.transformer, required this.selectedFileProvider});
   // List<GeoFile> data;
   // int currentIndex, selectedIndex;
   // int sample;
@@ -31,17 +27,18 @@ class Painter extends CustomPainter {
   final WidgetRef ref;
   final StateProvider<FileDetailMini?> selectedFileProvider;
   bool debug = true;
-  List<FileDetailMini> files;
   MapTransformer transformer;
 
   @override
   void paint(Canvas canvas, size) {
     // DateTime start = DateTime.now();
-    // var sampler = map(transformer.controller.zoom.toInt(), 7, 17, 1, 5);
+    var sampler = map(transformer.controller.zoom.toInt(), 17, 20, 1, 5);
+    sampler = 6 - sampler;
 
+    final fileservice = ref.watch(fileDetailMiniServiceProvider);
     final selectedFile = ref.watch(selectedFileProvider);
-    final setting = ref.watch(settingChangeNotifierProvider).setting;
     final filterService = ref.watch(filterServiceProvider);
+    final files = fileservice.files;
 
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
@@ -101,24 +98,38 @@ class Painter extends CustomPainter {
               items: [
                 PopupMenuItem(
                     onTap: () async {
-                      var firstVideoUrl = await getUrlFromFile(element);
+                      var firstVideoUrl =
+                          await fileservice.getUrlFromFile(element);
                       print(firstVideoUrl);
                       if (firstVideoUrl.isNotEmpty) {
-                        var secondVideo = findFile(
+                        FileDetailMini? secondVideo = findFile(
                             visibleFilesList: visibleFilesList,
                             file: element,
                             fileRect: item);
-
-                        var secondVideoUrl = await getUrlFromFile(secondVideo);
-
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return Video(
-                                pathLeft: firstVideoUrl,
-                                pathRight: secondVideoUrl,
-                              );
-                            });
+                        var secondVideoUrl = firstVideoUrl;
+                        if (secondVideo != null) {
+                          await fileservice.getUrlFromFile(secondVideo);
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return Video(
+                                  pathLeft: firstVideoUrl,
+                                  pathRight: secondVideoUrl,
+                                );
+                              });
+                        } else {
+                          await snack.info("Adjacent Video not found");
+                          Future.delayed(const Duration(milliseconds: 800), () {
+                            showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return Video(
+                                    pathLeft: firstVideoUrl,
+                                    pathRight: secondVideoUrl,
+                                  );
+                                });
+                          });
+                        }
                       } else {
                         snack.error("Video not found!");
                       }
@@ -261,7 +272,7 @@ class Painter extends CustomPainter {
     return true;
   }
 
-  FileDetailMini findFile(
+  FileDetailMini? findFile(
       {required List<FileDetailMini> visibleFilesList,
       required FileDetailMini file,
       required Rect fileRect,
@@ -278,38 +289,7 @@ class Painter extends CustomPainter {
       }
     }
     distances.sort((a, b) => a.distance.compareTo(b.distance));
-    return distances.first.file;
-  }
-
-  Future<String> getUrlFromFile(FileDetailMini file) async {
-    var paths = file.path.replaceAll("\\", "/").split("/");
-
-    var usebalepaths = paths.getRange(2, paths.length);
-    String filePath = usebalepaths.join("/");
-    String urlFound = '';
-    bool found = false;
-
-    await Future.forEach<Hdd>(Hdd.values, (element) async {
-      String url = "${setting.videoSetting.videourl}/${element.name}/$filePath";
-      if (!found) {
-        try {
-          var response = await client.head(Uri.parse(url));
-
-          if (response.statusCode == 200) {
-            {
-              found = true;
-              urlFound = url;
-            }
-          } else {
-            // print(response.statusCode);
-          }
-        } catch (e) {
-          // snack.error(e.toString());
-        }
-      }
-    });
-
-    return Future.value(urlFound);
+    return distances.isNotEmpty ? distances.first.file : null;
   }
 
   Rect getRect(Rect boundingBox) {
