@@ -27,6 +27,7 @@ class UserService extends ChangeNotifier {
 
   List<UserModel>? users = [];
   List<UserModel>? get allUsers => users;
+
 //   }
   load() async {
     final userJson = storage.read(userStorageKey);
@@ -43,7 +44,10 @@ class UserService extends ChangeNotifier {
   Future<UserModel> fetchOne(String id) async {
     try {
       var response = await client.get(Uri.parse("${baseURL}api/user/$id"),
-          headers: {"Content-Type": "application/json"});
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.accessToken
+          });
       if (response.statusCode == 200) {
         UserModel temp = userModelFromJson(response.body);
         return temp;
@@ -85,11 +89,22 @@ class UserService extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<UserModel> getByRoles(Roles role) {
+    List<UserModel> roleUsers = [];
+    if (users == null) return [];
+    for (var element in users!) {
+      if (element.role == role.index) roleUsers.add(element);
+    }
+    return roleUsers;
+  }
+
   Future<bool> login(
       {required String username, required String password}) async {
     try {
       var response = await client.post(Uri.parse("${baseURL}auth/login"),
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: jsonEncode({
             "username": username,
             "password": password,
@@ -119,7 +134,10 @@ class UserService extends ChangeNotifier {
     try {
       var response = await client.delete(
         Uri.parse("${baseURL}user/$id"),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.accessToken
+        },
       );
       if (response.statusCode == 200) {
         // var temp = userModelListFromJson(response.body);
@@ -141,7 +159,10 @@ class UserService extends ChangeNotifier {
   Future<bool> add({required AddNewUser addUser}) async {
     try {
       var response = await client.post(Uri.parse("${baseURL}user"),
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.accessToken
+          },
           body: jsonEncode({
             "username": addUser.userName,
             "password": addUser.password,
@@ -171,7 +192,11 @@ class UserService extends ChangeNotifier {
       {required Map<String, dynamic> map, required String id}) async {
     try {
       var response = await client.put(Uri.parse("${baseURL}user/$id"),
-          headers: {"Content-Type": "application/json"}, body: jsonEncode(map));
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user.accessToken
+          },
+          body: jsonEncode(map));
       if (response.statusCode == 200) {
         // var temp = userModelListFromJson(response.body);
         // users = temp;

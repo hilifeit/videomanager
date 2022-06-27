@@ -1,7 +1,9 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 List<CustomCard> items = [
   CustomCard(
@@ -31,42 +33,7 @@ class DashBoard extends StatelessWidget {
         ),
         Row(
           children: [
-            Container(
-              height: 539.sh(),
-              width: 593.sw(),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.sr()),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 80.sw(), top: 9.sh()),
-                    height: 42.sh(),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8.sr()),
-                          topRight: Radius.circular(8.sr())),
-                    ),
-                    child: Text(
-                      'Assign Users',
-                      style: kTextStyleIbmRegular.copyWith(
-                        fontSize: 16.ssp(),
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                      child: Container(
-                    child: Column(
-                      children: [],
-                    ),
-                  ))
-                ],
-              ),
-            ),
+            AssignUser(),
             const OutletCard(),
             Card(
               color: const Color(0xfffffdeb),
@@ -418,9 +385,7 @@ class TargetCard extends StatelessWidget {
                               (states) => EdgeInsets.zero),
                           backgroundColor: MaterialStateColor.resolveWith(
                               (states) => primaryColor)),
-                      onPressed: () {
-                       
-                      },
+                      onPressed: () {},
                       child: Text(
                         'View Screenshot',
                         style: kTextStyleIbmRegular.copyWith(

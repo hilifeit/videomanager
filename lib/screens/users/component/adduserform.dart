@@ -32,8 +32,8 @@ class AddUser extends ConsumerWidget {
   final ScrollController _scrollController = ScrollController();
 
   final List<CustomMenuItem> menus = [
-    CustomMenuItem(label: "User", value: 0),
-    CustomMenuItem(label: "Manager", value: 1),
+    CustomMenuItem(label: "User", value: 0.toString()),
+    CustomMenuItem(label: "Manager", value: 1.toString()),
   ];
   bool edit = false;
   @override
@@ -193,7 +193,7 @@ class AddUser extends ConsumerWidget {
                             CustomMenuDropDown(
                                 value: menus[edit ? addNewUser.role : 0],
                                 onChanged: (val) {
-                                  addNewUser.role = val.value;
+                                  addNewUser.role = int.parse(val.value);
                                 },
                                 values: menus,
                                 helperText: ''),
@@ -202,7 +202,7 @@ class AddUser extends ConsumerWidget {
                             CustomMenuDropDown(
                                 value: menus[edit ? addNewUser.role : 0],
                                 onChanged: (val) {
-                                  addNewUser.role = val.value;
+                                  addNewUser.role = int.parse(val.value);
                                 },
                                 values: menus,
                                 helperText: ''),

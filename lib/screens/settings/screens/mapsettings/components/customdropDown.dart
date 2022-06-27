@@ -6,7 +6,7 @@ class CustomMenuItem {
     required this.value,
   });
   final String label;
-  final int value;
+  final String value;
 }
 
 class CustomDropDown<T> extends StatelessWidget {
@@ -86,8 +86,8 @@ class DropDown<T> extends ConsumerWidget {
                           horizontal: 15.sw(), vertical: 12.sh()),
                       child: Text(
                         "$e $helperText",
-                        style:
-                            kTextStyleInterRegular.copyWith(fontSize: 18.ssp()),
+                        style: kTextStyleIbmSemiBold.copyWith(
+                            fontSize: 16.ssp(), color: Colors.red),
                       ),
                     ))
                 .toList();
@@ -152,7 +152,8 @@ class CustomMenuDropDown extends ConsumerWidget {
                     horizontal: 15.sw(), vertical: 12.sh()),
                 child: Text(
                   "${e.label} $helperText",
-                  style: kTextStyleInterRegular.copyWith(fontSize: 18.ssp()),
+                  style: kTextStyleIbmSemiBold.copyWith(
+                      fontSize: 16.ssp(), color: Colors.black),
                 ),
               );
             }).toList();

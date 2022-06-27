@@ -33,10 +33,7 @@ class UserModelSource extends DataTableSource {
 
     final user = users[index];
 
-    return DataRow2.byIndex(
-      
-      
-      index: index, cells: [
+    return DataRow2.byIndex(index: index, cells: [
       DataCell(SizedBox(
         height: 41.sh(),
         child: TableUserCard(user: user),
@@ -86,16 +83,20 @@ class UserModelSource extends DataTableSource {
                                       return CustomDialogBox(
                                           textSecond: 'delete this user?',
                                           onApply: () {},
-                                          onSucess: () {
-                                            ref
-                                                .read(userChangeProvider)
-                                                .delete(id: user.id);
+                                          onSucess: () async {
+                                            try {
+                                              await ref
+                                                  .read(userChangeProvider)
+                                                  .delete(id: user.id);
 
-                                            ref
-                                                .read(userChangeProvider)
-                                                .fetchAll();
-                                            snack.success(
-                                                'User Deleted Sucessfully');
+                                              ref
+                                                  .read(userChangeProvider)
+                                                  .fetchAll();
+                                              snack.success(
+                                                  'User Deleted Sucessfully');
+                                            } catch (e) {
+                                              snack.error(e);
+                                            }
                                           },
                                           onReset: () {});
                                     });

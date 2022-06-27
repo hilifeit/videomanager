@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -20,6 +21,7 @@ class Holder extends ConsumerWidget {
     ref.read(userChangeProvider).fetchAll();
 
     return Scaffold(
+      backgroundColor: secondaryColor,
       body: Column(
         children: [
           MenuBar(
@@ -30,7 +32,7 @@ class Holder extends ConsumerWidget {
                 ? AnimatedIndexedStack(index: index, children: [
                     ViewScreen(),
                     Users(),
-                    const DashBoard(),
+                    AssignUser(),
                   ])
                 : const SettingsHolder(),
           )

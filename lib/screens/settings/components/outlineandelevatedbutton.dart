@@ -14,7 +14,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
       this.show = true,
       this.reset = false,
       this.edit = false,
-      this.applyText = ''})
+      this.applyText = 'Yes'})
       : super(key: key);
   final Function onApply, onSucess, onReset;
   String text;
@@ -90,6 +90,7 @@ class OutlineAndElevatedButton extends StatelessWidget {
                       context: (context),
                       builder: (context) {
                         return CustomDialogBox(
+                            applyText: applyText,
                             textSecond: textSecond,
                             onApply: onApply,
                             onSucess: onSucess,
