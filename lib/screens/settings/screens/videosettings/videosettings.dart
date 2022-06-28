@@ -117,27 +117,76 @@ class VideoSettings extends ConsumerWidget {
                     SizedBox(
                       height: 55.sh(),
                     ),
-                    OutlineAndElevatedButton(
-                      textSecond: 'apply the following settings?',
-                      reset: true,
-                      onReset: () {
-                        var setting = ref.read(settingChangeNotifierProvider);
 
-                        setting.updateSetting(
-                            videoSetting: defaultSetting.videoSetting);
-                      },
-                      onApply: () {
-                        if (_formKey.currentState!.validate()) {
-                          return true;
-                        }
-                        return false;
-                      },
-                      onSucess: () {
-                        var setting = ref.read(settingChangeNotifierProvider);
+                    OutlinedElevatedButtonCombo(
+                        outlinedButtonText: 'Reset',
+                        elevatedButtonText: 'Apply',
+                        onPressedOutlined: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomDialog(
+                                    textSecond: 'reset the following settings?',
+                                    elevatedButtonText: 'Yes',
+                                    onPressedElevated: () async {
+                                      try {
+                                        var setting = ref.read(
+                                            settingChangeNotifierProvider);
 
-                        setting.updateSetting(videoSetting: temp);
-                      },
-                    ),
+                                        await setting.updateSetting(
+                                            videoSetting:
+                                                defaultSetting.videoSetting);
+                                        snack.success(
+                                            'Settings Reset Sucessful');
+                                      } catch (e) {
+                                        snack.error(e);
+                                      }
+                                    });
+                              });
+                        },
+                        onPressedElevated: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomDialog(
+                                    elevatedButtonText: 'Yes',
+                                    textSecond: 'apply the following settings?',
+                                    onPressedElevated: () async {
+                                      try {
+                                        var setting = ref.read(
+                                            settingChangeNotifierProvider);
+
+                                        await setting.updateSetting(
+                                            videoSetting: temp);
+                                        snack.success(
+                                            'Settings Updated Sucessfully');
+                                      } catch (e) {
+                                        snack.error(e);
+                                      }
+                                    });
+                              });
+                        }),
+                    // OutlineAndElevatedButton(
+                    //   textSecond: 'apply the following settings?',
+                    //   reset: true,
+                    //   onReset: () {
+                    //     var setting = ref.read(settingChangeNotifierProvider);
+
+                    //     setting.updateSetting(
+                    //         videoSetting: defaultSetting.videoSetting);
+                    //   },
+                    //   onApply: () {
+                    //     if (_formKey.currentState!.validate()) {
+                    //       return true;
+                    //     }
+                    //     return false;
+                    //   },
+                    //   onSucess: () {
+                    //     var setting = ref.read(settingChangeNotifierProvider);
+
+                    //     setting.updateSetting(videoSetting: temp);
+                    //   },
+                    // ),
                   ]),
             ),
           ),

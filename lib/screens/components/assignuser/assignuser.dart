@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -113,14 +112,24 @@ class AssignUser extends ConsumerWidget {
                 SizedBox(
                   height: 58.sh(),
                 ),
-                OutlineAndElevatedButton(
-                  textSecond: 'assign this user?',
-                  applyText: 'Okay',
-                  text: 'Confirm',
+                OutlinedElevatedButtonCombo(
+                  outlinedButtonText: 'Cancel',
+                  elevatedButtonText: 'Confirm',
                   center: true,
-                  onApply: () {},
-                  onSucess: () {},
-                  onReset: () {},
+                  onPressedElevated: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomDialog(
+                            elevatedButtonText: 'Yes',
+                            onPressedElevated: () {},
+                          );
+                        });
+                  },
+                  onPressedOutlined: () {},
+                  width: 96.sw(),
+                  height: 32.sh(),
+                  spacing: 19.sw(),
                 )
               ],
             ),

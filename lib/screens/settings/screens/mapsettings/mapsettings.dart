@@ -130,21 +130,50 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 96.sh(),
             ),
-            OutlineAndElevatedButton(
-              textSecond: 'apply the following settings?',
-              reset: true,
-              onReset: () {
-                var setting = ref.read(settingChangeNotifierProvider);
+            OutlinedElevatedButtonCombo(
+                outlinedButtonText: 'Reset',
+                elevatedButtonText: 'Apply',
+                onPressedOutlined: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CustomDialog(
+                            textSecond: 'reset the following settings?',
+                            elevatedButtonText: 'Yes',
+                            onPressedElevated: () async {
+                              try {
+                                var setting =
+                                    ref.read(settingChangeNotifierProvider);
 
-                setting.updateSetting(mapSetting: defaultSetting.mapSetting);
-              },
-              onApply: () {},
-              onSucess: () {
-                var setting = ref.read(settingChangeNotifierProvider);
+                                await setting.updateSetting(
+                                    mapSetting: defaultSetting.mapSetting);
+                                snack.success('Settings Reset Sucessful');
+                              } catch (e) {
+                                snack.error(e);
+                              }
+                            });
+                      });
+                },
+                onPressedElevated: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CustomDialog(
+                            elevatedButtonText: 'Yes',
+                            textSecond: 'apply the following settings?',
+                            onPressedElevated: () async {
+                              try {
+                                var setting =
+                                    ref.read(settingChangeNotifierProvider);
 
-                setting.updateSetting(mapSetting: temp);
-              },
-            ),
+                                await setting.updateSetting(mapSetting: temp);
+                                snack.success('Settings Updated Sucessfully');
+                              } catch (e) {
+                                snack.error(e);
+                              }
+                            });
+                      });
+                }),
             SizedBox(height: 120.sh()),
           ]),
         ),

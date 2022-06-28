@@ -207,28 +207,16 @@ class TableUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: 32.sh(),
-          width: 32.sw(),
-          color: Colors.tealAccent,
+        Text(
+          user.name,
+          style: kTextStyleTableName,
         ),
-        SizedBox(
-          width: 10.sw(),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              user.name,
-              style: kTextStyleTableName,
-            ),
-            Text(
-              user.role.toString(),
-              style: kTextStyleTableSubtitle,
-            ),
-          ],
+        Text(
+          user.role.toString(),
+          style: kTextStyleTableSubtitle,
         ),
       ],
     );

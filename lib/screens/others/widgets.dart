@@ -1,8 +1,232 @@
 import 'package:flutter/services.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 const double minButtonHeight = 45;
 const double buttonHeight = 55;
+
+class CustomOutlinedButton extends StatelessWidget {
+  CustomOutlinedButton({
+    Key? key,
+    required this.onPressedOutlined,
+    required this.outlinedButtonText,
+    this.width,
+    this.height,
+  }) : super(key: key);
+
+  final Function onPressedOutlined;
+  final String outlinedButtonText;
+  double? width, height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width ?? 126.sw(),
+      height: height ?? 46.sh(),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.sr()),
+          border: Border.all(color: Colors.black)),
+      child: Consumer(builder: (context, ref, c) {
+        return TextButton(
+            onPressed: () {
+              onPressedOutlined();
+            },
+            child: Text(
+              outlinedButtonText,
+              style: kTextStyleIbmRegular.copyWith(
+                color: Colors.black,
+                fontSize: 17.ssp(),
+              ),
+            ));
+      }),
+    );
+  }
+}
+
+class CustomElevatedButton extends StatelessWidget {
+  CustomElevatedButton({
+    Key? key,
+    required this.onPressedElevated,
+    required this.elevatedButtonText,
+    this.width,
+    this.height,
+    this.elevatedButtonStyle,
+    this.elevatedButtonPadding,
+  }) : super(key: key);
+
+  final Function onPressedElevated;
+  final String elevatedButtonText;
+  double? width, height;
+  TextStyle? elevatedButtonStyle;
+  EdgeInsetsGeometry? elevatedButtonPadding;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width ?? 126.sw(),
+      height: height ?? 46.sh(),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            padding: MaterialStateProperty.resolveWith(
+                (states) => elevatedButtonPadding ?? EdgeInsets.zero),
+            backgroundColor: MaterialStateColor.resolveWith(
+                (states) => Theme.of(context).primaryColor)),
+        onPressed: () {
+          onPressedElevated();
+        },
+        child: Text(
+          elevatedButtonText,
+          style: elevatedButtonStyle ??
+              kTextStyleIbmRegular.copyWith(
+                color: Colors.white,
+                fontSize: 17.ssp(),
+              ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDialog extends StatelessWidget {
+  CustomDialog({
+    Key? key,
+    this.outlinedButtonText = 'Cancel',
+    required this.elevatedButtonText,
+    required this.onPressedElevated,
+    this.width,
+    this.height,
+    this.textFirst = 'Are you sure you want to ',
+    this.textSecond = '',
+  }) : super(key: key);
+
+  final String outlinedButtonText, elevatedButtonText, textFirst, textSecond;
+  final Function onPressedElevated;
+  double? width, height;
+
+  double defaultHeight = 31.4.sh();
+  double defaultWidth = 86.02.sh();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 148.sh(),
+        width: 434.sw(),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 86.sw(),
+            vertical: 27.sh(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                textFirst + textSecond,
+                textAlign: TextAlign.center,
+                style: kTextStyleInterRegular.copyWith(
+                  fontSize: 16.ssp(),
+                  color: Colors.black,
+                ),
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomOutlinedButton(
+                    width: width ?? defaultWidth,
+                    height: height ?? defaultHeight,
+                    outlinedButtonText: outlinedButtonText,
+                    onPressedOutlined: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SizedBox(
+                    width: 40.98.sw(),
+                  ),
+                  CustomElevatedButton(
+                    width: width ?? defaultWidth,
+                    height: height ?? defaultHeight,
+                    onPressedElevated: () {
+                      onPressedElevated();
+                      Navigator.pop(context);
+                    },
+                    elevatedButtonText: elevatedButtonText,
+                    elevatedButtonStyle: kTextStyleIbmSemiBold.copyWith(
+                      fontSize: 16.ssp(),
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OutlinedElevatedButtonCombo extends StatelessWidget {
+  OutlinedElevatedButtonCombo({
+    Key? key,
+    required this.outlinedButtonText,
+    required this.elevatedButtonText,
+    required this.onPressedOutlined,
+    required this.onPressedElevated,
+    this.width,
+    this.height,
+    this.spacing,
+    this.elevatedButtonStyle,
+    this.center = false,
+  }) : super(key: key);
+
+  final String outlinedButtonText, elevatedButtonText;
+  final Function onPressedOutlined, onPressedElevated;
+  double? width, height, spacing;
+  TextStyle? elevatedButtonStyle;
+  bool center;
+  double defaultHeight = 46.sh();
+  double defaultWidth = 126.sh();
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment:
+          center ? MainAxisAlignment.center : MainAxisAlignment.start,
+      children: [
+        CustomOutlinedButton(
+          width: width ?? defaultWidth,
+          //96.sw(),
+          height: height ?? defaultHeight,
+          // 32.sh(),
+          outlinedButtonText: outlinedButtonText,
+          onPressedOutlined: () {
+            onPressedOutlined();
+          },
+        ),
+        SizedBox(
+          width: spacing ?? 60.sw(),
+        ),
+        CustomElevatedButton(
+          width: width ?? defaultWidth,
+          // 96.sw(),
+          height: height ?? defaultHeight,
+          // 32.sh(),
+          onPressedElevated: () {
+            onPressedElevated();
+          },
+          elevatedButtonText: elevatedButtonText,
+          elevatedButtonStyle: elevatedButtonStyle ??
+              kTextStyleIbmRegular.copyWith(
+                fontSize: 17.ssp(),
+                color: Colors.white,
+              ),
+        ),
+      ],
+    );
+  }
+}
 
 class Button extends StatelessWidget {
   Button({
@@ -10,7 +234,7 @@ class Button extends StatelessWidget {
     required this.onPressed,
     required this.label,
     this.primary = true,
-    required this.kLabelTextStyle,
+    this.kLabelTextStyle,
     this.color,
     this.width,
   }) : super(key: key);
@@ -19,8 +243,8 @@ class Button extends StatelessWidget {
   final String label;
 
   final bool primary;
-  final TextStyle kLabelTextStyle;
-  final Color? color;
+  TextStyle? kLabelTextStyle;
+  Color? color;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,7 +279,9 @@ class Button extends StatelessWidget {
               label,
               //textScaleFactor: textScaleFactor,
 
-              style: kLabelTextStyle,
+              style: kLabelTextStyle ??
+                  kTextStyleIbmRegular.copyWith(
+                      fontSize: 17.ssp(), color: Colors.white),
 
               //textScaleFactor: textScaleFactor,
             )));

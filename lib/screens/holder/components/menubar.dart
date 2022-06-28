@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
 import 'package:videomanager/screens/load.dart';
@@ -80,10 +81,10 @@ class MenuBar extends ConsumerWidget {
                               return showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return CustomDialogBox(
+                                    return CustomDialog(
                                         textSecond: 'logout?',
-                                        onApply: () {},
-                                        onSucess: () {
+                                        elevatedButtonText: 'Yes',
+                                        onPressedElevated: () {
                                           storage.remove('users');
                                           // ref
                                           //     .read(loginStateProvider.state)
@@ -94,8 +95,7 @@ class MenuBar extends ConsumerWidget {
                                                   builder: (_) =>
                                                       const Loader()),
                                               (route) => true);
-                                        },
-                                        onReset: () {});
+                                        });
                                   });
                             });
                           },
