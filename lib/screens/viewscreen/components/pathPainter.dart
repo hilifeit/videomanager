@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -100,6 +101,29 @@ class Painter extends CustomPainter {
                   detail.globalPosition.dx + 1,
                   detail.globalPosition.dy + 1),
               items: [
+                PopupMenuItem(
+                  child: CustomPopUpMenuItemChild(
+                    icon: Videomanager.assign,
+                    text: "Assign Video",
+                  ),
+                  onTap: () async {
+                    // Navigator.pop(context);
+                    Future.delayed(const Duration(milliseconds: 10), () {
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              titlePadding: EdgeInsets.zero,
+                              contentPadding: EdgeInsets.zero,
+                              content: AssignUser(
+                                fileDetail: element,
+                              ),
+                            );
+                          });
+                    });
+                  },
+                ),
                 PopupMenuItem(
                     onTap: () async {
                       var firstVideoUrl =

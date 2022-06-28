@@ -54,77 +54,88 @@ class AssignUser extends ConsumerWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 47.sw()),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 18.sh(),
-                ),
-                Center(
-                  child: Text(
-                    'Please Choose the user from the drop down below',
-                    style: kTextStyleIbmRegularBlack.copyWith(
-                      fontSize: 16.ssp(),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 18.sh(),
+                  ),
+                  Center(
+                    child: Text(
+                      'Please Choose the user from the drop down below',
+                      style: kTextStyleIbmRegularBlack.copyWith(
+                        fontSize: 16.ssp(),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 30.sh(),
-                ),
-                Text(
-                  fileDetail == null ? 'Filename' : fileDetail!.filename,
-                  style: kTextStyleIbmRegular.copyWith(
-                    fontSize: 16..ssp(),
-                    color: danger,
+                  SizedBox(
+                    height: 30.sh(),
                   ),
-                ),
-                SizedBox(
-                  height: 29.sh(),
-                ),
-                Text(
-                  'User',
-                  style: kTextStyleIbmSemiBold,
-                ),
-                SizedBox(
-                  height: 6.sh(),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: secondaryColor)),
-                  child: CustomMenuDropDown(
-                      value: userMenu.first,
-                      onChanged: (val) {},
-                      values: userMenu,
-                      helperText: ''),
-                ),
-                SizedBox(
-                  height: 32.sh(),
-                ),
-                Wrap(
-                  spacing: 12.sw(),
-                  runSpacing: 20.sh(),
-                  children: [
-                    AssignedDetail(fileDetail: fileDetail),
-                    AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                    AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                    AssignedDetail(fileDetail: fileDetail),
-                  ],
-                ),
-                SizedBox(
-                  height: 58.sh(),
-                ),
-                OutlineAndElevatedButton(
-                  textSecond: 'assign this user?',
-                  applyText: 'Okay',
-                  text: 'Confirm',
-                  center: true,
-                  onApply: () {},
-                  onSucess: () {},
-                  onReset: () {},
-                )
-              ],
+                  Text(
+                    fileDetail == null ? 'Filename' : fileDetail!.filename,
+                    style: kTextStyleIbmRegular.copyWith(
+                      fontSize: 16..ssp(),
+                      color: danger,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 29.sh(),
+                  ),
+                  Text(
+                    'User',
+                    style: kTextStyleIbmSemiBold,
+                  ),
+                  SizedBox(
+                    height: 6.sh(),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: secondaryColor)),
+                    child: CustomMenuDropDown(
+                        value: userMenu.first,
+                        onChanged: (val) {},
+                        values: userMenu,
+                        helperText: ''),
+                  ),
+                  SizedBox(
+                    height: 32.sh(),
+                  ),
+                  Wrap(
+                    clipBehavior: Clip.hardEdge,
+                    spacing: 12.sw(),
+                    runSpacing: 20.sh(),
+                    children: [
+                      AssignedDetail(fileDetail: fileDetail),
+                      AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                      AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                      AssignedDetail(fileDetail: fileDetail),
+                      // AssignedDetail(fileDetail: fileDetail),
+                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                      // AssignedDetail(fileDetail: fileDetail),
+                      // AssignedDetail(fileDetail: fileDetail),
+                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                      // AssignedDetail(fileDetail: fileDetail),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 58.sh(),
+                  ),
+                ],
+              ),
             ),
           ),
+          OutlineAndElevatedButton(
+            textSecond: 'assign this user?',
+            applyText: 'Okay',
+            text: 'Confirm',
+            center: true,
+            onApply: () {},
+            onSucess: () {},
+            onReset: () {},
+          )
         ],
       ),
     );
@@ -144,7 +155,7 @@ class AssignedDetail extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(8.sw(), 12.sh(), 10.sw(), 9.sh()),
       height: 42.sh(),
       decoration: BoxDecoration(
-        color: Color(0x0D40667D),
+        color: const Color(0x0D40667D),
         borderRadius: BorderRadius.circular(
           6.sr(),
         ),
@@ -164,7 +175,8 @@ class AssignedDetail extends StatelessWidget {
             isOngoing ? '(Ongoing)' : '(Assigned)',
             style: kTextStyleIbmRegular.copyWith(
               fontSize: 14.ssp(),
-              color: isOngoing ? Color(0xff28A745) : Color(0xff17A2B8),
+              color:
+                  isOngoing ? const Color(0xff28A745) : const Color(0xff17A2B8),
             ),
           )
         ],
