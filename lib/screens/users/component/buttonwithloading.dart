@@ -14,13 +14,15 @@ class ButtonWithLoading extends ConsumerWidget {
           ? null
           : (() async {
               try {
+                var userService = ref.read(userChangeProvider);
                 ref.read(loadingStateProvider.state).state = true;
-                await ref.read(userChangeProvider).fetchAll();
+
+                await userService.fetchAll();
                 Future.delayed(const Duration(milliseconds: 1000), () {
                   ref.read(loadingStateProvider.state).state = false;
                 });
-              } catch (e) {
-                // print(e);
+              } catch (e, s) {
+                print('$e $s');
                 snack.error(e);
                 ref.read(loadingStateProvider.state).state = false;
               }

@@ -51,6 +51,7 @@ dependencies:
   get_storage: ^2.0.3
   data_table_2: ^2.3.2
   intl: ^0.17.0
+  retry: ^3.1.0
 
 
 

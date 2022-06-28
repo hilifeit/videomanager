@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/addnewusermodel.dart';
@@ -72,47 +71,47 @@ class AddUser extends ConsumerWidget {
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 32.ssp(), color: Colors.black),
                 ),
-                SizedBox(
-                  height: 39.sh(),
-                ),
+                // SizedBox(
+                //   height: 39.sh(),
+                // ),
                 Form(
                     key: formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          width: 88.sw(),
-                          height: 80.sh(),
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.teal,
-                                radius: 40.sr(),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 14.sr(),
-                                  child: CircleAvatar(
-                                    radius: 13.sr(),
-                                    backgroundColor:
-                                        Theme.of(context).primaryColor,
-                                    child: Icon(
-                                      Videomanager.edit_1,
-                                      color: Colors.white,
-                                      size: 11.04.ssp(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 35.sh(),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // SizedBox(
+                        //   width: 88.sw(),
+                        //   height: 80.sh(),
+                        //   child: Stack(
+                        //     children: [
+                        //       CircleAvatar(
+                        //         backgroundColor: Colors.teal,
+                        //         radius: 40.sr(),
+                        //       ),
+                        //       Positioned(
+                        //         bottom: 0,
+                        //         right: 0,
+                        //         child: CircleAvatar(
+                        //           backgroundColor: Colors.white,
+                        //           radius: 14.sr(),
+                        //           child: CircleAvatar(
+                        //             radius: 13.sr(),
+                        //             backgroundColor:
+                        //                 Theme.of(context).primaryColor,
+                        //             child: Icon(
+                        //               Videomanager.edit_1,
+                        //               color: Colors.white,
+                        //               size: 11.04.ssp(),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       SizedBox(
+                        //         height: 35.sh(),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 35.sh(),
                         ),
@@ -265,67 +264,162 @@ class AddUser extends ConsumerWidget {
                           height: 60.sh(),
                         ),
                         Align(
-                          alignment: Alignment.center,
-                          child: OutlineAndElevatedButton(
-                            textSecond: 'add this user?',
-                            edit: edit,
-                            onReset: () {},
-                            center: true,
-                            text: edit ? 'Edit' : 'Add',
-                            onApply: () {
-                              if (formKey.currentState!.validate()) return true;
-                              return false;
-                            },
-                            onSucess: () async {
-                              if (edit) {
-                                var addNewUserToJson = addNewUser.toJson();
-                                var selectedUserToJson = selectedUser!.toJson();
-                                Map<String, dynamic> test = {};
-
-                                for (var element in addNewUserToJson.entries) {
-                                  if (selectedUserToJson[element.key] !=
-                                      element.value) {
-                                    if (element.key != "password") {
-                                      test.addAll(
-                                          {element.key: element.value});
-                                    }
-                                  }
+                            alignment: Alignment.center,
+                            child: OutlinedElevatedButtonCombo(
+                              center: true,
+                              spacing: 16.sw(),
+                              width: 96.sw(),
+                              height: 32.sh(),
+                              outlinedButtonText: 'Cancel',
+                              elevatedButtonText: edit ? 'Edit' : 'Add',
+                              onPressedOutlined: () {
+                                if (edit) {
+                                  ref.read(userChangeProvider).selectUser(null);
                                 }
+                              },
+                              onPressedElevated: () async {
+                                if (formKey.currentState!.validate()) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CustomDialog(
+                                            textSecond: edit
+                                                ? 'save the following changes?'
+                                                : 'add the following user?',
+                                            elevatedButtonText: 'Yes',
+                                            onPressedElevated: () async {
+                                              if (edit) {
+                                                var addNewUserToJson =
+                                                    addNewUser.toJson();
+                                                var selectedUserToJson =
+                                                    selectedUser!.toJson();
+                                                Map<String, dynamic> test = {};
 
-                                if (test.isEmpty) {
-                                  snack.info('No change');
-                                } else {
-                                  try {
-                                    var user = ref.read(userChangeProvider);
+                                                for (var element
+                                                    in addNewUserToJson
+                                                        .entries) {
+                                                  if (selectedUserToJson[
+                                                          element.key] !=
+                                                      element.value) {
+                                                    if (element.key !=
+                                                        "password") {
+                                                      test.addAll({
+                                                        element.key:
+                                                            element.value
+                                                      });
+                                                    }
+                                                  }
+                                                }
 
-                                    await user.edit(
-                                        map: test, id: addNewUser.id);
+                                                if (test.isEmpty) {
+                                                  snack.info('No change');
+                                                } else {
+                                                  try {
+                                                    var user = ref.read(
+                                                        userChangeProvider);
 
-                                    formKey.currentState!.reset();
-                                    ref
-                                        .read(userChangeProvider)
-                                        .selectUser(null);
-                                    ref.read(userChangeProvider).fetchAll();
-                                    snack.success("User Edited Sucessfully");
-                                  } catch (e) {
-                                    snack.error(e);
-                                  }
+                                                    await user.edit(
+                                                        map: test,
+                                                        id: addNewUser.id);
+
+                                                    formKey.currentState!
+                                                        .reset();
+                                                    ref
+                                                        .read(
+                                                            userChangeProvider)
+                                                        .selectUser(null);
+                                                    ref
+                                                        .read(
+                                                            userChangeProvider)
+                                                        .fetchAll();
+                                                    snack.success(
+                                                        "User Edited Sucessfully");
+                                                  } catch (e) {
+                                                    snack.error(e);
+                                                  }
+                                                }
+                                              } else {
+                                                try {
+                                                  var user = ref
+                                                      .read(userChangeProvider);
+                                                  await user.add(
+                                                      addUser: addNewUser);
+                                                  snack.success(
+                                                      "User Added Sucessfully");
+                                                  formKey.currentState!.reset();
+                                                  ref
+                                                      .read(userChangeProvider)
+                                                      .fetchAll();
+                                                } catch (e) {
+                                                  snack.error(e);
+                                                }
+                                              }
+                                            });
+                                      });
                                 }
-                              } else {
-                                try {
-                                  var user = ref.read(userChangeProvider);
-                                  await user.add(addUser: addNewUser);
-                                  snack.success("User Added Sucessfully");
-                                  formKey.currentState!.reset();
-                                  ref.read(userChangeProvider).fetchAll();
-                                } catch (e) {
-                                  snack.error(e);
-                                }
-                              }
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 120.sh()),
+                              },
+                            )
+
+                            // OutlineAndElevatedButton(
+                            //   textSecond: 'add this user?',
+                            //   edit: edit,
+                            //   onReset: () {},
+                            //   center: true,
+                            //   text: edit ? 'Edit' : 'Add',
+                            //   onApply: () {
+                            //     if (formKey.currentState!.validate()) return true;
+                            //     return false;
+                            //   },
+                            //   onSucess: () async {
+                            //     if (edit) {
+                            //       var addNewUserToJson = addNewUser.toJson();
+                            //       var selectedUserToJson = selectedUser!.toJson();
+                            //       Map<String, dynamic> test = {};
+
+                            //       for (var element in addNewUserToJson.entries) {
+                            //         if (selectedUserToJson[element.key] !=
+                            //             element.value) {
+                            //           if (element.key != "password") {
+                            //             test.addAll(
+                            //                 {element.key: element.value});
+                            //           }
+                            //         }
+                            //       }
+
+                            //       if (test.isEmpty) {
+                            //         snack.info('No change');
+                            //       } else {
+                            //         try {
+                            //           var user = ref.read(userChangeProvider);
+
+                            //           await user.edit(
+                            //               map: test, id: addNewUser.id);
+
+                            //           formKey.currentState!.reset();
+                            //           ref
+                            //               .read(userChangeProvider)
+                            //               .selectUser(null);
+                            //           ref.read(userChangeProvider).fetchAll();
+                            //           snack.success("User Edited Sucessfully");
+                            //         } catch (e) {
+                            //           snack.error(e);
+                            //         }
+                            //       }
+                            //     } else {
+                            //       try {
+                            //         var user = ref.read(userChangeProvider);
+                            //         await user.add(addUser: addNewUser);
+                            //         snack.success("User Added Sucessfully");
+                            //         formKey.currentState!.reset();
+                            //         ref.read(userChangeProvider).fetchAll();
+                            //       } catch (e) {
+                            //         snack.error(e);
+                            //       }
+                            //     }
+                            //   },
+                            // ),
+                            ),
+                        SizedBox(height: 20.sh()),
                       ],
                     )),
               ],

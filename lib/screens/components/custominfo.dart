@@ -37,7 +37,7 @@ class CustomInfo extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 10.sh(),
+          height: 40.sh(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

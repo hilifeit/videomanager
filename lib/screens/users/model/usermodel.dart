@@ -20,6 +20,7 @@ class UserModel {
     required this.updatedAt,
     required this.v,
     required this.accessToken,
+    required this.refreshToken,
   });
 
   String id;
@@ -32,7 +33,7 @@ class UserModel {
   DateTime createdAt;
   DateTime updatedAt;
   int v;
-  String accessToken;
+  String accessToken, refreshToken;
 
   UserModel copyWith({
     required String id,
@@ -46,6 +47,7 @@ class UserModel {
     required DateTime updatedAt,
     required int v,
     required String accessToken,
+    required String refreshToken,
   }) =>
       UserModel(
         id: id,
@@ -59,6 +61,7 @@ class UserModel {
         updatedAt: updatedAt,
         v: v,
         accessToken: accessToken,
+        refreshToken: refreshToken,
       );
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -73,6 +76,7 @@ class UserModel {
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
         accessToken: json['accessToken'] ?? '',
+        refreshToken: json['refreshToken'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,5 +91,6 @@ class UserModel {
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
         "accessToken": accessToken,
+        "refreshToken": refreshToken,
       };
 }

@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -31,113 +30,111 @@ class AssignUser extends ConsumerWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.sr()),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 80.sw(), top: 9.sh()),
-            height: 42.sh(),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8.sr()),
-                  topRight: Radius.circular(8.sr())),
-            ),
-            child: Text(
-              'Assign Users',
-              style: kTextStyleIbmRegular.copyWith(
-                fontSize: 16.ssp(),
-                color: Colors.white,
-              ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Container(
+          padding: EdgeInsets.only(left: 80.sw(), top: 9.sh()),
+          height: 42.sh(),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.sr()),
+                topRight: Radius.circular(8.sr())),
+          ),
+          child: Text(
+            'Assign Users',
+            style: kTextStyleIbmRegular.copyWith(
+              fontSize: 16.ssp(),
+              color: Colors.white,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 47.sw()),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 18.sh(),
-                  ),
-                  Center(
-                    child: Text(
-                      'Please Choose the user from the drop down below',
-                      style: kTextStyleIbmRegularBlack.copyWith(
-                        fontSize: 16.ssp(),
-                      ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 47.sw()),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 18.sh(),
+                ),
+                Center(
+                  child: Text(
+                    'Please Choose the user from the drop down below',
+                    style: kTextStyleIbmRegularBlack.copyWith(
+                      fontSize: 16.ssp(),
                     ),
                   ),
-                  SizedBox(
-                    height: 30.sh(),
+                ),
+                SizedBox(
+                  height: 30.sh(),
+                ),
+                Text(
+                  fileDetail == null ? 'Filename' : fileDetail!.filename,
+                  style: kTextStyleIbmRegular.copyWith(
+                    fontSize: 16..ssp(),
+                    color: danger,
                   ),
-                  Text(
-                    fileDetail == null ? 'Filename' : fileDetail!.filename,
-                    style: kTextStyleIbmRegular.copyWith(
-                      fontSize: 16..ssp(),
-                      color: danger,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 29.sh(),
-                  ),
-                  Text(
-                    'User',
-                    style: kTextStyleIbmSemiBold,
-                  ),
-                  SizedBox(
-                    height: 6.sh(),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: secondaryColor)),
-                    child: CustomMenuDropDown(
-                        value: userMenu.first,
-                        onChanged: (val) {},
-                        values: userMenu,
-                        helperText: ''),
-                  ),
-                  SizedBox(
-                    height: 32.sh(),
-                  ),
-                  Wrap(
-                    clipBehavior: Clip.hardEdge,
-                    spacing: 12.sw(),
-                    runSpacing: 20.sh(),
-                    children: [
-                      AssignedDetail(fileDetail: fileDetail),
-                      AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                      AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                      AssignedDetail(fileDetail: fileDetail),
-                      // AssignedDetail(fileDetail: fileDetail),
-                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                      // AssignedDetail(fileDetail: fileDetail),
-                      // AssignedDetail(fileDetail: fileDetail),
-                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                      // AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                      // AssignedDetail(fileDetail: fileDetail),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 58.sh(),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 29.sh(),
+                ),
+                Text(
+                  'User',
+                  style: kTextStyleIbmSemiBold,
+                ),
+                SizedBox(
+                  height: 6.sh(),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: secondaryColor)),
+                  child: CustomMenuDropDown(
+                      value: userMenu.first,
+                      onChanged: (val) {},
+                      values: userMenu,
+                      helperText: ''),
+                ),
+                SizedBox(
+                  height: 32.sh(),
+                ),
+                Wrap(
+                  spacing: 12.sw(),
+                  runSpacing: 20.sh(),
+                  children: [
+                    AssignedDetail(fileDetail: fileDetail),
+                    AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                    AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                    AssignedDetail(fileDetail: fileDetail),
+                  ],
+                ),
+                SizedBox(
+                  height: 58.sh(),
+                ),
+                OutlinedElevatedButtonCombo(
+                  outlinedButtonText: 'Cancel',
+                  elevatedButtonText: 'Confirm',
+                  center: true,
+                  onPressedElevated: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CustomDialog(
+                            elevatedButtonText: 'Yes',
+                            onPressedElevated: () {},
+                          );
+                        });
+                  },
+                  onPressedOutlined: () {},
+                  width: 96.sw(),
+                  height: 32.sh(),
+                  spacing: 19.sw(),
+                )
+              ],
             ),
           ),
-          OutlineAndElevatedButton(
-            textSecond: 'assign this user?',
-            applyText: 'Okay',
-            text: 'Confirm',
-            center: true,
-            onApply: () {},
-            onSucess: () {},
-            onReset: () {},
-          )
-        ],
-      ),
+        ),
+      ]),
     );
   }
 }

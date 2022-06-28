@@ -1,5 +1,5 @@
+import 'package:videomanager/screens/others/apiHelper.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/model/addnewusermodel.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
@@ -60,29 +60,35 @@ class UserService extends ChangeNotifier {
   }
 
   fetchAll() async {
-    try {
-      var response = await client.get(Uri.parse("${baseURL}user"), headers: {
-        "Content-Type": "application/json",
-        "x-access-token": user.accessToken
-      });
-      if (response.statusCode == 200) {
-        var temp = userModelListFromJson(response.body);
-        users = temp;
-        notifyListeners();
-      } else {
-        var error = jsonDecode(response.body);
-        // print(error);
-        users = null;
-        errorMessage = error['message'];
-        notifyListeners();
-        throw errorMessage;
-      }
-    } catch (e) {
-      errorMessage = e.toString();
+    // try {
+
+    var response = await tunnelRequest(() => client
+            .get(Uri.parse("${baseURL}user"), headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user.accessToken
+        }));
+
+    if (response.statusCode == 200) {
+      var temp = userModelListFromJson(response.body);
+      users = temp;
+      notifyListeners();
+    } else if (response.statusCode == 403) {
+      throw 'token expired';
+    } else {
+      var error = jsonDecode(response.body);
+      // print(error);
+      users = null;
+      errorMessage = error['message'];
       notifyListeners();
       throw errorMessage;
     }
   }
+  // catch (e) {
+  //   errorMessage = e.toString();
+  //   notifyListeners();
+  //   throw e.toString();
+  // }
+// }
 
   selectUser(UserModel? user) {
     selectedUser = user;
@@ -115,6 +121,38 @@ class UserService extends ChangeNotifier {
           throw "Normal Users cannot login in Video Manager";
         }
         user = temp;
+        store();
+
+        notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
+  Future<bool> getToken() async {
+    try {
+      var response = await client.post(
+        Uri.parse("${baseURL}auth/token"),
+        headers: {
+          "Content-Type": "application/json",
+          "x-refresh-token": user.refreshToken
+        },
+      );
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+
+        // if (!json["accessToken"]) {
+        //   throw "";
+        // }
+
+        user.accessToken = json["accessToken"];
         store();
 
         notifyListeners();
@@ -191,12 +229,13 @@ class UserService extends ChangeNotifier {
   Future<bool> edit(
       {required Map<String, dynamic> map, required String id}) async {
     try {
-      var response = await client.put(Uri.parse("${baseURL}user/$id"),
+      var response = await tunnelRequest(() => client.put(
+          Uri.parse("${baseURL}user/$id"),
           headers: {
             "Content-Type": "application/json",
             "x-access-token": user.accessToken
           },
-          body: jsonEncode(map));
+          body: jsonEncode(map)));
       if (response.statusCode == 200) {
         // var temp = userModelListFromJson(response.body);
         // users = temp;

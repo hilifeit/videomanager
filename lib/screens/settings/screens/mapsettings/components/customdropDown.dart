@@ -86,9 +86,8 @@ class DropDown<T> extends ConsumerWidget {
                           horizontal: 15.sw(), vertical: 12.sh()),
                       child: Text(
                         "$e $helperText",
-                        style: kTextStyleIbmRegularBlack.copyWith(
-                          fontSize: 16.ssp(),
-                        ),
+                        style: kTextStyleIbmRegular.copyWith(
+                            fontSize: 18.ssp(), color: Colors.black),
                       ),
                     ))
                 .toList();

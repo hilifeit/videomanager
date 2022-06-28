@@ -53,29 +53,6 @@ class CustomDialogBox extends StatelessWidget {
             ],
           ),
         ),
-        // child: AlertDialog(
-        //   title: const Text('Apply changes'),
-        //   content: const Text('Do you want to apply the changes?'),
-        //   actions: [
-        //     TextButton(
-        //         onPressed: () => Navigator.pop(context),
-        //         child: Text(
-        //           'Cancel',
-        //           style: kTextStyleInterSemiBold.copyWith(
-        //               fontSize: 20.ssp(), color: Theme.of(context).primaryColor),
-        //         )),
-        //     TextButton(
-        //         onPressed: () async {
-        //           await onSucess();
-        //           Navigator.pop(context, onApply());
-        //         },
-        //         child: Text(
-        //           'Yes',
-        //           style: kTextStyleInterSemiBold.copyWith(
-        //               fontSize: 20.ssp(), color: Theme.of(context).primaryColor),
-        //         )),
-        //   ],
-        // ),
       ),
     );
   }

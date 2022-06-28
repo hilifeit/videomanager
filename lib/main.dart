@@ -1,4 +1,4 @@
-// import 'dart:html';
+import 'dart:html';
 
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -8,7 +8,7 @@ void main() async {
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
   await GetStorage.init();
   //storage.erase();
-  // window.document.onContextMenu.listen((evt) => evt.preventDefault());
+  window.document.onContextMenu.listen((evt) => evt.preventDefault());
   runApp(const MyApp());
 }
 

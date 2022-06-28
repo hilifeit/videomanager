@@ -1,6 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/customswitch.dart';
-import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/locationsettings/models/locationsetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 
@@ -47,27 +46,56 @@ class LocationSettings extends ConsumerWidget {
                 SizedBox(
                   height: 85.sw(),
                 ),
-                OutlineAndElevatedButton(
-                  textSecond: 'apply the following settings?',
-                  reset: true,
-                  onReset: () {
-                    var setting = ref.read(settingChangeNotifierProvider);
 
-                    setting.updateSetting(
-                        locationSetting: defaultSetting.locationSetting);
-                  },
-                  onApply: () {},
-                  onSucess: () {
-                    var setting = ref.read(settingChangeNotifierProvider);
+                OutlinedElevatedButtonCombo(
+                    outlinedButtonText: 'Reset',
+                    elevatedButtonText: 'Apply',
+                    onPressedOutlined: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomDialog(
+                                textSecond: 'reset the following settings?',
+                                elevatedButtonText: 'Yes',
+                                onPressedElevated: () async {
+                                  try {
+                                    var setting =
+                                        ref.read(settingChangeNotifierProvider);
 
-                    setting.updateSetting(locationSetting: temp);
-                  },
-                ),
-                // OutlineAndElevatedButton(
-                //   width: 126.sw(),
-                //     height: 46.sh(),
-                //   space: 60.sw(),
-                // ),
+                                    await setting.updateSetting(
+                                        locationSetting:
+                                            defaultSetting.locationSetting);
+                                    snack.success('Settings Reset Sucessful');
+                                  } catch (e) {
+                                    snack.error(e);
+                                  }
+                                });
+                          });
+                    },
+                    onPressedElevated: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomDialog(
+                                elevatedButtonText: 'Yes',
+                                textSecond: 'apply the following settings?',
+                                onPressedElevated: () async {
+                                  try {
+                                    var setting =
+                                        ref.read(settingChangeNotifierProvider);
+
+                                    await setting.updateSetting(
+                                        locationSetting: temp);
+                                    snack.success(
+                                        'Settings Updated Sucessfully');
+                                  } catch (e) {
+                                    snack.error(e);
+                                  }
+                                });
+                          });
+                    }),
+
+                
               ],
             ),
           ),
