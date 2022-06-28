@@ -49,7 +49,8 @@ class AddUser extends ConsumerWidget {
         ..mobile = selectedUser.mobile
         ..name = selectedUser.name
         ..role = selectedUser.role
-        ..id = selectedUser.id;
+        ..id = selectedUser.id
+        ..superVisor = thisUser.id;
     } else {
       edit = false;
     }
@@ -278,6 +279,8 @@ class AddUser extends ConsumerWidget {
                                 }
                               },
                               onPressedElevated: () async {
+                                addNewUser.superVisor = thisUser.id;
+                                print(addNewUser.superVisor);
                                 if (formKey.currentState!.validate()) {
                                   showDialog(
                                       context: context,

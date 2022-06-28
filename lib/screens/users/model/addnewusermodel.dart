@@ -9,14 +9,16 @@ AddNewUser addNewUserFromJson(String str) =>
 String addNewUserToJson(AddNewUser data) => json.encode(data.toJson());
 
 class AddNewUser {
-  AddNewUser(
-      {this.userName = '',
-      this.role = 0,
-      this.name = '',
-      this.email = '',
-      this.password = '',
-      this.mobile = 0,
-      this.id = ''});
+  AddNewUser({
+    this.userName = '',
+    this.role = 0,
+    this.name = '',
+    this.email = '',
+    this.password = '',
+    this.mobile = 0,
+    this.id = '',
+    this.superVisor = '',
+  });
 
   String id;
   String userName;
@@ -25,6 +27,7 @@ class AddNewUser {
   String email;
   String password;
   int mobile;
+  String superVisor;
 
   AddNewUser copyWith({
     required String id,
@@ -34,6 +37,7 @@ class AddNewUser {
     required String email,
     required String password,
     required int mobile,
+    required String superVisor,
   }) =>
       AddNewUser(
         id: id,
@@ -43,6 +47,7 @@ class AddNewUser {
         email: email,
         password: password,
         mobile: mobile,
+        superVisor: superVisor,
       );
 
   factory AddNewUser.fromJson(Map<String, dynamic> json) => AddNewUser(
@@ -53,6 +58,7 @@ class AddNewUser {
         email: json["email"],
         password: json["password"] ?? '',
         mobile: json["mobile"],
+        superVisor: json["superVisor"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,5 +69,6 @@ class AddNewUser {
         "email": email,
         "password": password,
         "mobile": mobile,
+        "superVisor": superVisor,
       };
 }

@@ -207,7 +207,8 @@ class UserService extends ChangeNotifier {
             "mobile": addUser.mobile,
             "name": addUser.name,
             "role": addUser.role,
-            "email": addUser.email
+            "email": addUser.email,
+            "superVisor": addUser.superVisor
           }));
       if (response.statusCode == 201) {
         // var temp = userModelListFromJson(response.body);

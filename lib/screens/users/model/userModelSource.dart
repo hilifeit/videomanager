@@ -215,7 +215,7 @@ class TableUserCard extends StatelessWidget {
           style: kTextStyleTableName,
         ),
         Text(
-          user.role.toString(),
+          '',
           style: kTextStyleTableSubtitle,
         ),
       ],

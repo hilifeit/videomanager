@@ -39,8 +39,8 @@ class Loader extends ConsumerWidget {
             right: 10,
             child: SizedBox(
               height: 44,
-              width: 345,
-              // width: snackVisible ? 300 : 1,
+              //width: 345,
+              width: snackVisible ? 300 : 1,
               // height: snackVisible ? 55 : 1,
               child: ScaffoldMessenger(
                   key: CustomKeys().messengerKey,
