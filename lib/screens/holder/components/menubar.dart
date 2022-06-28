@@ -1,7 +1,5 @@
-import 'package:videomanager/screens/components/assignuser/assignuser.dart';
-import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
-import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -84,17 +82,10 @@ class MenuBar extends ConsumerWidget {
                                     return CustomDialog(
                                         textSecond: 'logout?',
                                         elevatedButtonText: 'Yes',
-                                        onPressedElevated: () {
+                                        onPressedElevated: () async {
                                           storage.remove('users');
-                                          // ref
-                                          //     .read(loginStateProvider.state)
-                                          //     .state = true;
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      const Loader()),
-                                              (route) => true);
+
+                                          Phoenix.rebirth(context);
                                         });
                                   });
                             });

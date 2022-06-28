@@ -1,5 +1,6 @@
-import 'dart:html';
+// import 'dart:html';
 
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -8,8 +9,8 @@ void main() async {
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
   await GetStorage.init();
   //storage.erase();
-  window.document.onContextMenu.listen((evt) => evt.preventDefault());
-  runApp(const MyApp());
+  // window.document.onContextMenu.listen((evt) => evt.preventDefault());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -23,15 +24,18 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return ProviderScope(
           child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Demo',
-              themeMode: ThemeMode.light,
-              darkTheme: ThemeData(brightness: Brightness.dark),
-              theme: lightTheme,
-              builder: (_, home) {
-                return home!;
-              },
-              home: const Scaffold(body: Loader())),
+            debugShowCheckedModeBanner: false,
+            title: 'Demo',
+            themeMode: ThemeMode.light,
+            darkTheme: ThemeData(brightness: Brightness.dark),
+            theme: lightTheme,
+            builder: (_, home) {
+              return home!;
+            },
+            initialRoute: '/',
+            routes: {"/": (context) => const Loader()},
+            // home: const Scaffold(body: Loader())
+          ),
         );
       },
     );

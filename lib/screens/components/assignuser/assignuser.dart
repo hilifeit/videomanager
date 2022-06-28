@@ -86,15 +86,18 @@ class AssignUser extends ConsumerWidget {
                 SizedBox(
                   height: 6.sh(),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: secondaryColor)),
-                  child: CustomMenuDropDown(
-                      value: userMenu.first,
-                      onChanged: (val) {},
-                      values: userMenu,
-                      helperText: ''),
-                ),
+                userMenu.isNotEmpty
+                    ? Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 1, color: secondaryColor)),
+                        child: CustomMenuDropDown(
+                            value: userMenu.first,
+                            onChanged: (val) {},
+                            values: userMenu,
+                            helperText: ''),
+                      )
+                    : const Text("Add Users first"),
                 SizedBox(
                   height: 32.sh(),
                 ),
@@ -125,7 +128,10 @@ class AssignUser extends ConsumerWidget {
                           );
                         });
                   },
-                  onPressedOutlined: () {},
+                  onPressedOutlined: () {
+                    // Navigator.of(context).overlay!.mounted;
+                    Navigator.pop(context);
+                  },
                   width: 96.sw(),
                   height: 32.sh(),
                   spacing: 19.sw(),
