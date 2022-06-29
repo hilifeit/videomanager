@@ -3,6 +3,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/model/addnewusermodel.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 final userChangeProvider = ChangeNotifierProvider<UserService>((ref) {
   return UserService();
@@ -18,21 +19,21 @@ class UserService extends ChangeNotifier {
     load();
     fetchAll();
   }
-  late UserModel user;
+  late UserModelMini user;
   UserModel? selectedUser;
 
-  UserModel? get userTemp => user;
+  UserModelMini? get userTemp => user;
 
   String errorMessage = '';
 
-  List<UserModel>? users = [];
-  List<UserModel>? get allUsers => users;
+  List<UserModelMini>? users = [];
+  List<UserModelMini>? get allUsers => users;
 
 //   }
   load() async {
     final userJson = storage.read(userStorageKey);
     if (userJson != null) {
-      user = UserModel.fromJson(userJson);
+      user = UserModelMini.fromJson(userJson);
     }
   }
 
@@ -41,16 +42,17 @@ class UserService extends ChangeNotifier {
     // print(user.mobile);
   }
 
-  Future<UserModel> fetchOne(String id) async {
+  // Future<UserModel>
+  fetchOne(String id) async {
     try {
-      var response = await client.get(Uri.parse("${baseURL}api/user/$id"),
+      var response = await client.get(Uri.parse("${baseURL}user/$id"),
           headers: {
             "Content-Type": "application/json",
-            "x-access-token": user.accessToken
+            "x-access-token": user.accessToken!
           });
       if (response.statusCode == 200) {
-        UserModel temp = userModelFromJson(response.body);
-        return temp;
+        selectedUser = userModelFromJson(response.body);
+        notifyListeners();
       } else {
         throw response.statusCode;
       }
@@ -65,11 +67,11 @@ class UserService extends ChangeNotifier {
     var response = await tunnelRequest(() => client
             .get(Uri.parse("${baseURL}user"), headers: {
           "Content-Type": "application/json",
-          "x-access-token": user.accessToken
+          "x-access-token": user.accessToken!
         }));
 
     if (response.statusCode == 200) {
-      var temp = userModelListFromJson(response.body);
+      var temp = userModelMiniListFromJson(response.body);
       users = temp;
       notifyListeners();
     } else if (response.statusCode == 403) {
@@ -95,8 +97,8 @@ class UserService extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<UserModel> getByRoles(Roles role) {
-    List<UserModel> roleUsers = [];
+  List<UserModelMini> getByRoles(Roles role) {
+    List<UserModelMini> roleUsers = [];
     if (users == null) return [];
     for (var element in users!) {
       if (element.role == role.index) roleUsers.add(element);
@@ -116,10 +118,11 @@ class UserService extends ChangeNotifier {
             "password": password,
           }));
       if (response.statusCode == 200) {
-        var temp = userModelFromJson(response.body);
+        var temp = userModelMiniFromJson(response.body);
         if (temp.role == Roles.user.index) {
           throw "Normal Users cannot login in Video Manager";
         }
+
         user = temp;
         store();
 
@@ -131,8 +134,8 @@ class UserService extends ChangeNotifier {
         print(error);
         throw error['message'];
       }
-    } catch (e) {
-      throw "$e";
+    } catch (e, s) {
+      throw "$e $s";
     }
   }
 
@@ -142,7 +145,7 @@ class UserService extends ChangeNotifier {
         Uri.parse("${baseURL}auth/token"),
         headers: {
           "Content-Type": "application/json",
-          "x-refresh-token": user.refreshToken
+          "x-refresh-token": user.refreshToken!
         },
       );
       if (response.statusCode == 200) {
@@ -170,13 +173,14 @@ class UserService extends ChangeNotifier {
 
   Future<bool> delete({required String id}) async {
     try {
-      var response = await client.delete(
-        Uri.parse("${baseURL}user/$id"),
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": user.accessToken
-        },
-      );
+      var response = await tunnelRequest(() => client.delete(
+            Uri.parse("${baseURL}user/$id"),
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": user.accessToken!
+            },
+          ));
+
       if (response.statusCode == 200) {
         // var temp = userModelListFromJson(response.body);
         // users = temp;
@@ -199,16 +203,16 @@ class UserService extends ChangeNotifier {
       var response = await client.post(Uri.parse("${baseURL}user"),
           headers: {
             "Content-Type": "application/json",
-            "x-access-token": user.accessToken
+            "x-access-token": user.accessToken!
           },
           body: jsonEncode({
-            "username": addUser.userName,
+            "username": addUser.username,
             "password": addUser.password,
             "mobile": addUser.mobile,
             "name": addUser.name,
             "role": addUser.role,
             "email": addUser.email,
-            "superVisor": addUser.superVisor
+            "superVisor": addUser.superVisor.id
           }));
       if (response.statusCode == 201) {
         // var temp = userModelListFromJson(response.body);
@@ -234,7 +238,7 @@ class UserService extends ChangeNotifier {
           Uri.parse("${baseURL}user/$id"),
           headers: {
             "Content-Type": "application/json",
-            "x-access-token": user.accessToken
+            "x-access-token": user.accessToken!
           },
           body: jsonEncode(map)));
       if (response.statusCode == 200) {

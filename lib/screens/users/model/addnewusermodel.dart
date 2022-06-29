@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
+
 List<AddNewUser> addNewUserListFromJson(String str) =>
     List<AddNewUser>.from(json.decode(str).map((x) => AddNewUser.fromJson(x)));
 
@@ -10,38 +13,38 @@ String addNewUserToJson(AddNewUser data) => json.encode(data.toJson());
 
 class AddNewUser {
   AddNewUser({
-    this.userName = '',
+    this.username = '',
     this.role = 0,
     this.name = '',
     this.email = '',
     this.password = '',
     this.mobile = 0,
     this.id = '',
-    this.superVisor = '',
+    required this.superVisor,
   });
 
   String id;
-  String userName;
+  String username;
   String name;
   int role;
   String email;
   String password;
   int mobile;
-  String superVisor;
+  SuperVisor superVisor;
 
   AddNewUser copyWith({
     required String id,
-    required String userName,
+    required String username,
     required String name,
     required int role,
     required String email,
     required String password,
     required int mobile,
-    required String superVisor,
+    required SuperVisor superVisor,
   }) =>
       AddNewUser(
         id: id,
-        userName: userName,
+        username: username,
         name: name,
         role: role,
         email: email,
@@ -52,23 +55,23 @@ class AddNewUser {
 
   factory AddNewUser.fromJson(Map<String, dynamic> json) => AddNewUser(
         id: json["_id"],
-        userName: json["username"],
+        username: json["username"],
         name: json["name"],
         role: json["role"],
         email: json["email"],
         password: json["password"] ?? '',
         mobile: json["mobile"],
-        superVisor: json["superVisor"],
+        superVisor: SuperVisor.fromJson(json["superVisor"]),
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "username": userName,
+        "username": username,
         "name": name,
         "role": role,
         "email": email,
         "password": password,
         "mobile": mobile,
-        "superVisor": superVisor,
+        "superVisor": superVisor.toJson(),
       };
 }

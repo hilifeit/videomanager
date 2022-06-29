@@ -16,8 +16,7 @@ class AssignUser extends ConsumerWidget {
     final userService = ref.watch(userChangeProvider);
     final allUsers = userService.getByRoles(Roles.user);
     final userMenu = allUsers
-        .map((e) =>
-            CustomMenuItem(label: "${e.username}: ${e.name}", value: e.id))
+        .map((e) => CustomMenuItem(label: e.name, value: e.id))
         .toList();
     // print(allUsers.length);
     // final index = user.length;

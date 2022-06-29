@@ -334,6 +334,7 @@ class InputTextField extends StatelessWidget {
         TextFormField(
           controller: TextEditingController(text: value),
           inputFormatters: [
+            if (isdigits) LengthLimitingTextInputFormatter(10),
             isdigits
                 ? FilteringTextInputFormatter.digitsOnly
                 : FilteringTextInputFormatter.singleLineFormatter

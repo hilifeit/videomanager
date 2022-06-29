@@ -3,25 +3,7 @@ import 'package:videomanager/screens/settings/screens/mapsettings/components/cus
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/addnewusermodel.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
-// import 'package:videomanager/screens/users/component/userService.dart';
-
-// class AddNewUser {
-//   AddNewUser(
-//       {this.userName = '',
-//       this.role = 0,
-//       this.name = '',
-//       this.email = '',
-//       this.password = '',
-//       this.mobile = 0,
-//       this.id = ''});
-//   String userName;
-//   int role;
-//   String name;
-//   String email;
-//   String password;
-//   int mobile;
-//   String id;
-// }
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -35,22 +17,30 @@ class AddUser extends ConsumerWidget {
     CustomMenuItem(label: "Manager", value: 1.toString()),
   ];
   bool edit = false;
+
+  final managerSelectProvider = StateProvider<bool>((ref) {
+    return true;
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final userService = ref.watch(userChangeProvider);
+    final userService = ref.watch(userChangeProvider);
+    final allManagers = userService.getByRoles(Roles.manager);
+    final managerMenu = allManagers
+        .map((e) => CustomMenuItem(label: e.name, value: e.id))
+        .toList();
     final selectedUser = ref.watch(userChangeProvider).selectedUser;
     final thisUser = ref.watch(userChangeProvider).user;
-    AddNewUser addNewUser = AddNewUser();
+    final selectManager = ref.watch(managerSelectProvider.state).state;
+    AddNewUser addNewUser = AddNewUser(superVisor: SuperVisor(id: ''));
     if (selectedUser != null) {
       edit = true;
       addNewUser
-        ..userName = selectedUser.username
+        ..username = selectedUser.username
         ..email = selectedUser.email
         ..mobile = selectedUser.mobile
         ..name = selectedUser.name
         ..role = selectedUser.role
-        ..id = selectedUser.id
-        ..superVisor = thisUser.id;
+        ..id = selectedUser.id;
     } else {
       edit = false;
     }
@@ -117,17 +107,16 @@ class AddUser extends ConsumerWidget {
                           height: 35.sh(),
                         ),
                         InputTextField(
-                          value: edit ? addNewUser.userName : '',
-                          title: 'Username',
+                          value: edit ? addNewUser.username : 'username',
+                          title: 'username',
                           isVisible: true,
                           fillColor: Colors.white,
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
                           validator: (val) => validateUserName(val!),
                           onChanged: (val) {
-                            // addUser!.username = val;
-                            addNewUser.userName = val;
-                            print(addNewUser.userName);
+                            // addUser!.username= val;
+                            addNewUser.username = val;
                           },
                         ),
                         SizedBox(
@@ -203,14 +192,42 @@ class AddUser extends ConsumerWidget {
                                 value: menus[edit ? addNewUser.role : 0],
                                 onChanged: (val) {
                                   addNewUser.role = int.parse(val.value);
+                                  if (addNewUser.role == 1) {
+                                    ref
+                                        .read(managerSelectProvider.state)
+                                        .state = false;
+                                  } else {
+                                    ref
+                                        .read(managerSelectProvider.state)
+                                        .state = true;
+                                  }
                                 },
                                 values: menus,
                                 helperText: ''),
                         SizedBox(
                           height: 6.sh(),
                         ),
+
+                        if (!edit && selectManager) ...[
+                          Text('Supervisor', style: kTextStyleIbmSemiBold),
+                          SizedBox(
+                            height: 14.sh(),
+                          ),
+                          if (thisUser.role >= 2)
+                            CustomMenuDropDown(
+                                value: managerMenu.first,
+                                onChanged: (val) {
+                                  addNewUser.superVisor.id = val.value;
+                                },
+                                values: managerMenu,
+                                helperText: ''),
+                        ],
+
+                        SizedBox(
+                          height: 6.sh(),
+                        ),
                         InputTextField(
-                          value: edit ? addNewUser.name : '',
+                          value: edit ? addNewUser.name : 'Name',
                           title: 'Name',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -223,7 +240,7 @@ class AddUser extends ConsumerWidget {
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
-                          value: edit ? addNewUser.email : '',
+                          value: edit ? addNewUser.email : 'test@test.com',
                           title: 'Email',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -237,6 +254,7 @@ class AddUser extends ConsumerWidget {
                         SizedBox(height: 14.sh()),
                         if (!edit)
                           InputTextField(
+                            value: '123456789',
                             title: 'Password',
                             isVisible: true,
                             fillColor: Colors.white,
@@ -249,7 +267,8 @@ class AddUser extends ConsumerWidget {
                           ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
-                          value: edit ? addNewUser.mobile.toString() : '',
+                          value:
+                              edit ? addNewUser.mobile.toString() : '987654321',
                           isdigits: true,
                           title: 'Mobile Number',
                           isVisible: true,
@@ -279,8 +298,6 @@ class AddUser extends ConsumerWidget {
                                 }
                               },
                               onPressedElevated: () async {
-                                addNewUser.superVisor = thisUser.id;
-                                print(addNewUser.superVisor);
                                 if (formKey.currentState!.validate()) {
                                   showDialog(
                                       context: context,
@@ -305,7 +322,9 @@ class AddUser extends ConsumerWidget {
                                                           element.key] !=
                                                       element.value) {
                                                     if (element.key !=
-                                                        "password") {
+                                                            "password" &&
+                                                        element.key !=
+                                                            "superVisor") {
                                                       test.addAll({
                                                         element.key:
                                                             element.value
@@ -342,6 +361,10 @@ class AddUser extends ConsumerWidget {
                                                   }
                                                 }
                                               } else {
+                                                if (selectManager) {
+                                                  addNewUser.superVisor.id =
+                                                      thisUser.id;
+                                                }
                                                 try {
                                                   var user = ref
                                                       .read(userChangeProvider);

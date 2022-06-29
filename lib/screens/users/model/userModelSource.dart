@@ -4,6 +4,7 @@ import 'package:videomanager/screens/components/customdialogbox/customdialogbox.
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 enum Roles { user, manager, superAdmin }
 
@@ -21,7 +22,7 @@ class UserModelSource extends DataTableSource {
       this.status = 'Pending'});
 
   final BuildContext context;
-  final List<UserModel> users;
+  final List<UserModelMini> users;
 
   Color color;
   String status;
@@ -39,7 +40,7 @@ class UserModelSource extends DataTableSource {
         child: TableUserCard(user: user),
       )),
       DataCell(Text(
-        user.email,
+        user.id,
         style: kTextStyleTableSubtitle,
       )),
       DataCell(Text(
@@ -57,7 +58,7 @@ class UserModelSource extends DataTableSource {
                     return [
                       PopupMenuItem(
                           onTap: () {
-                            ref.read(userChangeProvider).selectUser(user);
+                            ref.read(userChangeProvider).fetchOne(user.id);
                           },
                           child: CustomPopUpMenuItemChild(
                             icon: Videomanager.edit,
@@ -203,7 +204,7 @@ class TableUserCard extends StatelessWidget {
     required this.user,
   }) : super(key: key);
 
-  final UserModel user;
+  final UserModelMini user;
 
   @override
   Widget build(BuildContext context) {
@@ -214,10 +215,11 @@ class TableUserCard extends StatelessWidget {
           user.name,
           style: kTextStyleTableName,
         ),
-        Text(
-          '',
-          style: kTextStyleTableSubtitle,
-        ),
+        if (user.role != 2)
+          Text(
+            user.superVisor!.name,
+            style: kTextStyleTableSubtitle,
+          ),
       ],
     );
   }
