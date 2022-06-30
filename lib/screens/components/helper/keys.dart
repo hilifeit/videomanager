@@ -9,8 +9,10 @@ class CustomKeys {
 
   final messengerKey = GlobalKey<ScaffoldMessengerState>();
   WidgetRef? ref;
+  BuildContext? context;
 
-  init(WidgetRef ref) {
+  init(WidgetRef ref, context) {
     this.ref = ref;
+    this.context = context;
   }
 }

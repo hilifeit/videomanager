@@ -45,11 +45,11 @@ class UserService extends ChangeNotifier {
   // Future<UserModel>
   fetchOne(String id) async {
     try {
-      var response = await client.get(Uri.parse("${baseURL}user/$id"),
-          headers: {
+      var response = await tunnelRequest(() => client
+              .get(Uri.parse("${baseURL}user/$id"), headers: {
             "Content-Type": "application/json",
             "x-access-token": user.accessToken!
-          });
+          }));
       if (response.statusCode == 200) {
         selectedUser = userModelFromJson(response.body);
         notifyListeners();
@@ -82,7 +82,8 @@ class UserService extends ChangeNotifier {
       users = null;
       errorMessage = error['message'];
       notifyListeners();
-      throw errorMessage;
+
+      // throw errorMessage;
     }
   }
   // catch (e) {
@@ -163,8 +164,8 @@ class UserService extends ChangeNotifier {
         return true;
       } else {
         var error = jsonDecode(response.body);
-        print(error);
-        throw error['message'];
+
+        return false;
       }
     } catch (e) {
       throw "$e";

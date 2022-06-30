@@ -1,10 +1,8 @@
-import 'package:get_storage/get_storage.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart' as http;
-import 'package:latlng/latlng.dart';
-import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/components/snackbar/customsnackbar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 export 'dart:convert';
 
@@ -15,10 +13,10 @@ export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:get_storage/get_storage.dart';
 export 'package:hooks_riverpod/hooks_riverpod.dart';
 export 'package:latlng/latlng.dart';
-
 export 'package:searchfield/searchfield.dart';
 export 'package:video_player/video_player.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
+export 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
 // own components
@@ -43,3 +41,8 @@ final snackVisibleProvider = StateProvider<bool>((ref) {
 
 final CustomSnackBar snack = CustomSnackBar();
 // final CustomShowMessage message = CustomShowMessage();
+
+logout() {
+  storage.remove(userStorageKey);
+  Phoenix.rebirth(CustomKeys().context!);
+}

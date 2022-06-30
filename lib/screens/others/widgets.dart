@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
 
 const double minButtonHeight = 45;
 const double buttonHeight = 55;
@@ -80,88 +79,6 @@ class CustomElevatedButton extends StatelessWidget {
                 color: Colors.white,
                 fontSize: 17.ssp(),
               ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomDialog extends StatelessWidget {
-  CustomDialog({
-    Key? key,
-    this.outlinedButtonText = 'Cancel',
-    required this.elevatedButtonText,
-    required this.onPressedElevated,
-    this.width,
-    this.height,
-    this.textFirst = 'Are you sure you want to ',
-    this.textSecond = '',
-  }) : super(key: key);
-
-  final String outlinedButtonText, elevatedButtonText, textFirst, textSecond;
-  final Function onPressedElevated;
-  double? width, height;
-
-  double defaultHeight = 31.4.sh();
-  double defaultWidth = 86.02.sh();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 148.sh(),
-        width: 434.sw(),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 86.sw(),
-            vertical: 27.sh(),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                textFirst + textSecond,
-                textAlign: TextAlign.center,
-                style: kTextStyleInterRegular.copyWith(
-                  fontSize: 16.ssp(),
-                  color: Colors.black,
-                ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomOutlinedButton(
-                    width: width ?? defaultWidth,
-                    height: height ?? defaultHeight,
-                    outlinedButtonText: outlinedButtonText,
-                    onPressedOutlined: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SizedBox(
-                    width: 40.98.sw(),
-                  ),
-                  CustomElevatedButton(
-                    width: width ?? defaultWidth,
-                    height: height ?? defaultHeight,
-                    onPressedElevated: () {
-                      onPressedElevated();
-                      Navigator.pop(context);
-                    },
-                    elevatedButtonText: elevatedButtonText,
-                    elevatedButtonStyle: kTextStyleIbmSemiBold.copyWith(
-                      fontSize: 16.ssp(),
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
         ),
       ),
     );

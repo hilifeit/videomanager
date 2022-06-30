@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/settings/screens/usersettings/models/usersetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';

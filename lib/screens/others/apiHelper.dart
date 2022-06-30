@@ -6,9 +6,15 @@ Future<Response> tunnelRequest(Future<Response> Function() mainFuction) async {
   try {
     var resp = await mainFuction();
     if (resp.statusCode == 403) {
-      await CustomKeys().ref!.read(userChangeProvider).getToken();
+      if (await CustomKeys().ref!.read(userChangeProvider).getToken()) {
+        return await mainFuction();
+      } else {
+        await CustomDialogBox.alertMessage(() {
+          logout();
+        }, title: 'Your Session has Expired!', message: ' Login to continue');
 
-      return await mainFuction();
+        return Response('{"message":"logout"}', 406);
+      }
     } else {
       return resp;
     }

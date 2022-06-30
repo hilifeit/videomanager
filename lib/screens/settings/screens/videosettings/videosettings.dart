@@ -1,6 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/customswitch.dart';
-import 'package:videomanager/screens/settings/components/outlineandelevatedbutton.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/components/videoqualityselect.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -61,6 +60,7 @@ class VideoSettings extends ConsumerWidget {
                                   if (Uri.parse(val!).host.isEmpty) {
                                     return 'Enter a valid URL';
                                   }
+                                  return null;
                                 },
                                 onChanged: (val) {
                                   temp.videourl = val;

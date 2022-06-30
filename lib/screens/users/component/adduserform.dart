@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
@@ -277,7 +278,9 @@ class AddUser extends ConsumerWidget {
                               fontSize: 16.ssp(), color: Colors.black),
                           validator: (val) => validatePhone(val!),
                           onChanged: (val) {
-                            addNewUser.mobile = int.parse(val);
+                            if (int.tryParse(val) != null) {
+                              addNewUser.mobile = int.tryParse(val)!;
+                            }
                           },
                         ),
                         SizedBox(

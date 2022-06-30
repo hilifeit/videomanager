@@ -70,7 +70,7 @@ class UserModelMini {
         "name": name,
         "role": role,
         "createdAt": createdAt.toIso8601String(),
-        "superVisor": superVisor!.toJson(),
+        "superVisor": superVisor != null ? superVisor!.toJson() : null,
         "accessToken": accessToken,
         "refreshToken": refreshToken,
       };

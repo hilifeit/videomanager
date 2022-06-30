@@ -18,6 +18,7 @@ class FileService extends ChangeNotifier {
 
   load() async {
     await fetch();
+
     // print(files.length);
   }
 

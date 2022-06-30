@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
-import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
@@ -16,7 +15,7 @@ class Holder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CustomKeys().init(ref);
+    CustomKeys().init(ref, context);
     final index = ref.watch(indexProvider.state).state;
     ref.read(userChangeProvider).fetchAll();
 
@@ -31,7 +30,7 @@ class Holder extends ConsumerWidget {
             child: index != 3
                 ? AnimatedIndexedStack(index: index, children: [
                     ViewScreen(),
-                    Users(),
+                    const Users(),
                     AssignUser(),
                   ])
                 : const SettingsHolder(),

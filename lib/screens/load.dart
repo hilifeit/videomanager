@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/auth/auth.dart';
-import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
@@ -18,7 +17,7 @@ class Loader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CustomKeys().init(ref);
+    CustomKeys().init(ref, context);
     final isLogin = ref.watch(loginStateProvider.state).state;
     return Stack(
       children: [

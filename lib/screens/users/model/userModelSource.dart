@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/usermodel.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 enum Roles { user, manager, superAdmin }
@@ -81,25 +80,25 @@ class UserModelSource extends DataTableSource {
                                 return showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return CustomDialogBox(
-                                          textSecond: 'delete this user?',
-                                          onApply: () {},
-                                          onSucess: () async {
-                                            try {
-                                              await ref
-                                                  .read(userChangeProvider)
-                                                  .delete(id: user.id);
+                                      return CustomDialog(
+                                        textSecond: 'delete this user?',
+                                        elevatedButtonText: "Yes",
+                                        onPressedElevated: () async {
+                                          try {
+                                            await ref
+                                                .read(userChangeProvider)
+                                                .delete(id: user.id);
 
-                                              ref
-                                                  .read(userChangeProvider)
-                                                  .fetchAll();
-                                              snack.success(
-                                                  'User Deleted Sucessfully');
-                                            } catch (e) {
-                                              snack.error(e);
-                                            }
-                                          },
-                                          onReset: () {});
+                                            ref
+                                                .read(userChangeProvider)
+                                                .fetchAll();
+                                            snack.success(
+                                                'User Deleted Sucessfully');
+                                          } catch (e) {
+                                            snack.error(e);
+                                          }
+                                        },
+                                      );
                                     });
                               });
 
