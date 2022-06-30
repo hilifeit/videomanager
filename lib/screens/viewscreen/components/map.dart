@@ -10,6 +10,7 @@ import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
   return;
@@ -77,7 +78,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       body: Consumer(builder: (context, ref, c) {
         final fileService = ref.watch(fileDetailMiniServiceProvider);
         final selectedFile = ref.watch(selectedFileProvider.state).state;
-        final selectedPoints = ref.watch(selectedPointProvider.state).state;
 
         return LayoutBuilder(builder: (context, constraint) {
           return MapLayoutBuilder(
@@ -100,6 +100,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       GestureType.onTapDown,
                       GestureType.onSecondaryTapDown,
                       GestureType.onSecondaryTapUp,
+                      GestureType.onForcePressEnd
+
+                      // GestureType.onLongPressMoveUpdate
                     ],
                     builder: (context) {
                       return CustomPaint(
@@ -107,7 +110,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         painter: Painter(
                           context,
                           ref,
-                          selectedAreaPoints: selectedPoints,
                           selectedFileProvider: selectedFileProvider,
                           transformer: transformer,
                         ),
@@ -122,6 +124,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 onScaleUpdate: _onScaleUpdate,
                 child: Listener(
                   behavior: HitTestBehavior.opaque,
+                  onPointerUp: (detail) {
+                    var selectedPointService = ref.read(selectedAreaProvider);
+                    if (selectedPointService.selectedHandle != null) {
+                      selectedPointService.deSelectHandle();
+                    }
+                  },
+                  onPointerHover: (details) {
+                    ref.read(selectedAreaProvider).moveHandle(transformer,
+                        newPosition: details.localPosition);
+                  },
                   onPointerSignal: (event) {
                     if (event is PointerScrollEvent) {
                       final delta = event.scrollDelta;

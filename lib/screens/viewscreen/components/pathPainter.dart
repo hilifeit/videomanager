@@ -14,6 +14,7 @@ import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class FileWithDistance {
   FileWithDistance({required this.file, required this.distance});
@@ -21,22 +22,20 @@ class FileWithDistance {
   final double distance;
 }
 
-final selectedPointProvider = StateProvider<List<LatLng>>((ref) {
-  return [];
-});
-
 class Painter extends CustomPainter {
-  Painter(this.context, this.ref,
-      {required this.transformer,
-      required this.selectedFileProvider,
-      required this.selectedAreaPoints});
+  Painter(
+    this.context,
+    this.ref, {
+    required this.transformer,
+    required this.selectedFileProvider,
+  });
   // List<GeoFile> data;
   // int currentIndex, selectedIndex;
   // int sample;
   final BuildContext context;
   final WidgetRef ref;
   final StateProvider<FileDetailMini?> selectedFileProvider;
-  final List<LatLng> selectedAreaPoints;
+
   bool debug = true;
   MapTransformer transformer;
 
@@ -47,12 +46,15 @@ class Painter extends CustomPainter {
     sampler = 6 - sampler;
 
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
-    final selectedPoints = ref.watch(selectedPointProvider.state).state;
+    final selectedPointsProvider = ref.watch(selectedAreaProvider);
+    final selectedPoints =
+        selectedPointsProvider.selectedPointsOffset(transformer);
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
     final settingService = ref.watch(settingChangeNotifierProvider);
     final files = fileservice.files;
     final stroke = settingService.setting.mapSetting.stroke.toDouble();
+    final handleDragged = selectedPointsProvider.selectedHandle;
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
@@ -69,32 +71,17 @@ class Painter extends CustomPainter {
     var visibleFiles = 0, totalDataUsedForPaint = 0, sampleLength = 0;
 
     Paint bigBoxPaint = Paint()..color = Colors.black.withOpacity(0);
-    Paint selectedPointPainter = Paint()
-      ..color = primaryColor
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 3;
     customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
-      // ref.read(selectedFileProvider.state).state = null;
-      ref
-          .read(selectedPointProvider.state)
-          .state
-          .add(transformer.fromXYCoordsToLatLng(details.localPosition));
+      ref.read(selectedFileProvider.state).state = null;
+
+      selectedPointsProvider.addPoints(transformer,
+          point: details.localPosition);
+    }, onSecondaryTapUp: (detail) {
+      selectedPointsProvider.deSelectHandle();
     });
     List<FileDetailMini> visibleFilesList = [];
-    Path pointPath = Path();
-    for (int i = 0; i < selectedAreaPoints.length; i++) {
-      if (i < 4) {
-        Offset item = transformer.fromLatLngToXYCoords(LatLng(
-            selectedAreaPoints[i].latitude, selectedAreaPoints[i].longitude));
-        customCanvas.drawCircle(item, 10, selectedPointPainter);
-        if (i <= 2) {
-          Offset oldItem = transformer.fromLatLngToXYCoords(LatLng(
-              selectedAreaPoints[i - 1].latitude,
-              selectedAreaPoints[i - 1].longitude));
-          customCanvas.drawLine(item, oldItem, selectedPointPainter);
-        } else {}
-      }
-    }
+
+    selectedPointsProvider.draw(customCanvas, transformer);
 
     for (var element in files) {
       Rect item = getRect(element.boundingBox!);
@@ -291,19 +278,24 @@ class Painter extends CustomPainter {
 
             newPaint.style = PaintingStyle.stroke;
             newPaint.color = Theme.of(context).primaryColor;
-            customCanvas.drawRect(path.getBounds(), newPaint,
-                onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            if (handleDragged == null) {
+              customCanvas.drawRect(path.getBounds(), newPaint,
+                  onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            }
+
             newPaint.style = PaintingStyle.fill;
             newPaint.color = Colors.transparent;
-            customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            if (handleDragged == null) {
+              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            }
           } else {
             if (filterService.onlyNotUsable == !element.isUseable) {
               customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
@@ -315,12 +307,14 @@ class Painter extends CustomPainter {
           }
         } else {
           if (filterService.onlyNotUsable == !element.isUseable) {
-            customCanvas.drawRect(path.getBounds(), newPaint,
-                onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            if (handleDragged == null) {
+              customCanvas.drawRect(path.getBounds(), newPaint,
+                  onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            }
           }
         }
         // path.close();
