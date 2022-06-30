@@ -241,6 +241,7 @@ class AddUser extends ConsumerWidget {
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
+                          
                           value: edit ? addNewUser.email : 'test@test.com',
                           title: 'Email',
                           isVisible: true,

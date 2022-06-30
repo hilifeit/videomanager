@@ -108,7 +108,9 @@ class UserService extends ChangeNotifier {
   }
 
   Future<bool> login(
-      {required String username, required String password}) async {
+      {required String username,
+      required String password,
+      required bool remember}) async {
     try {
       var response = await client.post(Uri.parse("${baseURL}auth/login"),
           headers: {
@@ -123,9 +125,10 @@ class UserService extends ChangeNotifier {
         if (temp.role == Roles.user.index) {
           throw "Normal Users cannot login in Video Manager";
         }
-
         user = temp;
-        store();
+        if (remember) {
+          await store();
+        }
 
         notifyListeners();
 
@@ -157,7 +160,9 @@ class UserService extends ChangeNotifier {
         // }
 
         user.accessToken = json["accessToken"];
-        store();
+        if (storage.read(userStorageKey) != null) {
+          store();
+        }
 
         notifyListeners();
 

@@ -15,6 +15,7 @@ class UserTable extends ConsumerWidget {
     return SizedBox(
       // width: double.infinity,
       child: PaginatedDataTable2(
+        
         empty: users == null
             ? CustomShowMessage.nodata()
             : CustomShowMessage.nodata(),
