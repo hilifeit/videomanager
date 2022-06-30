@@ -16,12 +16,12 @@ class Login extends ConsumerWidget {
   Login({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  late String username, password;
+  String username = '', password = '';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checked = ref.watch(checkBoxStateProvider.state).state;
-    final userService = ref.watch(userChangeProvider);
+    // final userService = ref.watch(userChangeProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -68,6 +68,7 @@ class Login extends ConsumerWidget {
               child: Column(
                 children: [
                   InputTextField(
+                    value: username,
                     isVisible: true,
                     title: 'USERNAME',
                     validator: (val) => validateUserName(val!),
@@ -79,6 +80,7 @@ class Login extends ConsumerWidget {
                     height: 25.5.sh(),
                   ),
                   InputTextField(
+                    value: password,
                     isVisible: true,
                     title: 'PASSWORD',
                     validator: (val) => validatePassword(val!),
@@ -110,6 +112,7 @@ class Login extends ConsumerWidget {
                             });
                         try {
                           bool? status = await userService.login(
+                            remember: checked,
                             username: username,
                             password: password,
                           );
