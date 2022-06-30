@@ -21,15 +21,22 @@ class FileWithDistance {
   final double distance;
 }
 
+final selectedPointProvider = StateProvider<List<LatLng>>((ref) {
+  return [];
+});
+
 class Painter extends CustomPainter {
   Painter(this.context, this.ref,
-      {required this.transformer, required this.selectedFileProvider});
+      {required this.transformer,
+      required this.selectedFileProvider,
+      required this.selectedAreaPoints});
   // List<GeoFile> data;
   // int currentIndex, selectedIndex;
   // int sample;
   final BuildContext context;
   final WidgetRef ref;
   final StateProvider<FileDetailMini?> selectedFileProvider;
+  final List<LatLng> selectedAreaPoints;
   bool debug = true;
   MapTransformer transformer;
 
@@ -40,6 +47,7 @@ class Painter extends CustomPainter {
     sampler = 6 - sampler;
 
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
+    final selectedPoints = ref.watch(selectedPointProvider.state).state;
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
     final settingService = ref.watch(settingChangeNotifierProvider);
@@ -60,7 +68,34 @@ class Painter extends CustomPainter {
 
     var visibleFiles = 0, totalDataUsedForPaint = 0, sampleLength = 0;
 
+    Paint bigBoxPaint = Paint()..color = Colors.black.withOpacity(0);
+    Paint selectedPointPainter = Paint()
+      ..color = primaryColor
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 3;
+    customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
+      // ref.read(selectedFileProvider.state).state = null;
+      ref
+          .read(selectedPointProvider.state)
+          .state
+          .add(transformer.fromXYCoordsToLatLng(details.localPosition));
+    });
     List<FileDetailMini> visibleFilesList = [];
+    Path pointPath = Path();
+    for (int i = 0; i < selectedAreaPoints.length; i++) {
+      if (i < 4) {
+        Offset item = transformer.fromLatLngToXYCoords(LatLng(
+            selectedAreaPoints[i].latitude, selectedAreaPoints[i].longitude));
+        customCanvas.drawCircle(item, 10, selectedPointPainter);
+        if (i <= 2) {
+          Offset oldItem = transformer.fromLatLngToXYCoords(LatLng(
+              selectedAreaPoints[i - 1].latitude,
+              selectedAreaPoints[i - 1].longitude));
+          customCanvas.drawLine(item, oldItem, selectedPointPainter);
+        } else {}
+      }
+    }
+
     for (var element in files) {
       Rect item = getRect(element.boundingBox!);
       if (item.overlaps(visibleScreen)) {

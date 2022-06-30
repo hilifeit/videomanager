@@ -29,6 +29,7 @@ class MapScreen extends ConsumerStatefulWidget {
 }
 
 class _MapScreenState extends ConsumerState<MapScreen> {
+  final List<Offset> selectedArea = [];
   void _gotoDefault() {
     widget.controller.center = LatLng(27.7251933, 85.3411312);
     setState(() {});
@@ -76,6 +77,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       body: Consumer(builder: (context, ref, c) {
         final fileService = ref.watch(fileDetailMiniServiceProvider);
         final selectedFile = ref.watch(selectedFileProvider.state).state;
+        final selectedPoints = ref.watch(selectedPointProvider.state).state;
 
         return LayoutBuilder(builder: (context, constraint) {
           return MapLayoutBuilder(
@@ -105,6 +107,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         painter: Painter(
                           context,
                           ref,
+                          selectedAreaPoints: selectedPoints,
                           selectedFileProvider: selectedFileProvider,
                           transformer: transformer,
                         ),
@@ -163,7 +166,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           ),
                         ],
                       ),
-                      if (widget.draw) markerWidgets,
+                      if (widget.draw) Listener(child: markerWidgets),
                       if (widget.miniMap)
                         Positioned(
                           left: 0,
