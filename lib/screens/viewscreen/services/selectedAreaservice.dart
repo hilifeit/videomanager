@@ -30,6 +30,12 @@ class SelectedArea extends ChangeNotifier {
     }
   }
 
+  Rect getRectFromPoints(MapTransformer transformer) {
+    Path pointPath = Path();
+    pointPath.addPolygon(selectedPointsOffset(transformer), true);
+    return pointPath.getBounds();
+  }
+
   draw(TouchyCanvas canvas, MapTransformer transformer) {
     Paint selectedPointPainter = Paint()
       ..color = primaryColor
@@ -44,10 +50,13 @@ class SelectedArea extends ChangeNotifier {
     for (int i = 0; i < points.length; i++) {
       var item = points[i];
       Path handlePath = Path();
-      // if (selectedHandle == i) {
-      //   handlePath.addOval(Rect.fromCircle(center: item, radius: 3));
-      // }
-      handlePath.addRect(Rect.fromCenter(center: item, width: 20, height: 20));
+      if (selectedHandle == i) {
+        Paint SelectedHandle = Paint()..color = primaryColor.withOpacity(0.5);
+        canvas.drawCircle(item, 16, SelectedHandle);
+      }
+      handlePath.addOval(Rect.fromCircle(center: item, radius: 12.sr()));
+      handlePath.fillType = PathFillType.nonZero;
+
       // handlePath.addOval(Rect.fromCircle(center: item, radius: 20));
       handlePath.close();
       canvas.drawPath(handlePath, pointHandlePainter,
