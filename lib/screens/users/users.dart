@@ -1,9 +1,14 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/component/buttonwithloading.dart';
+import 'package:videomanager/screens/users/component/edituserform.dart';
 import 'package:videomanager/screens/users/component/userTable.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
+
+final editUserProvider = StateProvider<bool>((ref) {
+  return false;
+});
 
 class Users extends StatelessWidget {
   const Users({Key? key}) : super(key: key);
@@ -68,7 +73,8 @@ class Users extends StatelessWidget {
             Expanded(
                 flex: 1,
                 child: Consumer(builder: (context, ref, c) {
-                  return AddUser();
+                  final edit = ref.watch(editUserProvider.state).state;
+                  return edit ? EditUser() : AddUser();
                 }))
           ],
         ));

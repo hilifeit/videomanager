@@ -4,6 +4,11 @@ import 'package:videomanager/screens/components/customdialogbox/customdialogbox.
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
+import 'package:videomanager/screens/users/users.dart';
+
+final editManagerSelectProvider = StateProvider<bool>((ref) {
+  return false;
+});
 
 enum Roles { user, manager, superAdmin }
 
@@ -56,8 +61,17 @@ class UserModelSource extends DataTableSource {
                   itemBuilder: (BuildContext context) {
                     return [
                       PopupMenuItem(
-                          onTap: () {
-                            ref.read(userChangeProvider).fetchOne(user.id);
+                          onTap: () async {
+                            await ref
+                                .read(userChangeProvider)
+                                .fetchOne(user.id);
+                            final selectedUser =
+                                ref.watch(userChangeProvider).selectedUser;
+                            if (selectedUser!.role == 0) {
+                              ref.read(editUserProvider.state).state = true;
+                            } else if (selectedUser.role == 1) {
+                              ref.read(editUserProvider.state).state = false;
+                            }
                           },
                           child: CustomPopUpMenuItemChild(
                             icon: Videomanager.edit,

@@ -5,8 +5,8 @@ class CustomMenuItem {
     required this.label,
     required this.value,
   });
-  final String label;
-  final String value;
+  late final String label;
+  late final String value;
 }
 
 class CustomDropDown<T> extends StatelessWidget {
