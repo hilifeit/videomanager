@@ -14,6 +14,7 @@ import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class FileWithDistance {
   FileWithDistance({required this.file, required this.distance});
@@ -22,14 +23,19 @@ class FileWithDistance {
 }
 
 class Painter extends CustomPainter {
-  Painter(this.context, this.ref,
-      {required this.transformer, required this.selectedFileProvider});
+  Painter(
+    this.context,
+    this.ref, {
+    required this.transformer,
+    required this.selectedFileProvider,
+  });
   // List<GeoFile> data;
   // int currentIndex, selectedIndex;
   // int sample;
   final BuildContext context;
   final WidgetRef ref;
   final StateProvider<FileDetailMini?> selectedFileProvider;
+
   bool debug = true;
   MapTransformer transformer;
 
@@ -40,11 +46,15 @@ class Painter extends CustomPainter {
     sampler = 6 - sampler;
 
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
+    final selectedPointsProvider = ref.watch(selectedAreaProvider);
+    final selectedPoints =
+        selectedPointsProvider.selectedPointsOffset(transformer);
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
     final settingService = ref.watch(settingChangeNotifierProvider);
     final files = fileservice.files;
     final stroke = settingService.setting.mapSetting.stroke.toDouble();
+    final handleDragged = selectedPointsProvider.selectedHandle;
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
@@ -60,7 +70,19 @@ class Painter extends CustomPainter {
 
     var visibleFiles = 0, totalDataUsedForPaint = 0, sampleLength = 0;
 
+    Paint bigBoxPaint = Paint()..color = Colors.black.withOpacity(0);
+    customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
+      ref.read(selectedFileProvider.state).state = null;
+
+      selectedPointsProvider.addPoints(transformer,
+          point: details.localPosition);
+    }, onSecondaryTapUp: (detail) {
+      selectedPointsProvider.deSelectHandle();
+    });
     List<FileDetailMini> visibleFilesList = [];
+
+    selectedPointsProvider.draw(customCanvas, transformer);
+
     for (var element in files) {
       Rect item = getRect(element.boundingBox!);
       if (item.overlaps(visibleScreen)) {
@@ -256,19 +278,24 @@ class Painter extends CustomPainter {
 
             newPaint.style = PaintingStyle.stroke;
             newPaint.color = Theme.of(context).primaryColor;
-            customCanvas.drawRect(path.getBounds(), newPaint,
-                onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            if (handleDragged == null) {
+              customCanvas.drawRect(path.getBounds(), newPaint,
+                  onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            }
+
             newPaint.style = PaintingStyle.fill;
             newPaint.color = Colors.transparent;
-            customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            if (handleDragged == null) {
+              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            }
           } else {
             if (filterService.onlyNotUsable == !element.isUseable) {
               customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
@@ -280,12 +307,14 @@ class Painter extends CustomPainter {
           }
         } else {
           if (filterService.onlyNotUsable == !element.isUseable) {
-            customCanvas.drawRect(path.getBounds(), newPaint,
-                onTapUp: ((details) {
-              tap();
-            }), onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
+            if (handleDragged == null) {
+              customCanvas.drawRect(path.getBounds(), newPaint,
+                  onTapUp: ((details) {
+                tap();
+              }), onSecondaryTapUp: (detail) {
+                tapSecondary(detail);
+              });
+            }
           }
         }
         // path.close();

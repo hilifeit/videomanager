@@ -6,7 +6,9 @@ import 'package:videomanager/screens/others/exporter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //window.document.onContextMenu.listen((evt) => evt.preventDefault());
+
+  // window.document.onContextMenu.listen((evt) => evt.preventDefault());
+
   await GetStorage.init();
   //storage.erase();
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
