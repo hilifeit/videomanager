@@ -14,8 +14,9 @@ class SelectedArea extends ChangeNotifier {
   List<Offset> selectedPointsOffset(MapTransformer transformer) =>
       selectedPoints.map((e) => transformer.fromLatLngToXYCoords(e)).toList();
   int? selectedHandle;
+  final int pointLimit = 4;
   addPoints(MapTransformer transformer, {required Offset point}) {
-    if (selectedPoints.length < 6) {
+    if (selectedPoints.length < pointLimit) {
       selectedPoints.add(transformer.fromXYCoordsToLatLng(point));
       notifyListeners();
     }

@@ -174,7 +174,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                             },
                           ),
                           Container(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Theme.of(context).primaryColor.withAlpha(30),
                           ),
                         ],
                       ),
@@ -233,6 +233,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         visible: widget.isvisible,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
               height: 54.sr(),
@@ -250,37 +251,91 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             SizedBox(
               height: 32.sh(),
             ),
-            SizedBox(
-              height: 54.sr(),
-              width: 54.sr(),
-              child: CustomFloatingActionButton(
-                  icon: Icons.add,
-                  onPressed: () async {
-                    widget.controller.zoom += ref
-                        .read(settingChangeNotifierProvider)
-                        .setting
-                        .mapSetting
-                        .zoom;
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Builder(builder: (
+                  context,
+                ) {
+                  final selectedAreaService = ref.watch(selectedAreaProvider);
+                  final selectedPoints = selectedAreaService.selectedPoints;
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (selectedPoints.isNotEmpty) ...[
+                        if (selectedPoints.length >
+                            selectedAreaService.pointLimit - 1)
+                          SizedBox(
+                            height: 54.sr(),
+                            width: 54.sr(),
+                            child: CustomFloatingActionButton(
+                                roundShape: true,
+                                icon: Videomanager.assign,
+                                onPressed: () async {
+                                  setState(() {});
+                                },
+                                tooltip: 'Assign Area'),
+                          ),
+                        SizedBox(
+                          width: 20.sw(),
+                        ),
+                        SizedBox(
+                          height: 54.sr(),
+                          width: 54.sr(),
+                          child: CustomFloatingActionButton(
+                              icon: Icons.clear,
+                              roundShape: true,
+                              onPressed: () async {
+                                selectedAreaService.clear();
+                                setState(() {});
+                              },
+                              tooltip: 'Clear Selection'),
+                        ),
+                      ]
+                    ],
+                  );
+                }),
+                SizedBox(
+                  width: 24.sw(),
+                ),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 54.sr(),
+                      width: 54.sr(),
+                      child: CustomFloatingActionButton(
+                          icon: Icons.add,
+                          onPressed: () async {
+                            widget.controller.zoom += ref
+                                .read(settingChangeNotifierProvider)
+                                .setting
+                                .mapSetting
+                                .zoom;
 
-                    setState(() {});
-                  },
-                  tooltip: 'Zoom in'),
-            ),
-            SizedBox(
-              height: 54.sr(),
-              width: 54.sr(),
-              child: CustomFloatingActionButton(
-                  icon: Icons.remove,
-                  onPressed: () {
-                    setState(() {
-                      widget.controller.zoom -= ref
-                          .read(settingChangeNotifierProvider)
-                          .setting
-                          .mapSetting
-                          .zoom;
-                    });
-                  },
-                  tooltip: "Zoom out"),
+                            setState(() {});
+                          },
+                          tooltip: 'Zoom in'),
+                    ),
+                    SizedBox(
+                      height: 54.sr(),
+                      width: 54.sr(),
+                      child: CustomFloatingActionButton(
+                          icon: Icons.remove,
+                          onPressed: () {
+                            setState(() {
+                              widget.controller.zoom -= ref
+                                  .read(settingChangeNotifierProvider)
+                                  .setting
+                                  .mapSetting
+                                  .zoom;
+                            });
+                          },
+                          tooltip: "Zoom out"),
+                    ),
+                  ],
+                )
+              ],
             ),
             SizedBox(
               height: 19.sh(),
