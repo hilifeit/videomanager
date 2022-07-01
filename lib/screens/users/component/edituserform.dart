@@ -21,6 +21,7 @@ class EditUser extends ConsumerWidget {
   final edituserProvider = StateProvider<AddNewUser>((ref) {
     return AddNewUser(superVisor: SuperVisor());
   });
+  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

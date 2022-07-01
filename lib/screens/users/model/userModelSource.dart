@@ -65,12 +65,15 @@ class UserModelSource extends DataTableSource {
                             await ref
                                 .read(userChangeProvider)
                                 .fetchOne(user.id);
+                            ref.read(editUserProvider.state).state = true;
                             final selectedUser =
                                 ref.watch(userChangeProvider).selectedUser;
                             if (selectedUser!.role == 0) {
-                              ref.read(editUserProvider.state).state = true;
+                              ref.read(editManagerSelectProvider.state).state =
+                                  true;
                             } else if (selectedUser.role == 1) {
-                              ref.read(editUserProvider.state).state = false;
+                              ref.read(editManagerSelectProvider.state).state =
+                                  false;
                             }
                           },
                           child: CustomPopUpMenuItemChild(
