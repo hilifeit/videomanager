@@ -180,44 +180,46 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       ),
                       if (widget.draw) Listener(child: markerWidgets),
                       if (widget.miniMap)
-                        Positioned(
-                          left: 0,
-                          bottom: 0,
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onDoubleTap: () {},
-                              onTap: () async {
-                                transformer.controller.center = LatLng(
-                                    selectedFile!.boundingBox!.center.dx,
-                                    selectedFile.boundingBox!.center.dy);
-                                await Clipboard.setData(
-                                    ClipboardData(text: selectedFile.id));
-                              },
-                              onScaleStart: (detail) {},
-                              onScaleEnd: (detail) {},
-                              child: Stack(
-                                children: [
-                                  AnimatedOpacity(
-                                    opacity: selectedFile == null ? 0 : 1,
-                                    duration: const Duration(milliseconds: 300),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: SizedBox(
-                                          width: 613.sw(),
-                                          height: 180.sh(),
-                                          child: VideoDetails(
-                                            isDetailed: false,
-                                            showMap: false,
-                                            miniDetail: selectedFile,
-                                          )),
+                        if (selectedFile != null)
+                          Positioned(
+                            left: 0,
+                            bottom: 0,
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onDoubleTap: () {},
+                                onTap: () async {
+                                  transformer.controller.center = LatLng(
+                                      selectedFile.boundingBox!.center.dx,
+                                      selectedFile.boundingBox!.center.dy);
+                                  await Clipboard.setData(
+                                      ClipboardData(text: selectedFile.id));
+                                },
+                                onScaleStart: (detail) {},
+                                onScaleEnd: (detail) {},
+                                child: Stack(
+                                  children: [
+                                    AnimatedOpacity(
+                                      opacity: selectedFile == null ? 0 : 1,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SizedBox(
+                                            width: 613.sw(),
+                                            height: 180.sh(),
+                                            child: VideoDetails(
+                                              isDetailed: false,
+                                              showMap: false,
+                                              miniDetail: selectedFile,
+                                            )),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        )
+                          )
                     ],
                   ),
                 ),
@@ -284,7 +286,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           height: 54.sr(),
                           width: 54.sr(),
                           child: CustomFloatingActionButton(
-                              icon: Icons.clear,
+                              icon: Videomanager.cleararea,
                               roundShape: true,
                               onPressed: () async {
                                 selectedAreaService.clear();
