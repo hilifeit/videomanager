@@ -1,5 +1,6 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
@@ -25,9 +26,10 @@ class Filter extends StatelessWidget {
               SizedBox(
                 height: 26.sh(),
               ),
-              SearchBox(
-                mapController: mapController,
-              ),
+              CustomSearch(),
+              // SearchBox(
+              //   mapController: mapController,
+              // ),
               SizedBox(
                 height: 29.sh(),
               ),

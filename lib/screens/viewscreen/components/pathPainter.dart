@@ -71,14 +71,14 @@ class Painter extends CustomPainter {
     var visibleFiles = 0, totalDataUsedForPaint = 0, sampleLength = 0;
 
     Paint bigBoxPaint = Paint()..color = Colors.black.withOpacity(0);
-    customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
-      ref.read(selectedFileProvider.state).state = null;
+    // customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
+    //   ref.read(selectedFileProvider.state).state = null;
 
-      selectedPointsProvider.addPoints(transformer,
-          point: details.localPosition);
-    }, onSecondaryTapUp: (detail) {
-      selectedPointsProvider.deSelectHandle();
-    });
+    //   selectedPointsProvider.addPoints(transformer,
+    //       point: details.localPosition);
+    // }, onSecondaryTapUp: (detail) {
+    //   selectedPointsProvider.deSelectHandle();
+    // });
     List<FileDetailMini> visibleFilesList = [];
 
     selectedPointsProvider.draw(customCanvas, transformer);
