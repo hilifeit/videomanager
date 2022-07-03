@@ -1,42 +1,51 @@
+import 'dart:collection';
+
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
-final selectedAreaProvider = ChangeNotifierProvider<SelectedArea>((ref) {
+final selectedAreaServiceProvider = ChangeNotifierProvider<SelectedArea>((ref) {
   return SelectedArea._();
 });
 
 class SelectedArea extends ChangeNotifier {
   SelectedArea._();
 
-  List<LatLng> selectedPoints = [];
+  final List<LatLng> _selectedPoints = [];
+  List<LatLng> get selectedPoints => UnmodifiableListView(_selectedPoints);
+  List<Offset> selectedPointsToOffset(MapTransformer transformer) =>
+      UnmodifiableListView(_selectedPoints
+          .map((e) => transformer.fromLatLngToXYCoords(e))
+          .toList());
 
-  List<Offset> selectedPointsOffset(MapTransformer transformer) =>
-      selectedPoints.map((e) => transformer.fromLatLngToXYCoords(e)).toList();
-  int? selectedHandle;
+  late final selectedHandle = Property<int?>(null, notifyListeners);
+
   final int pointLimit = 4;
-  addPoints(MapTransformer transformer, {required Offset point}) {
-    if (selectedPoints.length < pointLimit) {
-      selectedPoints.add(transformer.fromXYCoordsToLatLng(point));
+
+  static late MapTransformer transformer;
+
+  addPoints({required Offset point}) {
+    if (_selectedPoints.length < pointLimit) {
+      _selectedPoints.add(transformer.fromXYCoordsToLatLng(point));
       notifyListeners();
     }
   }
 
-  moveHandle(MapTransformer transformer, {required Offset newPosition}) {
-    if (selectedHandle != null) {
-      selectedPoints[selectedHandle!] =
+  moveHandle({required Offset newPosition}) {
+    if (selectedHandle.value != null) {
+      _selectedPoints[selectedHandle.value!] =
           transformer.fromXYCoordsToLatLng(newPosition);
       notifyListeners();
     }
   }
 
-  Rect getRectFromPoints(MapTransformer transformer) {
+  Rect getRectFromPoints() {
     Path pointPath = Path();
-    pointPath.addPolygon(selectedPointsOffset(transformer), true);
+    pointPath.addPolygon(selectedPointsToOffset(transformer), true);
     return pointPath.getBounds();
   }
 
-  draw(TouchyCanvas canvas, MapTransformer transformer) {
+  draw(TouchyCanvas canvas) {
     Paint selectedPointPainter = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.stroke
@@ -44,15 +53,15 @@ class SelectedArea extends ChangeNotifier {
     Paint pointHandlePainter = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.fill;
-    List<Offset> points = selectedPointsOffset(transformer);
+    List<Offset> points = selectedPointsToOffset(transformer);
     Path selectedPath = Path();
 
     for (int i = 0; i < points.length; i++) {
       var item = points[i];
       Path handlePath = Path();
-      if (selectedHandle == i) {
-        Paint SelectedHandle = Paint()..color = primaryColor.withOpacity(0.5);
-        canvas.drawCircle(item, 16, SelectedHandle);
+      if (selectedHandle.value == i) {
+        Paint _SelectedHandle = Paint()..color = primaryColor.withOpacity(0.5);
+        canvas.drawCircle(item, 16, _SelectedHandle);
       }
       handlePath.addOval(Rect.fromCircle(center: item, radius: 12.sr()));
       handlePath.fillType = PathFillType.nonZero;
@@ -65,9 +74,7 @@ class SelectedArea extends ChangeNotifier {
           //   print("here");
           // },
           onTapUp: ((details) {
-        selectedHandle = i;
-
-        notifyListeners();
+        selectedHandle.value = i;
       }));
       // selectedPath.addOval(Rect.fromCircle(center: item, radius: 7));
     }
@@ -77,14 +84,31 @@ class SelectedArea extends ChangeNotifier {
   }
 
   deSelectHandle() {
-    if (selectedHandle != null) {
-      selectedHandle = null;
-      notifyListeners();
+    if (selectedHandle.value != null) {
+      selectedHandle.value = null;
     }
   }
 
   clear() {
-    selectedPoints.clear();
+    _selectedPoints.clear();
     notifyListeners();
+  }
+}
+
+class Property<T> {
+  Property(T initialValue, this.notifyListeners) {
+    _value = initialValue;
+  }
+
+  late T _value;
+  final void Function() notifyListeners;
+
+  T get value => _value;
+
+  set value(T value) {
+    if (_value != value) {
+      _value = value;
+      notifyListeners();
+    }
   }
 }
