@@ -71,24 +71,38 @@ class Painter extends CustomPainter {
     var visibleFiles = 0, totalDataUsedForPaint = 0, sampleLength = 0;
 
     Paint bigBoxPaint = Paint()..color = Colors.black.withOpacity(0);
-    // customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
-    //   ref.read(selectedFileProvider.state).state = null;
+    customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
+      ref.read(selectedFileProvider.state).state = null;
 
-    //   selectedPointsProvider.addPoints(transformer,
-    //       point: details.localPosition);
-    // }, onSecondaryTapUp: (detail) {
-    //   selectedPointsProvider.deSelectHandle();
-    // });
+      selectedPointsProvider.addPoints(transformer,
+          point: details.localPosition);
+    }, onSecondaryTapUp: (detail) {
+      selectedPointsProvider.deSelectHandle();
+    });
     List<FileDetailMini> visibleFilesList = [];
+    List<FileDetailMini> selectedFileList = [];
 
     selectedPointsProvider.draw(customCanvas, transformer);
+    Rect? selection = selectedPointsProvider.getRectFromPoints(transformer);
 
     for (var element in files) {
       Rect item = getRect(element.boundingBox!);
+
       if (item.overlaps(visibleScreen)) {
         visibleFilesList.add(element);
+        if (selection != null &&
+            filterService.onlyNotUsable == !element.isUseable) {
+          if (item.overlaps(selection) && !selectedFileList.contains(element)) {
+            selectedFileList.add(element);
+          } else {
+            selectedFileList.remove(element);
+          }
+        }
       }
     }
+    // for (var element in selectedFileList) {
+    //   print(element.path);
+    // }
     if (files.isNotEmpty) {
       if (!filterService.onlyNotUsable) {
         if (kIsWeb) {
@@ -108,6 +122,7 @@ class Painter extends CustomPainter {
         visibleFiles++;
         Path path = Path();
         Rect item = getRect(element.boundingBox!);
+
         Function tap, tapSecondary;
         tap = () {
           ref.read(selectedFileProvider.state).state = element;
@@ -247,7 +262,11 @@ class Painter extends CustomPainter {
         totalDataUsedForPaint += points.length;
         paint.strokeWidth = stroke;
         paint.style = PaintingStyle.stroke;
-        paint.color = element.isUseable ? Colors.red : Colors.black;
+        paint.color = element.isUseable
+            ? selectedFileList.contains(element)
+                ? Colors.orange
+                : Colors.red
+            : Colors.black;
 
         path.addPolygon(points, false);
         Paint newPaint = Paint()

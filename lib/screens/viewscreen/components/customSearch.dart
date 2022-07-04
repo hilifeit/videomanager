@@ -22,7 +22,7 @@ class _CustomSearchState extends State<CustomSearch> {
           //  top: renderBox.globalToLocal(point),
           child: CompositedTransformFollower(
             link: _layerLink,
-            offset: Offset(0, 0),
+            offset: Offset(0, size.height),
             child: Material(
               elevation: 5,
               child: Padding(

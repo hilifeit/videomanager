@@ -30,7 +30,8 @@ class SelectedArea extends ChangeNotifier {
     }
   }
 
-  Rect getRectFromPoints(MapTransformer transformer) {
+  Rect? getRectFromPoints(MapTransformer transformer) {
+    if (selectedPoints.isEmpty || selectedPoints.length < 3) return null;
     Path pointPath = Path();
     pointPath.addPolygon(selectedPointsOffset(transformer), true);
     return pointPath.getBounds();
