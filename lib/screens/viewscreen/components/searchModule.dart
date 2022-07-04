@@ -12,25 +12,15 @@ class SearchBox extends ConsumerWidget {
     final searchService = ref.watch(searchChangeNotifierProvider);
 
     return SearchField<Result>(
-        emptyWidget: Padding(
-          padding: EdgeInsets.all(15.r),
-          child: Column(
-            children: const [
-              Icon(
-                Icons.error,
-                color: primaryColor,
-              ),
-              Text('Your search did not match any documents.', maxLines: 2),
-            ],
-          ),
-        ),
+        emptyWidget: Container(),
         searchStyle: kTextStyleInterMedium,
         searchInputDecoration: InputDecoration(
           prefixIcon:
               Icon(Videomanager.search, color: Colors.black, size: 15.ssp()),
           fillColor: secondaryColor,
           filled: true,
-          contentPadding: EdgeInsets.only(left: 10.5.sw(), top: 9.sh(), bottom: 11.sh()),
+          contentPadding:
+              EdgeInsets.only(left: 10.5.sw(), top: 9.sh(), bottom: 11.sh()),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5.sr()),
             borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
@@ -76,8 +66,8 @@ class SearchBox extends ConsumerWidget {
                     ),
                     title: Text(
                       e.filename,
-                      style:
-                          kTextStyleIbmRegularBlack.copyWith(fontSize: 16.ssp()),
+                      style: kTextStyleIbmRegularBlack.copyWith(
+                          fontSize: 16.ssp()),
                     ),
                     trailing: Text(
                       'State ${e.area.state}',

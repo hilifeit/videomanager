@@ -36,7 +36,7 @@ var kTextStyleIbmRegular = TextStyle(
 
 var kTextStyleInterMedium = TextStyle(
   fontFamily: 'Inter',
-  fontSize: 14.sp,
+  fontSize: 14.ssp(),
   fontWeight: FontWeight.w500,
   color: Colors.black,
 );
