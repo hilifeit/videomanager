@@ -83,6 +83,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           return MapLayoutBuilder(
             controller: widget.controller,
             builder: (context, transformer) {
+              SelectedArea.transformer = transformer;
               transformer.controller.addListener(() {
                 setState(() {});
               });
@@ -125,14 +126,16 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 child: Listener(
                   behavior: HitTestBehavior.opaque,
                   onPointerUp: (detail) {
-                    var selectedPointService = ref.read(selectedAreaProvider);
+                    var selectedPointService =
+                        ref.read(selectedAreaServiceProvider);
                     if (selectedPointService.selectedHandle != null) {
                       selectedPointService.deSelectHandle();
                     }
                   },
                   onPointerHover: (details) {
-                    ref.read(selectedAreaProvider).moveHandle(transformer,
-                        newPosition: details.localPosition);
+                    ref
+                        .read(selectedAreaServiceProvider)
+                        .moveHandle(newPosition: details.localPosition);
                   },
                   onPointerSignal: (event) {
                     if (event is PointerScrollEvent) {
@@ -260,7 +263,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 Builder(builder: (
                   context,
                 ) {
-                  final selectedAreaService = ref.watch(selectedAreaProvider);
+                  final selectedAreaService =
+                      ref.watch(selectedAreaServiceProvider);
                   final selectedPoints = selectedAreaService.selectedPoints;
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.end,

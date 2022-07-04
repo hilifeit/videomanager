@@ -46,9 +46,9 @@ class Painter extends CustomPainter {
     sampler = 6 - sampler;
 
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
-    final selectedPointsProvider = ref.watch(selectedAreaProvider);
+    final selectedPointsProvider = ref.watch(selectedAreaServiceProvider);
     final selectedPoints =
-        selectedPointsProvider.selectedPointsOffset(transformer);
+        selectedPointsProvider.selectedPointsToOffset(transformer);
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
     final settingService = ref.watch(settingChangeNotifierProvider);
@@ -71,19 +71,25 @@ class Painter extends CustomPainter {
     var visibleFiles = 0, totalDataUsedForPaint = 0, sampleLength = 0;
 
     Paint bigBoxPaint = Paint()..color = Colors.black.withOpacity(0);
-    customCanvas.drawRect(visibleScreen, bigBoxPaint, onTapUp: (details) {
-      ref.read(selectedFileProvider.state).state = null;
+    customCanvas.drawRect(
+      visibleScreen,
+      bigBoxPaint,
+      onTapUp: (details) {
+        ref.read(selectedFileProvider.state).state = null;
 
-      selectedPointsProvider.addPoints(transformer,
-          point: details.localPosition);
-    }, onSecondaryTapUp: (detail) {
-      selectedPointsProvider.deSelectHandle();
-    });
+        selectedPointsProvider.addPoints(point: details.localPosition);
+      },
+      onSecondaryTapUp: (detail) {
+        selectedPointsProvider.deSelectHandle();
+
+        selectedPointsProvider.addPoints(point: detail.localPosition);
+      },
+    );
     List<FileDetailMini> visibleFilesList = [];
     List<FileDetailMini> selectedFileList = [];
 
-    selectedPointsProvider.draw(customCanvas, transformer);
-    Rect? selection = selectedPointsProvider.getRectFromPoints(transformer);
+    selectedPointsProvider.draw(customCanvas);
+    Rect? selection = selectedPointsProvider.getRectFromPoints();
 
     for (var element in files) {
       Rect item = getRect(element.boundingBox!);
@@ -340,7 +346,7 @@ class Painter extends CustomPainter {
 
       }
     }
-
+    selectedPointsProvider.draw(customCanvas);
     if (debug && files.isNotEmpty) {
       canvas.drawRect(
           Rect.fromLTWH(0, 0, size.width, 40),
