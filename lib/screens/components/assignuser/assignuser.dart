@@ -14,8 +14,8 @@ class AssignUser extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userService = ref.watch(userChangeProvider);
-    final allUsers = userService.getByRoles(Roles.user);
-    final userMenu = allUsers
+    final allManagers = userService.getByRoles(Roles.manager);
+    final managerMenu = allManagers
         .map((e) => CustomMenuItem(label: e.name, value: e.id))
         .toList();
     // print(allUsers.length);
@@ -69,7 +69,7 @@ class AssignUser extends ConsumerWidget {
                   height: 30.sh(),
                 ),
                 Text(
-                  fileDetail == null ? 'Filename' : fileDetail!.filename,
+                  fileDetail == null ? 'Areaname' : fileDetail!.filename,
                   style: kTextStyleIbmRegular.copyWith(
                     fontSize: 16..ssp(),
                     color: danger,
@@ -85,18 +85,18 @@ class AssignUser extends ConsumerWidget {
                 SizedBox(
                   height: 6.sh(),
                 ),
-                userMenu.isNotEmpty
+                managerMenu.isNotEmpty
                     ? Container(
                         decoration: BoxDecoration(
                             border:
                                 Border.all(width: 1, color: secondaryColor)),
                         child: CustomMenuDropDown(
-                            value: userMenu.first,
+                            value: managerMenu.first,
                             onChanged: (val) {},
-                            values: userMenu,
+                            values: managerMenu,
                             helperText: ''),
                       )
-                    : const Text("Add Users first"),
+                    : const Text("Add Managers first"),
                 SizedBox(
                   height: 32.sh(),
                 ),
@@ -105,8 +105,12 @@ class AssignUser extends ConsumerWidget {
                   runSpacing: 20.sh(),
                   children: [
                     AssignedDetail(fileDetail: fileDetail),
-                    AssignedDetail(fileDetail: fileDetail, isOngoing: true),
-                    AssignedDetail(fileDetail: fileDetail, isOngoing: true),
+                    AssignedDetail(
+                      fileDetail: fileDetail,
+                    ),
+                    AssignedDetail(
+                      fileDetail: fileDetail,
+                    ),
                     AssignedDetail(fileDetail: fileDetail),
                   ],
                 ),
@@ -129,7 +133,7 @@ class AssignUser extends ConsumerWidget {
                   },
                   onPressedOutlined: () {
                     // Navigator.of(context).overlay!.mounted;
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   width: 96.sw(),
                   height: 32.sh(),
@@ -145,11 +149,15 @@ class AssignUser extends ConsumerWidget {
 }
 
 class AssignedDetail extends StatelessWidget {
-  AssignedDetail({Key? key, required this.fileDetail, this.isOngoing = false})
-      : super(key: key);
+  AssignedDetail({
+    Key? key,
+    required this.fileDetail,
+
+    // this.isOngoing = false
+  }) : super(key: key);
 
   final FileDetailMini? fileDetail;
-  bool isOngoing;
+  // bool isOngoing;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +174,7 @@ class AssignedDetail extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            fileDetail == null ? 'Filename' : fileDetail!.filename,
+            fileDetail == null ? 'Areaname' : fileDetail!.filename,
             style: kTextStyleIbmRegular.copyWith(
                 fontSize: 16.ssp(), color: Colors.black),
           ),
@@ -174,11 +182,10 @@ class AssignedDetail extends StatelessWidget {
             width: 14.sw(),
           ),
           Text(
-            isOngoing ? '(Ongoing)' : '(Assigned)',
+            '(Assigned)',
             style: kTextStyleIbmRegular.copyWith(
               fontSize: 14.ssp(),
-              color:
-                  isOngoing ? const Color(0xff28A745) : const Color(0xff17A2B8),
+              color: const Color(0xff17A2B8),
             ),
           )
         ],

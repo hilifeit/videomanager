@@ -1,14 +1,44 @@
+import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/component/buttonwithloading.dart';
 import 'package:videomanager/screens/users/component/edituserform.dart';
-import 'package:videomanager/screens/users/component/userTable.dart';
+import 'package:videomanager/screens/users/component/dataTable.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
 
 final editUserProvider = StateProvider<bool>((ref) {
   return false;
 });
+List<DataColumn> data = [
+  DataColumn(
+      label: Text(
+    "User",
+    style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+  )),
+  DataColumn(
+      label: Text(
+    "Email",
+    style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+  )),
+  DataColumn(
+      label: Text(
+    "JOINING DATE",
+    style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+  )),
+  DataColumn(
+      label: Text(
+    "ROLE",
+    style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+  )),
+  DataColumn(
+      label: Text(
+    "ACTION",
+    style: kTextStyleTableTitle.copyWith(fontSize: 12.ssp()),
+  )),
+];
 
 class Users extends StatelessWidget {
   const Users({Key? key}) : super(key: key);
@@ -60,7 +90,21 @@ class Users extends StatelessWidget {
                             SizedBox(
                               height: 18.sh(),
                             ),
-                            Expanded(child: UserTable()),
+                            Expanded(
+                              child: Consumer(builder: (context, ref, c) {
+                                final userService =
+                                    ref.watch(userChangeProvider);
+                                final users = userService.users;
+                                return CustomDataTable(
+                                  empty: users == null
+                                      ? CustomShowMessage.nodata()
+                                      : CustomShowMessage.nodata(),
+                                  source: UserModelSource(
+                                      context: context, users: users ?? []),
+                                  column: data,
+                                );
+                              }),
+                            ),
                           ],
                         ),
                       ),

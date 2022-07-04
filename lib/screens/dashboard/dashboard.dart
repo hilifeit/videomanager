@@ -1,4 +1,5 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/components/custominfo.dart';
@@ -29,6 +30,8 @@ class DashBoard extends StatelessWidget {
             const TargetCard(),
             const UsersCard(),
             const AssignedVideoCard(),
+            const ScreenShotReview(),
+            
           ],
         ),
         Row(
@@ -105,6 +108,67 @@ class DashBoard extends StatelessWidget {
         ),
       ]),
     );
+  }
+}
+
+class ScreenShotReview extends StatelessWidget {
+  const ScreenShotReview({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        color: const Color(0xffF4FCFF),
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: 14.sh(), left: 19.sw(), right: 25.sh(), bottom: 15.sh()),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Screenshot\nReview',
+                style: kTextStyleIbmSemiBold.copyWith(
+                  fontSize: 15.ssp(),
+                  color: const Color(0xff697A8D),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 4.sw()),
+                child: SizedBox(
+                    height: 118.sr(),
+                    width: 118.sr(),
+                    child: Stack(
+                      children: [
+                        const Image(
+                            image: AssetImage('assets/images/Oval.png')),
+                        Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '72%',
+                              style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 22.ssp(),
+                                color: const Color(0xff566a7f),
+                              ),
+                            ),
+                            Text(
+                              textAlign: TextAlign.center,
+                              'Screenshot review\nto be done',
+                              style: kTextStyleIbmRegular.copyWith(
+                                fontSize: 11.ssp(),
+                                color: const Color(0xffA1ACB8),
+                              ),
+                            ),
+                          ],
+                        )),
+                      ],
+                    )),
+              )
+            ],
+          ),
+        ));
   }
 }
 

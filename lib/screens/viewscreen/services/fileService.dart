@@ -19,7 +19,7 @@ class FileService extends ChangeNotifier {
   load() async {
     await fetch();
 
-    // print(files.length);
+     print(files.length);
   }
 
   fetch() async {
@@ -29,6 +29,7 @@ class FileService extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         files = fileDetailMiniFromJson(response.body).toList();
+      
         List<int> states = [];
         List<String> district = [];
         await Future.forEach<FileDetailMini>(files, (element) {

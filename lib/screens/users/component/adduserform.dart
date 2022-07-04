@@ -112,7 +112,7 @@ class AddUser extends ConsumerWidget {
                           height: 35.sh(),
                         ),
                         InputTextField(
-                          // value: edit ? addNewUser.username : "",
+                          value: addNewUser.username,
                           title: 'username',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -217,13 +217,12 @@ class AddUser extends ConsumerWidget {
                         SizedBox(
                           height: 6.sh(),
                         ),
-
-                        if (!edit && selectManager) ...[
-                          Text('Supervisor', style: kTextStyleIbmSemiBold),
-                          SizedBox(
-                            height: 14.sh(),
-                          ),
-                          if (thisUser.role >= 2)
+                        if (managerMenu.isNotEmpty)
+                          if (!edit && selectManager && thisUser.role >= 2) ...[
+                            Text('Supervisor', style: kTextStyleIbmSemiBold),
+                            SizedBox(
+                              height: 14.sh(),
+                            ),
                             CustomMenuDropDown(
                                 value: managerMenu.first,
                                 onChanged: (val) {
@@ -231,29 +230,13 @@ class AddUser extends ConsumerWidget {
                                 },
                                 values: managerMenu,
                                 helperText: ''),
-                        ],
-                        // if (edit &&
-                        //     selectManager &&
-                        //     thisUser.id != selectedUser!.id) ...[
-                        //   Text('Supervisor', style: kTextStyleIbmSemiBold),
-                        //   SizedBox(
-                        //     height: 14.sh(),
-                        //   ),
-                        //   if (thisUser.role >= 2)
-                        //     CustomMenuDropDown(
-                        //         value: editMenuSuperVisor!,
-                        //         onChanged: (val) {
-                        //           addNewUser.superVisor.id = val.value;
-                        //         },
-                        //         values: managerMenu,
-                        //         helperText: ''),
-                        // ],
+                          ],
 
                         SizedBox(
                           height: 6.sh(),
                         ),
                         InputTextField(
-                          value: edit ? addNewUser.name : 'Name',
+                          value: addNewUser.name,
                           title: 'Name',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -266,7 +249,7 @@ class AddUser extends ConsumerWidget {
                         ),
                         SizedBox(height: 14.sh()),
                         InputTextField(
-                          value: edit ? addNewUser.email : 'test@test.com',
+                          value: addNewUser.email,
                           title: 'Email',
                           isVisible: true,
                           fillColor: Colors.white,
@@ -280,7 +263,7 @@ class AddUser extends ConsumerWidget {
                         SizedBox(height: 14.sh()),
                         if (!edit)
                           InputTextField(
-                            value: '123456789',
+                            value: addNewUser.password,
                             title: 'Password',
                             isVisible: true,
                             fillColor: Colors.white,
@@ -329,72 +312,20 @@ class AddUser extends ConsumerWidget {
                                       context: context,
                                       builder: (context) {
                                         return CustomDialog(
-                                            textSecond: edit
-                                                ? 'save the following changes?'
-                                                : 'add the following user?',
+                                            textSecond:
+                                                'add the following user?',
                                             elevatedButtonText: 'Yes',
                                             onPressedElevated: () async {
-                                              // if (edit) {
-                                              //   var addNewUserToJson =
-                                              //       addNewUser.toJson();
-                                              //   var selectedUserToJson =
-                                              //       selectedUser!.toJson();
-                                              //   Map<String, dynamic> test = {};
-
-                                              //   for (var element
-                                              //       in addNewUserToJson
-                                              //           .entries) {
-                                              //     if (selectedUserToJson[
-                                              //             element.key] !=
-                                              //         element.value) {
-                                              //       if (element.key !=
-                                              //               "password" &&
-                                              //           element.key !=
-                                              //               "superVisor") {
-                                              //         test.addAll({
-                                              //           element.key:
-                                              //               element.value
-                                              //         });
-                                              //       }
-                                              //     }
-                                              //   }
-
-                                              //   if (test.isEmpty) {
-                                              //     snack.info('No change');
-                                              //   } else {
-                                              //     try {
-                                              //       var user = ref.read(
-                                              //           userChangeProvider);
-
-                                              //       await user.edit(
-                                              //           map: test,
-                                              //           id: addNewUser.id);
-
-                                              //       formKey.currentState!
-                                              //           .reset();
-                                              //       ref
-                                              //           .read(
-                                              //               userChangeProvider)
-                                              //           .selectUser(null);
-                                              //       ref
-                                              //           .read(
-                                              //               userChangeProvider)
-                                              //           .fetchAll();
-                                              //       snack.success(
-                                              //           "User Edited Sucessfully");
-                                              //     } catch (e) {
-                                              //       snack.error(e);
-                                              //     }
-                                              //   }
-                                              // }
                                               {
                                                 if (!selectManager) {
                                                   addNewUser.superVisor.id =
                                                       thisUser.id;
                                                 }
+                                                if (thisUser.role == 1) {
+                                                  addNewUser.superVisor.id =
+                                                      thisUser.id;
+                                                }
                                                 try {
-                                                  print(
-                                                      addNewUser.superVisor.id);
                                                   var user = ref
                                                       .read(userChangeProvider);
                                                   await user.add(
@@ -406,8 +337,8 @@ class AddUser extends ConsumerWidget {
                                                   ref
                                                       .read(userChangeProvider)
                                                       .fetchAll();
-                                                } catch (e, s) {
-                                                  snack.error("$e $s");
+                                                } catch (e) {
+                                                  snack.error("$e");
                                                 }
                                               }
                                             });

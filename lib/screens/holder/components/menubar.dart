@@ -60,63 +60,52 @@ class MenuBar extends ConsumerWidget {
           Padding(
             padding: EdgeInsets.only(
                 top: 13.sh(), right: 61.08.sw(), bottom: 13.sh()),
-            child: Row(
-              children: [
-                CircleAvatar(
-                    radius: 30.sr(),
-                    backgroundColor: Colors.teal,
-                    child: Container()),
-                SizedBox(
-                  width: 18.sw(),
-                ),
-                PopupMenuButton(
-                  offset: Offset(0, height / 2 + 22.ssp()),
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      PopupMenuItem(
-                          onTap: () async {
-                            Future.delayed(const Duration(milliseconds: 1), () {
-                              return showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return CustomDialog(
-                                        textSecond: 'logout?',
-                                        elevatedButtonText: 'Yes',
-                                        onPressedElevated: () async {
-                                          logout();
-                                        });
-                                  });
-                            });
-                          },
-                          child: CustomPopUpMenuItemChild(
-                              icon: Videomanager.logout, text: 'Logout'))
-                    ];
-                  },
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 180.sw(),
-                        child: Text(
-                          maxLines: 2,
-                          // userName.user.username,
-                          userName.name,
+            child: PopupMenuButton(
+              offset: Offset(0, height / 2 + 22.ssp()),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                      onTap: () async {
+                        Future.delayed(const Duration(milliseconds: 1), () {
+                          return showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomDialog(
+                                    textSecond: 'logout?',
+                                    elevatedButtonText: 'Yes',
+                                    onPressedElevated: () async {
+                                      logout();
+                                    });
+                              });
+                        });
+                      },
+                      child: CustomPopUpMenuItemChild(
+                          icon: Videomanager.logout, text: 'Logout'))
+                ];
+              },
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 180.sw(),
+                    child: Text(
+                      maxLines: 2,
+                      // userName.user.username,
+                      userName.name,
 
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 17.ssp(min: 10), color: Colors.white),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20.sw(),
-                      ),
-                      Icon(
-                        (button) ? Videomanager.down : Videomanager.up,
-                        color: Colors.white,
-                        size: 15.sr(),
-                      )
-                    ],
+                      style: kTextStyleIbmSemiBold.copyWith(
+                          fontSize: 17.ssp(min: 10), color: Colors.white),
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 20.sw(),
+                  ),
+                  Icon(
+                    (button) ? Videomanager.down : Videomanager.up,
+                    color: Colors.white,
+                    size: 15.sr(),
+                  )
+                ],
+              ),
             ),
           )
         ],

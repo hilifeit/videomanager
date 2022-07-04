@@ -229,7 +229,6 @@ class UserService extends ChangeNotifier {
         return true;
       } else {
         var error = jsonDecode(response.body);
-        print(error);
         throw error['message'];
       }
     } catch (e) {
@@ -256,7 +255,6 @@ class UserService extends ChangeNotifier {
         return true;
       } else {
         var error = jsonDecode(response.body);
-        print(error);
         throw error['message'];
       }
     } catch (e) {

@@ -21,7 +21,6 @@ class EditUser extends ConsumerWidget {
   final edituserProvider = StateProvider<AddNewUser>((ref) {
     return AddNewUser(superVisor: SuperVisor());
   });
-  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +35,7 @@ class EditUser extends ConsumerWidget {
     final addNewUser = ref.watch(edituserProvider.state).state;
 
     var dd;
-    if (selectedUser != null) {
+    if (selectedUser != null && selectedUser.role != 2) {
       addNewUser
         ..username = selectedUser.username
         ..email = selectedUser.email
@@ -55,6 +54,18 @@ class EditUser extends ConsumerWidget {
           // print(dd.label);
         }
       }
+    }
+    if (selectedUser != null && selectedUser.role == 2) {
+      addNewUser
+        ..username = selectedUser.username
+        ..email = selectedUser.email
+        ..mobile = selectedUser.mobile
+        ..name = selectedUser.name
+        ..role = selectedUser.role
+        ..id = selectedUser.id;
+
+      // dd = managerMenu.firstWhere((element) => element.value == selectedUser.superVisor!.id);
+
     }
 
     return Scrollbar(

@@ -1,5 +1,7 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
@@ -76,39 +78,49 @@ class VideoDetails extends StatelessWidget {
           if (showMap)
             Expanded(
               flex: 2,
-              child: Stack(
-                children: [
-                  MapScreen(
-                    draw: false,
-                    controller: MapController(location: home),
-                    isvisible: false,
-                    miniMap: false,
-                  ),
-                  Positioned(
-                      bottom: 5.sh(),
-                      right: 5.sw(),
-                      child: IconButton(
-                          onPressed: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return AlertDialog(
-                                    contentPadding: EdgeInsets.zero,
-                                    content: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
+              child: Consumer(builder: (context, ref, c) {
+                final videoSetting = ref
+                    .watch(settingChangeNotifierProvider)
+                    .setting
+                    .videoSetting;
+                final VideoSetting temp =
+                    VideoSetting.fromJson(videoSetting.toJson());
+                return Stack(
+                  children: [
+                    MapScreen(
+                      draw: false,
+                      controller: MapController(location: home),
+                      isvisible: false,
+                      miniMap: false,
+                    ),
+                    if (temp.allowMinMapFScreen)
+                      Positioned(
+                          bottom: 5.sh(),
+                          right: 5.sw(),
+                          child: IconButton(
+                              onPressed: () async {
+                                await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        contentPadding: EdgeInsets.zero,
+                                        content: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
                                                 .8,
-                                        child: MapScreen(
-                                          miniMap: true,
-                                          controller:
-                                              MapController(location: home),
-                                        )),
-                                  );
-                                });
-                          },
-                          icon: const Icon(Icons.fullscreen)))
-                ],
-              ),
+                                            child: MapScreen(
+                                              miniMap: true,
+                                              controller:
+                                                  MapController(location: home),
+                                            )),
+                                      );
+                                    });
+                              },
+                              icon: const Icon(Icons.fullscreen)))
+                  ],
+                );
+              }),
             )
         ],
       ),
