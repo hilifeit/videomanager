@@ -23,7 +23,7 @@ class MenuBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
-    final userName = ref.watch(userChangeProvider).user;
+    final userName = ref.watch(userChangeProvider).loggedInUser.value;
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
@@ -90,7 +90,7 @@ class MenuBar extends ConsumerWidget {
                     child: Text(
                       maxLines: 2,
                       // userName.user.username,
-                      userName.name,
+                      userName!.name,
 
                       style: kTextStyleIbmSemiBold.copyWith(
                           fontSize: 17.ssp(min: 10), color: Colors.white),

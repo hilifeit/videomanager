@@ -97,10 +97,10 @@ class Users extends StatelessWidget {
                                 final users = userService.users;
                                 return CustomDataTable(
                                   empty: users == null
-                                      ? CustomShowMessage.nodata()
+                                      ? CustomShowMessage.nointernet()
                                       : CustomShowMessage.nodata(),
                                   source: UserModelSource(
-                                      context: context, users: users ?? []),
+                                      context: context, users: users),
                                   column: data,
                                 );
                               }),

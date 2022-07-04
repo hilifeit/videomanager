@@ -157,9 +157,14 @@ class Login extends ConsumerWidget {
                                       value!;
                                 });
                           }),
-                          Text(
-                            'Remember Me?',
-                            style: kTextStyleIbmMedium,
+                          GestureDetector(
+                            onTap: () => ref
+                                .read(checkBoxStateProvider.state)
+                                .state = !checked,
+                            child: Text(
+                              'Stay logged in?',
+                              style: kTextStyleIbmMedium,
+                            ),
                           ),
                         ],
                       ),

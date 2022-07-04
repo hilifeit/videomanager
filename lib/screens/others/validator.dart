@@ -104,11 +104,13 @@ String? validateRegisterPassword(String value) {
 }
 
 String? validatePhone(String value) {
-  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  // RegExp regExp = RegExp(pattern as String);
+  Pattern pattern = "^[9]{1}[6-8]{1}[0-9]{8}";
+  RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter mobile number';
   } else if (value.length < 10) {
+    return 'Mobile number must be 10 digits';
+  } else if (!regExp.hasMatch(value)) {
     return 'Please enter a valid mobile number';
   } else {
     return null;
@@ -116,12 +118,16 @@ String? validatePhone(String value) {
 }
 
 String? validateUserName(String value, {String label = "username"}) {
-  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
-  // RegExp regExp = RegExp(pattern as String);
+  Pattern pattern = r"\s";
+  RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter $label';
   } else if (value.length < 3) {
     return '$label should be atleast 3 characters';
+  } else if (regExp.hasMatch(value)) {
+    return '$label should not have white spaces';
+  } else if ((RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value))) {
+    return "$label cannot have special characters";
   } else {
     return null;
   }

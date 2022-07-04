@@ -96,7 +96,7 @@ class UserModel {
         "email": email,
         // "password": password,
         "mobile": mobile,
-        "superVisor": superVisor!.toJson(),
+        "superVisor": superVisor != null ? superVisor!.toJson() : null,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,

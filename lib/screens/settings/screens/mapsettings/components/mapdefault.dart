@@ -32,7 +32,7 @@ class MapDefaultLocation extends ConsumerWidget {
             width: 816.sw(),
             height: 49.sh(),
             decoration: BoxDecoration(
-                color: lightWhite.withOpacity(0.22),
+                color: lightGrey.withOpacity(0.22),
                 borderRadius: BorderRadius.circular(4.sr())),
             child: Padding(
               padding: EdgeInsets.only(

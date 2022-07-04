@@ -54,8 +54,8 @@ class UserModelSource extends DataTableSource {
       DataCell(Text(getRole(user.role))),
       DataCell(
         Consumer(builder: (context, ref, c) {
-          final thisUser = ref.watch(userChangeProvider).user;
-          return (thisUser.role > user.role || thisUser.id == user.id)
+          final thisUser = ref.watch(userChangeProvider).loggedInUser;
+          return (thisUser.value!.role > user.role || thisUser.value!.id == user.id)
               ? PopupMenuButton(
                   offset: const Offset(0, 0),
                   itemBuilder: (BuildContext context) {
@@ -68,10 +68,10 @@ class UserModelSource extends DataTableSource {
                             ref.read(editUserProvider.state).state = true;
                             final selectedUser =
                                 ref.watch(userChangeProvider).selectedUser;
-                            if (selectedUser!.role == 0) {
+                            if (selectedUser.value!.role == 0) {
                               ref.read(editManagerSelectProvider.state).state =
                                   true;
-                            } else if (selectedUser.role == 1) {
+                            } else if (selectedUser.value!.role == 1) {
                               ref.read(editManagerSelectProvider.state).state =
                                   false;
                             }
@@ -80,7 +80,7 @@ class UserModelSource extends DataTableSource {
                             icon: Videomanager.edit,
                             text: 'Edit',
                           )),
-                      if (thisUser.id != user.id)
+                      if (thisUser.value!.id != user.id)
                         PopupMenuItem(
                             onTap: () {
                               // ref.read(userChangeProvider).selectUser(user);
@@ -89,7 +89,7 @@ class UserModelSource extends DataTableSource {
                               icon: Videomanager.lock,
                               text: 'Reset Password',
                             )),
-                      if (thisUser.id != user.id)
+                      if (thisUser.value!.id != user.id)
                         PopupMenuItem(
                             onTap: () {
                               Future.delayed(const Duration(milliseconds: 1),

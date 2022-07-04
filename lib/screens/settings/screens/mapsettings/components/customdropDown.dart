@@ -77,7 +77,7 @@ class DropDown<T> extends ConsumerWidget {
       color: Colors.black,
     );
     return Container(
-      color: helperText != '' ? lightWhite.withOpacity(0.22) : Colors.white,
+      color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
       child: DropdownButton<T>(
           selectedItemBuilder: (context) {
             return values
@@ -143,7 +143,7 @@ class CustomMenuDropDown extends ConsumerWidget {
       color: Colors.black,
     );
     return Container(
-      color: helperText != '' ? lightWhite.withOpacity(0.22) : Colors.white,
+      color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
       child: DropdownButton<CustomMenuItem>(
           selectedItemBuilder: (context) {
             return values.map((e) {

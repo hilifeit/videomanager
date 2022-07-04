@@ -34,7 +34,7 @@ class MenuItemWidget extends ConsumerWidget {
             children: [
               Icon(
                 item.icon,
-                color: index == item.id ? Colors.white : lightWhite,
+                color: index == item.id ? Colors.white : lightGrey,
                 size: 18.sr(),
               ),
               SizedBox(
@@ -44,7 +44,7 @@ class MenuItemWidget extends ConsumerWidget {
                 item.title,
                 style: kTextStyleIbmSemiBold.copyWith(
                   fontSize: 17.ssp(),
-                  color: index == item.id ? Colors.white : lightWhite,
+                  color: index == item.id ? Colors.white : lightGrey,
                 ),
               )
             ],

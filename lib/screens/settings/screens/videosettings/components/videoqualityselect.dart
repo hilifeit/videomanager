@@ -47,7 +47,7 @@ class _VideoQualitySelectState extends ConsumerState<VideoQualitySelect> {
           decoration: BoxDecoration(
               color: value == item.id
                   ? Theme.of(context).primaryColor.withOpacity(0.15)
-                  : lightWhite.withOpacity(0.22),
+                  : lightGrey.withOpacity(0.22),
               borderRadius: BorderRadius.circular(4.sr())),
           child: Center(
             child: Text(

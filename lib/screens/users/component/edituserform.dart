@@ -29,8 +29,8 @@ class EditUser extends ConsumerWidget {
     final managerMenu = allManagers
         .map((e) => CustomMenuItem(label: e.name, value: e.id))
         .toList();
-    final selectedUser = ref.watch(userChangeProvider).selectedUser;
-    final thisUser = ref.watch(userChangeProvider).user;
+    final selectedUser = ref.watch(userChangeProvider).selectedUser.value;
+    final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
     var editSelectManager = ref.watch(editManagerSelectProvider.state).state;
     final addNewUser = ref.watch(edituserProvider.state).state;
 
@@ -44,7 +44,6 @@ class EditUser extends ConsumerWidget {
         ..role = selectedUser.role
         ..superVisor.id = selectedUser.superVisor!.id
         ..id = selectedUser.id;
-
       // dd = managerMenu.firstWhere((element) => element.value == selectedUser.superVisor!.id);
       for (var element in managerMenu) {
         if (element.value == selectedUser.superVisor!.id) {
@@ -115,72 +114,112 @@ class EditUser extends ConsumerWidget {
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        if (thisUser.id == selectedUser!.id)
+                        if (thisUser!.id == selectedUser!.id)
                           Container(
-                            height: 55.sh(),
+                            height: 65.sh(),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                 4.sr(),
+                              ),
+                              border: Border.all(
+                                color: lightGrey,
                               ),
                               color: Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.only(
                                   left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                              child: Text(getRole(selectedUser.role)),
+                              child: Text(
+                                getRole(selectedUser.role),
+                                style: kTextStyleIbmSemiBold.copyWith(
+                                    fontSize: 16.ssp(), color: Colors.black),
+                              ),
                             ),
                           ),
                         if (thisUser.role < 2 && thisUser.id != selectedUser.id)
                           Container(
-                            height: 55.sh(),
+                            height: 65.sh(),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                 4.sr(),
+                              ),
+                              border: Border.all(
+                                color: lightGrey,
                               ),
                               color: Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.only(
                                   left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                              child: Text(getRole(selectedUser.role)),
+                              child: Text(
+                                getRole(selectedUser.role),
+                                style: kTextStyleIbmSemiBold.copyWith(
+                                    fontSize: 16.ssp(), color: Colors.black),
+                              ),
                             ),
                           ),
                         if (thisUser.role >= 2 && selectedUser.role < 1)
-                          CustomMenuDropDown(
-                              value: menus[addNewUser.role],
-                              onChanged: (val) {
-                                addNewUser.role = int.parse(val.value);
-                                if (addNewUser.role == 1) {
-                                  ref
-                                      .read(editManagerSelectProvider.state)
-                                      .state = false;
-                                } else if (addNewUser.role == 0) {
-                                  ref
-                                      .read(editManagerSelectProvider.state)
-                                      .state = true;
-                                }
-                              },
-                              values: menus,
-                              helperText: ''),
+                          Container(
+                            height: 65.sh(),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.sr(),
+                              ),
+                              border: Border.all(
+                                color: lightGrey,
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: CustomMenuDropDown(
+                                value: menus[addNewUser.role],
+                                onChanged: (val) {
+                                  addNewUser.role = int.parse(val.value);
+                                  if (addNewUser.role == 1) {
+                                    ref
+                                        .read(editManagerSelectProvider.state)
+                                        .state = false;
+                                  } else if (addNewUser.role == 0) {
+                                    ref
+                                        .read(editManagerSelectProvider.state)
+                                        .state = true;
+                                  }
+                                },
+                                values: menus,
+                                helperText: ''),
+                          ),
                         if (thisUser.role >= 2 && selectedUser.role == 1)
-                          CustomMenuDropDown(
-                              value: menus[addNewUser.role],
-                              onChanged: (val) {
-                                addNewUser.role = int.parse(val.value);
-                                if (addNewUser.role == 1) {
-                                  ref
-                                      .read(editManagerSelectProvider.state)
-                                      .state = false;
-                                } else if (addNewUser.role == 0) {
-                                  ref
-                                      .read(editManagerSelectProvider.state)
-                                      .state = true;
-                                }
-                              },
-                              values: menus,
-                              helperText: ''),
+                          Container(
+                            height: 65.sh(),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                4.sr(),
+                              ),
+                              border: Border.all(
+                                color: lightGrey,
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: CustomMenuDropDown(
+                                value: menus[addNewUser.role],
+                                onChanged: (val) {
+                                  addNewUser.role = int.parse(val.value);
+                                  if (addNewUser.role == 1) {
+                                    ref
+                                        .read(editManagerSelectProvider.state)
+                                        .state = false;
+                                  } else if (addNewUser.role == 0) {
+                                    ref
+                                        .read(editManagerSelectProvider.state)
+                                        .state = true;
+                                  }
+                                },
+                                values: menus,
+                                helperText: ''),
+                          ),
                         SizedBox(
                           height: 6.sh(),
                         ),
@@ -272,7 +311,8 @@ class EditUser extends ConsumerWidget {
                             elevatedButtonText: 'Edit',
                             onPressedOutlined: () {
                               ref.read(editUserProvider.state).state = false;
-                              ref.read(userChangeProvider).selectUser(null);
+                              ref.read(userChangeProvider).selectedUser.value =
+                                  null;
                             },
                             onPressedElevated: () async {
                               if (formKey.currentState!.validate()) {
@@ -295,13 +335,11 @@ class EditUser extends ConsumerWidget {
                                               if (selectedUserToJson[
                                                       element.key] !=
                                                   element.value) {
-                                                if (element.key != "password"
-                                                    //     &&
-                                                    // element.key !=
-                                                    //     "superVisor"
-                                                    ) {
+                                                if (element.key != "password" &&
+                                                    element.key !=
+                                                        "superVisor") {
                                                   test.addAll({
-                                                    element.key: element.value
+                                                    element.key: element.value,
                                                   });
                                                 }
                                               }
@@ -325,13 +363,14 @@ class EditUser extends ConsumerWidget {
                                                 formKey.currentState!.reset();
                                                 ref
                                                     .read(userChangeProvider)
-                                                    .selectUser(null);
+                                                    .selectedUser
+                                                    .value = null;
                                                 ref
                                                     .read(userChangeProvider)
                                                     .fetchAll();
                                                 snack.success(
                                                     "User Edited Sucessfully");
-                                              } catch (e) {
+                                              } catch (e, s) {
                                                 snack.error(e);
                                               }
                                             }

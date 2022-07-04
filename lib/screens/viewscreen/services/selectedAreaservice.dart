@@ -39,7 +39,7 @@ class SelectedArea extends ChangeNotifier {
     }
   }
 
-  Rect? getRectFromPoints(MapTransformer transformer) {
+  Rect? getRectFromPoints() {
     if (selectedPoints.isEmpty || selectedPoints.length < 3) return null;
 
     Path pointPath = Path();

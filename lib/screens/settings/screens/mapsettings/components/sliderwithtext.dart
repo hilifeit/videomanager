@@ -117,7 +117,7 @@ class CustomSlider extends StatelessWidget {
                         max: max,
                         activeColor: Theme.of(context).primaryColor,
                         thumbColor: const Color(0xff9FC6DD),
-                        inactiveColor: lightWhite,
+                        inactiveColor: lightGrey,
                         value: currentValue,
                         onChanged: (val) {
                           ref.read(valueProvider.state).state = val;
@@ -227,7 +227,7 @@ class CustomSlider extends StatelessWidget {
 //                       max: widget.max,
 //                       activeColor: Theme.of(context).primaryColor,
 //                       thumbColor: const Color(0xff9FC6DD),
-//                       inactiveColor: lightWhite,
+//                       inactiveColor: lightGrey,
 //                       value: value,
 //                       onChanged: (val) {
 //                         // widget.onChanged(val);
