@@ -126,9 +126,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 child: Listener(
                   behavior: HitTestBehavior.opaque,
                   onPointerUp: (detail) {
-                    var selectedPointService =
-                        ref.read(selectedAreaServiceProvider);
-                    if (selectedPointService.selectedHandle != null) {
+                    // if (detail.kind == PointerDeviceKind.mouse &&
+                    //     detail.buttons == kPrimaryMouseButton)
+
+                    {
+                      var selectedPointService =
+                          ref.read(selectedAreaServiceProvider);
                       selectedPointService.deSelectHandle();
                     }
                   },
@@ -270,8 +273,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       if (selectedPoints.isNotEmpty) ...[
-                        if (selectedPoints.length >
-                            selectedAreaService.pointLimit - 1)
+                        if (selectedAreaService.pathClosed.value)
                           SizedBox(
                             height: 54.sr(),
                             width: 54.sr(),

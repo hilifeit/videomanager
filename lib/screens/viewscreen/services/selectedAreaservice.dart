@@ -19,9 +19,12 @@ class SelectedArea extends ChangeNotifier {
           .toList());
 
   late final selectedHandle = Property<int?>(null, notifyListeners);
+  late final path = Property<Path>(Path(), () {});
 
-  final int pointLimit = 4;
+  int pointLimit = 200;
 
+  late final pathClosed = Property<bool>(false, notifyListeners);
+  late final pathSelected = Property<bool>(false, notifyListeners);
   static late MapTransformer transformer;
 
   addPoints({required Offset point}) {
@@ -40,7 +43,7 @@ class SelectedArea extends ChangeNotifier {
   }
 
   Rect? getRectFromPoints() {
-    if (selectedPoints.isEmpty || selectedPoints.length < 3) return null;
+    if (selectedPoints.isEmpty || selectedPoints.length < 2) return null;
 
     Path pointPath = Path();
     pointPath.addPolygon(selectedPointsToOffset(transformer), true);
@@ -57,15 +60,24 @@ class SelectedArea extends ChangeNotifier {
       ..style = PaintingStyle.fill;
     List<Offset> points = selectedPointsToOffset(transformer);
     Path selectedPath = Path();
+    // var sizeSampler = map(transformer.controller.zoom.toInt(), 10, 18, 1, 8);
+    // sizeSampler = 9 - sizeSampler;
+    var sizeSampler = 1;
 
+    if (pathSelected.value) {
+      sizeSampler = 1;
+    } else {
+      sizeSampler = 2;
+    }
     for (int i = 0; i < points.length; i++) {
       var item = points[i];
       Path handlePath = Path();
       if (selectedHandle.value == i) {
-        Paint SelectedHandle = Paint()..color = primaryColor.withOpacity(0.5);
-        canvas.drawCircle(item, 16, SelectedHandle);
+        Paint selectedHandle = Paint()..color = primaryColor.withOpacity(0.5);
+        canvas.drawCircle(item, (16 / sizeSampler).sr(), selectedHandle);
       }
-      handlePath.addOval(Rect.fromCircle(center: item, radius: 12.sr()));
+      handlePath.addOval(
+          Rect.fromCircle(center: item, radius: (12 / sizeSampler).sr()));
       handlePath.fillType = PathFillType.nonZero;
 
       // handlePath.addOval(Rect.fromCircle(center: item, radius: 20));
@@ -80,9 +92,16 @@ class SelectedArea extends ChangeNotifier {
       }));
       // selectedPath.addOval(Rect.fromCircle(center: item, radius: 7));
     }
-    selectedPath.addPolygon(points, true);
-
-    canvas.drawPath(selectedPath, selectedPointPainter);
+    selectedPath.addPolygon(
+      points,
+      pathClosed.value,
+    );
+    path.value = selectedPath;
+    canvas.drawPath(selectedPath, selectedPointPainter, onTapUp: (detail) {
+      print('here');
+      pathSelected.value = true;
+      notifyListeners();
+    }, hitTestBehavior: HitTestBehavior.translucent);
   }
 
   deSelectHandle() {
@@ -93,7 +112,7 @@ class SelectedArea extends ChangeNotifier {
 
   clear() {
     _selectedPoints.clear();
-    notifyListeners();
+    pathClosed.value = false;
   }
 }
 

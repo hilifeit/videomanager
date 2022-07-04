@@ -44,7 +44,10 @@ class Painter extends CustomPainter {
     // DateTime start = DateTime.now();
     var sampler = map(transformer.controller.zoom.toInt(), 17, 20, 1, 5);
     sampler = 6 - sampler;
-
+    const Color strokeColor = Colors.red,
+        selectedInAreaColor = primaryColor,
+        damagedColor = Colors.black;
+    const HitTestBehavior hitBehaviorTranslucent = HitTestBehavior.opaque;
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
     final selectedPointsProvider = ref.watch(selectedAreaServiceProvider);
     final selectedPoints =
@@ -58,7 +61,7 @@ class Painter extends CustomPainter {
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
-    rpaint.color = Colors.red.withOpacity(0.01);
+    rpaint.color = strokeColor.withOpacity(0.01);
 
     paint.style = PaintingStyle.stroke;
 
@@ -75,33 +78,51 @@ class Painter extends CustomPainter {
       visibleScreen,
       bigBoxPaint,
       onTapUp: (details) {
-        ref.read(selectedFileProvider.state).state = null;
+        var selectedFile = ref.read(selectedFileProvider.state).state;
+        if (selectedFile != null) {
+          ref.read(selectedFileProvider.state).state = null;
+        } else {
+          if (selectedPointsProvider.pathSelected.value) {
+            selectedPointsProvider.pathSelected.value = false;
+          }
 
-        selectedPointsProvider.addPoints(point: details.localPosition);
+          if (!selectedPointsProvider.pathClosed.value) {
+            selectedPointsProvider.addPoints(point: details.localPosition);
+          }
+        }
       },
       onSecondaryTapUp: (detail) {
-        selectedPointsProvider.deSelectHandle();
-
-        selectedPointsProvider.addPoints(point: detail.localPosition);
+        // selectedPointsProvider.deSelectHandle();
+        if (selectedPointsProvider.pathSelected.value) {
+          selectedPointsProvider.pathSelected.value = false;
+        }
+        // selectedPointsProvider.addPoints(point: detail.localPosition);
+        if (selectedPointsProvider.selectedPoints.length > 2) {
+          selectedPointsProvider.pathClosed.value = true;
+        }
       },
     );
     List<FileDetailMini> visibleFilesList = [];
     List<FileDetailMini> selectedFileList = [];
+    List<FileDetailMini> finalselectedFileList = [];
 
     selectedPointsProvider.draw(customCanvas);
-    Rect? selection = selectedPointsProvider.getRectFromPoints();
 
     for (var element in files) {
       Rect item = getRect(element.boundingBox!);
 
       if (item.overlaps(visibleScreen)) {
         visibleFilesList.add(element);
-        if (selection != null &&
-            filterService.onlyNotUsable == !element.isUseable) {
-          if (item.overlaps(selection) && !selectedFileList.contains(element)) {
-            selectedFileList.add(element);
-          } else {
-            selectedFileList.remove(element);
+        if (selectedPointsProvider.pathClosed.value) {
+          Rect? selection = selectedPointsProvider.getRectFromPoints();
+          if (selection != null &&
+              filterService.onlyNotUsable == !element.isUseable) {
+            if (item.overlaps(selection) &&
+                !selectedFileList.contains(element)) {
+              selectedFileList.add(element);
+            } else {
+              selectedFileList.remove(element);
+            }
           }
         }
       }
@@ -109,6 +130,24 @@ class Painter extends CustomPainter {
     // for (var element in selectedFileList) {
     //   print(element.path);
     // }
+
+    if (selectedPointsProvider.pathClosed.value) {
+      for (var element in selectedFileList) {
+        Offset first = transformer.fromLatLngToXYCoords(LatLng(
+            element.location.coordinates.first.last,
+            element.location.coordinates.first.first));
+        Offset last = transformer.fromLatLngToXYCoords(LatLng(
+            element.location.coordinates.last.last,
+            element.location.coordinates.last.first));
+        if (selectedPointsProvider.path.value.contains(first) &&
+            selectedPointsProvider.path.value.contains(last)) {
+          finalselectedFileList.add(element);
+        }
+      }
+      selectedFileList.clear();
+      // print(finalselectedFileList.length);
+    }
+
     if (files.isNotEmpty) {
       if (!filterService.onlyNotUsable) {
         if (kIsWeb) {
@@ -171,7 +210,7 @@ class Painter extends CustomPainter {
                     onTap: () async {
                       var firstVideoUrl =
                           await fileservice.getUrlFromFile(element);
-                      print(firstVideoUrl);
+                      //print(firstVideoUrl);
                       if (firstVideoUrl.isNotEmpty) {
                         FileDetailMini? secondVideo = findFile(
                             visibleFilesList: visibleFilesList,
@@ -269,12 +308,13 @@ class Painter extends CustomPainter {
         paint.strokeWidth = stroke;
         paint.style = PaintingStyle.stroke;
         paint.color = element.isUseable
-            ? selectedFileList.contains(element)
-                ? Colors.orange
-                : Colors.red
-            : Colors.black;
+            ? finalselectedFileList.contains(element)
+                ? selectedInAreaColor
+                : strokeColor
+            : damagedColor;
 
         path.addPolygon(points, false);
+
         Paint newPaint = Paint()
           ..color = Theme.of(context).primaryColor.withOpacity(0.1);
 
@@ -290,10 +330,11 @@ class Painter extends CustomPainter {
           if (selectedFile.id == element.id) {
             paint.strokeWidth = stroke * 2;
             paint.color = Theme.of(context).primaryColor;
+            //
             customCanvas.drawPath(path, paint, onTapUp: (details) {
               tap();
             }, onSecondaryTapUp: (detail) {});
-            paint.color = Colors.red;
+            paint.color = strokeColor;
             paint.strokeWidth = stroke;
             customCanvas.drawPath(path, paint, onTapUp: (details) {
               // tap();
@@ -303,23 +344,23 @@ class Painter extends CustomPainter {
 
             newPaint.style = PaintingStyle.stroke;
             newPaint.color = Theme.of(context).primaryColor;
-            if (handleDragged == null) {
+            if (handleDragged.value == null) {
               customCanvas.drawRect(path.getBounds(), newPaint,
                   onTapUp: ((details) {
                 tap();
               }), onSecondaryTapUp: (detail) {
                 tapSecondary(detail);
-              });
+              }, hitTestBehavior: hitBehaviorTranslucent);
             }
 
             newPaint.style = PaintingStyle.fill;
             newPaint.color = Colors.transparent;
-            if (handleDragged == null) {
+            if (handleDragged.value == null) {
               customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
                 tap();
               }), onSecondaryTapUp: (detail) {
                 tapSecondary(detail);
-              });
+              }, hitTestBehavior: hitBehaviorTranslucent);
             }
           } else {
             if (filterService.onlyNotUsable == !element.isUseable) {
@@ -327,18 +368,18 @@ class Painter extends CustomPainter {
                 tap();
               }), onSecondaryTapUp: (detail) {
                 tapSecondary(detail);
-              });
+              }, hitTestBehavior: hitBehaviorTranslucent);
             }
           }
         } else {
           if (filterService.onlyNotUsable == !element.isUseable) {
-            if (handleDragged == null) {
+            if (handleDragged.value == null) {
               customCanvas.drawRect(path.getBounds(), newPaint,
                   onTapUp: ((details) {
                 tap();
               }), onSecondaryTapUp: (detail) {
                 tapSecondary(detail);
-              });
+              }, hitTestBehavior: hitBehaviorTranslucent);
             }
           }
         }
@@ -355,7 +396,7 @@ class Painter extends CustomPainter {
             ..style = PaintingStyle.fill);
       drawText(canvas,
           text:
-              "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint Samples Used:$sampleLength",
+              "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint Samples Used:$sampleLength selectedFiles: ${finalselectedFileList.length}",
           position: const Offset(10, 10));
     }
     // print(DateTime.now().difference(start).inMilliseconds);
