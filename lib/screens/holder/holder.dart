@@ -20,6 +20,7 @@ class Holder extends ConsumerWidget {
     CustomKeys().init(ref, context);
     final index = ref.watch(indexProvider.state).state;
     ref.read(userChangeProvider).fetchAll();
+    final thisUser = ref.read(userChangeProvider).loggedInUser.value;
 
     return Scaffold(
       backgroundColor: secondaryColor,
