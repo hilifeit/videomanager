@@ -11,8 +11,8 @@ class CustomVideo extends StatefulWidget {
 }
 
 class _VideoState extends State<CustomVideo> {
-  late VideoPlayerController _controller1, _controller2;
-  late Player _player1, _player2;
+  VideoPlayerController? _controller1, _controller2;
+  Player? _player1, _player2;
 
   @override
   void initState() {
@@ -23,8 +23,8 @@ class _VideoState extends State<CustomVideo> {
       _player2 =
           Player(id: widget.pathRight.length, videoDimensions: dimension);
 
-      _player1.open(Media.network(widget.pathLeft));
-      _player2.open(Media.network(widget.pathRight));
+      _player1!.open(Media.network(widget.pathLeft));
+      _player2!.open(Media.network(widget.pathRight));
     } else {
       _controller1 = VideoPlayerController.network(widget.pathLeft)
         ..initialize().then((_) {
@@ -135,8 +135,10 @@ class _VideoState extends State<CustomVideo> {
                 Expanded(
                   flex: 1,
                   child: VideoPlayerControls(
-                    left: _controller1,
-                    right: _controller2,
+                    leftWeb: _controller1,
+                    rightWeb: _controller2,
+                    leftDesktop: _player1,
+                    rightDesktop: _player2,
                   ),
                 ),
               ],
@@ -165,7 +167,12 @@ class _VideoState extends State<CustomVideo> {
         }
         return Stack(
           children: [
-            UniversalPlatform.isDesktop ? Video() : VideoPlayer(controller!),
+            UniversalPlatform.isDesktop
+                ? Video(
+                    player: player,
+                    showControls: false,
+                  )
+                : VideoPlayer(controller!),
             if (buffering)
               Positioned.fill(
                   child: Center(
@@ -181,7 +188,12 @@ class _VideoState extends State<CustomVideo> {
   @override
   void dispose() {
     super.dispose();
-    _controller1.dispose();
-    _controller2.dispose();
+    if (UniversalPlatform.isDesktop) {
+      _player1!.dispose();
+      _player2!.dispose();
+    } else {
+      _controller1!.dispose();
+      _controller2!.dispose();
+    }
   }
 }

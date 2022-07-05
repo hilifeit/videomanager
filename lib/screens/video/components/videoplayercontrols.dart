@@ -1,11 +1,17 @@
-import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
-
+import 'package:videomanager/screens/others/exporter.dart';
 
 class VideoPlayerControls extends ConsumerStatefulWidget {
-  VideoPlayerControls({required this.left, required this.right});
+  const VideoPlayerControls(
+      {Key? key,
+      this.leftWeb,
+      this.rightWeb,
+      this.leftDesktop,
+      this.rightDesktop})
+      : super(key: key);
 
-  final VideoPlayerController left, right;
+  final VideoPlayerController? leftWeb, rightWeb;
+  final Player? leftDesktop, rightDesktop;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _VideoPlayerControlsState();
@@ -51,39 +57,47 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                               out_min: 0,
                               out_max: 1));
 
-                          // mapDouble(progress, 0, 1, 0, widget.left.value.duration).toInt()
-                          Duration seekedPosition = Duration(
-                              milliseconds: mapDouble(
-                                      x: progress,
-                                      in_min: 0,
-                                      in_max: 1,
-                                      out_min: 0,
-                                      out_max: widget
-                                          .left.value.duration.inMilliseconds
-                                          .toDouble())
-                                  .toInt());
-                          widget.left.seekTo(seekedPosition);
+                          // mapDouble(progress, 0, 1, 0, widget.leftWeb.value.duration).toInt()
+                          if (UniversalPlatform.isDesktop) {
+                          } else {
+                            Duration seekedPosition = Duration(
+                                milliseconds: mapDouble(
+                                        x: progress,
+                                        in_min: 0,
+                                        in_max: 1,
+                                        out_min: 0,
+                                        out_max: widget.leftWeb!.value.duration
+                                            .inMilliseconds
+                                            .toDouble())
+                                    .toInt());
+                            widget.leftWeb!.seekTo(seekedPosition);
+                          }
                         });
                       },
                       child:
                           StatefulBuilder(builder: (context, setCustomState) {
-                        widget.left.addListener(() {
-                          setCustomState(() {
-                            progress = mapDouble(
-                                x: widget.left.value.position.inMilliseconds
-                                    .toDouble(),
-                                in_min: 0,
-                                in_max: widget
-                                    .left.value.duration.inMilliseconds
-                                    .toDouble(),
-                                out_min: 0,
-                                out_max: 1);
+                        if (UniversalPlatform.isDesktop) {
+                        } else {
+                          widget.leftWeb!.addListener(() {
+                            setCustomState(() {
+                              progress = mapDouble(
+                                  x: widget
+                                      .leftWeb!.value.position.inMilliseconds
+                                      .toDouble(),
+                                  in_min: 0,
+                                  in_max: widget
+                                      .leftWeb!.value.duration.inMilliseconds
+                                      .toDouble(),
+                                  out_min: 0,
+                                  out_max: 1);
+                            });
                           });
-                        });
+                        }
                         return LinearProgressIndicator(
                           minHeight: 4.sh(),
                           color: Colors.white,
-                          backgroundColor: Color(0xffeaeaea).withAlpha(150),
+                          backgroundColor:
+                              const Color(0xffeaeaea).withAlpha(150),
                           value: progress,
                         );
                       }),
@@ -98,8 +112,8 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                       children: [
                         iconButton(
                             icon: AnimatedIcons.play_pause,
-                            left: widget.left,
-                            right: widget.right),
+                            leftWeb: widget.leftWeb,
+                            rightWeb: widget.rightWeb),
                         SizedBox(
                           width: 8.sw(),
                         ),
@@ -107,7 +121,7 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                           '5:07 / 15:28',
                           style: kTextStyleInterMedium.copyWith(
                               fontSize: 14.ssp(),
-                              color: Color(0xffeaeaea).withAlpha(180)),
+                              color: const Color(0xffeaeaea).withAlpha(180)),
                         )
                       ],
                     ),
@@ -126,24 +140,27 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
 
   Widget iconButton(
       {required AnimatedIconData icon,
-      required VideoPlayerController left,
-      required VideoPlayerController right}) {
+      VideoPlayerController? leftWeb,
+      VideoPlayerController? rightWeb}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          if (left.value.isPlaying && right.value.isPlaying) {
-            left.pause();
-            right.pause();
-            _playPauseController.reverse();
+          if (UniversalPlatform.isDesktop) {
           } else {
-            left.play();
-            right.play();
-            _playPauseController.forward();
+            if (leftWeb!.value.isPlaying && rightWeb!.value.isPlaying) {
+              leftWeb.pause();
+              rightWeb.pause();
+              _playPauseController.reverse();
+            } else {
+              leftWeb.play();
+              rightWeb!.play();
+              _playPauseController.forward();
+            }
           }
         },
         child: AnimatedIcon(
-          color: Color(0xffeaeaea),
+          color: const Color(0xffeaeaea),
           icon: icon,
           progress: _playPauseController,
         ),

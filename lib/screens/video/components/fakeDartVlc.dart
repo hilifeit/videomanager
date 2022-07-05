@@ -1,8 +1,9 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
 class Video extends StatefulWidget {
-  const Video({Key? key, required this.player}) : super(key: key);
-  final String player;
+  const Video({Key? key, this.player, this.showControls}) : super(key: key);
+  final dynamic player;
+  final bool? showControls;
   @override
   State<Video> createState() => _VideoState();
 }
@@ -22,11 +23,19 @@ class DartVLC {
 }
 
 class Player {
-  Player({this.id = '', this.videoDimensions});
-  String id;
+  Player({this.id, this.videoDimensions});
+  int? id;
   VideoDimensions? videoDimensions;
+
+  open(dynamic data) {}
+  dispose() {}
 }
 
 class VideoDimensions {
-  VideoDimensions(int width, int height);
+  const VideoDimensions(int width, int height);
+}
+
+class Media {
+  Media._();
+  static network(dynamic url) {}
 }
