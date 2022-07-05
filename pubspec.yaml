@@ -54,6 +54,8 @@ dependencies:
   retry: ^3.1.0
   flutter_phoenix: ^1.0.0
   syncfusion_flutter_gauges: ^20.2.36
+  dart_vlc: ^0.3.0
+  universal_platform: ^1.0.0+1
 
 
 

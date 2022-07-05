@@ -6,6 +6,8 @@ import 'package:videomanager/screens/users/component/userService.dart';
 
 export 'dart:convert';
 
+export 'package:dart_vlc/dart_vlc.dart'
+    if (dart.library.js) "package:videomanager/screens/video/components/fakeDartVlc.dart";
 export 'package:file_picker/file_picker.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,6 +16,7 @@ export 'package:get_storage/get_storage.dart';
 export 'package:hooks_riverpod/hooks_riverpod.dart';
 export 'package:latlng/latlng.dart';
 export 'package:searchfield/searchfield.dart';
+export 'package:universal_platform/universal_platform.dart';
 export 'package:video_player/video_player.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';

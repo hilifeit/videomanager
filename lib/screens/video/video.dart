@@ -2,35 +2,45 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 
-class Video extends StatefulWidget {
-  const Video({Key? key, required this.pathLeft, required this.pathRight})
+class CustomVideo extends StatefulWidget {
+  const CustomVideo({Key? key, required this.pathLeft, required this.pathRight})
       : super(key: key);
   final String pathLeft, pathRight;
   @override
   _VideoState createState() => _VideoState();
 }
 
-class _VideoState extends State<Video> {
-  late VideoPlayerController _controller1;
-  late VideoPlayerController _controller2;
+class _VideoState extends State<CustomVideo> {
+  late VideoPlayerController _controller1, _controller2;
+  late Player _player1, _player2;
 
   @override
   void initState() {
     super.initState();
-    _controller1 = VideoPlayerController.network(widget.pathLeft)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      }).catchError((e) {
-        print(e);
-      });
-    _controller2 = VideoPlayerController.network(widget.pathRight)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      }).catchError((e) {
-        print(e);
-      });
+    if (UniversalPlatform.isDesktop) {
+      VideoDimensions dimension = const VideoDimensions(1920, 1080);
+      _player1 = Player(id: widget.pathLeft.length, videoDimensions: dimension);
+      _player2 =
+          Player(id: widget.pathRight.length, videoDimensions: dimension);
+
+      _player1.open(Media.network(widget.pathLeft));
+      _player2.open(Media.network(widget.pathRight));
+    } else {
+      _controller1 = VideoPlayerController.network(widget.pathLeft)
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          setState(() {});
+        }).catchError((e) {
+          print(e);
+        });
+      _controller2 = VideoPlayerController.network(widget.pathRight)
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          setState(() {});
+        }).catchError((e) {
+          print(e);
+        });
+    }
 
     //   _controller.addListener(() {
     //   print(_controller.value.position);
@@ -55,7 +65,8 @@ class _VideoState extends State<Video> {
                         flex: 4,
                         child: Stack(
                           children: [
-                            CustomVideoPlayer(controller: _controller1),
+                            CustomVideoPlayer(
+                                controller: _controller1, player: _player1),
                             Positioned(
                                 top: 20.sh(),
                                 left: 19.sw(),
@@ -79,7 +90,8 @@ class _VideoState extends State<Video> {
                   Expanded(
                     child: Stack(
                       children: [
-                        CustomVideoPlayer(controller: _controller2),
+                        CustomVideoPlayer(
+                            controller: _controller2, player: _player2),
                         Positioned(
                             top: 20.sh(),
                             right: 24.32.sw(),
@@ -138,18 +150,22 @@ class _VideoState extends State<Video> {
     );
   }
 
-  Builder CustomVideoPlayer({required VideoPlayerController controller}) {
+  Builder CustomVideoPlayer(
+      {VideoPlayerController? controller, Player? player}) {
     return Builder(builder: (context) {
       bool buffering = false;
       return StatefulBuilder(builder: (context, setCustomState) {
-        controller.addListener(() {
-          setCustomState(() {
-            buffering = controller.value.isBuffering;
+        if (UniversalPlatform.isDesktop) {
+        } else {
+          controller!.addListener(() {
+            setCustomState(() {
+              buffering = controller.value.isBuffering;
+            });
           });
-        });
+        }
         return Stack(
           children: [
-            VideoPlayer(controller),
+            UniversalPlatform.isDesktop ? Video() : VideoPlayer(controller!),
             if (buffering)
               Positioned.fill(
                   child: Center(

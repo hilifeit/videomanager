@@ -1,5 +1,6 @@
 // import 'dart:html';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -8,7 +9,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
-
+  if (!kIsWeb) {
+    await DartVLC.initialize();
+  }
   await GetStorage.init();
   //storage.erase();
   // window.document.onContextMenu.listen((evt) => evt.preventDefault());
