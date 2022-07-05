@@ -26,9 +26,14 @@ class Player {
   Player({this.id, this.videoDimensions});
   int? id;
   VideoDimensions? videoDimensions;
-
-  open(dynamic data) {}
+  PlayBackState playback = PlayBackState();
+  Stream<PositionState> get positionStream =>
+      Stream<PositionState>.value(PositionState());
+  open(dynamic data, {bool autoStart = false}) {}
   dispose() {}
+  seek(Duration duration) {}
+  pause() {}
+  play() {}
 }
 
 class VideoDimensions {
@@ -37,5 +42,18 @@ class VideoDimensions {
 
 class Media {
   Media._();
-  static network(dynamic url) {}
+
+  static network(dynamic url, {bool parse = false}) {}
+  Map<String, dynamic> get metas => {};
+}
+
+class PositionState {
+  PositionState();
+  Duration? get position => Duration.zero;
+  listen() {}
+}
+
+class PlayBackState {
+  PlayBackState();
+  bool isPlaying = false;
 }
