@@ -315,17 +315,34 @@ class EditUser extends ConsumerWidget {
 
                                             for (var element
                                                 in addNewUserToJson.entries) {
-                                              if (selectedUserToJson[
-                                                      element.key] !=
-                                                  element.value) {
-                                                if (element.key != "password"
-                                                    // &&
-                                                    //     element.key !=
-                                                    //         "superVisor"
-                                                    ) {
-                                                  test.addAll({
-                                                    element.key: element.value,
-                                                  });
+                                              if (thisUser.role == 2) {
+                                                if (selectedUserToJson[
+                                                        element.key] !=
+                                                    element.value) {
+                                                  if (element.key !=
+                                                          "password" &&
+                                                      element.key !=
+                                                          "superVisor") {
+                                                    test.addAll({
+                                                      element.key:
+                                                          element.value,
+                                                    });
+                                                  }
+                                                }
+                                              } else {
+                                                if (selectedUserToJson[
+                                                        element.key] !=
+                                                    element.value) {
+                                                  if (element.key != "password"
+                                                      // &&
+                                                      //     element.key !=
+                                                      //         "superVisor"
+                                                      ) {
+                                                    test.addAll({
+                                                      element.key:
+                                                          element.value,
+                                                    });
+                                                  }
                                                 }
                                               }
                                             }
