@@ -36,10 +36,10 @@ class Holder extends ConsumerWidget {
               ? Expanded(
                   child: index != 4
                       ? AnimatedIndexedStack(index: index, children: [
-                          PlayVideo(),
+                          ViewScreen(),
                           const Users(),
                           ComponentMaker(),
-                          // PlayVideo()
+                          PlayVideo()
                         ])
                       : const SettingsHolder(),
                 )

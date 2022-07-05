@@ -98,10 +98,10 @@ class Painter extends CustomPainter {
         if (selectedPointsProvider.pathSelected.value) {
           selectedPointsProvider.pathSelected.value = false;
         }
-        // selectedPointsProvider.addPoints(point: detail.localPosition);
-        if (selectedPointsProvider.selectedPoints.length > 2) {
-          selectedPointsProvider.pathClosed.value = true;
-        }
+        // // selectedPointsProvider.addPoints(point: detail.localPosition);
+        // if (selectedPointsProvider.selectedPoints.length > 2) {
+        //   selectedPointsProvider.pathClosed.value = true;
+        // }
       },
     );
     List<FileDetailMini> visibleFilesList = [];

@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/clippedholder.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -273,17 +274,39 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     children: [
                       if (selectedPoints.isNotEmpty) ...[
                         if (selectedAreaService.pathClosed.value)
-                          SizedBox(
-                            height: 54.sr(),
-                            width: 54.sr(),
-                            child: CustomFloatingActionButton(
-                                roundShape: true,
-                                icon: Videomanager.assign,
-                                onPressed: () async {
-                                  setState(() {});
-                                },
-                                tooltip: 'Assign Area'),
+                          ClippedHolder(
+                            value: 3,
+                            child: SizedBox(
+                              child: CustomFloatingActionButton(
+                                  roundShape: true,
+                                  icon: Videomanager.assign,
+                                  onPressed: () async {
+                                    setState(() {});
+                                  },
+                                  tooltip: 'Assign Area'),
+                            ),
                           ),
+                        SizedBox(
+                          width: 20.sw(),
+                        ),
+                        SizedBox(
+                          height: 54.sr(),
+                          width: 54.sr(),
+                          child: CustomFloatingActionButton(
+                              icon: Icons.select_all,
+                              roundShape: true,
+                              onPressed: () async {
+                                // setState(() {
+                                SelectedArea.transformer.controller.center =
+                                    SelectedArea.transformer
+                                        .fromXYCoordsToLatLng(
+                                            selectedAreaService.path.value
+                                                .getBounds()
+                                                .center);
+                                // });
+                              },
+                              tooltip: 'Refine/Select'),
+                        ),
                         SizedBox(
                           width: 20.sw(),
                         ),
@@ -359,6 +382,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       bool roundShape = false,
       String? tooltip}) {
     return FloatingActionButton(
+      elevation: 5,
       shape: RoundedRectangleBorder(
           borderRadius: !roundShape
               ? BorderRadius.zero
@@ -371,7 +395,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       child: Icon(
         icon,
         size: 28.sr(),
-        color: Colors.black,
+        color: Theme.of(context).primaryColor,
       ),
     );
   }
