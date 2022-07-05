@@ -128,9 +128,9 @@ class UserService extends ChangeNotifier {
           }));
       if (response.statusCode == 200) {
         var temp = userModelMiniFromJson(response.body);
-        if (temp.role == Roles.user.index) {
-          throw "Normal Users cannot login in Video Manager";
-        }
+        // if (temp.role == Roles.user.index) {
+        //   throw "Normal Users cannot login in Video Manager";
+        // }
         loggedInUser.value = temp;
         if (remember) {
           await store();

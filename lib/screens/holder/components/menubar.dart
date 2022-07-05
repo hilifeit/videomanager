@@ -11,7 +11,14 @@ class MenuBar extends ConsumerWidget {
     CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
     CustomMenuItem(title: 'Users', icon: Videomanager.users, id: 1),
     CustomMenuItem(title: 'Outlets', icon: Videomanager.outlets, id: 2),
-    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 3),
+    CustomMenuItem(title: 'Play Video', icon: Videomanager.play_video, id: 3),
+    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 4),
+
+    //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
+  ];
+  final List<CustomMenuItem> itemsUser = [
+    CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
+    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 1),
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
 
@@ -23,7 +30,7 @@ class MenuBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
-    final userName = ref.watch(userChangeProvider).loggedInUser.value;
+    final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
     final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
@@ -44,7 +51,7 @@ class MenuBar extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return MenuItemWidget(
                     indexState: indexState,
-                    item: items[index],
+                    item: thisUser!.role > 0 ? items[index] : itemsUser[index],
                   );
                 },
                 separatorBuilder: (_, index) {
@@ -52,7 +59,7 @@ class MenuBar extends ConsumerWidget {
                     width: 100.sw(),
                   );
                 },
-                itemCount: 4,
+                itemCount: thisUser!.role > 0 ? 5 : 2,
               ),
             ),
           ),
@@ -90,7 +97,7 @@ class MenuBar extends ConsumerWidget {
                     child: Text(
                       maxLines: 2,
                       // userName.user.username,
-                      userName!.name,
+                      thisUser.name,
 
                       style: kTextStyleIbmSemiBold.copyWith(
                           fontSize: 17.ssp(min: 10), color: Colors.white),

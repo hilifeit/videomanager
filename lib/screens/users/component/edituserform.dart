@@ -205,22 +205,29 @@ class EditUser extends ConsumerWidget {
                         ),
                         if (editSelectManager &&
                             thisUser.id != selectedUser.id &&
-                            selectedUser.role < 1) ...[
+                            selectedUser.role == 0 &&
+                            thisUser.role == 2) ...[
                           Text('Supervisor', style: kTextStyleIbmSemiBold),
                           SizedBox(
                             height: 14.sh(),
                           ),
-                          if (thisUser.role >= 2)
-                            CustomMenuDropDown(
-                                value: dd,
-                                onChanged: (val) {
-                                  print(val.value);
-                                  print('before :${addNewUser.superVisor.id}');
-                                  addNewUser.superVisor.id = val.value;
-                                  print('after :${addNewUser.superVisor.id}');
-                                },
-                                values: managerMenu,
-                                helperText: '')
+                          CustomMenuDropDown(
+                              value: dd,
+                              onChanged: (val) {
+                                addNewUser.superVisor.id = val.value;
+                              },
+                              values: managerMenu,
+                              helperText: '')
+                        ],
+                        if (editSelectManager &&
+                            thisUser.id != selectedUser.id &&
+                            selectedUser.role == 0 &&
+                            thisUser.role == 1) ...[
+                          Text('Supervisor', style: kTextStyleIbmSemiBold),
+                          SizedBox(
+                            height: 14.sh(),
+                          ),
+                          SinglERoleText(text: selectedUser.superVisor!.name)
                         ],
                         if (editSelectManager &&
                             thisUser.id != selectedUser.id &&
