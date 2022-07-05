@@ -1,11 +1,18 @@
-import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
-
+import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 class VideoPlayerControls extends ConsumerStatefulWidget {
-  VideoPlayerControls({required this.left, required this.right});
+  const VideoPlayerControls(
+      {Key? key,
+      this.leftWeb,
+      this.rightWeb,
+      this.leftDesktop,
+      this.rightDesktop})
+      : super(key: key);
 
-  final VideoPlayerController left, right;
+  final VideoPlayerController? leftWeb, rightWeb;
+  final PlayerController? leftDesktop, rightDesktop;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _VideoPlayerControlsState();
@@ -20,8 +27,13 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
     super.initState();
     _playPauseController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
+
+    // if (widget.leftDesktop!.current.media != null) {
+
+    // print(widget.leftDesktop!.player.position.duration);
   }
 
+  double maxSliderValue = 100;
   double progress = 0;
   @override
   Widget build(BuildContext context) {
@@ -41,65 +53,95 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                 children: [
                   MouseRegion(
                     cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTapUp: (event) {
-                        setState(() {
-                          progress = (mapDouble(
-                              x: event.localPosition.dx,
-                              in_min: 0,
-                              in_max: constraint.maxWidth,
-                              out_min: 0,
-                              out_max: 1));
-
-                          // mapDouble(progress, 0, 1, 0, widget.left.value.duration).toInt()
-                          Duration seekedPosition = Duration(
-                              milliseconds: mapDouble(
-                                      x: progress,
-                                      in_min: 0,
-                                      in_max: 1,
-                                      out_min: 0,
-                                      out_max: widget
-                                          .left.value.duration.inMilliseconds
-                                          .toDouble())
-                                  .toInt());
-                          widget.left.seekTo(seekedPosition);
-                        });
-                      },
-                      child:
-                          StatefulBuilder(builder: (context, setCustomState) {
-                        widget.left.addListener(() {
+                    child: StatefulBuilder(builder: (context, setCustomState) {
+                      if (UniversalPlatform.isDesktop) {
+                        widget.leftDesktop!.player.positionStream
+                            .listen((event) {
                           setCustomState(() {
                             progress = mapDouble(
-                                x: widget.left.value.position.inMilliseconds
+                                x: event.position!.inMilliseconds.toDouble(),
+                                in_min: 0,
+                                in_max: double.parse(widget
+                                    .leftDesktop!.duration.inMilliseconds
+                                    .toString()),
+                                out_min: 0,
+                                out_max: maxSliderValue);
+                          });
+                        });
+                      } else {
+                        widget.leftWeb!.addListener(() {
+                          setCustomState(() {
+                            progress = mapDouble(
+                                x: widget.leftWeb!.value.position.inMilliseconds
                                     .toDouble(),
                                 in_min: 0,
                                 in_max: widget
-                                    .left.value.duration.inMilliseconds
+                                    .leftWeb!.value.duration.inMilliseconds
                                     .toDouble(),
                                 out_min: 0,
-                                out_max: 1);
+                                out_max: 100);
                           });
                         });
-                        return LinearProgressIndicator(
-                          minHeight: 4.sh(),
-                          color: Colors.white,
-                          backgroundColor: Color(0xffeaeaea).withAlpha(150),
-                          value: progress,
-                        );
-                      }),
-                    ),
+                      }
+                      // print(progress);
+                      return Slider(
+                        value: progress,
+                        activeColor: const Color(0xffeaeaea),
+                        inactiveColor: Colors.grey,
+                        onChanged: (val) {
+                          Duration seekedPosition = Duration(
+                              milliseconds: mapDouble(
+                                      x: val,
+                                      in_min: 0,
+                                      in_max: maxSliderValue,
+                                      out_min: 0,
+                                      out_max: UniversalPlatform.isDesktop
+                                          ? widget.leftDesktop!.duration
+                                              .inMilliseconds
+                                              .toDouble()
+                                          : widget.leftWeb!.value.duration
+                                              .inMilliseconds
+                                              .toDouble())
+                                  .toInt());
+                          if (UniversalPlatform.isDesktop) {
+                            widget.leftDesktop!.player.seek(seekedPosition);
+                          } else {
+                            widget.leftWeb!.seekTo(seekedPosition);
+                          }
+
+                          setState(() {
+                            progress = (mapDouble(
+                                x: val,
+                                in_min: 0,
+                                in_max: maxSliderValue,
+                                out_min: 0,
+                                out_max: 1));
+                          });
+                          //    setState(() {
+                          //
+
+                          //   // mapDouble(progress, 0, 1, 0, widget.leftWeb.value.duration).toInt()
+
+                          // });
+                        },
+                        min: 0,
+                        max: 100,
+                      );
+                    }),
                   ),
-                  SizedBox(
-                    height: 8.sh(),
-                  ),
+                  // SizedBox(
+                  //   height: 8.sh(),
+                  // ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.sw()),
+                    padding: EdgeInsets.symmetric(horizontal: 30.sw()),
                     child: Row(
                       children: [
                         iconButton(
                             icon: AnimatedIcons.play_pause,
-                            left: widget.left,
-                            right: widget.right),
+                            leftWeb: widget.leftWeb,
+                            rightWeb: widget.rightWeb,
+                            leftDesktop: widget.leftDesktop?.player,
+                            rightDesktop: widget.rightDesktop?.player),
                         SizedBox(
                           width: 8.sw(),
                         ),
@@ -107,7 +149,7 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                           '5:07 / 15:28',
                           style: kTextStyleInterMedium.copyWith(
                               fontSize: 14.ssp(),
-                              color: Color(0xffeaeaea).withAlpha(180)),
+                              color: const Color(0xffeaeaea).withAlpha(180)),
                         )
                       ],
                     ),
@@ -124,26 +166,43 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
     );
   }
 
-  Widget iconButton(
-      {required AnimatedIconData icon,
-      required VideoPlayerController left,
-      required VideoPlayerController right}) {
+  Widget iconButton({
+    required AnimatedIconData icon,
+    VideoPlayerController? leftWeb,
+    VideoPlayerController? rightWeb,
+    Player? leftDesktop,
+    Player? rightDesktop,
+  }) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          if (left.value.isPlaying && right.value.isPlaying) {
-            left.pause();
-            right.pause();
-            _playPauseController.reverse();
+          if (UniversalPlatform.isDesktop) {
+            if (leftDesktop!.playback.isPlaying &&
+                rightDesktop!.playback.isPlaying) {
+              leftDesktop.pause();
+              rightDesktop.pause();
+
+              _playPauseController.reverse();
+            } else {
+              leftDesktop.play();
+              rightDesktop!.play();
+              _playPauseController.forward();
+            }
           } else {
-            left.play();
-            right.play();
-            _playPauseController.forward();
+            if (leftWeb!.value.isPlaying && rightWeb!.value.isPlaying) {
+              leftWeb.pause();
+              rightWeb.pause();
+              _playPauseController.reverse();
+            } else {
+              leftWeb.play();
+              rightWeb!.play();
+              _playPauseController.forward();
+            }
           }
         },
         child: AnimatedIcon(
-          color: Color(0xffeaeaea),
+          color: const Color(0xffeaeaea),
           icon: icon,
           progress: _playPauseController,
         ),

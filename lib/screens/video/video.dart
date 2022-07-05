@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 
@@ -11,20 +12,34 @@ class CustomVideo extends StatefulWidget {
 }
 
 class _VideoState extends State<CustomVideo> {
-  late VideoPlayerController _controller1, _controller2;
-  late Player _player1, _player2;
+  VideoPlayerController? _controller1, _controller2;
+  PlayerController? player1, player2;
 
   @override
   void initState() {
     super.initState();
     if (UniversalPlatform.isDesktop) {
       VideoDimensions dimension = const VideoDimensions(1920, 1080);
-      _player1 = Player(id: widget.pathLeft.length, videoDimensions: dimension);
-      _player2 =
-          Player(id: widget.pathRight.length, videoDimensions: dimension);
 
-      _player1.open(Media.network(widget.pathLeft));
-      _player2.open(Media.network(widget.pathRight));
+      Media mediaLeft = Media.network(widget.pathLeft, parse: true);
+
+      Media mediaRight = Media.network(widget.pathRight, parse: true);
+
+      player1 = PlayerController(
+          player:
+              Player(id: widget.pathLeft.length, videoDimensions: dimension),
+          duration: Duration(
+              milliseconds: int.parse(mediaLeft.metas["duration"].toString())));
+
+      player2 = PlayerController(
+          player:
+              Player(id: widget.pathRight.length, videoDimensions: dimension),
+          duration: Duration(
+              milliseconds:
+                  int.parse(mediaRight.metas["duration"].toString())));
+
+      player1!.player.open(mediaLeft, autoStart: false);
+      player2!.player.open(mediaRight, autoStart: false);
     } else {
       _controller1 = VideoPlayerController.network(widget.pathLeft)
         ..initialize().then((_) {
@@ -66,7 +81,8 @@ class _VideoState extends State<CustomVideo> {
                         child: Stack(
                           children: [
                             CustomVideoPlayer(
-                                controller: _controller1, player: _player1),
+                                controller: _controller1,
+                                player: player1?.player),
                             Positioned(
                                 top: 20.sh(),
                                 left: 19.sw(),
@@ -91,7 +107,7 @@ class _VideoState extends State<CustomVideo> {
                     child: Stack(
                       children: [
                         CustomVideoPlayer(
-                            controller: _controller2, player: _player2),
+                            controller: _controller2, player: player2?.player),
                         Positioned(
                             top: 20.sh(),
                             right: 24.32.sw(),
@@ -135,8 +151,10 @@ class _VideoState extends State<CustomVideo> {
                 Expanded(
                   flex: 1,
                   child: VideoPlayerControls(
-                    left: _controller1,
-                    right: _controller2,
+                    leftWeb: _controller1,
+                    rightWeb: _controller2,
+                    leftDesktop: player1,
+                    rightDesktop: player2,
                   ),
                 ),
               ],
@@ -165,7 +183,12 @@ class _VideoState extends State<CustomVideo> {
         }
         return Stack(
           children: [
-            UniversalPlatform.isDesktop ? Video() : VideoPlayer(controller!),
+            UniversalPlatform.isDesktop
+                ? Video(
+                    player: player!,
+                    showControls: false,
+                  )
+                : VideoPlayer(controller!),
             if (buffering)
               Positioned.fill(
                   child: Center(
@@ -180,8 +203,13 @@ class _VideoState extends State<CustomVideo> {
 
   @override
   void dispose() {
+    if (UniversalPlatform.isDesktop) {
+      player1!.player.dispose();
+      player2!.player.dispose();
+    } else {
+      _controller1!.dispose();
+      _controller2!.dispose();
+    }
     super.dispose();
-    _controller1.dispose();
-    _controller2.dispose();
   }
 }

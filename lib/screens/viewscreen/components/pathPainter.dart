@@ -220,7 +220,8 @@ class Painter extends CustomPainter {
                             fileRect: item);
                         var secondVideoUrl = firstVideoUrl;
                         if (secondVideo != null) {
-                          await fileservice.getUrlFromFile(secondVideo);
+                          secondVideoUrl =
+                              await fileservice.getUrlFromFile(secondVideo);
                           showDialog(
                               context: context,
                               builder: (_) {
