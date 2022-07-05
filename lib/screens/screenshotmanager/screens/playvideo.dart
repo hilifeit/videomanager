@@ -22,6 +22,7 @@ class _PlayVideoState extends State<PlayVideo> {
           right: 0,
           bottom: 0,
           height: size.height,
+          width: 100,
 
           //  top: renderBox.globalToLocal(point),
           child: Material(
