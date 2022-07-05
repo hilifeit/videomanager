@@ -41,7 +41,9 @@ class AddUser extends ConsumerWidget {
     final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
     var selectManager = ref.watch(managerSelectProvider.state).state;
     final addNewUser = ref.watch(userProvider.state).state;
-    addNewUser.superVisor.id = managerMenu.first.value;
+    if (managerMenu.isNotEmpty) {
+      addNewUser.superVisor.id = managerMenu.first.value;
+    }
     // if (selectedUser != null) {
     //   edit = true;
     //   addNewUser
@@ -172,25 +174,7 @@ class AddUser extends ConsumerWidget {
                         //     ),
                         //   ),
                         if (!edit && thisUser!.role == 1)
-                          Container(
-                            height: 55.sh(),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                4.sr(),
-                              ),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                              child: Text(
-                                'User',
-                                style: kTextStyleIbmSemiBold.copyWith(
-                                    fontSize: 18.ssp()),
-                              ),
-                            ),
-                          ),
+                          SinglERoleText(text: 'User'),
                         // if (edit)
                         //   if (thisUser.role >= 2 &&
                         //       thisUser.id != selectedUser!.id)
@@ -201,7 +185,7 @@ class AddUser extends ConsumerWidget {
                         //         },
                         //         values: menus,
                         //         helperText: ''),
-                        if (!edit)
+                        if (managerMenu.isNotEmpty)
                           if (thisUser!.role >= 2)
                             CustomMenuDropDown(
                                 value: menus[addNewUser.role],
@@ -220,13 +204,15 @@ class AddUser extends ConsumerWidget {
                                 },
                                 values: menus,
                                 helperText: ''),
+                        if (managerMenu.isEmpty)
+                          SinglERoleText(
+                            text: 'Manager',
+                          ),
                         SizedBox(
                           height: 6.sh(),
                         ),
                         if (managerMenu.isNotEmpty)
-                          if (!edit &&
-                              selectManager &&
-                              thisUser!.role >= 2) ...[
+                          if (selectManager && thisUser!.role >= 2) ...[
                             Text('Supervisor', style: kTextStyleIbmSemiBold),
                             SizedBox(
                               height: 14.sh(),
@@ -327,6 +313,11 @@ class AddUser extends ConsumerWidget {
                                             elevatedButtonText: 'Yes',
                                             onPressedElevated: () async {
                                               {
+                                                if (managerMenu.isEmpty) {
+                                                  addNewUser.role = 1;
+                                                  addNewUser.superVisor.id =
+                                                      thisUser!.id;
+                                                }
                                                 if (!selectManager) {
                                                   addNewUser.superVisor.id =
                                                       thisUser!.id;
@@ -349,8 +340,13 @@ class AddUser extends ConsumerWidget {
                                                     ..name = ""
                                                     ..password = ""
                                                     ..role = 0;
+                                                  ref
+                                                      .read(
+                                                          managerSelectProvider
+                                                              .state)
+                                                      .state = true;
                                                   formKey.currentState!.reset();
-                                                  selectManager = true;
+
                                                   ref
                                                       .read(userChangeProvider)
                                                       .fetchAll();
@@ -428,6 +424,42 @@ class AddUser extends ConsumerWidget {
                     )),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SinglERoleText extends StatelessWidget {
+  SinglERoleText({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 65.sh(),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          4.sr(),
+        ),
+        border: Border.all(
+          color: lightGrey,
+        ),
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            text,
+            style: kTextStyleIbmSemiBold.copyWith(
+                fontSize: 16.ssp(), color: Colors.black),
           ),
         ),
       ),

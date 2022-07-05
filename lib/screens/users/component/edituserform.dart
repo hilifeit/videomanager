@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/addnewusermodel.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -115,28 +116,7 @@ class EditUser extends ConsumerWidget {
                           height: 6.sh(),
                         ),
                         if (thisUser!.id == selectedUser!.id)
-                          Container(
-                            height: 65.sh(),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                4.sr(),
-                              ),
-                              border: Border.all(
-                                color: lightGrey,
-                              ),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                              child: Text(
-                                getRole(selectedUser.role),
-                                style: kTextStyleIbmSemiBold.copyWith(
-                                    fontSize: 16.ssp(), color: Colors.black),
-                              ),
-                            ),
-                          ),
+                          SinglERoleText(text: getRole(selectedUser.role)),
                         if (thisUser.role < 2 && thisUser.id != selectedUser.id)
                           Container(
                             height: 65.sh(),
@@ -160,7 +140,7 @@ class EditUser extends ConsumerWidget {
                               ),
                             ),
                           ),
-                        if (thisUser.role >= 2 && selectedUser.role < 1)
+                        if (thisUser.role >= 2 && selectedUser.role == 0)
                           Container(
                             height: 65.sh(),
                             width: double.infinity,
@@ -234,7 +214,10 @@ class EditUser extends ConsumerWidget {
                             CustomMenuDropDown(
                                 value: dd,
                                 onChanged: (val) {
+                                  print(val.value);
+                                  print('before :${addNewUser.superVisor.id}');
                                   addNewUser.superVisor.id = val.value;
+                                  print('after :${addNewUser.superVisor.id}');
                                 },
                                 values: managerMenu,
                                 helperText: '')
@@ -335,9 +318,11 @@ class EditUser extends ConsumerWidget {
                                               if (selectedUserToJson[
                                                       element.key] !=
                                                   element.value) {
-                                                if (element.key != "password" &&
-                                                    element.key !=
-                                                        "superVisor") {
+                                                if (element.key != "password"
+                                                    // &&
+                                                    //     element.key !=
+                                                    //         "superVisor"
+                                                    ) {
                                                   test.addAll({
                                                     element.key: element.value,
                                                   });
