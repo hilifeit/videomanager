@@ -50,8 +50,8 @@ class Painter extends CustomPainter {
     const HitTestBehavior hitBehaviorTranslucent = HitTestBehavior.opaque;
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
     final selectedPointsProvider = ref.watch(selectedAreaServiceProvider);
-    final selectedPoints =
-        selectedPointsProvider.selectedPointsToOffset(transformer);
+    final pathSelected =
+        ref.watch(selectedAreaServiceProvider).pathSelected.value;
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
     final settingService = ref.watch(settingChangeNotifierProvider);
@@ -66,6 +66,8 @@ class Painter extends CustomPainter {
     paint.style = PaintingStyle.stroke;
 
     paint.strokeWidth = stroke;
+
+    print(pathSelected);
 
     var customCanvas = TouchyCanvas(context, canvas);
     Rect visibleScreen = Rect.fromLTWH(0, 0, transformer.constraints.maxWidth,
@@ -222,7 +224,7 @@ class Painter extends CustomPainter {
                           showDialog(
                               context: context,
                               builder: (_) {
-                                return Video(
+                                return CustomVideo(
                                   pathLeft: firstVideoUrl,
                                   pathRight: secondVideoUrl,
                                 );
@@ -233,7 +235,7 @@ class Painter extends CustomPainter {
                             showDialog(
                                 context: context,
                                 builder: (_) {
-                                  return Video(
+                                  return CustomVideo(
                                     pathLeft: firstVideoUrl,
                                     pathRight: secondVideoUrl,
                                   );

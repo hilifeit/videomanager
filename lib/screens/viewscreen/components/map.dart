@@ -127,8 +127,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   behavior: HitTestBehavior.opaque,
                   onPointerUp: (detail) {
                     // if (detail.kind == PointerDeviceKind.mouse &&
-                    //     detail.buttons == kPrimaryMouseButton)
-
+                    //     detail.buttons == kSecondaryMouseButton)
                     {
                       var selectedPointService =
                           ref.read(selectedAreaServiceProvider);

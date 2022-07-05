@@ -98,9 +98,19 @@ class SelectedArea extends ChangeNotifier {
     );
     path.value = selectedPath;
     canvas.drawPath(selectedPath, selectedPointPainter, onTapUp: (detail) {
-      print('here');
+      // print('here');
+
+      // notifyListeners();
+    }, hitTestBehavior: HitTestBehavior.translucent);
+
+    canvas.drawRect(
+        selectedPath.getBounds(),
+        selectedPointPainter
+          ..color = Colors.transparent
+          ..style = PaintingStyle.fill, onTapUp: (detail) {
       pathSelected.value = true;
-      notifyListeners();
+
+      // notifyListeners();
     }, hitTestBehavior: HitTestBehavior.translucent);
   }
 
