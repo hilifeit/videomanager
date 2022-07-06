@@ -67,7 +67,7 @@ class Painter extends CustomPainter {
 
     paint.strokeWidth = stroke;
 
-    print(pathSelected);
+    // print(pathSelected);
 
     var customCanvas = TouchyCanvas(context, canvas);
     Rect visibleScreen = Rect.fromLTWH(0, 0, transformer.constraints.maxWidth,
@@ -212,7 +212,7 @@ class Painter extends CustomPainter {
                     onTap: () async {
                       var firstVideoUrl =
                           await fileservice.getUrlFromFile(element);
-                      //print(firstVideoUrl);
+
                       if (firstVideoUrl.isNotEmpty) {
                         FileDetailMini? secondVideo = findFile(
                             visibleFilesList: visibleFilesList,
@@ -232,16 +232,16 @@ class Painter extends CustomPainter {
                               });
                         } else {
                           await snack.info("Adjacent Video not found");
-                          Future.delayed(const Duration(milliseconds: 800), () {
-                            showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return CustomVideo(
-                                    pathLeft: firstVideoUrl,
-                                    pathRight: secondVideoUrl,
-                                  );
-                                });
-                          });
+                          // Future.delayed(const Duration(milliseconds: 800), () {
+                          //   showDialog(
+                          //       context: context,
+                          //       builder: (_) {
+                          //         return CustomVideo(
+                          //           pathLeft: firstVideoUrl,
+                          //           pathRight: secondVideoUrl,
+                          //         );
+                          //       });
+                          // });
                         }
                       } else {
                         snack.error("Video not found!");
@@ -399,7 +399,7 @@ class Painter extends CustomPainter {
             ..style = PaintingStyle.fill);
       drawText(canvas,
           text:
-              "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint Samples Used:$sampleLength selectedFiles: ${finalselectedFileList.length}",
+              "Debug Window~     Files: ${files.length}    Visible: $visibleFiles    Visible Samples: $totalDataUsedForPaint   Samples Used:$sampleLength   selectedFiles: ${finalselectedFileList.length}   zoomLevel: ${transformer.controller.zoom.toStringAsFixed(2)}",
           position: const Offset(10, 10));
     }
     // print(DateTime.now().difference(start).inMilliseconds);
@@ -419,14 +419,20 @@ class Painter extends CustomPainter {
     for (var e in visibleFilesList) {
       Rect testElement = getRect(e.boundingBox!);
       double distance = (testElement.center - fileRect.center).distance.abs();
-
-      if (distance < minimumDistance) {
+      if (SelectedArea.transformer.controller.zoom < 19) {
+        if (distance < minimumDistance) {
+          if (e != file) {
+            distances.add(FileWithDistance(file: e, distance: distance));
+          }
+        }
+      } else {
         if (e != file) {
           distances.add(FileWithDistance(file: e, distance: distance));
         }
       }
     }
     distances.sort((a, b) => a.distance.compareTo(b.distance));
+
     return distances.isNotEmpty ? distances.first.file : null;
   }
 
