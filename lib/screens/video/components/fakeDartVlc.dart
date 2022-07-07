@@ -34,6 +34,7 @@ class Player {
   seek(Duration duration) {}
   pause() {}
   play() {}
+  PositionState get position => PositionState();
 }
 
 class VideoDimensions {
@@ -50,6 +51,7 @@ class Media {
 class PositionState {
   PositionState();
   Duration? get position => Duration.zero;
+
   listen() {}
 }
 

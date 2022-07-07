@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/clippedholder.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -273,17 +274,59 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     children: [
                       if (selectedPoints.isNotEmpty) ...[
                         if (selectedAreaService.pathClosed.value)
-                          SizedBox(
-                            height: 54.sr(),
-                            width: 54.sr(),
-                            child: CustomFloatingActionButton(
-                                roundShape: true,
-                                icon: Videomanager.assign,
-                                onPressed: () async {
-                                  setState(() {});
-                                },
-                                tooltip: 'Assign Area'),
+                          ClippedHolder(
+                            value: 3,
+                            child: SizedBox(
+                              child: CustomFloatingActionButton(
+                                  roundShape: true,
+                                  icon: Videomanager.assign,
+                                  onPressed: () async {
+                                    var fileService =
+                                        ref.read(fileDetailMiniServiceProvider);
+                                    await fileService.fixLocationData();
+                                  },
+                                  tooltip: 'Assign Area'),
+                            ),
                           ),
+                        SizedBox(
+                          width: 20.sw(),
+                        ),
+                        SizedBox(
+                          height: 54.sr(),
+                          width: 54.sr(),
+                          child: CustomFloatingActionButton(
+                              icon: Icons.select_all,
+                              roundShape: true,
+                              onPressed: () async {
+                                Future.delayed(const Duration(milliseconds: 20),
+                                    () async {
+                                  SelectedArea.transformer.controller.center =
+                                      SelectedArea.transformer
+                                          .fromXYCoordsToLatLng(
+                                              selectedAreaService.path.value
+                                                  .getBounds()
+                                                  .center);
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 200),
+                                      () async {
+                                    bool perfect =
+                                        smartRefine(selectedAreaService);
+                                    while (perfect == false) {
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 1), () {
+                                        SelectedArea.transformer.controller
+                                            .zoom = SelectedArea
+                                                .transformer.controller.zoom -
+                                            0.2;
+                                        perfect =
+                                            smartRefine(selectedAreaService);
+                                      });
+                                    }
+                                  });
+                                });
+                              },
+                              tooltip: 'Refine/Select'),
+                        ),
                         SizedBox(
                           width: 20.sw(),
                         ),
@@ -359,6 +402,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       bool roundShape = false,
       String? tooltip}) {
     return FloatingActionButton(
+      elevation: 5,
       shape: RoundedRectangleBorder(
           borderRadius: !roundShape
               ? BorderRadius.zero
@@ -371,8 +415,26 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       child: Icon(
         icon,
         size: 28.sr(),
-        color: Colors.black,
+        color: Theme.of(context).primaryColor,
       ),
     );
+  }
+
+  bool smartRefine(SelectedArea selectedAreaService) {
+    Rect visibleScreen = Rect.fromLTWH(
+        0,
+        0,
+        SelectedArea.transformer.constraints.maxWidth,
+        SelectedArea.transformer.constraints.maxHeight - 5);
+
+    Rect pathBoud = selectedAreaService.path.value.getBounds();
+    if (visibleScreen.contains(pathBoud.topLeft) &&
+        visibleScreen.contains(pathBoud.topRight) &&
+        visibleScreen.contains(pathBoud.bottomLeft) &&
+        visibleScreen.contains(pathBoud.bottomRight)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

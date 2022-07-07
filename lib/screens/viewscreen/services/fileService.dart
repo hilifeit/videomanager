@@ -4,6 +4,7 @@ import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 
 final fileDetailMiniServiceProvider =
     ChangeNotifierProvider<FileService>((ref) {
@@ -19,7 +20,7 @@ class FileService extends ChangeNotifier {
   load() async {
     await fetch();
 
-     print(files.length);
+    print(files.length);
   }
 
   fetch() async {
@@ -29,7 +30,7 @@ class FileService extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         files = fileDetailMiniFromJson(response.body).toList();
-      
+
         List<int> states = [];
         List<String> district = [];
         await Future.forEach<FileDetailMini>(files, (element) {
@@ -50,6 +51,29 @@ class FileService extends ChangeNotifier {
       }
     } catch (e, s) {
       throw "$e $s";
+    }
+  }
+
+  addOriginalLocation(FileDetailMini file, List<OriginalLocation> data) {
+    var index = files.indexOf(file);
+    files[index].originalLocation.clear();
+    files[index].originalLocation.addAll(data);
+
+    notifyListeners();
+  }
+
+  Future<List<OriginalLocation>> fetchOriginalLocation(String url) async {
+    final List<OriginalLocation> originalLocation = [];
+    try {
+      var response = await client.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        originalLocation.addAll(originalLocationFromJson(response.body));
+        return originalLocation;
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -131,5 +155,40 @@ class FileService extends ChangeNotifier {
     });
 
     return Future.value(urlFound);
+  }
+
+  fixLocationData() async {
+    for (var element in files) {
+      if (element.isUseable) {
+        FileDetailMini temp = FileDetailMini(
+            id: element.id,
+            filename: element.filename,
+            location: element.location,
+            path: element.path.replaceAll(".MP4", "_processed.json"),
+            isUseable: element.isUseable);
+
+        var url = await getUrlFromFile(temp);
+        if (url.isNotEmpty) {
+          var originalData = await fetchOriginalLocation(url);
+          if (originalData.isNotEmpty) {
+            LatLng first =
+                LatLng(originalData.first.lat, originalData.first.lng);
+            LatLng last = LatLng(originalData.last.lat, originalData.last.lng);
+            element.location.coordinates.clear();
+            // element.location.coordinates.add([first.longitude,first.latitude]);
+            int divider = originalData.length ~/ 50;
+            for (int i = 0; i < originalData.length; i = i + divider) {
+              element.location.coordinates
+                  .add([originalData[i].lng, originalData[i].lat]);
+            }
+            if (element.location.coordinates.last.first != last.longitude &&
+                element.location.coordinates.last.last != last.latitude) {
+              element.location.coordinates.add([last.longitude, last.latitude]);
+            }
+          }
+        }
+      }
+      print(files.indexOf(element));
+    }
   }
 }

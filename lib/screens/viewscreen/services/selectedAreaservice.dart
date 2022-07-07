@@ -88,8 +88,16 @@ class SelectedArea extends ChangeNotifier {
           //   print("here");
           // },
           onTapUp: ((details) {
-        selectedHandle.value = i;
-      }));
+        if (selectedPoints.length > 2 && !pathClosed.value && i == 0) {
+          pathClosed.value = true;
+          pathSelected.value = true;
+        } else {
+          selectedHandle.value = i;
+          pathSelected.value = true;
+        }
+      }), onSecondaryTapUp: (details) {
+        // pathSelected.value = false;
+      });
       // selectedPath.addOval(Rect.fromCircle(center: item, radius: 7));
     }
     selectedPath.addPolygon(
@@ -103,11 +111,12 @@ class SelectedArea extends ChangeNotifier {
       // notifyListeners();
     }, hitTestBehavior: HitTestBehavior.translucent);
 
-    canvas.drawRect(
-        selectedPath.getBounds(),
+    canvas.drawPath(
+        selectedPath,
         selectedPointPainter
-          ..color = Colors.transparent
+          ..color = Colors.blue.withOpacity(0.025)
           ..style = PaintingStyle.fill, onTapUp: (detail) {
+      print("here");
       pathSelected.value = true;
 
       // notifyListeners();

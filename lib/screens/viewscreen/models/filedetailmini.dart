@@ -5,6 +5,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
+
 List<FileDetailMini> fileDetailMiniFromJson(String str) =>
     List<FileDetailMini>.from(
         json.decode(str).map((x) => FileDetailMini.fromJson(x)));
@@ -25,6 +27,7 @@ class FileDetailMini {
   final String id;
   final String filename, path;
   final Location location;
+  final List<OriginalLocation> originalLocation = [];
   bool isUseable;
   // final Area area;
   Rect? boundingBox;

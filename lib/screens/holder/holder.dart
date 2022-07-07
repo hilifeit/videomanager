@@ -40,7 +40,6 @@ class Holder extends ConsumerWidget {
                           const Users(),
                           ComponentMaker(),
                           PlayVideo()
-                          // PlayVideo()
                         ])
                       : const SettingsHolder(),
                 )

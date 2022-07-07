@@ -48,90 +48,9 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
           Expanded(
             flex: 8,
             child: LayoutBuilder(builder: (context, constraint) {
-              return Column(
+              return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: StatefulBuilder(builder: (context, setCustomState) {
-                      if (UniversalPlatform.isDesktop) {
-                        widget.leftDesktop!.player.positionStream
-                            .listen((event) {
-                          setCustomState(() {
-                            progress = mapDouble(
-                                x: event.position!.inMilliseconds.toDouble(),
-                                in_min: 0,
-                                in_max: double.parse(widget
-                                    .leftDesktop!.duration.inMilliseconds
-                                    .toString()),
-                                out_min: 0,
-                                out_max: maxSliderValue);
-                          });
-                        });
-                      } else {
-                        widget.leftWeb!.addListener(() {
-                          setCustomState(() {
-                            progress = mapDouble(
-                                x: widget.leftWeb!.value.position.inMilliseconds
-                                    .toDouble(),
-                                in_min: 0,
-                                in_max: widget
-                                    .leftWeb!.value.duration.inMilliseconds
-                                    .toDouble(),
-                                out_min: 0,
-                                out_max: 100);
-                          });
-                        });
-                      }
-                      // print(progress);
-                      return Slider(
-                        value: progress,
-                        activeColor: const Color(0xffeaeaea),
-                        inactiveColor: Colors.grey,
-                        onChanged: (val) {
-                          Duration seekedPosition = Duration(
-                              milliseconds: mapDouble(
-                                      x: val,
-                                      in_min: 0,
-                                      in_max: maxSliderValue,
-                                      out_min: 0,
-                                      out_max: UniversalPlatform.isDesktop
-                                          ? widget.leftDesktop!.duration
-                                              .inMilliseconds
-                                              .toDouble()
-                                          : widget.leftWeb!.value.duration
-                                              .inMilliseconds
-                                              .toDouble())
-                                  .toInt());
-                          if (UniversalPlatform.isDesktop) {
-                            widget.leftDesktop!.player.seek(seekedPosition);
-                          } else {
-                            widget.leftWeb!.seekTo(seekedPosition);
-                          }
-
-                          setState(() {
-                            progress = (mapDouble(
-                                x: val,
-                                in_min: 0,
-                                in_max: maxSliderValue,
-                                out_min: 0,
-                                out_max: 1));
-                          });
-                          //    setState(() {
-                          //
-
-                          //   // mapDouble(progress, 0, 1, 0, widget.leftWeb.value.duration).toInt()
-
-                          // });
-                        },
-                        min: 0,
-                        max: 100,
-                      );
-                    }),
-                  ),
-                  // SizedBox(
-                  //   height: 8.sh(),
-                  // ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sw()),
                     child: Row(
@@ -142,18 +61,123 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                             rightWeb: widget.rightWeb,
                             leftDesktop: widget.leftDesktop?.player,
                             rightDesktop: widget.rightDesktop?.player),
-                        SizedBox(
-                          width: 8.sw(),
-                        ),
-                        Text(
-                          '5:07 / 15:28',
-                          style: kTextStyleInterMedium.copyWith(
-                              fontSize: 14.ssp(),
-                              color: const Color(0xffeaeaea).withAlpha(180)),
-                        )
                       ],
                     ),
                   ),
+                  Expanded(
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child:
+                          StatefulBuilder(builder: (context, setCustomState) {
+                        late Duration length;
+                        late Duration current;
+                        if (UniversalPlatform.isDesktop) {
+                          length = widget.leftDesktop!.duration;
+                          current =
+                              widget.leftDesktop!.player.position.position!;
+                          widget.leftDesktop!.player.positionStream
+                              .listen((event) {
+                            setCustomState(() {
+                              current = event.position!;
+                              progress = mapDouble(
+                                  x: event.position!.inMilliseconds.toDouble(),
+                                  in_min: 0,
+                                  in_max: double.parse(widget
+                                      .leftDesktop!.duration.inMilliseconds
+                                      .toString()),
+                                  out_min: 0,
+                                  out_max: maxSliderValue);
+                            });
+                          });
+                        } else {
+                          length = widget.leftWeb!.value.duration;
+                          current = widget.leftWeb!.value.position;
+                          widget.leftWeb!.addListener(() {
+                            current = widget.leftWeb!.value.position;
+                            setCustomState(() {
+                              progress = mapDouble(
+                                  x: widget
+                                      .leftWeb!.value.position.inMilliseconds
+                                      .toDouble(),
+                                  in_min: 0,
+                                  in_max: widget
+                                      .leftWeb!.value.duration.inMilliseconds
+                                      .toDouble(),
+                                  out_min: 0,
+                                  out_max: 100);
+                            });
+                          });
+                        }
+                        // print(progress);
+                        return Row(
+                          children: [
+                            Text(
+                              '${intToTime(current.inSeconds)} / ${intToTime(length.inSeconds)}',
+                              style: kTextStyleInterMedium.copyWith(
+                                  fontSize: 14.ssp(),
+                                  color:
+                                      const Color(0xffeaeaea).withAlpha(180)),
+                            ),
+                            Expanded(
+                              child: Slider(
+                                value: progress,
+                                activeColor: const Color(0xffeaeaea),
+                                inactiveColor: Colors.grey,
+                                onChanged: (val) {
+                                  Duration seekedPosition = Duration(
+                                      milliseconds: mapDouble(
+                                              x: val,
+                                              in_min: 0,
+                                              in_max: maxSliderValue,
+                                              out_min: 0,
+                                              out_max:
+                                                  UniversalPlatform.isDesktop
+                                                      ? widget
+                                                          .leftDesktop!
+                                                          .duration
+                                                          .inMilliseconds
+                                                          .toDouble()
+                                                      : widget
+                                                          .leftWeb!
+                                                          .value
+                                                          .duration
+                                                          .inMilliseconds
+                                                          .toDouble())
+                                          .toInt());
+                                  if (UniversalPlatform.isDesktop) {
+                                    widget.leftDesktop!.player
+                                        .seek(seekedPosition);
+                                  } else {
+                                    widget.leftWeb!.seekTo(seekedPosition);
+                                  }
+
+                                  setState(() {
+                                    progress = (mapDouble(
+                                        x: val,
+                                        in_min: 0,
+                                        in_max: maxSliderValue,
+                                        out_min: 0,
+                                        out_max: 1));
+                                  });
+                                  //    setState(() {
+                                  //
+
+                                  //   // mapDouble(progress, 0, 1, 0, widget.leftWeb.value.duration).toInt()
+
+                                  // });
+                                },
+                                min: 0,
+                                max: 100,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ),
+                  // SizedBox(
+                  //   height: 8.sh(),
+                  // ),
                 ],
               );
             }),
