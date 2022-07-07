@@ -1,0 +1,20 @@
+import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
+
+List<Shop> shops = [
+  Shop(
+      shopName: "Hilife Kirana",
+      category: "Kirana",
+      shopSize: "1 shutter",
+      color: Colors.red),
+  Shop(
+      shopName: "Hilife Wholesale",
+      category: "WholeSale",
+      shopSize: "2 shutter",
+      color: Colors.amber),
+  Shop(
+      shopName: "Hilife Department",
+      category: "Department",
+      shopSize: "3 shutter",
+      color: Colors.blue),
+];

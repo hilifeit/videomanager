@@ -59,6 +59,7 @@ class Videomanager {
   static const IconData videooutline = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData add_user_svgrepo_com_1 = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData edit_1 = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shop = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData card = IconData(0xe824, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData refresh_1 = IconData(0xe825, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData location_pin = IconData(0xe826, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -67,6 +68,13 @@ class Videomanager {
   static const IconData delete = IconData(0xe829, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData camera = IconData(0xe82b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cleararea = IconData(0xe82c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData filter = IconData(0xe82d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData image_icon_group = IconData(0xe82e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData image_icon = IconData(0xe82f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData clipboard = IconData(0xe830, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData rewind = IconData(0xe832, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shop_2 = IconData(0xe833, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData brush = IconData(0xe834, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData info = IconData(0xe845, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData sucess = IconData(0xe846, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close = IconData(0xe847, fontFamily: _kFontFam, fontPackage: _kFontPkg);

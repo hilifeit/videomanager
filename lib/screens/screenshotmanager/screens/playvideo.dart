@@ -1,4 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 class PlayVideo extends StatefulWidget {
   const PlayVideo({Key? key}) : super(key: key);
@@ -12,7 +14,6 @@ class _PlayVideoState extends State<PlayVideo> {
 
   late OverlayEntry overlayEntry;
   final GlobalKey keey = GlobalKey();
-  final LayerLink _layerLink = LayerLink();
   _createOverlay() {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
@@ -31,15 +32,15 @@ class _PlayVideoState extends State<PlayVideo> {
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      keey;
-    });
-  }
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     keey;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,17 @@ class _PlayVideoState extends State<PlayVideo> {
               flex: 14,
               child: Container(
                 color: Colors.white,
+                child: Row(
+                  children: [
+                    Consumer(builder: (context, ref, c) {
+                      final thisUser =
+                          ref.watch(userChangeProvider).loggedInUser.value;
+                      return VideoAssignCard(
+                        thisUser: thisUser!,
+                      );
+                    }),
+                  ],
+                ),
               ),
             ),
             Expanded(

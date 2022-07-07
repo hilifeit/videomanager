@@ -125,6 +125,7 @@ class CustomMenuDropDown extends ConsumerWidget {
     required this.onChanged,
     required this.values,
     required this.helperText,
+    this.icon,
   }) : super(key: key);
   final CustomMenuItem value;
   late final valueProvider = StateProvider<CustomMenuItem>((ref) {
@@ -133,15 +134,12 @@ class CustomMenuDropDown extends ConsumerWidget {
   final Function(CustomMenuItem val) onChanged;
   final List<CustomMenuItem> values;
   final String helperText;
+  Icon? icon;
 
   @override
   Widget build(BuildContext context, ref) {
     final selectedValue = ref.watch(valueProvider.state).state;
-    final icon = Icon(
-      Videomanager.down,
-      size: 8.5.sr(),
-      color: Colors.black,
-    );
+
     return Container(
       color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
       child: DropdownButton<CustomMenuItem>(
@@ -163,11 +161,21 @@ class CustomMenuDropDown extends ConsumerWidget {
           value: selectedValue,
           icon: helperText != ''
               ? Expanded(
-                  child: icon,
+                  child: icon ??
+                      Icon(
+                        Videomanager.down,
+                        size: 8.5.sr(),
+                        color: Colors.black,
+                      ),
                 )
               : Padding(
                   padding: EdgeInsets.only(right: 24.sw()),
-                  child: icon,
+                  child: icon ??
+                      Icon(
+                        Videomanager.down,
+                        size: 8.5.sr(),
+                        color: Colors.black,
+                      ),
                 ),
           items: values.map<DropdownMenuItem<CustomMenuItem>>((vall) {
             return DropdownMenuItem<CustomMenuItem>(

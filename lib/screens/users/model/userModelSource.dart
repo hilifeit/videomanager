@@ -184,35 +184,6 @@ class CustomPopUpMenuItemChild extends StatelessWidget {
   }
 }
 
-class Status extends StatelessWidget {
-  const Status({
-    Key? key,
-    required this.color,
-    required this.status,
-  }) : super(key: key);
-
-  final Color color;
-  final String status;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 95.sw(),
-      height: 22.sh(),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4.sr()),
-        color: color,
-      ),
-      child: Center(
-        child: Text(
-          status,
-          style:
-              kTextStyleIbmMedium.copyWith(fontSize: 13.ssp(), color: danger),
-        ),
-      ),
-    );
-  }
-}
 
 class TableUserCard extends StatelessWidget {
   const TableUserCard({
