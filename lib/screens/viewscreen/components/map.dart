@@ -281,7 +281,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    setState(() {});
+                                    var fileService =
+                                        ref.read(fileDetailMiniServiceProvider);
+                                    await fileService.fixLocationData();
                                   },
                                   tooltip: 'Assign Area'),
                             ),
@@ -296,29 +298,31 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                               icon: Icons.select_all,
                               roundShape: true,
                               onPressed: () async {
-                                SelectedArea.transformer.controller.center =
-                                    SelectedArea.transformer
-                                        .fromXYCoordsToLatLng(
-                                            selectedAreaService.path.value
-                                                .getBounds()
-                                                .center);
-
-                                await Future.delayed(
-                                    const Duration(milliseconds: 200),
+                                Future.delayed(const Duration(milliseconds: 20),
                                     () async {
-                                  bool perfect =
-                                      smartRefine(selectedAreaService);
-                                  while (perfect == false) {
-                                    await Future.delayed(
-                                        const Duration(milliseconds: 1), () {
-                                      SelectedArea.transformer.controller.zoom =
-                                          SelectedArea
-                                                  .transformer.controller.zoom -
-                                              0.2;
-                                      perfect =
-                                          smartRefine(selectedAreaService);
-                                    });
-                                  }
+                                  SelectedArea.transformer.controller.center =
+                                      SelectedArea.transformer
+                                          .fromXYCoordsToLatLng(
+                                              selectedAreaService.path.value
+                                                  .getBounds()
+                                                  .center);
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 200),
+                                      () async {
+                                    bool perfect =
+                                        smartRefine(selectedAreaService);
+                                    while (perfect == false) {
+                                      await Future.delayed(
+                                          const Duration(milliseconds: 1), () {
+                                        SelectedArea.transformer.controller
+                                            .zoom = SelectedArea
+                                                .transformer.controller.zoom -
+                                            0.2;
+                                        perfect =
+                                            smartRefine(selectedAreaService);
+                                      });
+                                    }
+                                  });
                                 });
                               },
                               tooltip: 'Refine/Select'),

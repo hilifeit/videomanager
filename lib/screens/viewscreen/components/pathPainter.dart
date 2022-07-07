@@ -171,8 +171,26 @@ class Painter extends CustomPainter {
         Rect item = getRect(element.boundingBox!);
 
         Function tap, tapSecondary;
-        tap = () {
+        tap = () async {
           ref.read(selectedFileProvider.state).state = element;
+          if (element.originalLocation.isEmpty) {}
+          FileDetailMini temp = FileDetailMini(
+              filename: element.filename,
+              location: element.location,
+              isUseable: element.isUseable,
+              id: element.id,
+              path: element.path.replaceAll('.MP4', '_processed.json'));
+
+          var jsonUrl = await fileservice.getUrlFromFile(temp);
+          if (jsonUrl.isNotEmpty) {
+            var originalLocationData =
+                await fileservice.fetchOriginalLocation(jsonUrl);
+            fileservice.addOriginalLocation(element, originalLocationData);
+            // var metrics=selectedPointsProvider.path.value.computeMetrics();
+
+            print(
+                "${element.location.coordinates.first} ${element.location.coordinates.last} ${originalLocationData.first.lat} ${originalLocationData.first.lng} ${originalLocationData.last.lat} ${originalLocationData.last.lng}");
+          }
         };
         tapSecondary = (TapUpDetails detail) {
           tap();
@@ -222,7 +240,7 @@ class Painter extends CustomPainter {
                         if (secondVideo != null) {
                           secondVideoUrl =
                               await fileservice.getUrlFromFile(secondVideo);
-                          showDialog(
+                          await showDialog(
                               context: context,
                               builder: (_) {
                                 return CustomVideo(
@@ -230,18 +248,25 @@ class Painter extends CustomPainter {
                                   pathRight: secondVideoUrl,
                                 );
                               });
+
+                          // SelectedArea.transformer.controller.zoom =
+                          //     SelectedArea.transformer.controller.zoom - 0.1;
+                          transformer.controller.drag(0.1, 0.1);
                         } else {
                           await snack.info("Adjacent Video not found");
-                          // Future.delayed(const Duration(milliseconds: 800), () {
-                          //   showDialog(
-                          //       context: context,
-                          //       builder: (_) {
-                          //         return CustomVideo(
-                          //           pathLeft: firstVideoUrl,
-                          //           pathRight: secondVideoUrl,
-                          //         );
-                          //       });
-                          // });
+                          Future.delayed(const Duration(milliseconds: 800),
+                              () async {
+                            await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return CustomVideo(
+                                    pathLeft: firstVideoUrl,
+                                    pathRight: secondVideoUrl,
+                                  );
+                                });
+                            print("closed");
+                            transformer.controller.drag(0.1, 0.1);
+                          });
                         }
                       } else {
                         snack.error("Video not found!");
@@ -283,30 +308,45 @@ class Painter extends CustomPainter {
         };
 
         List<Offset> points = [];
-        Offset start = transformer.fromLatLngToXYCoords(LatLng(
-            element.location.coordinates.first.last,
-            element.location.coordinates.first.first));
-        points.add(start);
-        if (sampleLength != 0) {
-          for (int i = 1;
-              i < element.location.coordinates.length;
-              i = i + (50 ~/ sampleLength)) {
-            // print('$i');
-            // if (i < sampleLength - 1) {
+        List<Offset> duplicatePoints = [];
 
-            Offset current = transformer.fromLatLngToXYCoords(LatLng(
-                element.location.coordinates[i].last,
-                element.location.coordinates[i].first));
-            points.add(current);
-
-            // }
+        if (selectedFile == element && element.originalLocation.isNotEmpty) {
+          for (var locationData in element.originalLocation) {
+            if (!locationData.duplicate) {
+              points.add(transformer.fromLatLngToXYCoords(
+                  LatLng(locationData.lat, locationData.lng)));
+            } else {
+              duplicatePoints.add(transformer.fromLatLngToXYCoords(
+                  LatLng(locationData.lat, locationData.lng)));
+            }
           }
+        } else {
+          Offset start = transformer.fromLatLngToXYCoords(LatLng(
+              element.location.coordinates.first.last,
+              element.location.coordinates.first.first));
+          points.add(start);
+          if (sampleLength != 0) {
+            for (int i = 1;
+                i < element.location.coordinates.length;
+                i = i + (50 ~/ sampleLength)) {
+              // print('$i');
+              // if (i < sampleLength - 1) {
+
+              Offset current = transformer.fromLatLngToXYCoords(LatLng(
+                  element.location.coordinates[i].last,
+                  element.location.coordinates[i].first));
+              points.add(current);
+
+              // }
+            }
+          }
+
+          Offset end = transformer.fromLatLngToXYCoords(LatLng(
+              element.location.coordinates.last.last,
+              element.location.coordinates.last.first));
+          points.add(end);
         }
 
-        Offset end = transformer.fromLatLngToXYCoords(LatLng(
-            element.location.coordinates.last.last,
-            element.location.coordinates.last.first));
-        points.add(end);
         totalDataUsedForPaint += points.length;
         paint.strokeWidth = stroke;
         paint.style = PaintingStyle.stroke;
@@ -318,9 +358,18 @@ class Painter extends CustomPainter {
 
         path.addPolygon(points, false);
 
+        Path duplicatePath = Path();
+        Paint duplicatePaint = Paint()
+          ..color = Colors.blue
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3;
+        duplicatePath.addPolygon(duplicatePoints, false);
         Paint newPaint = Paint()
           ..color = Theme.of(context).primaryColor.withOpacity(0.1);
 
+        if (duplicatePoints.isNotEmpty) {
+          customCanvas.drawPath(duplicatePath, duplicatePaint);
+        }
         {
           customCanvas.drawPath(path, paint, onTapUp: (details) {
             tap();
@@ -414,7 +463,7 @@ class Painter extends CustomPainter {
       {required List<FileDetailMini> visibleFilesList,
       required FileDetailMini file,
       required Rect fileRect,
-      double minimumDistance = 50}) {
+      double minimumDistance = 200}) {
     List<FileWithDistance> distances = [];
     for (var e in visibleFilesList) {
       Rect testElement = getRect(e.boundingBox!);
