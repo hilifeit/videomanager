@@ -281,9 +281,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    var fileService =
-                                        ref.read(fileDetailMiniServiceProvider);
-                                    await fileService.fixLocationData();
+                                    // var fileService =
+                                    //     ref.read(fileDetailMiniServiceProvider);
+                                    // // await fileService.fixLocationData();
+                                    // fileService.updateLocationDataInServer();
                                   },
                                   tooltip: 'Assign Area'),
                             ),

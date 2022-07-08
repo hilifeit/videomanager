@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:videomanager/screens/components/helper/disk.dart';
@@ -18,21 +19,44 @@ class FileService extends ChangeNotifier {
   List<FileDetailMini> files = [];
 
   load() async {
-    await fetch();
-
-    print(files.length);
+    await fetch(fromServer: false);
   }
 
-  fetch() async {
-    try {
-      var response = await client.get(Uri.parse("${baseURL}file"),
-          headers: {"Content-Type": "application/json"});
+  fetch({bool fromServer = false}) async {
+    if (fromServer) {
+      try {
+        var response = await client.get(Uri.parse("${baseURL}file"),
+            headers: {"Content-Type": "application/json"});
 
-      if (response.statusCode == 200) {
-        files = fileDetailMiniFromJson(response.body).toList();
+        if (response.statusCode == 200) {
+          files = fileDetailMiniFromJson(response.body).toList();
 
-        List<int> states = [];
-        List<String> district = [];
+          List<int> states = [];
+          List<String> district = [];
+          await Future.forEach<FileDetailMini>(files, (element) {
+            element.boundingBox =
+                boundingBoxOffset(element.location.coordinates);
+            // if (!states.contains(element.area.state)) {
+            //   states.add(element.area.state);
+            // }
+            // if (!states.contains(element.area.state)) {
+            //   states.add(element.area.state);
+            // }
+          });
+
+          // print(
+          //     "${files[0].boundingBox!.left.toString()} ${files[0].boundingBox!.top.toString()}");
+          notifyListeners();
+        } else {
+          throw response.statusCode;
+        }
+      } catch (e, s) {
+        throw "$e $s";
+      }
+    } else {
+      var filesJson = await storage.read("files");
+      if (filesJson != null) {
+        files = fileDetailMiniFromJson(filesJson).toList();
         await Future.forEach<FileDetailMini>(files, (element) {
           element.boundingBox = boundingBoxOffset(element.location.coordinates);
           // if (!states.contains(element.area.state)) {
@@ -42,15 +66,9 @@ class FileService extends ChangeNotifier {
           //   states.add(element.area.state);
           // }
         });
-
-        // print(
-        //     "${files[0].boundingBox!.left.toString()} ${files[0].boundingBox!.top.toString()}");
-        notifyListeners();
       } else {
-        throw response.statusCode;
+        fetch();
       }
-    } catch (e, s) {
-      throw "$e $s";
     }
   }
 
@@ -93,7 +111,7 @@ class FileService extends ChangeNotifier {
         // store();
 
         // notifyListeners();
-
+        print(response.body);
         return true;
       } else {
         var error = jsonDecode(response.body);
@@ -169,26 +187,47 @@ class FileService extends ChangeNotifier {
 
         var url = await getUrlFromFile(temp);
         if (url.isNotEmpty) {
-          var originalData = await fetchOriginalLocation(url);
-          if (originalData.isNotEmpty) {
-            LatLng first =
-                LatLng(originalData.first.lat, originalData.first.lng);
-            LatLng last = LatLng(originalData.last.lat, originalData.last.lng);
-            element.location.coordinates.clear();
-            // element.location.coordinates.add([first.longitude,first.latitude]);
-            int divider = originalData.length ~/ 50;
-            for (int i = 0; i < originalData.length; i = i + divider) {
-              element.location.coordinates
-                  .add([originalData[i].lng, originalData[i].lat]);
+          try {
+            var originalData = await fetchOriginalLocation(url);
+            if (originalData.isNotEmpty) {
+              LatLng first =
+                  LatLng(originalData.first.lat, originalData.first.lng);
+              LatLng last =
+                  LatLng(originalData.last.lat, originalData.last.lng);
+              element.location.coordinates.clear();
+              // element.location.coordinates.add([first.longitude,first.latitude]);
+              int divider = originalData.length ~/ 50;
+              for (int i = 0; i < originalData.length; i = i + divider) {
+                element.location.coordinates
+                    .add([originalData[i].lng, originalData[i].lat]);
+              }
+              if (element.location.coordinates.last.first != last.longitude &&
+                  element.location.coordinates.last.last != last.latitude) {
+                element.location.coordinates
+                    .add([last.longitude, last.latitude]);
+              }
+              print(files.indexOf(element));
             }
-            if (element.location.coordinates.last.first != last.longitude &&
-                element.location.coordinates.last.last != last.latitude) {
-              element.location.coordinates.add([last.longitude, last.latitude]);
-            }
+          } catch (e) {
+            print(e.toString() + element.id);
           }
+        } else {
+          print("empty${files.indexOf(element)}");
         }
       }
-      print(files.indexOf(element));
     }
   }
+
+  updateLocationDataInServer() async {
+    // for (var element in files) {
+    // storage.write("files", fileDetailMiniToJson(files));
+    File file = File("D:\\Projects\\file.json");
+    file.writeAsStringSync(storage.read("files"));
+    // var element = files.first;
+    // var elementJson = element.toJson();
+
+    // var status = await edit(element, data: elementJson["location"]);
+    // print("$status ${files.indexOf(element)}");
+  }
+  // }
 }
