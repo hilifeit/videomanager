@@ -29,7 +29,7 @@ class UserSettings extends ConsumerWidget {
                 SizedBox(
                   height: 43.sh(),
                 ),
-                CustomSlider(
+                CustomSliderRectThumb(
                     text: 'Number of video per user',
                     min: 1,
                     max: 200,

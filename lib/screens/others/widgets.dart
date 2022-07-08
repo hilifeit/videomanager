@@ -49,15 +49,17 @@ class CustomElevatedButton extends StatelessWidget {
     required this.elevatedButtonText,
     this.width,
     this.height,
-    this.elevatedButtonStyle,
+    this.elevatedButtonTextStyle,
     this.elevatedButtonPadding,
+    this.color,
   }) : super(key: key);
 
   final Function onPressedElevated;
   final String elevatedButtonText;
   double? width, height;
-  TextStyle? elevatedButtonStyle;
+  TextStyle? elevatedButtonTextStyle;
   EdgeInsetsGeometry? elevatedButtonPadding;
+  Color? color;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -68,13 +70,13 @@ class CustomElevatedButton extends StatelessWidget {
             padding: MaterialStateProperty.resolveWith(
                 (states) => elevatedButtonPadding ?? EdgeInsets.zero),
             backgroundColor: MaterialStateColor.resolveWith(
-                (states) => Theme.of(context).primaryColor)),
+                (states) => color ?? Theme.of(context).primaryColor)),
         onPressed: () {
           onPressedElevated();
         },
         child: Text(
           elevatedButtonText,
-          style: elevatedButtonStyle ??
+          style: elevatedButtonTextStyle ??
               kTextStyleIbmRegular.copyWith(
                 color: Colors.white,
                 fontSize: 17.ssp(),
@@ -134,7 +136,7 @@ class OutlinedElevatedButtonCombo extends StatelessWidget {
             onPressedElevated();
           },
           elevatedButtonText: elevatedButtonText,
-          elevatedButtonStyle: elevatedButtonStyle ??
+          elevatedButtonTextStyle: elevatedButtonStyle ??
               kTextStyleIbmRegular.copyWith(
                 fontSize: 17.ssp(),
                 color: Colors.white,

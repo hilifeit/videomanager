@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class ShopCard extends StatelessWidget {
   ShopCard({Key? key, required this.shop}) : super(key: key);
@@ -70,9 +71,27 @@ class ShopCard extends StatelessWidget {
   }
 }
 
+class VideoAssignCardItems {
+  VideoAssignCardItems(
+      {required this.fileName,
+      required this.status,
+      // required this.filedetail,
+      required this.screenShot,
+      required this.shops});
+  // final FileDetailMini filedetail;
+  final String fileName, status;
+  final int screenShot;
+  final int shops;
+}
+
 class VideoAssignCard extends StatelessWidget {
-  VideoAssignCard({Key? key, required this.thisUser}) : super(key: key);
+  VideoAssignCard({
+    Key? key,
+    required this.thisUser,
+    required this.item,
+  }) : super(key: key);
   final UserModelMini thisUser;
+  final VideoAssignCardItems item;
 
   @override
   Widget build(BuildContext context) {
@@ -86,18 +105,26 @@ class VideoAssignCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                thisUser.superVisor!.name,
-                style: kTextStyleIbmMedium.copyWith(
-                    fontSize: 15.ssp(), color: cardHeader),
+              SizedBox(
+                width: 88.sw(),
+                child: Text(
+                  thisUser.superVisor!.name,
+                  style: kTextStyleIbmMedium.copyWith(
+                      fontSize: 15.ssp(), color: cardHeader),
+                ),
               ),
               Spacer(),
-              Text(
-                'videoFile',
-                style: kTextStyleIbmMedium.copyWith(
-                    fontSize: 12.ssp(), color: Colors.black),
+              SizedBox(
+                width: 70.sw(),
+                child: Text(
+                  item.fileName,
+                  style: kTextStyleIbmMedium.copyWith(
+                      fontSize: 12.ssp(), color: Colors.black),
+                ),
               ),
-              Spacer(),
+              SizedBox(
+                width: 10.sw(),
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -111,10 +138,13 @@ class VideoAssignCard extends StatelessWidget {
                       SizedBox(
                         width: 5.sw(),
                       ),
-                      Text(
-                        '60',
-                        style: kTextStyleIbmMedium.copyWith(
-                            fontSize: 12.ssp(), color: lightBlack),
+                      SizedBox(
+                        width: 60.sw(),
+                        child: Text(
+                          item.screenShot.toString(),
+                          style: kTextStyleIbmMedium.copyWith(
+                              fontSize: 12.ssp(), color: lightBlack),
+                        ),
                       )
                     ],
                   ),
@@ -129,17 +159,20 @@ class VideoAssignCard extends StatelessWidget {
                       SizedBox(
                         width: 5.sw(),
                       ),
-                      Text(
-                        '60',
-                        style: kTextStyleIbmMedium.copyWith(
-                            fontSize: 12.ssp(), color: lightBlack),
+                      SizedBox(
+                        width: 60.sw(),
+                        child: Text(
+                          item.shops.toString(),
+                          style: kTextStyleIbmMedium.copyWith(
+                              fontSize: 12.ssp(), color: lightBlack),
+                        ),
                       )
                     ],
                   ),
                 ],
               ),
               Spacer(),
-              StatusCard(color: dangerSecondary, status: 'Pending')
+              StatusCard(status: item.status)
             ],
           ),
         ),
@@ -148,30 +181,48 @@ class VideoAssignCard extends StatelessWidget {
   }
 }
 
+class Status {
+  Status({required this.status, required this.color});
+  final String status;
+  final Color color;
+}
+
 class StatusCard extends StatelessWidget {
-  const StatusCard({
+  StatusCard({
     Key? key,
-    required this.color,
     required this.status,
   }) : super(key: key);
 
-  final Color color;
   final String status;
-
+  late Color color;
   @override
   Widget build(BuildContext context) {
+    List<Status> items = [
+      Status(status: 'Pending', color: danger),
+      Status(status: 'Complete', color: sucess),
+      Status(status: 'Ongoing', color: primaryColor),
+      Status(status: 'Approved', color: sucess),
+      Status(status: 'Rejected', color: danger)
+    ];
+
+    for (var element in items) {
+      if (element.status == status) {
+        color = element.color;
+        break;
+      }
+    }
+
     return Container(
       width: 95.sw(),
       height: 22.sh(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.sr()),
-        color: color,
+        color: color.withOpacity(0.16),
       ),
       child: Center(
         child: Text(
           status,
-          style:
-              kTextStyleIbmMedium.copyWith(fontSize: 13.ssp(), color: danger),
+          style: kTextStyleIbmMedium.copyWith(fontSize: 13.ssp(), color: color),
         ),
       ),
     );

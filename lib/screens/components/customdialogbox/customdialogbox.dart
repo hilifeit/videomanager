@@ -143,7 +143,7 @@ class CustomDialog extends StatelessWidget {
                           Navigator.pop(context);
                         },
                         elevatedButtonText: elevatedButtonText,
-                        elevatedButtonStyle: kTextStyleIbmSemiBold.copyWith(
+                        elevatedButtonTextStyle: kTextStyleIbmSemiBold.copyWith(
                           fontSize: 16.ssp(),
                           color: Colors.white,
                         ),

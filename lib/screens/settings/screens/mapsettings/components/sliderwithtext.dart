@@ -46,8 +46,60 @@ class CustomSliderComponentShape extends SliderComponentShape {
   }
 }
 
-class CustomSlider extends StatelessWidget {
-  CustomSlider(
+class CustomSliderComponentShapeRoundHollow extends SliderComponentShape {
+  CustomSliderComponentShapeRoundHollow({required this.currentValue});
+  final double currentValue;
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) {
+    // TODO: implement getPreferredSize
+    return const Size(10, 10);
+  }
+
+  @override
+  void paint(PaintingContext context, Offset center,
+      {required Animation<double> activationAnimation,
+      required Animation<double> enableAnimation,
+      required bool isDiscrete,
+      required TextPainter labelPainter,
+      required RenderBox parentBox,
+      required SliderThemeData sliderTheme,
+      required TextDirection textDirection,
+      required double value,
+      required double textScaleFactor,
+      required Size sizeWithOverflow}) {
+    Paint paint = Paint()..color = Colors.white;
+    Paint paintInside = Paint()..color = primaryColor;
+    // drawText(context.canvas,
+    //     text: currentValue.toInt().toString(), position: center);
+    Path path = Path();
+
+    // path.addRRect(
+
+    path.addOval(Rect.fromCircle(center: center, radius: 7.sr()));
+    //   RRect.fromRectXY(
+    //     Rect.fromCenter(center: center, width: 20.sw(), height: 20.sh()),
+    //     10.sr(),
+    //     10.sr()));
+
+    // TextSpan span = TextSpan(
+    //     style: TextStyle(color: Colors.black, fontSize: 12.ssp()),
+    //     text: currentValue.toInt().toString());
+    // TextPainter tp = TextPainter(
+    //     text: span,
+    //     textAlign: TextAlign.center,
+    //     textDirection: TextDirection.ltr);
+    // tp.layout();
+
+    // // path.addRect(Rect.fromCenter(center: center, width: 40, height: 25));
+    context.canvas.drawPath(path, paint);
+    context.canvas.drawCircle(center, 5.sr(), paintInside);
+    // tp.paint(context.canvas,
+    //     Offset(center.dx - tp.width / 2, center.dy - tp.height / 2));
+  }
+}
+
+class CustomSliderRectThumb extends StatelessWidget {
+  CustomSliderRectThumb(
       {Key? key,
       required this.text,
       required this.min,
@@ -146,6 +198,93 @@ class CustomSlider extends StatelessWidget {
   }
 }
 
+class CustomTrackShape extends RoundedRectSliderTrackShape {
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double? trackHeight = sliderTheme.trackHeight;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight!) / 2;
+    final double trackWidth = parentBox.size.width - 2.sw();
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+}
+
+class CustomSliderHollowThumb extends StatelessWidget {
+  CustomSliderHollowThumb(
+      {Key? key,
+      required this.value,
+      required this.onChanged,
+      this.isDiscrete = false})
+      : super(key: key);
+
+  final double value;
+  final bool isDiscrete;
+  final Function(double val) onChanged;
+
+  late final valueProvider = StateProvider<double>((ref) {
+    return value;
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          height: 6.sh(),
+          width: 100.sw(),
+          child: Expanded(
+            child: Consumer(builder: (context, ref, c) {
+              final currentValue = ref.watch(valueProvider.state).state;
+              return SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                    trackHeight: 3.sh(),
+                    overlayShape: SliderComponentShape.noOverlay,
+                    trackShape: CustomTrackShape(),
+
+                    // overlayShape: SliderComponentShape.noOverlay,
+                    // valueIndicatorColor:
+                    //     Theme.of(context).primaryColor.withOpacity(0.5),
+                    // showValueIndicator: isDiscrete
+                    //     ? ShowValueIndicator.onlyForDiscrete
+                    //     : ShowValueIndicator.onlyForContinuous,
+                    // valueIndicatorTextStyle: kTextStyleIbmRegular
+                    //     .copyWith(color: Colors.black),
+                    thumbShape: CustomSliderComponentShapeRoundHollow(
+                        currentValue: currentValue)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.white,
+                  ),
+                  alignment: Alignment.center,
+                  child: Slider(
+                    label: currentValue.round().toString(),
+                    activeColor: Colors.white,
+                    thumbColor: const Color(0xff9FC6DD),
+                    inactiveColor: Theme.of(context).primaryColor,
+                    value: currentValue,
+                    onChanged: (val) {
+                      ref.read(valueProvider.state).state = val;
+                      // widget.onChanged(val);
+
+                      onChanged(val);
+                    },
+                  ),
+                ),
+              );
+            }),
+          ),
+        )
+      ],
+    );
+  }
+}
 
 
 

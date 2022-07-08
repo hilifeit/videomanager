@@ -157,7 +157,7 @@ class AddEditShop extends ConsumerWidget {
                 title: 'Shop Name',
                 isVisible: true,
                 onChanged: (val) {
-                  shop!.shopName= val;
+                  shop!.shopName = val;
                 },
               ),
               SizedBox(
@@ -184,7 +184,7 @@ class AddEditShop extends ConsumerWidget {
                     ),
                     value: edit ? editCategory : category.first,
                     onChanged: (val) {
-                      shop!.category=val.label;
+                      shop!.category = val.label;
                     },
                     values: category,
                     helperText: ""),
@@ -213,7 +213,7 @@ class AddEditShop extends ConsumerWidget {
                     ),
                     value: edit ? editShopSize : shopSize.first,
                     onChanged: (val) {
-                      shop!.shopSize= val.label;
+                      shop!.shopSize = val.label;
                     },
                     values: shopSize,
                     helperText: ""),
@@ -264,13 +264,12 @@ class AddEditShop extends ConsumerWidget {
                 child: CustomElevatedButton(
                     width: 120.sw(),
                     height: 49.sh(),
-                    elevatedButtonStyle: kTextStyleInterMedium.copyWith(
+                    elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
                         fontSize: 20.ssp(), color: Colors.white),
                     onPressedElevated: () {
-
                       shop!.color = markerColor;
-                     
-                      // TODO : save 
+
+                      // TODO : save
                     },
                     elevatedButtonText: 'Save'),
               ),

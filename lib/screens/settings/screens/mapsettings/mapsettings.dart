@@ -31,7 +31,7 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 43.sh(),
             ),
-            CustomSlider(
+            CustomSliderRectThumb(
               text: 'Zoom Factor',
               max: 10,
               min: 1,
@@ -74,7 +74,7 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 18.sh(),
             ),
-            CustomSlider(
+            CustomSliderRectThumb(
               text: 'Original Map Quality',
               min: 0,
               max: 100,
@@ -86,7 +86,7 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 33.sh(),
             ),
-            CustomSlider(
+            CustomSliderRectThumb(
                 text: 'View Map Quality',
                 max: 100,
                 min: 0,
@@ -97,7 +97,7 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 33.sh(),
             ),
-            CustomSlider(
+            CustomSliderRectThumb(
               text: 'Original Mini Map Quality',
               max: 100,
               min: 0,
@@ -115,7 +115,7 @@ class MapSettings extends ConsumerWidget {
             SizedBox(
               height: 23.sh(),
             ),
-            CustomSlider(
+            CustomSliderRectThumb(
               text: 'Suggestion / Result Count',
               max: 10,
               min: 1,

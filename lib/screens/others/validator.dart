@@ -122,8 +122,8 @@ String? validateUserName(String value, {String label = "username"}) {
   RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
     return 'Please enter $label';
-  } else if (value.length < 3) {
-    return '$label should be atleast 3 characters';
+  } else if (value.length < 5) {
+    return '$label should be atleast 5 characters';
   } else if (regExp.hasMatch(value)) {
     return '$label should not have white spaces';
   } else if ((RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value))) {

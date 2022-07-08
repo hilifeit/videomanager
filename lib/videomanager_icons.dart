@@ -60,13 +60,13 @@ class Videomanager {
   static const IconData add_user_svgrepo_com_1 = IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData edit_1 = IconData(0xe821, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shop = IconData(0xe822, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData camera = IconData(0xe823, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData card = IconData(0xe824, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData refresh_1 = IconData(0xe825, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData location_pin = IconData(0xe826, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData lock = IconData(0xe827, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData logout = IconData(0xe828, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData delete = IconData(0xe829, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData camera = IconData(0xe82b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cleararea = IconData(0xe82c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData filter = IconData(0xe82d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData image_icon_group = IconData(0xe82e, fontFamily: _kFontFam, fontPackage: _kFontPkg);

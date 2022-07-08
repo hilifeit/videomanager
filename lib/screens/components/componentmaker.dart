@@ -1,23 +1,27 @@
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
-import 'package:videomanager/screens/screenshotmanager/components/fakeshop.dart';
-import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
+// import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
+// import 'package:videomanager/screens/screenshotmanager/components/fakeshop.dart';
+// import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 
-class ComponentMaker extends ConsumerWidget {
+class ComponentMaker extends StatelessWidget {
   ComponentMaker({Key? key}) : super(key: key);
   final double value = 75;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
+  Widget build(BuildContext context) {
+    return Column(
       children: [
-        AddEditShop(
-          // shop: shops[0],
-          edit: false,
-        ),
-        Spacer(),
-        ShopCard(shop: shops[1])
+        // AddEditShop(
+        //   // shop: shops[0],
+        //   edit: false,
+        // ),
+        // Spacer(),
+
+        // CustomSliderHollowThumb(value: 0.5, onChanged: (val) {}),
+        // Spacer(),
+        // ShopCard(shop: shops[1])
       ],
     );
   }
