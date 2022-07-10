@@ -300,43 +300,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                               icon: Icons.select_all,
                               roundShape: true,
                               onPressed: () async {
-                                Future.delayed(const Duration(milliseconds: 20),
-                                    () async {
-                                  SelectedArea.transformer.controller.center =
-                                      SelectedArea.transformer
-                                          .fromXYCoordsToLatLng(
-                                              selectedAreaService.path.value
-                                                  .getBounds()
-                                                  .center);
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 200),
-                                      () async {
-                                    bool perfect =
-                                        smartRefine(selectedAreaService);
-                                    while (perfect == false) {
-                                      await Future.delayed(
-                                          const Duration(milliseconds: 1), () {
-                                        SelectedArea.transformer.controller
-                                            .zoom = SelectedArea
-                                                .transformer.controller.zoom -
-                                            0.2;
-                                        perfect =
-                                            smartRefine(selectedAreaService);
-                                      });
-                                    }
-                                    if (selectedAreaService
-                                        .currentSelection.value.isNotEmpty) {
-                                      selectedAreaService
-                                              .refinedSelection.value =
-                                          selectedAreaService
-                                              .currentSelection.value;
-                                      ref
-                                          .read(selectedAreaServiceProvider)
-                                          .refined
-                                          .value = true;
-                                    }
-                                  });
-                                });
+                                selectedAreaService.refine();
                               },
                               tooltip: 'Refine/Select'),
                         ),
@@ -431,23 +395,5 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         color: Theme.of(context).primaryColor,
       ),
     );
-  }
-
-  bool smartRefine(SelectedArea selectedAreaService) {
-    Rect visibleScreen = Rect.fromLTWH(
-        0,
-        0,
-        SelectedArea.transformer.constraints.maxWidth,
-        SelectedArea.transformer.constraints.maxHeight - 5);
-
-    Rect pathBoud = selectedAreaService.path.value.getBounds();
-    if (visibleScreen.contains(pathBoud.topLeft) &&
-        visibleScreen.contains(pathBoud.topRight) &&
-        visibleScreen.contains(pathBoud.bottomLeft) &&
-        visibleScreen.contains(pathBoud.bottomRight)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
