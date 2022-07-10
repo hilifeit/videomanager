@@ -40,7 +40,7 @@ class ClippedHolder extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: radius.sr(),
-                    child: FittedBox(child: Text("10")),
+                    child: FittedBox(child: Text(value.toString())),
                   ),
                 )
               ],
@@ -50,7 +50,7 @@ class ClippedHolder extends StatelessWidget {
   }
 
   Size getSize() {
-    Future.delayed(Duration(milliseconds: 10), () {});
+    Future.delayed(const Duration(milliseconds: 10), () {});
     RenderBox box = _childKey.currentContext?.findRenderObject as RenderBox;
     return box.size;
   }

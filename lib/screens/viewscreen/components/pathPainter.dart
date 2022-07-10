@@ -367,9 +367,10 @@ class Painter extends CustomPainter {
         Paint newPaint = Paint()
           ..color = Theme.of(context).primaryColor.withOpacity(0.1);
 
-        if (duplicatePoints.isNotEmpty) {
-          customCanvas.drawPath(duplicatePath, duplicatePaint);
-        }
+        // if (duplicatePoints.isNotEmpty) {
+        //   customCanvas.drawPath(duplicatePath, duplicatePaint);
+        // }
+        //Main Path
         {
           customCanvas.drawPath(path, paint, onTapUp: (details) {
             tap();
@@ -377,61 +378,63 @@ class Painter extends CustomPainter {
             tapSecondary(detail);
           });
         }
-
-        if (selectedFile != null) {
-          if (selectedFile.id == element.id) {
-            paint.strokeWidth = stroke * 2;
-            paint.color = Theme.of(context).primaryColor;
-            //
-            customCanvas.drawPath(path, paint, onTapUp: (details) {
-              tap();
-            }, onSecondaryTapUp: (detail) {});
-            paint.color = strokeColor;
-            paint.strokeWidth = stroke;
-            customCanvas.drawPath(path, paint, onTapUp: (details) {
-              // tap();
-            }, onSecondaryTapUp: (detail) {
-              tapSecondary(detail);
-            });
-
-            newPaint.style = PaintingStyle.stroke;
-            newPaint.color = Theme.of(context).primaryColor;
-            if (handleDragged.value == null) {
-              customCanvas.drawRect(path.getBounds(), newPaint,
-                  onTapUp: ((details) {
+        if (selectedPointsProvider.selectedPoints.isEmpty ||
+            selectedPointsProvider.pathClosed.value) {
+          if (selectedFile != null) {
+            if (selectedFile.id == element.id) {
+              paint.strokeWidth = stroke * 2;
+              paint.color = Theme.of(context).primaryColor;
+              //
+              customCanvas.drawPath(path, paint, onTapUp: (details) {
                 tap();
-              }), onSecondaryTapUp: (detail) {
+              }, onSecondaryTapUp: (detail) {});
+              paint.color = strokeColor;
+              paint.strokeWidth = stroke;
+              customCanvas.drawPath(path, paint, onTapUp: (details) {
+                // tap();
+              }, onSecondaryTapUp: (detail) {
                 tapSecondary(detail);
-              }, hitTestBehavior: hitBehaviorTranslucent);
-            }
+              });
 
-            newPaint.style = PaintingStyle.fill;
-            newPaint.color = Colors.transparent;
-            if (handleDragged.value == null) {
-              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-                tap();
-              }), onSecondaryTapUp: (detail) {
-                tapSecondary(detail);
-              }, hitTestBehavior: hitBehaviorTranslucent);
+              newPaint.style = PaintingStyle.stroke;
+              newPaint.color = Theme.of(context).primaryColor;
+              if (handleDragged.value == null) {
+                customCanvas.drawRect(path.getBounds(), newPaint,
+                    onTapUp: ((details) {
+                  tap();
+                }), onSecondaryTapUp: (detail) {
+                  tapSecondary(detail);
+                }, hitTestBehavior: hitBehaviorTranslucent);
+              }
+
+              newPaint.style = PaintingStyle.fill;
+              newPaint.color = Colors.transparent;
+              if (handleDragged.value == null) {
+                customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                  tap();
+                }), onSecondaryTapUp: (detail) {
+                  tapSecondary(detail);
+                }, hitTestBehavior: hitBehaviorTranslucent);
+              }
+            } else {
+              if (filterService.onlyNotUsable == !element.isUseable) {
+                customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
+                  tap();
+                }), onSecondaryTapUp: (detail) {
+                  tapSecondary(detail);
+                }, hitTestBehavior: hitBehaviorTranslucent);
+              }
             }
           } else {
             if (filterService.onlyNotUsable == !element.isUseable) {
-              customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-                tap();
-              }), onSecondaryTapUp: (detail) {
-                tapSecondary(detail);
-              }, hitTestBehavior: hitBehaviorTranslucent);
-            }
-          }
-        } else {
-          if (filterService.onlyNotUsable == !element.isUseable) {
-            if (handleDragged.value == null) {
-              customCanvas.drawRect(path.getBounds(), newPaint,
-                  onTapUp: ((details) {
-                tap();
-              }), onSecondaryTapUp: (detail) {
-                tapSecondary(detail);
-              }, hitTestBehavior: hitBehaviorTranslucent);
+              if (handleDragged.value == null) {
+                customCanvas.drawRect(path.getBounds(), newPaint,
+                    onTapUp: ((details) {
+                  tap();
+                }), onSecondaryTapUp: (detail) {
+                  tapSecondary(detail);
+                }, hitTestBehavior: hitBehaviorTranslucent);
+              }
             }
           }
         }
@@ -439,6 +442,9 @@ class Painter extends CustomPainter {
 
       }
     }
+
+    selectedPointsProvider.currentSelection.value = finalselectedFileList;
+
     selectedPointsProvider.draw(customCanvas);
     if (debug && files.isNotEmpty) {
       canvas.drawRect(
