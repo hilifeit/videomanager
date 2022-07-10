@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 final selectedAreaServiceProvider = ChangeNotifierProvider<SelectedArea>((ref) {
   return SelectedArea._();
@@ -23,6 +24,11 @@ class SelectedArea extends ChangeNotifier {
 
   int pointLimit = 200;
 
+  late final refinedSelection =
+      Property<List<FileDetailMini>>([], notifyListeners);
+  late final currentSelection = Property<List<FileDetailMini>>([], () {});
+
+  late final refined = Property<bool>(false, notifyListeners);
   late final pathClosed = Property<bool>(false, notifyListeners);
   late final pathSelected = Property<bool>(false, notifyListeners);
   static late MapTransformer transformer;
@@ -38,6 +44,9 @@ class SelectedArea extends ChangeNotifier {
     if (selectedHandle.value != null) {
       _selectedPoints[selectedHandle.value!] =
           transformer.fromXYCoordsToLatLng(newPosition);
+      if (currentSelection.value.length != refinedSelection.value.length) {
+        refined.value = false;
+      }
       notifyListeners();
     }
   }
@@ -132,6 +141,9 @@ class SelectedArea extends ChangeNotifier {
   clear() {
     _selectedPoints.clear();
     pathClosed.value = false;
+    refinedSelection.value = [];
+    currentSelection.value = [];
+    refined.value = false;
   }
 }
 

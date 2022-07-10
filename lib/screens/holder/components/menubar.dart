@@ -1,8 +1,7 @@
-import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
+import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
 
 class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
@@ -59,11 +58,11 @@ class MenuBar extends ConsumerWidget {
                     width: 100.sw(),
                   );
                 },
-                itemCount: thisUser!.role > 0 ? 5 : 2,
+                itemCount: thisUser!.role > 0 ? items.length : itemsUser.length,
               ),
             ),
           ),
-          // Spacer(),
+          const Spacer(),
           Padding(
             padding: EdgeInsets.only(
                 top: 13.sh(), right: 61.08.sw(), bottom: 13.sh()),
@@ -96,8 +95,9 @@ class MenuBar extends ConsumerWidget {
                     width: 180.sw(),
                     child: Text(
                       maxLines: 2,
+                      "asdsad",
                       // userName.user.username,
-                      thisUser.name,
+                      // thisUser!.name,
 
                       style: kTextStyleIbmSemiBold.copyWith(
                           fontSize: 17.ssp(min: 10), color: Colors.white),

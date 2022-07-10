@@ -199,6 +199,7 @@ class CustomSliderRectThumb extends StatelessWidget {
 }
 
 class CustomTrackShape extends RoundedRectSliderTrackShape {
+  @override
   Rect getPreferredRect({
     required RenderBox parentBox,
     Offset offset = Offset.zero,
@@ -238,48 +239,46 @@ class CustomSliderHollowThumb extends StatelessWidget {
         SizedBox(
           height: 6.sh(),
           width: 100.sw(),
-          child: Expanded(
-            child: Consumer(builder: (context, ref, c) {
-              final currentValue = ref.watch(valueProvider.state).state;
-              return SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                    trackHeight: 3.sh(),
-                    overlayShape: SliderComponentShape.noOverlay,
-                    trackShape: CustomTrackShape(),
+          child: Consumer(builder: (context, ref, c) {
+            final currentValue = ref.watch(valueProvider.state).state;
+            return SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                  trackHeight: 3.sh(),
+                  overlayShape: SliderComponentShape.noOverlay,
+                  trackShape: CustomTrackShape(),
 
-                    // overlayShape: SliderComponentShape.noOverlay,
-                    // valueIndicatorColor:
-                    //     Theme.of(context).primaryColor.withOpacity(0.5),
-                    // showValueIndicator: isDiscrete
-                    //     ? ShowValueIndicator.onlyForDiscrete
-                    //     : ShowValueIndicator.onlyForContinuous,
-                    // valueIndicatorTextStyle: kTextStyleIbmRegular
-                    //     .copyWith(color: Colors.black),
-                    thumbShape: CustomSliderComponentShapeRoundHollow(
-                        currentValue: currentValue)),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: Slider(
-                    label: currentValue.round().toString(),
-                    activeColor: Colors.white,
-                    thumbColor: const Color(0xff9FC6DD),
-                    inactiveColor: Theme.of(context).primaryColor,
-                    value: currentValue,
-                    onChanged: (val) {
-                      ref.read(valueProvider.state).state = val;
-                      // widget.onChanged(val);
-
-                      onChanged(val);
-                    },
-                  ),
+                  // overlayShape: SliderComponentShape.noOverlay,
+                  // valueIndicatorColor:
+                  //     Theme.of(context).primaryColor.withOpacity(0.5),
+                  // showValueIndicator: isDiscrete
+                  //     ? ShowValueIndicator.onlyForDiscrete
+                  //     : ShowValueIndicator.onlyForContinuous,
+                  // valueIndicatorTextStyle: kTextStyleIbmRegular
+                  //     .copyWith(color: Colors.black),
+                  thumbShape: CustomSliderComponentShapeRoundHollow(
+                      currentValue: currentValue)),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.white,
                 ),
-              );
-            }),
-          ),
+                alignment: Alignment.center,
+                child: Slider(
+                  label: currentValue.round().toString(),
+                  activeColor: Colors.white,
+                  thumbColor: const Color(0xff9FC6DD),
+                  inactiveColor: Theme.of(context).primaryColor,
+                  value: currentValue,
+                  onChanged: (val) {
+                    ref.read(valueProvider.state).state = val;
+                    // widget.onChanged(val);
+
+                    onChanged(val);
+                  },
+                ),
+              ),
+            );
+          }),
         )
       ],
     );

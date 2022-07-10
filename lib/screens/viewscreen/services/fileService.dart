@@ -19,7 +19,7 @@ class FileService extends ChangeNotifier {
   List<FileDetailMini> files = [];
 
   load() async {
-    await fetch(fromServer: false);
+    await fetch();
   }
 
   fetch({bool fromServer = false}) async {
@@ -67,7 +67,7 @@ class FileService extends ChangeNotifier {
           // }
         });
       } else {
-        fetch();
+        await fetch(fromServer: true);
       }
     }
   }

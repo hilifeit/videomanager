@@ -1,12 +1,9 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
-import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class ShopCard extends StatelessWidget {
-  ShopCard({Key? key, required this.shop}) : super(key: key);
+  const ShopCard({Key? key, required this.shop}) : super(key: key);
   final Shop shop;
 
   @override
@@ -85,7 +82,7 @@ class VideoAssignCardItems {
 }
 
 class VideoAssignCard extends StatelessWidget {
-  VideoAssignCard({
+  const VideoAssignCard({
     Key? key,
     required this.thisUser,
     required this.item,
@@ -99,7 +96,7 @@ class VideoAssignCard extends StatelessWidget {
       width: 412.sw(),
       height: 73.sh(),
       child: Card(
-        color: Color(0xffECF0F2),
+        color: const Color(0xffECF0F2),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.5.sw()),
           child: Row(
@@ -108,12 +105,12 @@ class VideoAssignCard extends StatelessWidget {
               SizedBox(
                 width: 88.sw(),
                 child: Text(
-                  thisUser.superVisor!.name,
+                  thisUser.superVisor != null ? thisUser.superVisor!.name : '',
                   style: kTextStyleIbmMedium.copyWith(
                       fontSize: 15.ssp(), color: cardHeader),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               SizedBox(
                 width: 70.sw(),
                 child: Text(
@@ -171,7 +168,7 @@ class VideoAssignCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               StatusCard(status: item.status)
             ],
           ),

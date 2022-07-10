@@ -273,9 +273,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       if (selectedPoints.isNotEmpty) ...[
-                        if (selectedAreaService.pathClosed.value)
+                        if (selectedAreaService.refined.value)
                           ClippedHolder(
-                            value: 3,
+                            value: selectedAreaService
+                                .refinedSelection.value.length,
                             child: SizedBox(
                               child: CustomFloatingActionButton(
                                   roundShape: true,
@@ -322,6 +323,17 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                         perfect =
                                             smartRefine(selectedAreaService);
                                       });
+                                    }
+                                    if (selectedAreaService
+                                        .currentSelection.value.isNotEmpty) {
+                                      selectedAreaService
+                                              .refinedSelection.value =
+                                          selectedAreaService
+                                              .currentSelection.value;
+                                      ref
+                                          .read(selectedAreaServiceProvider)
+                                          .refined
+                                          .value = true;
                                     }
                                   });
                                 });

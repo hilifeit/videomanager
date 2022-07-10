@@ -69,27 +69,28 @@ class UserService extends ChangeNotifier {
 
   fetchAll() async {
     // try {
+    if (loggedInUser.value != null) {
+      var response = await tunnelRequest(
+          () => client.get(Uri.parse("$baseURL$userEndPoint"), headers: {
+                "Content-Type": "application/json",
+                "x-access-token": loggedInUser.value!.accessToken!
+              }));
 
-    var response = await tunnelRequest(
-        () => client.get(Uri.parse("$baseURL$userEndPoint"), headers: {
-              "Content-Type": "application/json",
-              "x-access-token": loggedInUser.value!.accessToken!
-            }));
+      if (response.statusCode == 200) {
+        var temp = userModelMiniListFromJson(response.body);
+        users = temp;
+        notifyListeners();
+      } else if (response.statusCode == 403) {
+        throw 'token expired';
+      } else {
+        var error = jsonDecode(response.body);
+        // print(error);
+        users = [];
+        errorMessage.value = error['message'];
+        notifyListeners();
 
-    if (response.statusCode == 200) {
-      var temp = userModelMiniListFromJson(response.body);
-      users = temp;
-      notifyListeners();
-    } else if (response.statusCode == 403) {
-      throw 'token expired';
-    } else {
-      var error = jsonDecode(response.body);
-      // print(error);
-      users = [];
-      errorMessage.value = error['message'];
-      notifyListeners();
-
-      // throw errorMessage;
+        // throw errorMessage;
+      }
     }
   }
   // catch (e) {
