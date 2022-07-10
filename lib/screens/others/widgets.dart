@@ -208,13 +208,14 @@ class Button extends StatelessWidget {
 }
 
 class InputTextField extends StatelessWidget {
-  final String? title;
+  final String title;
+  String? suffixText;
   Color? fillColor = Colors.transparent;
   bool isVisible = true;
   final String? Function(String? val)? validator;
   final Function()? onTap;
   final Icon? prefixIcon;
-  final TextStyle? hintStyle;
+  final TextStyle? hintStyle, suffixStyle;
   final TextStyle? style;
   final String value;
   final Function(String) onChanged;
@@ -231,6 +232,8 @@ class InputTextField extends StatelessWidget {
       this.style,
       this.onTap,
       this.isdigits = false,
+      this.suffixText,
+      this.suffixStyle,
       required this.onChanged})
       : super(key: key);
 
@@ -243,53 +246,63 @@ class InputTextField extends StatelessWidget {
           visible: isVisible,
           child: Column(
             children: [
-              Text(title!, style: kTextStyleIbmSemiBold),
+              Text(title, style: kTextStyleIbmSemiBold),
               SizedBox(
                 height: 9.5.sh(),
               ),
             ],
           ),
         ),
-        TextFormField(
-          controller: TextEditingController(text: value),
-          inputFormatters: [
-            if (isdigits) LengthLimitingTextInputFormatter(10),
-            isdigits
-                ? FilteringTextInputFormatter.digitsOnly
-                : FilteringTextInputFormatter.singleLineFormatter
-          ],
-          style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
-          onTap: onTap,
-          //controller: TextEditingController(text: ''),
-          validator: validator,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          onChanged: (val) {
-            onChanged(val);
-          },
-          decoration: InputDecoration(
-            prefixIcon: prefixIcon,
-            fillColor: fillColor,
-            filled: true,
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.sr()),
-              borderSide: const BorderSide(color: Colors.red, width: 1),
+        SizedBox(
+          height: 55.sh(),
+          child: TextFormField(
+            controller: TextEditingController(text: value),
+            inputFormatters: [
+              if (isdigits) LengthLimitingTextInputFormatter(10),
+              isdigits
+                  ? FilteringTextInputFormatter.digitsOnly
+                  : FilteringTextInputFormatter.singleLineFormatter
+            ],
+            style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
+            onTap: onTap,
+            //controller: TextEditingController(text: ''),
+            validator: validator,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            onChanged: (val) {
+              onChanged(val);
+            },
+
+            decoration: InputDecoration(
+              prefixIcon: prefixIcon,
+              suffixText: suffixText,
+              suffixStyle: suffixStyle,
+              fillColor: fillColor,
+              filled: true,
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.sr()),
+                borderSide: const BorderSide(color: Colors.red, width: 1),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.sr()),
+                borderSide: const BorderSide(color: Colors.red, width: 1),
+              ),
+              contentPadding: EdgeInsets.only(
+                left: 17.sw(),
+                top: 16.sh(),
+                bottom: 17.sh(),
+                right: 17.sw(),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.sr()),
+                borderSide: const BorderSide(color: darkGrey, width: 1),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.sr()),
+                borderSide: const BorderSide(color: darkGrey, width: 1),
+              ),
+              hintText: isVisible ? 'Enter ${title.toLowerCase()}' : '$title',
+              hintStyle: hintStyle,
             ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.sr()),
-              borderSide: const BorderSide(color: Colors.red, width: 1),
-            ),
-            contentPadding:
-                EdgeInsets.only(left: 19.5.sw(), top: 16.sh(), bottom: 17.sh()),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.sr()),
-              borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.sr()),
-              borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
-            ),
-            hintText: isVisible ? 'Enter ${title!.toLowerCase()}' : '$title',
-            hintStyle: hintStyle,
           ),
         ),
       ],

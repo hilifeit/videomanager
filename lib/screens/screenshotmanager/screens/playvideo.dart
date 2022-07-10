@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
@@ -49,20 +50,32 @@ class _PlayVideoState extends State<PlayVideo> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  color: Colors.amber,
+                  // color: Colors.amber,
                   height: 447.sh(),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Videos',
-                            style: kTextStyleIbmMedium.copyWith(
-                              fontSize: 18.ssp(),
-                              color: Theme.of(context).primaryColor,
+                      Padding(
+                        padding: EdgeInsets.all(13.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Videos',
+                              style: kTextStyleIbmMedium.copyWith(
+                                fontSize: 18.ssp(),
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                              padding: EdgeInsets.all(7.sr()),
+                              decoration: BoxDecoration(
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(4.sr())),
+                              child: Icon(Videomanager.filter,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 13.sh(),
@@ -115,18 +128,6 @@ class _PlayVideoState extends State<PlayVideo> {
             flex: 14,
             child: Container(
               color: Colors.white,
-              child: Row(
-                children: [
-                  Consumer(builder: (context, ref, c) {
-                    final thisUser =
-                        ref.watch(userChangeProvider).loggedInUser.value;
-                    return VideoAssignCard(
-                      thisUser: thisUser!,
-                      item: items[1],
-                    );
-                  }),
-                ],
-              ),
             ),
           ),
           Container(

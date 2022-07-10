@@ -218,7 +218,8 @@ class Painter extends CustomPainter {
                               backgroundColor: Colors.transparent,
                               titlePadding: EdgeInsets.zero,
                               contentPadding: EdgeInsets.zero,
-                              content: AssignUser(
+                              content: AssignManager(
+                                video: 14,
                                 fileDetail: element,
                               ),
                             );

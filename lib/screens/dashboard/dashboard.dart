@@ -31,12 +31,11 @@ class DashBoard extends StatelessWidget {
             const UsersCard(),
             const AssignedVideoCard(),
             const ScreenShotReview(),
-            
           ],
         ),
         Row(
           children: [
-            AssignUser(),
+            AssignManager(video: 14),
             const OutletCard(),
             Card(
               color: const Color(0xfffffdeb),

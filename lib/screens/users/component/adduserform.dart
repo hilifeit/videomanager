@@ -441,7 +441,7 @@ class SinglERoleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 65.sh(),
+      height: 55.sh(),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(

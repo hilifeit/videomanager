@@ -23,12 +23,13 @@ class ViewScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-                flex: 5,
-                child: MapScreen(
-                  draw: true,
-                  controller: controller,
-                  isvisible: true,
-                ))
+              flex: 5,
+              child: MapScreen(
+                draw: true,
+                controller: controller,
+                isvisible: true,
+              ),
+            )
           ],
         ),
       ),

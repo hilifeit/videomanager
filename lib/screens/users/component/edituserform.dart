@@ -142,7 +142,7 @@ class EditUser extends ConsumerWidget {
                           ),
                         if (thisUser.role >= 2 && selectedUser.role == 0)
                           Container(
-                            height: 65.sh(),
+                            height: 55.sh(),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
