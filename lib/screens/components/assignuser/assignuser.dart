@@ -4,12 +4,14 @@ import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
-class AssignUser extends ConsumerWidget {
-  AssignUser({
+class AssignManager extends ConsumerWidget {
+  AssignManager({
     Key? key,
     this.fileDetail,
+    required this.video,
   }) : super(key: key);
   FileDetailMini? fileDetail;
+  final int video;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +43,7 @@ class AssignUser extends ConsumerWidget {
                 topRight: Radius.circular(8.sr())),
           ),
           child: Text(
-            'Assign Users',
+            'Assign Managers',
             style: kTextStyleIbmRegular.copyWith(
               fontSize: 16.ssp(),
               color: Colors.white,
@@ -59,7 +61,7 @@ class AssignUser extends ConsumerWidget {
                 ),
                 Center(
                   child: Text(
-                    'Please Choose the user from the drop down below',
+                    'Please Choose the Manager from the drop down below',
                     style: kTextStyleIbmRegularBlack.copyWith(
                       fontSize: 16.ssp(),
                     ),
@@ -68,18 +70,32 @@ class AssignUser extends ConsumerWidget {
                 SizedBox(
                   height: 30.sh(),
                 ),
-                Text(
-                  fileDetail == null ? 'Areaname' : fileDetail!.filename,
-                  style: kTextStyleIbmRegular.copyWith(
-                    fontSize: 16..ssp(),
-                    color: danger,
-                  ),
-                ),
+                // Text(
+                //   fileDetail == null ? 'Areaname' : fileDetail!.filename,
+                //   style: kTextStyleIbmRegular.copyWith(
+                //     fontSize: 16..ssp(),
+                //     color: danger,
+                //   ),
+                // ),
                 SizedBox(
                   height: 29.sh(),
                 ),
+                InputTextField(
+                  fillColor: Colors.white,
+                  title: 'Area ',
+                  suffixText: '${video.toString()} Videos',
+                  suffixStyle: kTextStyleIbmMedium.copyWith(
+                    fontSize: 13.ssp(),
+                    color: primaryColor,
+                  ),
+                  isVisible: true,
+                  onChanged: (val) {},
+                ),
+                SizedBox(
+                  height: 18.sh(),
+                ),
                 Text(
-                  'User',
+                  'Manager',
                   style: kTextStyleIbmSemiBold,
                 ),
                 SizedBox(
@@ -101,19 +117,14 @@ class AssignUser extends ConsumerWidget {
                   height: 32.sh(),
                 ),
                 Wrap(
-                  spacing: 12.sw(),
-                  runSpacing: 20.sh(),
-                  children: [
-                    AssignedDetail(fileDetail: fileDetail),
-                    AssignedDetail(
-                      fileDetail: fileDetail,
-                    ),
-                    AssignedDetail(
-                      fileDetail: fileDetail,
-                    ),
-                    AssignedDetail(fileDetail: fileDetail),
-                  ],
-                ),
+                    children: List.generate(
+                  areaItems.length,
+                  (index) => Padding(
+                      padding: EdgeInsets.only(right: 16.sw()),
+                      child: AreaCard(
+                        item: areaItems[index],
+                      )),
+                )),
                 SizedBox(
                   height: 58.sh(),
                 ),
@@ -133,7 +144,7 @@ class AssignUser extends ConsumerWidget {
                   },
                   onPressedOutlined: () {
                     // Navigator.of(context).overlay!.mounted;
-                    // Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   width: 96.sw(),
                   height: 32.sh(),
@@ -144,6 +155,58 @@ class AssignUser extends ConsumerWidget {
           ),
         ),
       ]),
+    );
+  }
+}
+
+class AreaCardItem {
+  AreaCardItem({required this.text, required this.color});
+  final String text;
+  final Color color;
+}
+
+List<AreaCardItem> areaItems = [
+  AreaCardItem(
+    text: 'Kalimati Area',
+    color: Color(0xffFFDDDD),
+  ),
+  AreaCardItem(
+    text: 'Sukedhara Area',
+    color: Colors.teal,
+  ),
+  AreaCardItem(
+    text: 'Chabahil Area',
+    color: Colors.amber,
+  ),
+];
+
+class AreaCard extends StatelessWidget {
+  AreaCard({
+    Key? key,
+    required this.item,
+  }) : super(key: key);
+  final AreaCardItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: item.color,
+        borderRadius: BorderRadius.circular(
+          2.sr(),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 2.sh(),
+          horizontal: 10.sw(),
+        ),
+        child: Text(
+          item.text,
+          style: kTextStyleIbmMedium.copyWith(
+              fontSize: 14.ssp(), color: Colors.black),
+        ),
+      ),
     );
   }
 }

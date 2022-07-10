@@ -141,7 +141,17 @@ class CustomMenuDropDown extends ConsumerWidget {
     final selectedValue = ref.watch(valueProvider.state).state;
 
     return Container(
-      color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
+      height: 55.sh(),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          4.sr(),
+        ),
+        border: Border.all(
+          color: lightGrey,
+        ),
+        color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
+      ),
       child: DropdownButton<CustomMenuItem>(
           selectedItemBuilder: (context) {
             return values.map((e) {
