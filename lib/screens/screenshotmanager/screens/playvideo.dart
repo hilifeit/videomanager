@@ -113,21 +113,7 @@ class _PlayVideoState extends State<PlayVideo> {
         children: [
           Expanded(
             flex: 14,
-            child: Container(
-              color: Colors.white,
-              child: Row(
-                children: [
-                  Consumer(builder: (context, ref, c) {
-                    final thisUser =
-                        ref.watch(userChangeProvider).loggedInUser.value;
-                    return VideoAssignCard(
-                      thisUser: thisUser!,
-                      item: items[1],
-                    );
-                  }),
-                ],
-              ),
-            ),
+            child: Container(color: Colors.white, child: Container()),
           ),
           Container(
             height: 73.sh(),
@@ -205,7 +191,7 @@ class _PlayVideoState extends State<PlayVideo> {
                 CustomElevatedButton(
                   width: 120.sw(),
                   height: 49.sw(),
-                  color: Colors.white,
+                  // color: Colors.white,
                   onPressedElevated: () {
                     OverlayState overlayState = Overlay.of(context)!;
                     if (!showOverlay) {

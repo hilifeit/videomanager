@@ -1,14 +1,11 @@
-import 'package:videomanager/screens/components/componentmaker.dart';
-import 'package:videomanager/screens/dashboard/dashboard.dart';
-import 'package:videomanager/screens/dashboard/table.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/overlay.dart';
+
 import 'package:videomanager/screens/screenshotmanager/screens/playvideo.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/users.dart';
-import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
+
 import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 
 final indexProvider = StateProvider<int>((ref) {
@@ -37,16 +34,16 @@ class Holder extends ConsumerWidget {
                   child: index != 4
                       ? AnimatedIndexedStack(index: index, children: [
                           ViewScreen(),
-                          const Users(),
-                          ComponentMaker(),
-                          PlayVideo()
+                          Users(),
+                          Container(),
+                          PlayVideo(),
                         ])
                       : const SettingsHolder(),
                 )
               : Expanded(
                   child: index != 1
                       ? AnimatedIndexedStack(index: index, children: [
-                          thisUser.role == 0 ? PlayVideo() : ViewScreen(),
+                          const PlayVideo(),
                         ])
                       : const SettingsHolder(),
                 ),

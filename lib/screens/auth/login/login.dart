@@ -111,7 +111,7 @@ class Login extends ConsumerWidget {
                               );
                             });
                         try {
-                          bool? status = await userService.login(
+                          await userService.login(
                             remember: checked,
                             username: username,
                             password: password,

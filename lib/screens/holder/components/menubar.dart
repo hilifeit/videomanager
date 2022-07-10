@@ -16,11 +16,11 @@ class MenuBar extends ConsumerWidget {
 
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
-  final List<CustomMenuItem> itemsUser = [
-    CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
-    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 1),
-    //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
-  ];
+  // final List<CustomMenuItem> itemsUser = [
+  //   CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
+  //   CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 1),
+  //   //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
+  // ];
 
   final StateProvider<int> indexState;
   final buttonProvider = StateProvider<bool>((ref) {
@@ -51,7 +51,7 @@ class MenuBar extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return MenuItemWidget(
                     indexState: indexState,
-                    item: thisUser!.role > 0 ? items[index] : itemsUser[index],
+                    item: items[index],
                   );
                 },
                 separatorBuilder: (_, index) {
@@ -59,7 +59,7 @@ class MenuBar extends ConsumerWidget {
                     width: 100.sw(),
                   );
                 },
-                itemCount: thisUser!.role > 0 ? 5 : 2,
+                itemCount: items.length,
               ),
             ),
           ),
@@ -97,7 +97,7 @@ class MenuBar extends ConsumerWidget {
                     child: Text(
                       maxLines: 2,
                       // userName.user.username,
-                      thisUser.name,
+                      thisUser!.name,
 
                       style: kTextStyleIbmSemiBold.copyWith(
                           fontSize: 17.ssp(min: 10), color: Colors.white),
