@@ -36,6 +36,7 @@ class SelectedArea extends ChangeNotifier {
   addPoints({required Offset point}) {
     if (_selectedPoints.length < pointLimit) {
       _selectedPoints.add(transformer.fromXYCoordsToLatLng(point));
+
       notifyListeners();
     }
   }
@@ -100,6 +101,7 @@ class SelectedArea extends ChangeNotifier {
         if (selectedPoints.length > 2 && !pathClosed.value && i == 0) {
           pathClosed.value = true;
           pathSelected.value = true;
+          refine();
         } else {
           selectedHandle.value = i;
           pathSelected.value = true;
@@ -135,6 +137,45 @@ class SelectedArea extends ChangeNotifier {
   deSelectHandle() {
     if (selectedHandle.value != null) {
       selectedHandle.value = null;
+    }
+  }
+
+  refine() {
+    Future.delayed(const Duration(milliseconds: 20), () async {
+      SelectedArea.transformer.controller.center = SelectedArea.transformer
+          .fromXYCoordsToLatLng(path.value.getBounds().center);
+      await Future.delayed(const Duration(milliseconds: 200), () async {
+        bool perfect = smartRefine();
+        while (perfect == false) {
+          await Future.delayed(const Duration(milliseconds: 1), () {
+            SelectedArea.transformer.controller.zoom =
+                SelectedArea.transformer.controller.zoom - 0.2;
+            perfect = smartRefine();
+          });
+        }
+        if (currentSelection.value.isNotEmpty) {
+          refinedSelection.value = currentSelection.value;
+          refined.value = true;
+        }
+      });
+    });
+  }
+
+  bool smartRefine() {
+    Rect visibleScreen = Rect.fromLTWH(
+        0,
+        0,
+        SelectedArea.transformer.constraints.maxWidth,
+        SelectedArea.transformer.constraints.maxHeight - 5);
+
+    Rect pathBoud = path.value.getBounds();
+    if (visibleScreen.contains(pathBoud.topLeft) &&
+        visibleScreen.contains(pathBoud.topRight) &&
+        visibleScreen.contains(pathBoud.bottomLeft) &&
+        visibleScreen.contains(pathBoud.bottomRight)) {
+      return true;
+    } else {
+      return false;
     }
   }
 
