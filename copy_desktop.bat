@@ -1,0 +1,1 @@
+xcopy "build\windows\runner\Release\" "D:\xamp\htdocs\desktop\" /Y

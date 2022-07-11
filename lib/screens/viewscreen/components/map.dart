@@ -284,6 +284,14 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   onPressed: () async {
                                     var fileService =
                                         ref.read(fileDetailMiniServiceProvider);
+                                    // fileService.updateLocationDataInServer(
+                                    //     selectedAreaService
+                                    //         .refinedSelection.value);
+
+                                    print(fileService.files[10175].id);
+                                    // fileService.fixLocationData(
+                                    //     selectedAreaService
+                                    //         .refinedSelection.value);
                                     // // await fileService.fixLocationData();
                                     // fileService.updateLocationDataInServer();
                                     // await fileService

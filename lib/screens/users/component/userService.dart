@@ -269,4 +269,26 @@ class UserService extends ChangeNotifier {
       throw "$e";
     }
   }
+
+  Future<bool> assignArea({required data}) async {
+    // if (UserService._().
+    //loggedInUser.value == null) throw "Login to continue";
+    try {
+      var response = await client.post(Uri.parse("${baseURL}area"),
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": loggedInUser.value!.accessToken!
+          },
+          body: jsonEncode(data));
+
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        throw error['message'];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

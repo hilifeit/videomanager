@@ -174,9 +174,11 @@ class FileService extends ChangeNotifier {
     return Future.value(urlFound);
   }
 
-  fixLocationData() async {
-    for (var element in files) {
-      if (element.isUseable) {
+  fixLocationData(List<FileDetailMini>? selectedFiles) async {
+    var list = selectedFiles ?? files;
+    for (var element in list) {
+      var index = files.indexOf(element);
+      if (element.isUseable && index > 6425) {
         FileDetailMini temp = FileDetailMini(
             id: element.id,
             filename: element.filename,
@@ -217,8 +219,8 @@ class FileService extends ChangeNotifier {
     }
   }
 
-  updateLocationDataInServer() async {
-    for (var element in files) {
+  updateLocationDataInServer(List<FileDetailMini>? selectedFiles) async {
+    for (var element in selectedFiles ?? files) {
       // storage.write("files", fileDetailMiniToJson(files));
       // File file = File("D:\\Projects\\file.json");
       // file.writeAsStringSync(storage.read("files"));
