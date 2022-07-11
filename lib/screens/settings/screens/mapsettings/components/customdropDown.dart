@@ -201,3 +201,73 @@ class CustomMenuDropDown extends ConsumerWidget {
     );
   }
 }
+
+class TestDropDown extends ConsumerWidget {
+  TestDropDown({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+    required this.values,
+    required this.helperText,
+    this.icon,
+  }) : super(key: key);
+  final CustomMenuItem value;
+  late final valueProvider = StateProvider<CustomMenuItem>((ref) {
+    return value;
+  });
+  final Function(CustomMenuItem val) onChanged;
+  final List<CustomMenuItem> values;
+  final String helperText;
+  Icon? icon;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final selectedValue = ref.watch(valueProvider.state).state;
+
+    return Container(
+      height: 55.sh(),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          4.sr(),
+        ),
+        border: Border.all(
+          color: lightGrey,
+        ),
+        color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
+      ),
+      child: DropdownButton<CustomMenuItem>(
+          selectedItemBuilder: (context) {
+            return values.map((e) {
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 15.sw(), vertical: 12.sh()),
+                child:Container(
+                                padding: EdgeInsets.all(7.sr()),
+                                decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(4.sr())),
+                                child: Icon(Videomanager.filter,
+                                    color: Colors.white),
+                              )
+              );
+            }).toList();
+          },
+          isExpanded: helperText != '' ? false : true,
+          underline: Container(),
+          value: selectedValue,
+         
+          items: values.map<DropdownMenuItem<CustomMenuItem>>((vall) {
+            return DropdownMenuItem<CustomMenuItem>(
+              value: vall,
+              child: Text(vall.label),
+            );
+          }).toList(),
+          onChanged: (val) {
+            ref.read(valueProvider.state).state = val as CustomMenuItem;
+
+            onChanged(val);
+          }),
+    );
+  }
+}
