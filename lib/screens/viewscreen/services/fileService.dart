@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:videomanager/screens/components/helper/disk.dart';
@@ -19,7 +18,7 @@ class FileService extends ChangeNotifier {
   List<FileDetailMini> files = [];
 
   load() async {
-    await fetch();
+    await fetch(fromServer: true);
   }
 
   fetch({bool fromServer = false}) async {
@@ -111,7 +110,7 @@ class FileService extends ChangeNotifier {
         // store();
 
         // notifyListeners();
-        print(response.body);
+
         return true;
       } else {
         var error = jsonDecode(response.body);
@@ -219,15 +218,27 @@ class FileService extends ChangeNotifier {
   }
 
   updateLocationDataInServer() async {
-    // for (var element in files) {
-    // storage.write("files", fileDetailMiniToJson(files));
-    File file = File("D:\\Projects\\file.json");
-    file.writeAsStringSync(storage.read("files"));
-    // var element = files.first;
-    // var elementJson = element.toJson();
+    for (var element in files) {
+      // storage.write("files", fileDetailMiniToJson(files));
+      // File file = File("D:\\Projects\\file.json");
+      // file.writeAsStringSync(storage.read("files"));
+      // var element = files.first;
 
-    // var status = await edit(element, data: elementJson["location"]);
-    // print("$status ${files.indexOf(element)}");
+      try {
+        var elementJson = element.toJson();
+        // if (element.id == "6299bd5a4d73c7e1d6e0fbc9")
+        {
+          var status = await edit(element, data: {
+            "location": {
+              "type": "LineString",
+              "coordinates": elementJson["location"]["coordinates"]
+            }
+          });
+          print("$status ${files.indexOf(element)} ${element.id}");
+        }
+      } catch (e) {
+        print("$e ${files.indexOf(element)} ${element.id}");
+      }
+    }
   }
-  // }
 }
