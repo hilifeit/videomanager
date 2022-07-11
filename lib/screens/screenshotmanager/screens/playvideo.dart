@@ -1,9 +1,12 @@
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
+
+enum Filter { Pending, Complete, Ongoing, Approved, Rejected }
 
 class PlayVideo extends StatefulWidget {
   const PlayVideo({Key? key}) : super(key: key);
@@ -11,6 +14,11 @@ class PlayVideo extends StatefulWidget {
   @override
   State<PlayVideo> createState() => _PlayVideoState();
 }
+
+final List<CustomMenuItem> menus = [
+  CustomMenuItem(label: "User", value: 0.toString()),
+  CustomMenuItem(label: "Manager", value: 1.toString()),
+];
 
 List<VideoAssignCardItems> items = [
   VideoAssignCardItems(
@@ -66,6 +74,7 @@ class _PlayVideoState extends State<PlayVideo> {
                                 color: Theme.of(context).primaryColor,
                               ),
                             ),
+
                             Container(
                               padding: EdgeInsets.all(7.sr()),
                               decoration: BoxDecoration(
@@ -74,6 +83,7 @@ class _PlayVideoState extends State<PlayVideo> {
                               child: Icon(Videomanager.filter,
                                   color: Colors.white),
                             ),
+                            //     ),
                           ],
                         ),
                       ),
@@ -108,15 +118,13 @@ class _PlayVideoState extends State<PlayVideo> {
     });
   }
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
 
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     keey;
-  //   });
-  // }
+    showOverlay = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +187,7 @@ class _PlayVideoState extends State<PlayVideo> {
                 Text(
                   'FileName',
                   style: kTextStyleInterMedium.copyWith(
-                    fontSize: 24.ssp(),
+                    fontSize: 18.ssp(),
                     color: Colors.white,
                   ),
                 ),
@@ -205,7 +213,7 @@ class _PlayVideoState extends State<PlayVideo> {
                 ),
                 CustomElevatedButton(
                   width: 120.sw(),
-                  height: 49.sw(),
+                  height: 40.sw(),
                   color: Colors.white,
                   onPressedElevated: () {
                     OverlayState overlayState = Overlay.of(context)!;

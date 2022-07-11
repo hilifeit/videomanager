@@ -253,56 +253,53 @@ class InputTextField extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
-          height: 55.sh(),
-          child: TextFormField(
-            controller: TextEditingController(text: value),
-            inputFormatters: [
-              if (isdigits) LengthLimitingTextInputFormatter(10),
-              isdigits
-                  ? FilteringTextInputFormatter.digitsOnly
-                  : FilteringTextInputFormatter.singleLineFormatter
-            ],
-            style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
-            onTap: onTap,
-            //controller: TextEditingController(text: ''),
-            validator: validator,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (val) {
-              onChanged(val);
-            },
+        TextFormField(
+          controller: TextEditingController(text: value),
+          inputFormatters: [
+            if (isdigits) LengthLimitingTextInputFormatter(10),
+            isdigits
+                ? FilteringTextInputFormatter.digitsOnly
+                : FilteringTextInputFormatter.singleLineFormatter
+          ],
+          style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
+          onTap: onTap,
+          //controller: TextEditingController(text: ''),
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: (val) {
+            onChanged(val);
+          },
 
-            decoration: InputDecoration(
-              prefixIcon: prefixIcon,
-              suffixText: suffixText,
-              suffixStyle: suffixStyle,
-              fillColor: fillColor,
-              filled: true,
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.sr()),
-                borderSide: const BorderSide(color: Colors.red, width: 1),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.sr()),
-                borderSide: const BorderSide(color: Colors.red, width: 1),
-              ),
-              contentPadding: EdgeInsets.only(
-                left: 17.sw(),
-                top: 16.sh(),
-                bottom: 17.sh(),
-                right: 17.sw(),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.sr()),
-                borderSide: const BorderSide(color: darkGrey, width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.sr()),
-                borderSide: const BorderSide(color: darkGrey, width: 1),
-              ),
-              hintText: isVisible ? 'Enter ${title.toLowerCase()}' : '$title',
-              hintStyle: hintStyle,
+          decoration: InputDecoration(
+            prefixIcon: prefixIcon,
+            suffixText: suffixText,
+            suffixStyle: suffixStyle,
+            fillColor: fillColor,
+            filled: true,
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
             ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+            ),
+            contentPadding: EdgeInsets.only(
+              left: 17.sw(),
+              top: 16.sh(),
+              bottom: 16.sh(),
+              right: 17.sw(),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: darkGrey, width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: darkGrey, width: 1),
+            ),
+            hintText: isVisible ? 'Enter ${title.toLowerCase()}' : '$title',
+            hintStyle: hintStyle,
           ),
         ),
       ],
