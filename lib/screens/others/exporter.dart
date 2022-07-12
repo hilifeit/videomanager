@@ -1,5 +1,6 @@
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart' as http;
+import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/components/snackbar/customsnackbar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
@@ -22,6 +23,7 @@ export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
+export  'package:flutter_svg/flutter_svg.dart';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/screens/others/theme.dart';
@@ -49,3 +51,5 @@ logout() {
   storage.remove(userStorageKey);
   Phoenix.rebirth(CustomKeys().context!);
 }
+
+final overlay= CustomOverlayEntry();

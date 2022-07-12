@@ -215,7 +215,7 @@ class InputTextField extends StatelessWidget {
   final String? Function(String? val)? validator;
   final Function()? onTap;
   final Icon? prefixIcon;
-  final TextStyle? hintStyle, suffixStyle;
+  TextStyle? hintStyle, suffixStyle;
   final TextStyle? style;
   final String value;
   final Function(String) onChanged;
@@ -254,6 +254,7 @@ class InputTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          maxLines: title == 'Remarks' ? 3 : 1,
           controller: TextEditingController(text: value),
           inputFormatters: [
             if (isdigits) LengthLimitingTextInputFormatter(10),
@@ -298,8 +299,15 @@ class InputTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(5.sr()),
               borderSide: const BorderSide(color: darkGrey, width: 1),
             ),
-            hintText: isVisible ? 'Enter ${title.toLowerCase()}' : '$title',
-            hintStyle: hintStyle,
+            hintText: title == 'Remarks'
+                ? 'Write remarks if any'
+                : isVisible
+                    ? 'Enter ${title.toLowerCase()}'
+                    : '$title',
+            hintStyle: hintStyle ??
+                kTextStyleIbmRegular.copyWith(
+                  fontSize: 16.ssp(),
+                ),
           ),
         ),
       ],

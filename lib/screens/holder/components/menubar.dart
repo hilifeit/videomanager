@@ -7,9 +7,25 @@ class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
 
   final List<CustomMenuItem> items = [
-    CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
-    CustomMenuItem(title: 'Users', icon: Videomanager.users, id: 1),
-    CustomMenuItem(title: 'Outlets', icon: Videomanager.outlets, id: 2),
+    CustomMenuItem(
+        title: 'Dashboard',
+        icon: Videomanager.dashboard,
+        id: 0,
+        notify: true,
+        number: 50),
+    CustomMenuItem(
+        title: 'Users',
+        icon: Videomanager.users,
+        id: 1,
+        notify: true,
+        number: 1),
+    CustomMenuItem(
+      title: 'Outlets',
+      icon: Videomanager.outlets,
+      id: 2,
+      notify: true,
+      number: 60000,
+    ),
     CustomMenuItem(title: 'Play Video', icon: Videomanager.play_video, id: 3),
     CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 4),
 

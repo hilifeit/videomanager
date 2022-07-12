@@ -41,6 +41,7 @@ dependencies:
   fluent_ui: ^3.12.0
   searchfield: ^0.6.6
   flutter_staggered_grid_view: ^0.6.1
+  flutter_svg: ^1.1.1+1
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -87,6 +88,8 @@ flutter:
     - assets/images/nodata.png
     - assets/images/nointernet.png
     - assets/images/Oval.png
+    - assets/images/rejected.png
+    - assets/images/rejected.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
