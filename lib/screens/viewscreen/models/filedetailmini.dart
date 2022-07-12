@@ -20,12 +20,14 @@ class FileDetailMini {
       required this.filename,
       required this.location,
       required this.path,
-      required this.isUseable
+      required this.isUseable,
+      this.foundPath = ''
       // required this.area
       });
 
   final String id;
   final String filename, path;
+  String foundPath;
   final Location location;
   final List<OriginalLocation> originalLocation = [];
   bool isUseable;

@@ -3,14 +3,20 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class VideoDetails extends StatelessWidget {
   const VideoDetails(
-      {Key? key, this.showMap = true, this.isDetailed = true, this.miniDetail})
+      {Key? key,
+      this.showMap = true,
+      this.isDetailed = true,
+      required this.file,
+      this.detailedFile})
       : super(key: key);
   final bool showMap, isDetailed;
-  final FileDetailMini? miniDetail;
+  final FileDetailMini file;
+  final FileDetail? detailedFile;
 
   @override
   Widget build(BuildContext context) {
@@ -26,50 +32,43 @@ class VideoDetails extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  VideoDetailText(
-                      title: 'Video Name',
-                      details: !isDetailed
-                          ? miniDetail != null
-                              ? miniDetail!.filename
-                              : ''
-                          : ''),
-                  if (miniDetail == null)
+                  VideoDetailText(title: 'Video Name', details: file.filename),
+                  if (isDetailed && detailedFile != null)
                     Row(
                       children: [
-                        const VideoDetailText(title: 'Size', details: '1.2GB'),
+                        VideoDetailText(
+                            title: 'Size',
+                            details: '${detailedFile?.info.size}GB'),
                         SizedBox(
                           width: 21.79.sw(),
                         ),
-                        const VideoDetailText(
-                            title: 'Duration', details: '00:05:00'),
+                        VideoDetailText(
+                            title: 'Duration',
+                            details: '${detailedFile!.info.duration}'),
                       ],
                     ),
                   VideoDetailText(
                     title: 'Path',
-                    details: !isDetailed
-                        ? miniDetail != null
-                            ? miniDetail!.path
-                            : ''
-                        : '',
+                    details: !isDetailed ? file.path : '',
                   ),
-                  if (miniDetail == null)
+                  if (isDetailed && detailedFile != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         VideoDetailText(
                           title: 'Start Time',
-                          details: '00:05:00',
+                          details: '${detailedFile!.info.startTime}',
                         ),
                         VideoDetailText(
                           title: 'End Time',
-                          details: '00:11:00',
+                          details: '${detailedFile!.info.endTime}',
                         ),
                       ],
                     ),
-                  if (miniDetail == null)
-                    const VideoDetailText(
+                  if (isDetailed && detailedFile != null)
+                    VideoDetailText(
                       title: 'Date',
-                      details: '2072-12-13',
+                      details: '${detailedFile?.info.startTime}',
                     ),
                 ],
               ),

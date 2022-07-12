@@ -87,6 +87,7 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                                       .toString()),
                                   out_min: 0,
                                   out_max: maxSliderValue);
+                              if (progress.isNaN) progress = 0.0;
                             });
                           });
                         } else {
@@ -108,7 +109,7 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                             });
                           });
                         }
-                        // print(progress);
+
                         return Row(
                           children: [
                             Text(

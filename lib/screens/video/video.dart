@@ -2,11 +2,13 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class CustomVideo extends StatefulWidget {
-  const CustomVideo({Key? key, required this.pathLeft, required this.pathRight})
+  const CustomVideo({Key? key, required this.leftFile, required this.rightFile})
       : super(key: key);
-  final String pathLeft, pathRight;
+
+  final FileDetailMini leftFile, rightFile;
   @override
   _VideoState createState() => _VideoState();
 }
@@ -21,19 +23,24 @@ class _VideoState extends State<CustomVideo> {
     if (UniversalPlatform.isDesktop) {
       VideoDimensions dimension = const VideoDimensions(1920, 1080);
 
-      Media mediaLeft = Media.network(widget.pathLeft, parse: true);
+      Media mediaLeft = Media.network(
+          widget.leftFile.foundPath.replaceAll(" ", "%20"),
+          parse: true);
 
-      Media mediaRight = Media.network(widget.pathRight, parse: true);
+      Media mediaRight = Media.network(
+          widget.rightFile.foundPath.replaceAll(" ", "%20"),
+          parse: true);
 
       player1 = PlayerController(
-          player:
-              Player(id: widget.pathLeft.length, videoDimensions: dimension),
+          player: Player(
+              id: widget.leftFile.foundPath.length, videoDimensions: dimension),
           duration: Duration(
               milliseconds: int.parse(mediaLeft.metas["duration"].toString())));
 
       player2 = PlayerController(
-          player:
-              Player(id: widget.pathRight.length, videoDimensions: dimension),
+          player: Player(
+              id: widget.rightFile.foundPath.length,
+              videoDimensions: dimension),
           duration: Duration(
               milliseconds:
                   int.parse(mediaRight.metas["duration"].toString())));
@@ -41,14 +48,14 @@ class _VideoState extends State<CustomVideo> {
       player1!.player.open(mediaLeft, autoStart: false);
       player2!.player.open(mediaRight, autoStart: false);
     } else {
-      _controller1 = VideoPlayerController.network(widget.pathLeft)
+      _controller1 = VideoPlayerController.network(widget.leftFile.foundPath)
         ..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
         }).catchError((e) {
           print(e);
         });
-      _controller2 = VideoPlayerController.network(widget.pathRight)
+      _controller2 = VideoPlayerController.network(widget.rightFile.foundPath)
         ..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
@@ -138,12 +145,18 @@ class _VideoState extends State<CustomVideo> {
                 Expanded(
                   flex: 3,
                   child: Row(
-                    children: const [
+                    children: [
                       Expanded(
-                        child: VideoDetails(),
+                        child: VideoDetails(
+                          isDetailed: true,
+                          file: widget.leftFile,
+                        ),
                       ),
                       Expanded(
-                        child: VideoDetails(),
+                        child: VideoDetails(
+                          isDetailed: true,
+                          file: widget.rightFile,
+                        ),
                       ),
                     ],
                   ),

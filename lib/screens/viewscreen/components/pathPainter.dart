@@ -237,16 +237,19 @@ class Painter extends CustomPainter {
                             visibleFilesList: visibleFilesList,
                             file: element,
                             fileRect: item);
+                        element.foundPath = firstVideoUrl;
+
                         var secondVideoUrl = firstVideoUrl;
                         if (secondVideo != null) {
                           secondVideoUrl =
                               await fileservice.getUrlFromFile(secondVideo);
+                          secondVideo.foundPath = secondVideoUrl;
                           await showDialog(
                               context: context,
                               builder: (_) {
                                 return CustomVideo(
-                                  pathLeft: firstVideoUrl,
-                                  pathRight: secondVideoUrl,
+                                  leftFile: element,
+                                  rightFile: secondVideo,
                                 );
                               });
 
@@ -261,11 +264,11 @@ class Painter extends CustomPainter {
                                 context: context,
                                 builder: (_) {
                                   return CustomVideo(
-                                    pathLeft: firstVideoUrl,
-                                    pathRight: secondVideoUrl,
+                                    leftFile: element,
+                                    rightFile: element,
                                   );
                                 });
-                            print("closed");
+
                             transformer.controller.drag(0.1, 0.1);
                           });
                         }

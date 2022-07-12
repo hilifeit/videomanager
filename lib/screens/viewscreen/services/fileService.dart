@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 
@@ -18,10 +19,27 @@ class FileService extends ChangeNotifier {
   List<FileDetailMini> files = [];
 
   load() async {
-    await fetch(fromServer: true);
+    await fetchAll(fromServer: true);
   }
 
-  fetch({bool fromServer = false}) async {
+  Future<FileDetail> fetchOne(String id) async {
+    try {
+      var response = await client.get(Uri.parse("${baseURL}file/$id"),
+          headers: {"Content-Type": "application/json"});
+
+      if (response.statusCode == 200) {
+        return fileDetailFromJson(response.body);
+      } else {
+        var error = jsonDecode(response.body);
+
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
+  fetchAll({bool fromServer = false}) async {
     if (fromServer) {
       try {
         var response = await client.get(Uri.parse("${baseURL}file"),
@@ -66,7 +84,7 @@ class FileService extends ChangeNotifier {
           // }
         });
       } else {
-        await fetch(fromServer: true);
+        await fetchAll(fromServer: true);
       }
     }
   }
