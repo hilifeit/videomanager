@@ -67,6 +67,7 @@ class Videomanager {
   static const IconData lock = IconData(0xe827, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData logout = IconData(0xe828, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData delete = IconData(0xe829, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData rejected = IconData(0xe82a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cleararea = IconData(0xe82c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData filter = IconData(0xe82d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData image_icon_group = IconData(0xe82e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -75,6 +76,10 @@ class Videomanager {
   static const IconData rewind = IconData(0xe832, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shop_2 = IconData(0xe833, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData brush = IconData(0xe834, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData pending = IconData(0xe835, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tick = IconData(0xe836, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ongoing = IconData(0xe837, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData complete = IconData(0xe838, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData info = IconData(0xe845, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData sucess = IconData(0xe846, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close = IconData(0xe847, fontFamily: _kFontFam, fontPackage: _kFontPkg);

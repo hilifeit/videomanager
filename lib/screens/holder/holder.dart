@@ -36,7 +36,7 @@ class Holder extends ConsumerWidget {
                       ? AnimatedIndexedStack(index: index, children: [
                           ViewScreen(),
                           Users(),
-                          MyStatefulWidget(),
+                          AddRemarksOnSubmit(),
                           PlayVideo(),
                         ])
                       : const SettingsHolder(),

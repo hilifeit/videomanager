@@ -20,110 +20,26 @@ final List<CustomMenuItem> menus = [
   CustomMenuItem(label: "Manager", value: 1.toString()),
 ];
 
-List<VideoAssignCardItems> items = [
-  VideoAssignCardItems(
-      fileName: "rapaddddddddddddddddddddddddti",
-      screenShot: 451,
-      shops: 2150,
-      status: 'Pending'),
-  VideoAssignCardItems(
-      fileName: "bagmati", screenShot: 155, shops: 52, status: 'Approved'),
-  VideoAssignCardItems(
-      fileName: "gandaki", screenShot: 144, shops: 5555, status: 'Complete'),
-  VideoAssignCardItems(
-      fileName: "daada", screenShot: 451, shops: 55, status: 'Rejected'),
-  VideoAssignCardItems(
-      fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
-];
-
 class _PlayVideoState extends State<PlayVideo> {
   bool showOverlay = false;
 
   late OverlayEntry overlayEntry;
   final GlobalKey keey = GlobalKey();
-  _createOverlay() {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
 
-    var size = renderBox.size;
-    return OverlayEntry(builder: (context) {
-      return Positioned(
-          right: 0,
-          bottom: 73.sh(),
-          height: size.height - 73.sh(),
-          width: 412.sw(),
-
-          //  top: renderBox.globalToLocal(point),
-          child: Material(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  // color: Colors.amber,
-                  height: 447.sh(),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(13.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Videos',
-                              style: kTextStyleIbmMedium.copyWith(
-                                fontSize: 18.ssp(),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-
-                            Container(
-                              padding: EdgeInsets.all(7.sr()),
-                              decoration: BoxDecoration(
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(4.sr())),
-                              child: Icon(Videomanager.filter,
-                                  color: Colors.white),
-                            ),
-                            //     ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 13.sh(),
-                      ),
-                      Expanded(
-                        child: Consumer(builder: (context, ref, c) {
-                          final thisUser =
-                              ref.watch(userChangeProvider).loggedInUser.value;
-                          return ListView.separated(
-                              itemBuilder: (context, index) {
-                                return VideoAssignCard(
-                                  item: items[index],
-                                  thisUser: thisUser!,
-                                );
-                              },
-                              separatorBuilder: (context, _) {
-                                return SizedBox(
-                                  height: 8.sh(),
-                                );
-                              },
-                              itemCount: items.length);
-                        }),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ));
-    });
-  }
+  late GlobalKey _key;
+  bool isMenuOpen = false;
+  late Offset buttonPosition;
+  late OverlayEntry _overlayEntry;
 
   @override
   void initState() {
-    // TODO: implement initState
+    _key = LabeledGlobalKey("button_icon");
     super.initState();
+  }
 
-    showOverlay = false;
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -134,9 +50,63 @@ class _PlayVideoState extends State<PlayVideo> {
         children: [
           Expanded(
             flex: 14,
-            child: Container(
-              color: Colors.white,
-            ),
+            child: LayoutBuilder(builder: (context, c) {
+              return Stack(
+                children: [
+                  Expanded(
+                    flex: 14,
+                    child: Container(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        OverlayState overlayState = Overlay.of(context)!;
+                        if (!showOverlay) {
+                          overlayEntry = overlay.createOverlay(context);
+                          overlayState.insert(overlayEntry);
+                        }
+                        setState(() {
+                          showOverlay = !showOverlay;
+                        });
+                      },
+                      child: Container(
+                          width: 30.sw(),
+                          height: 155.sh(),
+                          color: Color(0xffE4F5FF),
+                          child: Icon(
+                            Icons.chevron_left_rounded,
+                            color: Colors.black,
+                          )),
+                    ),
+                  ),
+                  if (showOverlay)
+                    Positioned(
+                      right: 503.sw(),
+                      bottom: c.maxHeight / 2 - (155.sh() / 2),
+                      child: InkWell(
+                        onTap: () {
+                          overlayEntry.remove();
+
+                          setState(() {
+                            showOverlay = !showOverlay;
+                          });
+                        },
+                        child: Container(
+                            width: 30.sw(),
+                            height: 155.sh(),
+                            color: Color(0xffE4F5FF),
+                            child: Icon(
+                              Icons.chevron_right_rounded,
+                              color: Colors.black,
+                            )),
+                      ),
+                    )
+                ],
+              );
+            }),
           ),
           Container(
             height: 73.sh(),
@@ -202,6 +172,7 @@ class _PlayVideoState extends State<PlayVideo> {
                     color: Colors.white,
                   ),
                   alignment: Alignment.center,
+                  padding: EdgeInsets.only(right: 3.sw(), bottom: 3.sh()),
                   child: Icon(
                     Videomanager.camera,
                     color: Theme.of(context).primaryColor,
@@ -215,18 +186,7 @@ class _PlayVideoState extends State<PlayVideo> {
                   width: 120.sw(),
                   height: 40.sw(),
                   color: Colors.white,
-                  onPressedElevated: () {
-                    OverlayState overlayState = Overlay.of(context)!;
-                    if (!showOverlay) {
-                      overlayEntry = _createOverlay();
-                      overlayState.insert(overlayEntry);
-                    } else {
-                      overlayEntry.remove();
-                    }
-                    setState(() {
-                      showOverlay = !showOverlay;
-                    });
-                  },
+                  onPressedElevated: () {},
                   elevatedButtonText: "Submit",
                   elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
                     fontSize: 20.ssp(),

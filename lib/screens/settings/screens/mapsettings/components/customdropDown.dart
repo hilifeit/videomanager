@@ -237,26 +237,29 @@ class TestDropDown extends ConsumerWidget {
         color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
       ),
       child: DropdownButton<CustomMenuItem>(
+          hint: Container(
+            padding: EdgeInsets.all(7.sr()),
+            decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(4.sr())),
+            child: Icon(Videomanager.filter, color: Colors.white),
+          ),
           selectedItemBuilder: (context) {
             return values.map((e) {
               return Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 15.sw(), vertical: 12.sh()),
-                child:Container(
-                                padding: EdgeInsets.all(7.sr()),
-                                decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(4.sr())),
-                                child: Icon(Videomanager.filter,
-                                    color: Colors.white),
-                              )
+                child: Text(
+                  "${e.label} $helperText",
+                  style: kTextStyleIbmSemiBold.copyWith(
+                      fontSize: 16.ssp(), color: Colors.black),
+                ),
               );
             }).toList();
           },
           isExpanded: helperText != '' ? false : true,
           underline: Container(),
           value: selectedValue,
-         
           items: values.map<DropdownMenuItem<CustomMenuItem>>((vall) {
             return DropdownMenuItem<CustomMenuItem>(
               value: vall,
