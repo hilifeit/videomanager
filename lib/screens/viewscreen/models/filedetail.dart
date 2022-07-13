@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 
 FileDetail fileDetailFromJson(String str) =>
     FileDetail.fromJson(json.decode(str));
@@ -12,18 +13,19 @@ FileDetail fileDetailFromJson(String str) =>
 String fileDetailToJson(FileDetail data) => json.encode(data.toJson());
 
 class FileDetail {
-  FileDetail({
-    required this.id,
-    required this.path,
-    required this.useable,
-    required this.info,
-    required this.area,
-    required this.location,
-    required this.enabled,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
-  });
+  FileDetail(
+      {required this.id,
+      required this.path,
+      required this.useable,
+      required this.info,
+      required this.area,
+      required this.location,
+      required this.enabled,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.v,
+      this.foundPath = '',
+      t});
 
   final String id;
   final String path;
@@ -35,7 +37,8 @@ class FileDetail {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int v;
-
+  String foundPath;
+  final List<OriginalLocation> originalLocation = [];
   FileDetail copyWith({
     required String id,
     required String path,
@@ -58,6 +61,7 @@ class FileDetail {
         enabled: enabled,
         createdAt: createdAt,
         updatedAt: updatedAt,
+        foundPath: foundPath,
         v: v,
       );
 
@@ -70,6 +74,7 @@ class FileDetail {
         location: Location.fromJson(json["location"]),
         enabled: json["enabled"],
         createdAt: DateTime.parse(json["createdAt"]),
+        foundPath: '',
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
       );

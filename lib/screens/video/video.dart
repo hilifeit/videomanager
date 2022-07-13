@@ -2,13 +2,13 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
-import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 
 class CustomVideo extends StatefulWidget {
   const CustomVideo({Key? key, required this.leftFile, required this.rightFile})
       : super(key: key);
 
-  final FileDetailMini leftFile, rightFile;
+  final FileDetail leftFile, rightFile;
   @override
   _VideoState createState() => _VideoState();
 }
@@ -149,13 +149,13 @@ class _VideoState extends State<CustomVideo> {
                       Expanded(
                         child: VideoDetails(
                           isDetailed: true,
-                          file: widget.leftFile,
+                          detailedFile: widget.leftFile,
                         ),
                       ),
                       Expanded(
                         child: VideoDetails(
                           isDetailed: true,
-                          file: widget.rightFile,
+                          detailedFile: widget.rightFile,
                         ),
                       ),
                     ],

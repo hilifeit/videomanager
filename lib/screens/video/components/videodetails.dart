@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:map/map.dart';
+import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -11,11 +13,11 @@ class VideoDetails extends StatelessWidget {
       {Key? key,
       this.showMap = true,
       this.isDetailed = true,
-      required this.file,
+      this.file,
       this.detailedFile})
       : super(key: key);
   final bool showMap, isDetailed;
-  final FileDetailMini file;
+  final FileDetailMini? file;
   final FileDetail? detailedFile;
 
   @override
@@ -32,43 +34,53 @@ class VideoDetails extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  VideoDetailText(title: 'Video Name', details: file.filename),
+                  if (file != null || detailedFile != null)
+                    VideoDetailText(
+                        title: 'Video Name',
+                        details: isDetailed
+                            ? detailedFile!.info.filename
+                            : file!.filename),
                   if (isDetailed && detailedFile != null)
                     Row(
                       children: [
                         VideoDetailText(
                             title: 'Size',
-                            details: '${detailedFile?.info.size}GB'),
+                            details: formatBytes(detailedFile?.info.size)),
                         SizedBox(
                           width: 21.79.sw(),
                         ),
                         VideoDetailText(
                             title: 'Duration',
-                            details: '${detailedFile!.info.duration}'),
+                            details: DateFormat("HH:mm:ss")
+                                .format(detailedFile!.info.duration)),
                       ],
                     ),
-                  VideoDetailText(
-                    title: 'Path',
-                    details: !isDetailed ? file.path : '',
-                  ),
+                  if (file != null || detailedFile != null)
+                    VideoDetailText(
+                      title: 'Path',
+                      details: !isDetailed ? file!.path : detailedFile!.path,
+                    ),
                   if (isDetailed && detailedFile != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         VideoDetailText(
-                          title: 'Start Time',
-                          details: '${detailedFile!.info.startTime}',
-                        ),
+                            title: 'Start Time',
+                            details: DateFormat("HH:mm:ss").format(getStartTime(
+                                detailedFile!.info.modifiedDate,
+                                detailedFile!.info.duration))),
                         VideoDetailText(
                           title: 'End Time',
-                          details: '${detailedFile!.info.endTime}',
+                          details: DateFormat("HH:mm:ss")
+                              .format(detailedFile!.info.modifiedDate),
                         ),
                       ],
                     ),
                   if (isDetailed && detailedFile != null)
                     VideoDetailText(
                       title: 'Date',
-                      details: '${detailedFile?.info.startTime}',
+                      details: DateFormat("EEEE, dd MMMM, y")
+                          .format(detailedFile!.info.modifiedDate),
                     ),
                 ],
               ),
@@ -124,6 +136,14 @@ class VideoDetails extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  DateTime getStartTime(DateTime endTime, DateTime duration) {
+    Duration newDuration = Duration(
+        hours: duration.hour,
+        minutes: duration.minute,
+        seconds: duration.second);
+    return endTime.subtract(newDuration);
   }
 }
 
