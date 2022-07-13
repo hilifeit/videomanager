@@ -1,7 +1,6 @@
 import 'package:videomanager/screens/components/videosidebar/videosidebar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
 
 class CustomREctClipper extends CustomClipper<Path> {
   CustomREctClipper({
@@ -51,16 +50,38 @@ class CustomOverlayEntry {
   CustomOverlayEntry._internal();
 
   late OverlayEntry overlay;
-  late OverlayEntry progressOverlay;
+  late OverlayEntry loader;
   late OverlayEntry filter;
+  late BuildContext context;
   closeOverlay() {
     overlay.remove();
   }
 
+  showLoader() {
+    Future.delayed(const Duration(milliseconds: 15), () {
+      OverlayState state = Overlay.of(context)!;
+      loader = progressIndicatorOverlay(context);
+      state.insert(loader);
+    });
+  }
+
+  closeLoader() {
+    Future.delayed(const Duration(milliseconds: 18), () {
+      loader.remove();
+    });
+  }
+
   progressIndicatorOverlay(BuildContext context) {
-    progressOverlay = OverlayEntry(builder: ((context) {
-      return CircularProgressIndicator(
-        color: Theme.of(context).primaryColor,
+    return OverlayEntry(builder: ((context) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Theme.of(context).primaryColor.withOpacity(0.2),
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
       );
     }));
   }
@@ -140,7 +161,7 @@ final filterItemProvider = StateProvider<FilterItemWidgetItem?>((ref) {
 });
 
 class FilterIconButton extends ConsumerStatefulWidget {
-  FilterIconButton({
+  const FilterIconButton({
     Key? key,
   }) : super(key: key);
 
@@ -182,7 +203,7 @@ class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Videomanager.filter, color: Colors.white),
+            icon: const Icon(Videomanager.filter, color: Colors.white),
             onPressed: () {
               if (isMenuOpen) {
                 CustomOverlayEntry().filter.remove();
@@ -259,7 +280,7 @@ List<FilterItemWidgetItem> filterItems = [
 ];
 
 class FilterItemWidget extends StatelessWidget {
-  FilterItemWidget({
+  const FilterItemWidget({
     Key? key,
     required this.item,
   }) : super(key: key);

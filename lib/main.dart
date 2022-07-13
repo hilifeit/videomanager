@@ -38,11 +38,8 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeMode.light,
             darkTheme: ThemeData(brightness: Brightness.dark),
             theme: lightTheme,
-            builder: (_, home) {
-              return home!;
-            },
-            initialRoute: '/',
-            routes: {"/": (context) => const Loader()},
+            home: const Loader(),
+
             // home: const Scaffold(body: Loader())
           ),
         );

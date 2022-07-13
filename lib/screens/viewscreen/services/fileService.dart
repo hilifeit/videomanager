@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:videomanager/screens/components/helper/disk.dart';
+import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
@@ -42,9 +43,10 @@ class FileService extends ChangeNotifier {
   fetchAll({bool fromServer = false}) async {
     if (fromServer) {
       try {
+        CustomOverlayEntry().showLoader();
         var response = await client.get(Uri.parse("${baseURL}file"),
             headers: {"Content-Type": "application/json"});
-
+        CustomOverlayEntry().closeLoader();
         if (response.statusCode == 200) {
           files = fileDetailMiniFromJson(response.body).toList();
 
