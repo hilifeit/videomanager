@@ -43,42 +43,37 @@ class UserStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 66.sw(),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'User Statistics',
-            style: kTextStyleInterSemiBold.copyWith(
-              color: Theme.of(context).primaryColor,
-              fontSize: 21.ssp(),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'User Statistics',
+          style: kTextStyleInterSemiBold.copyWith(
+            color: Theme.of(context).primaryColor,
+            fontSize: 21.ssp(),
           ),
-          SizedBox(
-            height: 60.sh(),
+        ),
+        SizedBox(
+          height: 60.sh(),
+        ),
+        Expanded(
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: items.length,
+            separatorBuilder: (_, index) {
+              return SizedBox(
+                width: 29.sw(),
+              );
+            },
+            itemBuilder: (_, index) {
+              return items[index];
+            },
           ),
-          Expanded(
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: items.length,
-              separatorBuilder: (_, index) {
-                return SizedBox(
-                  width: 29.sw(),
-                );
-              },
-              itemBuilder: (_, index) {
-                return items[index];
-              },
-            ),
-          ),
-          SizedBox(
-            height: 56.sh(),
-          ),
-        ],
-      ),
+        ),
+        SizedBox(
+          height: 56.sh(),
+        ),
+      ],
     );
   }
 }

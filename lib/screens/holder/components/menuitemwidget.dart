@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class CustomMenuItem {
@@ -32,6 +33,10 @@ class MenuItemWidget extends ConsumerWidget {
       child: GestureDetector(
         onTap: (() {
           ref.read(indexState.state).state = item.id;
+          CustomOverlayEntry().closeVideoBar();
+          if (CustomOverlayEntry().isMenuOpen) {
+            CustomOverlayEntry().closeFilter();
+          }
         }),
         child: Card(
           elevation: 0,
@@ -40,6 +45,7 @@ class MenuItemWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 10.sw()),
@@ -51,27 +57,30 @@ class MenuItemWidget extends ConsumerWidget {
                   ),
                   if (item.notify && item.number != null)
                     Positioned(
-                      right: 0,
+                      right: -5,
+                      top: -8,
                       child: CircleAvatar(
-                        radius: (16.13 / 2).sr(),
+                        radius: (19 / 2).sr(),
                         backgroundColor: primaryColor,
                         child: Container(
-                          padding: EdgeInsets.all(1.sr()),
-                          decoration: BoxDecoration(
-                            color: Color(0xffFFD0D5),
-                            borderRadius: BorderRadius.circular(7.5.sr()),
-                          ),
+                          padding: EdgeInsets.all(2.sr()),
+                          decoration: const BoxDecoration(
+                              color: Color(0xffFFD0D5), shape: BoxShape.circle
+                              // borderRadius: BorderRadius.circular(8.565.sr()),
+                              ),
                           constraints: BoxConstraints(
-                            minWidth: 15.13.sw(),
-                            minHeight: 15.13.sh(),
+                            minWidth: 17.13.sr(),
+                            minHeight: 17.13.sr(),
                           ),
-                          child: Text(
-                            item.number! < 10 ? item.number.toString() : '9+',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 10.ssp(),
-                              color: primaryColor,
+                          child: FittedBox(
+                            child: Text(
+                              item.number! < 10 ? item.number.toString() : '9+',
+                              style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 10.ssp(),
+                                color: primaryColor,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),

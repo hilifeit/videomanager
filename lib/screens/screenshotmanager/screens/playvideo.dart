@@ -11,7 +11,7 @@ final mutedProvider = StateProvider<bool>((ref) {
 });
 
 class PlayVideo extends ConsumerWidget {
-  PlayVideo({Key? key}) : super(key: key);
+  PlayVideo({Key? key, required this.role}) : super(key: key);
 
   final List<CustomMenuItem> menus = [
     CustomMenuItem(label: "User", value: 0.toString()),
@@ -21,6 +21,7 @@ class PlayVideo extends ConsumerWidget {
   // bool showOverlay = false;
 
   late OverlayEntry overlayEntry;
+  final int role;
   // final GlobalKey keey = GlobalKey();
 
   // late GlobalKey _key;
@@ -50,10 +51,7 @@ class PlayVideo extends ConsumerWidget {
                   alignment: Alignment.centerRight,
                   child: InkWell(
                     onTap: () {
-                      OverlayState overlayState = Overlay.of(context)!;
-                      CustomOverlayEntry().createOverlay(context);
-                      overlayEntry = CustomOverlayEntry().overlay;
-                      overlayState.insert(overlayEntry);
+                      CustomOverlayEntry().showvideoBar(context, role);
                     },
                     child: Container(
                         width: 30.sw(),
@@ -65,28 +63,6 @@ class PlayVideo extends ConsumerWidget {
                         )),
                   ),
                 ),
-                // if (showOverlay)
-                //   Positioned(
-                //     right: 503.sw(),
-                //     bottom: c.maxHeight / 2 - (155.sh() / 2),
-                //     child: InkWell(
-                //       onTap: () {
-                //         overlayEntry.remove();
-
-                //         setState(() {
-                //           showOverlay = !showOverlay;
-                //         });
-                //       },
-                //       child: Container(
-                //           width: 30.sw(),
-                //           height: 155.sh(),
-                //           color: Color(0xffE4F5FF),
-                //           child: Icon(
-                //             Icons.chevron_right_rounded,
-                //             color: Colors.black,
-                //           )),
-                //     ),
-                //   )
               ],
             ),
           ),
@@ -119,7 +95,16 @@ class PlayVideo extends ConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    ref.read(mutedProvider.state).state = !mute;
+                    if (volume != 0 && mute) {
+                      ref.read(mutedProvider.state).state = false;
+                    }
+                    if (volume == 0 && mute) {
+                      ref.read(mutedProvider.state).state = false;
+                      ref.read(volumeProvider.state).state = 0.2;
+                    }
+                    if (!mute) {
+                      ref.read(mutedProvider.state).state = true;
+                    }
                   },
                   icon: mute || volume == 0
                       ? Icon(
@@ -134,12 +119,20 @@ class PlayVideo extends ConsumerWidget {
                         ),
                 ),
                 SizedBox(
-                  width: 6.75.sw(),
+                  width: 10.sw(),
                 ),
                 CustomSliderHollowThumb(
-                    value: mute ? 0 : volume,
+                    value: mute && volume != 0 ? 0 : volume,
+                    onChangedEnd: (val) {
+                      if (val == 0) {
+                        ref.read(mutedProvider.state).state = true;
+                      }
+                    },
                     onChanged: (val) {
                       ref.read(volumeProvider.state).state = val;
+                      if (volume != 0) {
+                        ref.read(mutedProvider.state).state = false;
+                      }
                     }),
                 SizedBox(
                   width: 24.sw(),

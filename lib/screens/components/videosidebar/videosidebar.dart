@@ -1,16 +1,36 @@
+import 'package:map/map.dart';
 import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/component/userstats.dart';
+import 'package:videomanager/screens/viewscreen/components/map.dart';
 
-class VideoSideBAr extends StatelessWidget {
-  VideoSideBAr({Key? key, required this.size}) : super(key: key);
+class VideoSideBar extends StatelessWidget {
+  VideoSideBar({Key? key, required this.size, required this.role})
+      : super(key: key);
   final Size size;
+  final int role;
+
+  List<VideoAssignCardItems> items = [
+    VideoAssignCardItems(
+        fileName: "rapa", screenShot: 451, shops: 2150, status: 'Pending'),
+    VideoAssignCardItems(
+        fileName: "bagmati", screenShot: 155, shops: 52, status: 'Approved'),
+    VideoAssignCardItems(
+        fileName: "gandaki", screenShot: 144, shops: 5555, status: 'Complete'),
+    VideoAssignCardItems(
+        fileName: "daada", screenShot: 451, shops: 55, status: 'Rejected'),
+    VideoAssignCardItems(
+        fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
+    VideoAssignCardItems(
+        fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: Colors.transparent,
       body: Row(
         children: [
           ClipPath(
@@ -23,7 +43,10 @@ class VideoSideBAr extends StatelessWidget {
                 smallWidth: 30.sw()),
             child: InkWell(
               onTap: () {
-                CustomOverlayEntry().closeOverlay();
+                if (CustomOverlayEntry().isMenuOpen) {
+                  CustomOverlayEntry().closeFilter();
+                }
+                CustomOverlayEntry().closeVideoBar();
               },
               child: Container(
                   width: 30.sw(),
@@ -58,11 +81,22 @@ class VideoSideBAr extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  role == 0
+                      ? Expanded(child: UserStats())
+                      : Expanded(
+                          // height: size.height - 535.sh(),
+                          child: MapScreen(
+                            isvisible: false,
+                            draw: false,
+                            controller: MapController(location: home),
+                          ),
+                        ),
+                  SizedBox(
+                    height: 5.sh(),
+                  ),
                   SizedBox(
                     height: 480.sh(),
                     child: Consumer(builder: (context, ref, c) {
-                      final filterSelect =
-                          ref.watch(filterItemProvider.state).state;
                       return Column(
                         children: [
                           Row(
@@ -76,20 +110,8 @@ class VideoSideBAr extends StatelessWidget {
                                 ),
                               ),
                               Spacer(),
-                              if (filterSelect != null)
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5.sw(),
-                                      ),
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      child:
-                                          FilterItemWidget(item: filterSelect)),
-                                ),
                               FilterIconButton(),
+
                               //     ),
                             ],
                           ),

@@ -1,7 +1,7 @@
+import 'package:videomanager/screens/components/videosidebar/filteroverlay.dart';
 import 'package:videomanager/screens/components/videosidebar/videosidebar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
 
 class CustomREctClipper extends CustomClipper<Path> {
   CustomREctClipper({
@@ -51,16 +51,60 @@ class CustomOverlayEntry {
   CustomOverlayEntry._internal();
 
   late OverlayEntry overlay;
-  late OverlayEntry progressOverlay;
+  late OverlayEntry loader;
   late OverlayEntry filter;
-  closeOverlay() {
+  late BuildContext context;
+
+  bool isMenuOpen = false;
+  closeVideoBar() {
     overlay.remove();
   }
 
+  showvideoBar(c, role) {
+    OverlayState overlayState = Overlay.of(c)!;
+    createOverlay(c, role);
+    overlayState.insert(overlay);
+  }
+
+  showLoader() {
+    Future.delayed(const Duration(milliseconds: 15), () {
+      OverlayState state = Overlay.of(context)!;
+      loader = progressIndicatorOverlay(context);
+      state.insert(loader);
+    });
+  }
+
+  closeLoader() {
+    Future.delayed(const Duration(milliseconds: 18), () {
+      loader.remove();
+    });
+  }
+
+  showFilter(BuildContext c) {
+    OverlayState filterState = Overlay.of(c)!;
+    filterOverlay(c);
+    filterState.insert(filter);
+    isMenuOpen = !isMenuOpen;
+  }
+
+  closeFilter() {
+    Future.delayed(const Duration(milliseconds: 18), () {
+      filter.remove();
+      isMenuOpen = !isMenuOpen;
+    });
+  }
+
   progressIndicatorOverlay(BuildContext context) {
-    progressOverlay = OverlayEntry(builder: ((context) {
-      return CircularProgressIndicator(
-        color: Theme.of(context).primaryColor,
+    return OverlayEntry(builder: ((context) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Theme.of(context).primaryColor.withOpacity(0.2),
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
       );
     }));
   }
@@ -92,9 +136,7 @@ class CustomOverlayEntry {
                               onTap: () {
                                 ref.read(filterItemProvider.state).state =
                                     filterItems[index];
-                                ref.read(filterOpenProvider.state).state =
-                                    false;
-                                filter.remove();
+                                closeFilter();
                               },
                               child: FilterItemWidget(
                                 item: filterItems[index],
@@ -103,9 +145,7 @@ class CustomOverlayEntry {
                           : InkWell(
                               onTap: () {
                                 ref.read(filterItemProvider.state).state = null;
-                                ref.read(filterOpenProvider.state).state =
-                                    false;
-                                filter.remove();
+                                closeFilter();
                               },
                               child: FilterItemWidget(
                                 item: filterItems[index],
@@ -120,7 +160,7 @@ class CustomOverlayEntry {
     );
   }
 
-  createOverlay(BuildContext context) {
+  createOverlay(BuildContext context, role) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     var size = renderBox.size;
@@ -132,7 +172,8 @@ class CustomOverlayEntry {
           width: 533.sw(),
 
           //  top: renderBox.globalToLocal(point),
-          child: VideoSideBAr(
+          child: VideoSideBar(
+            role: role,
             size: size,
           ));
     });
@@ -143,155 +184,45 @@ final filterItemProvider = StateProvider<FilterItemWidgetItem?>((ref) {
   return null;
 });
 
-final filterOpenProvider = StateProvider<bool>((ref) {
-  return false;
-});
-
 class FilterIconButton extends ConsumerWidget {
   FilterIconButton({Key? key}) : super(key: key);
 
-  late Offset buttonPosition;
   final FocusNode foucusNode = FocusNode();
-
-  late OverlayEntry overlayEntry;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isMenuOpen = ref.watch(filterOpenProvider.state).state;
-    return Container(
-      // padding: EdgeInsets.all(7.sr()),
-      decoration: BoxDecoration(
-          color: primaryColor, borderRadius: BorderRadius.circular(4.sr())),
+    final filterSelect = ref.watch(filterItemProvider.state).state;
+    return InkWell(
+      onTap: () {
+        if (CustomOverlayEntry().isMenuOpen) {
+          CustomOverlayEntry().closeFilter();
+        } else {
+          CustomOverlayEntry().showFilter(context);
+        }
+      },
       child: Row(
         children: [
-          IconButton(
-            icon: Icon(Videomanager.filter, color: Colors.white),
-            onPressed: () {
-              if (isMenuOpen) {
-                CustomOverlayEntry().filter.remove();
-                ref.read(filterOpenProvider.state).state = !isMenuOpen;
-              } else {
-                OverlayState overlayState = Overlay.of(context)!;
-                CustomOverlayEntry().filterOverlay(context);
-                overlayState.insert(CustomOverlayEntry().filter);
-                ref.read(filterOpenProvider.state).state = !isMenuOpen;
-              }
-            },
+          if (filterSelect != null)
+            Padding(
+              padding: EdgeInsets.only(right: 5.sw()),
+              child: Container(
+                  padding: EdgeInsets.all(
+                    7.sw(),
+                  ),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.black)),
+                  child: FilterItemWidget(item: filterSelect)),
+            ),
+          Container(
+            padding: EdgeInsets.all(10.sr()),
+            decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(4.sr())),
+            child:
+                Icon(Videomanager.filter, color: Colors.white, size: 18.ssp()),
           ),
         ],
       ),
     );
   }
 }
-
-// void closeMenu() {
-//   overlayEntry.remove();
-//   isMenuOpen = !isMenuOpen;
-// }
-
-// @override
-// void initState() {
-//   super.initState();
-
-//   foucusNode.addListener(() {
-//     if (!foucusNode.hasFocus) {
-//       closeMenu();
-//     }
-//   });
-// }
-
-class FilterItemWidgetItem {
-  FilterItemWidgetItem({required this.icon, required this.text});
-  final String text;
-  final Widget icon;
-}
-
-List<FilterItemWidgetItem> filterItems = [
-  FilterItemWidgetItem(
-      icon: Icon(
-        Videomanager.pending,
-        color: Colors.black,
-        size: 14.88.ssp(),
-      ),
-      text: 'Pending'),
-  FilterItemWidgetItem(
-      icon: Icon(
-        Icons.done,
-        color: Colors.black,
-        size: 14.88.ssp(),
-      ),
-      text: 'Complete'),
-  FilterItemWidgetItem(
-      icon: Icon(
-        Videomanager.ongoing,
-        color: Colors.black,
-        size: 14.88.ssp(),
-      ),
-      text: 'Ongoing'),
-  FilterItemWidgetItem(
-    icon: Icon(
-      Videomanager.complete,
-      color: Colors.black,
-      size: 14.88.ssp(),
-    ),
-    text: 'Approved',
-  ),
-  FilterItemWidgetItem(
-      icon: Padding(
-        padding: EdgeInsets.only(left: 2.sw()),
-        child: SvgPicture.asset(
-          'assets/images/rejected.svg',
-          // color: Colors.black,
-          width: 12.57.sw(),
-          height: 13.62.sh(),
-        ),
-      ),
-      text: 'Rejected'),
-  FilterItemWidgetItem(
-    icon: Icon(
-      Videomanager.refresh,
-      color: Colors.black,
-      size: 14.88.ssp(),
-    ),
-    text: 'All',
-  ),
-];
-
-class FilterItemWidget extends StatelessWidget {
-  FilterItemWidget({
-    Key? key,
-    required this.item,
-  }) : super(key: key);
-  final FilterItemWidgetItem item;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        item.icon,
-        SizedBox(
-          width: 9.06.sw(),
-        ),
-        Text(
-          item.text,
-          style: kTextStyleIbmRegular.copyWith(
-              fontSize: 14.ssp(), color: Colors.black),
-        ),
-      ],
-    );
-  }
-}
-
-List<VideoAssignCardItems> items = [
-  VideoAssignCardItems(
-      fileName: "rapa", screenShot: 451, shops: 2150, status: 'Pending'),
-  VideoAssignCardItems(
-      fileName: "bagmati", screenShot: 155, shops: 52, status: 'Approved'),
-  VideoAssignCardItems(
-      fileName: "gandaki", screenShot: 144, shops: 5555, status: 'Complete'),
-  VideoAssignCardItems(
-      fileName: "daada", screenShot: 451, shops: 55, status: 'Rejected'),
-  VideoAssignCardItems(
-      fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
-  VideoAssignCardItems(
-      fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
-];

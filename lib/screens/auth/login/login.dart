@@ -121,11 +121,9 @@ class Login extends ConsumerWidget {
                           ref.read(loginStateProvider.state).state = false;
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context);
-                        } catch (e, s) {
+                        } catch (e) {
                           Navigator.pop(context);
                           snack.error(e);
-
-                          print('$e $s');
                         }
                       }
 
@@ -204,28 +202,8 @@ class Login extends ConsumerWidget {
       // User canceled the picker
 
     } else {
-      // List<String> drives = [];
       List<String> finalDrives = [];
-      if (!single) {
-        // var p = await Process.run(
-        //     // "cmd /c wmic logicaldisk get name", [],
-        //     "cmd /c fsutil fsinfo drives",
-        //     [],
-        //     runInShell: true);
-        // // drives = p.outText.split(' ').toList();
-
-        // await Future.forEach<String>(drives, (element) {
-        //   if (element.contains(':\\')) {
-        //     Directory d = Directory(element + 'Managed Video');
-        //     if (d.existsSync()) {
-        //       finalDrives.add(element + 'Managed Video');
-        //     }
-        //   }
-        // });
-        // finalDrives.forEach((element) {
-        //   print(element);
-        // });
-      }
+      if (!single) {}
 
       final List<FileSystemEntity> entities = [];
       if (single) {

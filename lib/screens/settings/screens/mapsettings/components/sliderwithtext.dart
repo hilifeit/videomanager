@@ -75,7 +75,7 @@ class CustomSliderComponentShapeRoundHollow extends SliderComponentShape {
 
     // path.addRRect(
 
-    path.addOval(Rect.fromCircle(center: center, radius: 7.sr()));
+    path.addOval(Rect.fromCircle(center: center, radius: 10.sr()));
     //   RRect.fromRectXY(
     //     Rect.fromCenter(center: center, width: 20.sw(), height: 20.sh()),
     //     10.sr(),
@@ -92,7 +92,7 @@ class CustomSliderComponentShapeRoundHollow extends SliderComponentShape {
 
     // // path.addRect(Rect.fromCenter(center: center, width: 40, height: 25));
     context.canvas.drawPath(path, paint);
-    context.canvas.drawCircle(center, 5.sr(), paintInside);
+    context.canvas.drawCircle(center, 8.sr(), paintInside);
     // tp.paint(context.canvas,
     //     Offset(center.dx - tp.width / 2, center.dy - tp.height / 2));
   }
@@ -221,12 +221,14 @@ class CustomSliderHollowThumb extends StatelessWidget {
       {Key? key,
       required this.value,
       required this.onChanged,
-      this.isDiscrete = false})
+      this.isDiscrete = false,
+      required this.onChangedEnd})
       : super(key: key);
 
   final double value;
   final bool isDiscrete;
   final Function(double val) onChanged;
+  final Function(double val) onChangedEnd;
 
   late final valueProvider = StateProvider<double>((ref) {
     return value;
@@ -264,6 +266,9 @@ class CustomSliderHollowThumb extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: Slider(
+                  onChangeEnd: (val) {
+                    onChangedEnd(val);
+                  },
                   label: currentValue.round().toString(),
                   activeColor: Colors.white,
                   thumbColor: const Color(0xff9FC6DD),

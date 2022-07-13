@@ -37,14 +37,14 @@ class Holder extends ConsumerWidget {
                           ViewScreen(),
                           Users(),
                           AddRemarksOnSubmit(),
-                          PlayVideo(),
+                          PlayVideo(role: thisUser.role),
                         ])
                       : const SettingsHolder(),
                 )
               : Expanded(
                   child: index != 1
                       ? AnimatedIndexedStack(index: index, children: [
-                          PlayVideo(),
+                          PlayVideo(role: thisUser.role),
                         ])
                       : const SettingsHolder(),
                 ),

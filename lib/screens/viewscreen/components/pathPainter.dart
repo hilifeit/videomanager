@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
+import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -229,6 +230,7 @@ class Painter extends CustomPainter {
                 ),
                 PopupMenuItem(
                     onTap: () async {
+                      CustomOverlayEntry().showLoader();
                       var firstVideoUrl =
                           await fileservice.getUrlFromFile(element);
 
@@ -244,6 +246,7 @@ class Painter extends CustomPainter {
                           secondVideoUrl =
                               await fileservice.getUrlFromFile(secondVideo);
                           secondVideo.foundPath = secondVideoUrl;
+                          CustomOverlayEntry().closeLoader();
                           await showDialog(
                               context: context,
                               builder: (_) {
@@ -260,6 +263,7 @@ class Painter extends CustomPainter {
                           await snack.info("Adjacent Video not found");
                           Future.delayed(const Duration(milliseconds: 800),
                               () async {
+                            CustomOverlayEntry().closeLoader();
                             await showDialog(
                                 context: context,
                                 builder: (_) {
@@ -273,6 +277,7 @@ class Painter extends CustomPainter {
                           });
                         }
                       } else {
+                        CustomOverlayEntry().closeLoader();
                         snack.error("Video not found!");
                       }
                     },
