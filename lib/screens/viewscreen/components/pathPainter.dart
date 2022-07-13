@@ -240,19 +240,28 @@ class Painter extends CustomPainter {
                             file: element,
                             fileRect: item);
                         element.foundPath = firstVideoUrl;
+                        var leftFile = await fileservice.fetchOne(element.id);
+                        leftFile.foundPath = element.foundPath;
 
                         var secondVideoUrl = firstVideoUrl;
                         if (secondVideo != null) {
                           secondVideoUrl =
                               await fileservice.getUrlFromFile(secondVideo);
                           secondVideo.foundPath = secondVideoUrl;
+
+                          var rightFile =
+                              await fileservice.fetchOne(secondVideo.id);
+
+                          rightFile.foundPath = secondVideo.foundPath;
+
+                          // print(secondVideo.id);
                           CustomOverlayEntry().closeLoader();
                           await showDialog(
                               context: context,
                               builder: (_) {
                                 return CustomVideo(
-                                  leftFile: element,
-                                  rightFile: secondVideo,
+                                  leftFile: leftFile,
+                                  rightFile: rightFile,
                                 );
                               });
 
@@ -268,8 +277,8 @@ class Painter extends CustomPainter {
                                 context: context,
                                 builder: (_) {
                                   return CustomVideo(
-                                    leftFile: element,
-                                    rightFile: element,
+                                    leftFile: leftFile,
+                                    rightFile: leftFile,
                                   );
                                 });
 

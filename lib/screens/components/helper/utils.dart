@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 int map(int x, int inMin, int inMax, int outMin, int outMax) {
   var calc =
       ((x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin).toInt();
@@ -49,4 +51,13 @@ String intToTime(int value,
   String result = "${hour ? "$hourLeft:" : ""}$minuteLeft:$secondsLeft";
 
   return result;
+}
+
+formatBytes(bytes, {int decimals = 2}) {
+  if (bytes == 0) return '0 Bytes';
+  const k = 1024;
+  var dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  var i = (math.log(bytes) / math.log(k)).floor();
+  return '${((bytes) / math.pow(k, i)).toStringAsFixed(dm)} ${sizes[i]}';
 }

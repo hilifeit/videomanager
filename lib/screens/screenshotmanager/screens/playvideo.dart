@@ -1,13 +1,19 @@
-import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 
 enum Filter { Pending, Complete, Ongoing, Approved, Rejected }
+
+class Tetst extends HookConsumerWidget {
+  Tetst({Key? key}) : super(key: key);
+  AnimationController controller = useAnimationController();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container();
+  }
+}
 
 class PlayVideo extends StatefulWidget {
   const PlayVideo({Key? key}) : super(key: key);
@@ -71,8 +77,8 @@ class _PlayVideoState extends State<PlayVideo> {
                     child: Container(
                         width: 30.sw(),
                         height: 155.sh(),
-                        color: Color(0xffE4F5FF),
-                        child: Icon(
+                        color: const Color(0xffE4F5FF),
+                        child: const Icon(
                           Icons.chevron_left_rounded,
                           color: Colors.black,
                         )),
