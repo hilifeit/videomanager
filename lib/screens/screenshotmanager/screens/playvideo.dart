@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
+import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
@@ -50,63 +51,57 @@ class _PlayVideoState extends State<PlayVideo> {
         children: [
           Expanded(
             flex: 14,
-            child: LayoutBuilder(builder: (context, c) {
-              return Stack(
-                children: [
-                  Expanded(
-                    flex: 14,
+            child: Stack(
+              children: [
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    color: Colors.blue[100],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                      OverlayState overlayState = Overlay.of(context)!;
+                      CustomOverlayEntry().createOverlay(context);
+                      overlayEntry = CustomOverlayEntry().overlay;
+                      overlayState.insert(overlayEntry);
+                    },
                     child: Container(
-                      color: Colors.white,
-                    ),
+                        width: 30.sw(),
+                        height: 155.sh(),
+                        color: Color(0xffE4F5FF),
+                        child: Icon(
+                          Icons.chevron_left_rounded,
+                          color: Colors.black,
+                        )),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        OverlayState overlayState = Overlay.of(context)!;
-                        if (!showOverlay) {
-                          overlayEntry = overlay.createOverlay(context);
-                          overlayState.insert(overlayEntry);
-                        }
-                        setState(() {
-                          showOverlay = !showOverlay;
-                        });
-                      },
-                      child: Container(
-                          width: 30.sw(),
-                          height: 155.sh(),
-                          color: Color(0xffE4F5FF),
-                          child: Icon(
-                            Icons.chevron_left_rounded,
-                            color: Colors.black,
-                          )),
-                    ),
-                  ),
-                  if (showOverlay)
-                    Positioned(
-                      right: 503.sw(),
-                      bottom: c.maxHeight / 2 - (155.sh() / 2),
-                      child: InkWell(
-                        onTap: () {
-                          overlayEntry.remove();
+                ),
+                // if (showOverlay)
+                //   Positioned(
+                //     right: 503.sw(),
+                //     bottom: c.maxHeight / 2 - (155.sh() / 2),
+                //     child: InkWell(
+                //       onTap: () {
+                //         overlayEntry.remove();
 
-                          setState(() {
-                            showOverlay = !showOverlay;
-                          });
-                        },
-                        child: Container(
-                            width: 30.sw(),
-                            height: 155.sh(),
-                            color: Color(0xffE4F5FF),
-                            child: Icon(
-                              Icons.chevron_right_rounded,
-                              color: Colors.black,
-                            )),
-                      ),
-                    )
-                ],
-              );
-            }),
+                //         setState(() {
+                //           showOverlay = !showOverlay;
+                //         });
+                //       },
+                //       child: Container(
+                //           width: 30.sw(),
+                //           height: 155.sh(),
+                //           color: Color(0xffE4F5FF),
+                //           child: Icon(
+                //             Icons.chevron_right_rounded,
+                //             color: Colors.black,
+                //           )),
+                //     ),
+                //   )
+              ],
+            ),
           ),
           Container(
             height: 73.sh(),

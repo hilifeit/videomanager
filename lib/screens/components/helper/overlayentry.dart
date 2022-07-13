@@ -1,6 +1,47 @@
+import 'package:videomanager/screens/components/videosidebar/videosidebar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+
+class CustomREctClipper extends CustomClipper<Path> {
+  CustomREctClipper({
+    required this.bigWidth,
+    required this.bigHeight,
+    required this.smallWidth,
+    required this.smallHeight,
+    required this.bigleft,
+    required this.bigtop,
+  });
+  final double bigWidth, bigHeight, smallWidth, smallHeight, bigleft, bigtop;
+
+  @override
+  getClip(Size size) {
+    // TODO: implement getClip
+
+    Path path = Path();
+
+    path.addRect(Rect.fromLTWH(
+      bigleft,
+      bigHeight / 2 - smallHeight / 2,
+      smallWidth,
+      smallHeight,
+    ));
+    path.addRect(Rect.fromLTWH(bigleft, bigtop, bigWidth, bigHeight));
+
+    // path.addOval(Rect.fromCircle(center: Offset(left, top), radius: radius));
+    // path.addOval(Rect.fromCircle(
+    //     center: Offset(size.width / 2, size.height / 2),
+    //     radius: size.width / 2));
+    path.fillType = PathFillType.evenOdd;
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper oldClipper) {
+    // TODO: implement shouldReclip
+    return false;
+  }
+}
 
 class CustomOverlayEntry {
   static final CustomOverlayEntry _instance = CustomOverlayEntry._internal();
@@ -9,91 +50,86 @@ class CustomOverlayEntry {
 
   CustomOverlayEntry._internal();
 
+  late OverlayEntry overlay;
+  late OverlayEntry progressOverlay;
+  late OverlayEntry filter;
+  closeOverlay() {
+    overlay.remove();
+  }
+
+  progressIndicatorOverlay(BuildContext context) {
+    progressOverlay = OverlayEntry(builder: ((context) {
+      return CircularProgressIndicator(
+        color: Theme.of(context).primaryColor,
+      );
+    }));
+  }
+
+  filterOverlay(BuildContext context) {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    late Offset buttonPosition;
+    buttonPosition = renderBox.localToGlobal(Offset.zero);
+    var size = renderBox.size;
+    filter = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          top: buttonPosition.dy + size.height + 2.sh(),
+          left: buttonPosition.dx - 117.sw() + size.width,
+          child: Material(
+            child: Container(
+              padding:
+                  EdgeInsets.symmetric(horizontal: 14.sh(), vertical: 15.sw()),
+              height: 159.sh(),
+              width: 117.sw(),
+              child: Consumer(builder: (context, ref, c) {
+                return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(
+                      filterItems.length,
+                      (index) => filterItems[index] != filterItems.last
+                          ? InkWell(
+                              onTap: () {
+                                ref.read(filterItemProvider.state).state =
+                                    filterItems[index];
+                                filter.remove();
+                              },
+                              child: FilterItemWidget(
+                                item: filterItems[index],
+                              ),
+                            )
+                          : InkWell(
+                              onTap: () {
+                                ref.read(filterItemProvider.state).state = null;
+                                filter.remove();
+                              },
+                              child: FilterItemWidget(
+                                item: filterItems[index],
+                              ),
+                            ),
+                    ));
+              }),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   createOverlay(BuildContext context) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     var size = renderBox.size;
-    return OverlayEntry(builder: (context) {
+    overlay = OverlayEntry(builder: (context) {
       return Positioned(
           right: 0,
           bottom: 73.sh(),
-          height: size.height,
-          width: 503.sw(),
+          height: size.height - 73.sh(),
+          width: 533.sw(),
 
           //  top: renderBox.globalToLocal(point),
-          child: Material(
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: 37.sw(), right: 54.sw(), bottom: 0.sh()),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    height: 480.sh(),
-                    child: Consumer(builder: (context, ref, c) {
-                      final filterSelect =
-                          ref.watch(filterItemProvider.state).state;
-                      return Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Videos',
-                                style: kTextStyleIbmMedium.copyWith(
-                                  fontSize: 18.ssp(),
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              Spacer(),
-                              if (filterSelect != null)
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5.sw(),
-                                      ),
-                                      decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black)),
-                                      child:
-                                          FilterItemWidget(item: filterSelect)),
-                                ),
-                              FilterIconButton(),
-                              //     ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 13.sh(),
-                          ),
-                          Expanded(
-                            child: Consumer(builder: (context, ref, c) {
-                              final thisUser = ref
-                                  .watch(userChangeProvider)
-                                  .loggedInUser
-                                  .value;
-                              return ListView.separated(
-                                  itemBuilder: (context, index) {
-                                    return VideoAssignCard(
-                                      item: items[index],
-                                      thisUser: thisUser!,
-                                    );
-                                  },
-                                  separatorBuilder: (context, _) {
-                                    return SizedBox(
-                                      height: 8.sh(),
-                                    );
-                                  },
-                                  itemCount: items.length);
-                            }),
-                          )
-                        ],
-                      );
-                    }),
-                  ),
-                ],
-              ),
-            ),
+          child: VideoSideBAr(
+            size: size,
           ));
     });
   }
@@ -121,16 +157,10 @@ class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
 
   late OverlayEntry overlayEntry;
 
-  void closeMenu() {
-    overlayEntry.remove();
-    isMenuOpen = !isMenuOpen;
-  }
-
-  void openMenu(BuildContext context) {
-    overlayEntry = _overlayEntryBuilder(context);
-    Overlay.of(context)!.insert(overlayEntry);
-    isMenuOpen = !isMenuOpen;
-  }
+  // void closeMenu() {
+  //   overlayEntry.remove();
+  //   isMenuOpen = !isMenuOpen;
+  // }
 
   // @override
   // void initState() {
@@ -143,53 +173,6 @@ class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
   //   });
   // }
 
-  OverlayEntry _overlayEntryBuilder(BuildContext context) {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    buttonPosition = renderBox.localToGlobal(Offset.zero);
-    var size = renderBox.size;
-    return OverlayEntry(
-      builder: (context) {
-        return Positioned(
-          top: buttonPosition.dy + size.height + 2.sh(),
-          left: buttonPosition.dx - 117.sw() + size.width,
-          child: Material(
-            child: Container(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 14.sh(), vertical: 15.sw()),
-              height: 159.sh(),
-              width: 117.sw(),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(
-                    filterItems.length,
-                    (index) => filterItems[index] != filterItems.last
-                        ? InkWell(
-                            onTap: () {
-                              ref.read(filterItemProvider.state).state =
-                                  filterItems[index];
-                              closeMenu();
-                            },
-                            child: FilterItemWidget(
-                              item: filterItems[index],
-                            ),
-                          )
-                        : InkWell(
-                            onTap: () {
-                              ref.read(filterItemProvider.state).state = null;
-                              closeMenu();
-                            },
-                            child: FilterItemWidget(
-                              item: filterItems[index],
-                            ),
-                          ),
-                  )),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -199,13 +182,16 @@ class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
       child: Row(
         children: [
           IconButton(
-            focusNode: foucusNode,
             icon: Icon(Videomanager.filter, color: Colors.white),
             onPressed: () {
               if (isMenuOpen) {
-                closeMenu();
+                CustomOverlayEntry().filter.remove();
+                isMenuOpen = !isMenuOpen;
               } else {
-                openMenu(context);
+                OverlayState overlayState = Overlay.of(context)!;
+                CustomOverlayEntry().filterOverlay(context);
+                overlayState.insert(CustomOverlayEntry().filter);
+                isMenuOpen = !isMenuOpen;
               }
             },
           ),
