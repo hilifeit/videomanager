@@ -92,6 +92,8 @@ class CustomOverlayEntry {
                               onTap: () {
                                 ref.read(filterItemProvider.state).state =
                                     filterItems[index];
+                                ref.read(filterOpenProvider.state).state =
+                                    false;
                                 filter.remove();
                               },
                               child: FilterItemWidget(
@@ -101,6 +103,8 @@ class CustomOverlayEntry {
                           : InkWell(
                               onTap: () {
                                 ref.read(filterItemProvider.state).state = null;
+                                ref.read(filterOpenProvider.state).state =
+                                    false;
                                 filter.remove();
                               },
                               child: FilterItemWidget(
@@ -139,42 +143,21 @@ final filterItemProvider = StateProvider<FilterItemWidgetItem?>((ref) {
   return null;
 });
 
-class FilterIconButton extends ConsumerStatefulWidget {
-  FilterIconButton({
-    Key? key,
-  }) : super(key: key);
+final filterOpenProvider = StateProvider<bool>((ref) {
+  return false;
+});
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _FilterIconButtonState();
-}
-
-class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
-  bool isMenuOpen = false;
+class FilterIconButton extends ConsumerWidget {
+  FilterIconButton({Key? key}) : super(key: key);
 
   late Offset buttonPosition;
   final FocusNode foucusNode = FocusNode();
 
   late OverlayEntry overlayEntry;
 
-  // void closeMenu() {
-  //   overlayEntry.remove();
-  //   isMenuOpen = !isMenuOpen;
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   foucusNode.addListener(() {
-  //     if (!foucusNode.hasFocus) {
-  //       closeMenu();
-  //     }
-  //   });
-  // }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool isMenuOpen = ref.watch(filterOpenProvider.state).state;
     return Container(
       // padding: EdgeInsets.all(7.sr()),
       decoration: BoxDecoration(
@@ -186,12 +169,12 @@ class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
             onPressed: () {
               if (isMenuOpen) {
                 CustomOverlayEntry().filter.remove();
-                isMenuOpen = !isMenuOpen;
+                ref.read(filterOpenProvider.state).state = !isMenuOpen;
               } else {
                 OverlayState overlayState = Overlay.of(context)!;
                 CustomOverlayEntry().filterOverlay(context);
                 overlayState.insert(CustomOverlayEntry().filter);
-                isMenuOpen = !isMenuOpen;
+                ref.read(filterOpenProvider.state).state = !isMenuOpen;
               }
             },
           ),
@@ -200,6 +183,22 @@ class _FilterIconButtonState extends ConsumerState<FilterIconButton> {
     );
   }
 }
+
+// void closeMenu() {
+//   overlayEntry.remove();
+//   isMenuOpen = !isMenuOpen;
+// }
+
+// @override
+// void initState() {
+//   super.initState();
+
+//   foucusNode.addListener(() {
+//     if (!foucusNode.hasFocus) {
+//       closeMenu();
+//     }
+//   });
+// }
 
 class FilterItemWidgetItem {
   FilterItemWidgetItem({required this.icon, required this.text});
@@ -254,7 +253,7 @@ List<FilterItemWidgetItem> filterItems = [
       color: Colors.black,
       size: 14.88.ssp(),
     ),
-    text: 'Reset',
+    text: 'All',
   ),
 ];
 

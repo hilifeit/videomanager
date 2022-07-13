@@ -1,50 +1,37 @@
-import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 
-enum Filter { Pending, Complete, Ongoing, Approved, Rejected }
+final volumeProvider = StateProvider<double>((ref) {
+  return 0.5;
+});
+final mutedProvider = StateProvider<bool>((ref) {
+  return false;
+});
 
-class PlayVideo extends StatefulWidget {
-  const PlayVideo({Key? key}) : super(key: key);
+class PlayVideo extends ConsumerWidget {
+  PlayVideo({Key? key}) : super(key: key);
 
-  @override
-  State<PlayVideo> createState() => _PlayVideoState();
-}
+  final List<CustomMenuItem> menus = [
+    CustomMenuItem(label: "User", value: 0.toString()),
+    CustomMenuItem(label: "Manager", value: 1.toString()),
+  ];
 
-final List<CustomMenuItem> menus = [
-  CustomMenuItem(label: "User", value: 0.toString()),
-  CustomMenuItem(label: "Manager", value: 1.toString()),
-];
-
-class _PlayVideoState extends State<PlayVideo> {
-  bool showOverlay = false;
+  // bool showOverlay = false;
 
   late OverlayEntry overlayEntry;
-  final GlobalKey keey = GlobalKey();
+  // final GlobalKey keey = GlobalKey();
 
-  late GlobalKey _key;
-  bool isMenuOpen = false;
-  late Offset buttonPosition;
-  late OverlayEntry _overlayEntry;
-
-  @override
-  void initState() {
-    _key = LabeledGlobalKey("button_icon");
-    super.initState();
-  }
+  // late GlobalKey _key;
+  // bool isMenuOpen = false;
+  // late Offset buttonPosition;
+  // late OverlayEntry _overlayEntry;
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final double volume = ref.watch(volumeProvider.state).state;
+    final bool mute = ref.watch(mutedProvider.state).state;
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -71,8 +58,8 @@ class _PlayVideoState extends State<PlayVideo> {
                     child: Container(
                         width: 30.sw(),
                         height: 155.sh(),
-                        color: Color(0xffE4F5FF),
-                        child: Icon(
+                        color: const Color(0xffE4F5FF),
+                        child: const Icon(
                           Icons.chevron_left_rounded,
                           color: Colors.black,
                         )),
@@ -130,15 +117,30 @@ class _PlayVideoState extends State<PlayVideo> {
                 SizedBox(
                   width: 30.5.sw(),
                 ),
-                Icon(
-                  Videomanager.volume,
-                  color: Colors.white,
-                  size: 24.ssp(),
+                IconButton(
+                  onPressed: () {
+                    ref.read(mutedProvider.state).state = !mute;
+                  },
+                  icon: mute || volume == 0
+                      ? Icon(
+                          Icons.volume_off,
+                          color: Colors.white,
+                          size: 24.ssp(),
+                        )
+                      : Icon(
+                          Videomanager.volume,
+                          color: Colors.white,
+                          size: 24.ssp(),
+                        ),
                 ),
                 SizedBox(
                   width: 6.75.sw(),
                 ),
-                CustomSliderHollowThumb(value: 0.5, onChanged: (val) {}),
+                CustomSliderHollowThumb(
+                    value: mute ? 0 : volume,
+                    onChanged: (val) {
+                      ref.read(volumeProvider.state).state = val;
+                    }),
                 SizedBox(
                   width: 24.sw(),
                 ),
