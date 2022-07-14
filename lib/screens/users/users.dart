@@ -2,12 +2,12 @@ import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
 import 'package:videomanager/screens/users/component/buttonwithloading.dart';
-import 'package:videomanager/screens/users/component/edituserform.dart';
 import 'package:videomanager/screens/users/component/dataTable.dart';
+import 'package:videomanager/screens/users/component/edituserform.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
-import 'package:videomanager/screens/viewscreen/components/searchModule.dart';
+import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
 
 final editUserProvider = StateProvider<bool>((ref) {
   return false;
@@ -83,7 +83,7 @@ class Users extends StatelessWidget {
                                 ),
                                 SizedBox(
                                   width: 300.sw(),
-                                  child: SearchBox(),
+                                  child: const CustomSearch(),
                                 ),
                               ],
                             ),

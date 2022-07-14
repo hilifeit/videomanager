@@ -13,17 +13,16 @@ export 'package:file_picker/file_picker.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
+export 'package:flutter_svg/flutter_svg.dart';
 export 'package:get_storage/get_storage.dart';
 export 'package:hooks_riverpod/hooks_riverpod.dart';
 export 'package:latlng/latlng.dart';
-export 'package:searchfield/searchfield.dart';
 export 'package:universal_platform/universal_platform.dart';
 export 'package:video_player/video_player.dart';
 export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
-export  'package:flutter_svg/flutter_svg.dart';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/screens/others/theme.dart';
@@ -52,4 +51,4 @@ logout() {
   Phoenix.rebirth(CustomKeys().context!);
 }
 
-final overlay= CustomOverlayEntry();
+final overlay = CustomOverlayEntry();
