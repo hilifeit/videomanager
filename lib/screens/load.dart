@@ -23,7 +23,7 @@ class Loader extends ConsumerWidget {
     final isLogin = ref.watch(loginStateProvider.state).state;
     return Stack(
       children: [
-        isLogin ? const AuthScreen() : const Holder(),
+        isLogin ? const AuthScreen() : Holder(),
         // AnimatedCrossFade(
         //     firstChild: const AuthScreen(),
         //     secondChild: const Holder(),

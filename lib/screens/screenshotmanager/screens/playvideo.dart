@@ -2,6 +2,8 @@ import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
+import 'package:videomanager/screens/video/components/models/playerController.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 
 final volumeProvider = StateProvider<double>((ref) {
   return 0.5;
@@ -10,8 +12,11 @@ final mutedProvider = StateProvider<bool>((ref) {
   return false;
 });
 
-class PlayVideo extends ConsumerWidget {
-  PlayVideo({Key? key, required this.role}) : super(key: key);
+class PlayVideo extends HookConsumerWidget {
+  PlayVideo({required this.videoFile, Key? key, required this.role})
+      : super(key: key);
+  final int role;
+  final FileDetail videoFile;
 
   final List<CustomMenuItem> menus = [
     CustomMenuItem(label: "User", value: 0.toString()),
@@ -21,18 +26,37 @@ class PlayVideo extends ConsumerWidget {
   // bool showOverlay = false;
 
   late OverlayEntry overlayEntry;
-  final int role;
-  // final GlobalKey keey = GlobalKey();
+  Media media = Media.network(
+      "http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4"
+          .replaceAll(" ", "%20"),
+      parse: true);
 
-  // late GlobalKey _key;
-  // bool isMenuOpen = false;
-  // late Offset buttonPosition;
-  // late OverlayEntry _overlayEntry;
+  VideoDimensions dimension = const VideoDimensions(1920, 1080);
+
+  late PlayerController player = PlayerController(
+    player: Player(id: videoFile.foundPath.length, videoDimensions: dimension),
+    duration: Duration(
+      hours: videoFile.info.duration.hour,
+      minutes: videoFile.info.duration.minute,
+      seconds: videoFile.info.duration.second,
+      milliseconds: videoFile.info.duration.millisecond,
+    ),
+  );
+
+  late VideoPlayerController controller =
+      VideoPlayerController.network(videoFile.foundPath)
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        }).catchError((e) {
+          print(" $e text");
+        });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double volume = ref.watch(volumeProvider.state).state;
-    final bool mute = ref.watch(mutedProvider.state).state;
+    player.player.open(media, autoStart: false);
+
+    // player.player.play();
+    // if (UniversalPlatform.isDesktop) {}
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -41,12 +65,8 @@ class PlayVideo extends ConsumerWidget {
             flex: 14,
             child: Stack(
               children: [
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    color: Colors.blue[100],
-                  ),
-                ),
+                CustomVideoPlayer(
+                    player: player.player, controller: controller),
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
@@ -74,74 +94,9 @@ class PlayVideo extends ConsumerWidget {
                 SizedBox(
                   width: 51.sw(),
                 ),
-                Icon(
-                  Videomanager.rewind,
-                  color: Colors.white,
-                  size: 21.75.ssp(),
-                ),
-                SizedBox(
-                  width: 33.sw(),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 24.ssp(),
-                  ),
-                ),
-                SizedBox(
-                  width: 30.5.sw(),
-                ),
-                IconButton(
-                  onPressed: () {
-                    if (volume != 0 && mute) {
-                      ref.read(mutedProvider.state).state = false;
-                    }
-                    if (volume == 0 && mute) {
-                      ref.read(mutedProvider.state).state = false;
-                      ref.read(volumeProvider.state).state = 0.2;
-                    }
-                    if (!mute) {
-                      ref.read(mutedProvider.state).state = true;
-                    }
-                  },
-                  icon: mute || volume == 0
-                      ? Icon(
-                          Icons.volume_off,
-                          color: Colors.white,
-                          size: 24.ssp(),
-                        )
-                      : Icon(
-                          Videomanager.volume,
-                          color: Colors.white,
-                          size: 24.ssp(),
-                        ),
-                ),
-                SizedBox(
-                  width: 10.sw(),
-                ),
-                CustomSliderHollowThumb(
-                    value: mute && volume != 0 ? 0 : volume,
-                    onChangedEnd: (val) {
-                      if (val == 0) {
-                        ref.read(mutedProvider.state).state = true;
-                      }
-                    },
-                    onChanged: (val) {
-                      ref.read(volumeProvider.state).state = val;
-                      if (volume != 0) {
-                        ref.read(mutedProvider.state).state = false;
-                      }
-                    }),
-                SizedBox(
-                  width: 24.sw(),
-                ),
-                Text(
-                  '5:00 / 10:00',
-                  style: kTextStyleInterMedium.copyWith(
-                      fontSize: 14.ssp(),
-                      color: const Color(0xffeaeaea).withAlpha(180)),
+                SingleVideoPlayerControls(
+                  desktop: player,
+                  web: controller,
                 ),
                 const Spacer(),
                 Text(
@@ -195,6 +150,33 @@ class PlayVideo extends ConsumerWidget {
   }
 }
 
+class CustomVideoPlayer extends StatelessWidget {
+  CustomVideoPlayer({Key? key, required this.player, required this.controller})
+      : super(key: key);
+  final Player player;
+  final VideoPlayerController controller;
+  bool buffering = false;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        UniversalPlatform.isDesktop
+            ? Video(
+                player: player,
+                showControls: false,
+              )
+            : VideoPlayer(controller),
+        if (buffering)
+          Positioned.fill(
+              child: Center(
+                  child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          )))
+      ],
+    );
+  }
+}
+
 // class TestWidget extends StatelessWidget {
 //   const TestWidget({
 //     Key? key,
@@ -207,3 +189,120 @@ class PlayVideo extends ConsumerWidget {
 //     );
 //   }
 // }
+
+class SingleVideoPlayerControls extends HookConsumerWidget {
+  SingleVideoPlayerControls({this.web, this.desktop, Key? key})
+      : super(key: key);
+
+  final VideoPlayerController? web;
+  final PlayerController? desktop;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller =
+        useAnimationController(duration: Duration(milliseconds: 15));
+
+    final double volume = ref.watch(volumeProvider.state).state;
+    final bool mute = ref.watch(mutedProvider.state).state;
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Videomanager.rewind,
+            color: Colors.white,
+            size: 21.75.ssp(),
+          ),
+        ),
+        SizedBox(
+          width: 33.sw(),
+        ),
+        IconButton(
+          onPressed: () {
+            if (UniversalPlatform.isDesktop) {
+              if (desktop!.player.playback.isPlaying) {
+                desktop!.player.pause();
+                controller.reverse();
+              } else {
+                desktop!.player.play();
+
+                controller.forward();
+              }
+            } else {
+              if (web!.value.isPlaying) {
+                web!.pause();
+                controller.reverse();
+              } else {
+                web!.play();
+                controller.forward();
+              }
+            }
+          },
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.play_pause,
+            color: Colors.white,
+            progress: controller,
+          ),
+        ),
+        SizedBox(
+          width: 30.5.sw(),
+        ),
+        IconButton(
+          onPressed: () {
+            if (volume != 0 && mute) {
+              desktop!.player.setVolume(volume);
+
+              ref.read(mutedProvider.state).state = false;
+            } else if (volume == 0 && mute) {
+              desktop!.player.setVolume(0);
+
+              ref.read(mutedProvider.state).state = false;
+              ref.read(volumeProvider.state).state = 0.2;
+            } else {
+              desktop!.player.setVolume(0);
+              ref.read(mutedProvider.state).state = true;
+            }
+          },
+          icon: mute || volume == 0
+              ? Icon(
+                  Icons.volume_off,
+                  color: Colors.white,
+                  size: 24.ssp(),
+                )
+              : Icon(
+                  Videomanager.volume,
+                  color: Colors.white,
+                  size: 24.ssp(),
+                ),
+        ),
+        SizedBox(
+          width: 10.sw(),
+        ),
+        CustomSliderHollowThumb(
+            value: mute && volume != 0 ? 0 : volume,
+            onChangedEnd: (val) {
+              if (val == 0) {
+                ref.read(mutedProvider.state).state = true;
+              }
+            },
+            onChanged: (val) {
+              ref.read(volumeProvider.state).state = val;
+              desktop!.player.setVolume(val);
+
+              if (volume != 0) {
+                ref.read(mutedProvider.state).state = false;
+              }
+            }),
+        SizedBox(
+          width: 24.sw(),
+        ),
+        Text(
+          '5:00 / 10:00',
+          style: kTextStyleInterMedium.copyWith(
+              fontSize: 14.ssp(),
+              color: const Color(0xffeaeaea).withAlpha(180)),
+        ),
+      ],
+    );
+  }
+}
