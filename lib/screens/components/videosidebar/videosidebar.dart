@@ -7,6 +7,7 @@ import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class VideoSideBar extends StatelessWidget {
   VideoSideBar({Key? key, required this.size, required this.role})
@@ -129,10 +130,13 @@ class VideoSideBar extends StatelessWidget {
                                       .watch(userChangeProvider)
                                       .loggedInUser
                                       .value;
+                                  final fileService =
+                                      ref.watch(fileDetailMiniServiceProvider);
+                                  final files = fileService.userFiles;
                                   return ListView.separated(
                                       itemBuilder: (context, index) {
                                         return VideoAssignCard(
-                                          item: items[index],
+                                          item: files[index],
                                           thisUser: thisUser!,
                                         );
                                       },
@@ -141,7 +145,7 @@ class VideoSideBar extends StatelessWidget {
                                           height: 8.sh(),
                                         );
                                       },
-                                      itemCount: items.length);
+                                      itemCount: files.length);
                                 }),
                               )
                             ],
