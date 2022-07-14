@@ -53,13 +53,26 @@ class VideoSideBar extends StatelessWidget {
               child: Container(
                   width: 30.sw(),
                   height: 155.sh(),
-                  color: const Color(0xffE4F5FF),
-                  child: const Icon(
+                  color: Color(0xffE4F5FF),
+                  child: Icon(
                     Icons.chevron_right_rounded,
                     color: Colors.black,
                   )),
             ),
           ),
+          // InkWell(
+          //   onTap: () {
+          //     closeOverlay();
+          //   },
+          //   child: Container(
+          //       width: 30.sw(),
+          //       height: 155.sh(),
+          //       color: Color(0xffE4F5FF),
+          //       child: Icon(
+          //         Icons.chevron_right_rounded,
+          //         color: Colors.black,
+          //       )),
+          // ),
           Container(
             color: Colors.white,
             height: size.height,
@@ -86,8 +99,9 @@ class VideoSideBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SizedBox(
-                          height: 480.sh(),
-                          child: Column(
+                        height: 480.sh(),
+                        child: Consumer(builder: (context, ref, c) {
+                          return Column(
                             children: [
                               Row(
                                 mainAxisAlignment:
@@ -100,7 +114,7 @@ class VideoSideBar extends StatelessWidget {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                  const Spacer(),
+                                  Spacer(),
                                   FilterIconButton(),
 
                                   //     ),
@@ -131,7 +145,9 @@ class VideoSideBar extends StatelessWidget {
                                 }),
                               )
                             ],
-                          )),
+                          );
+                        }),
+                      ),
                     ],
                   ),
                 ),

@@ -9,7 +9,6 @@ import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/playvideo.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/video/video.dart';
@@ -181,6 +180,7 @@ class Painter extends CustomPainter {
               location: element.location,
               isUseable: element.isUseable,
               id: element.id,
+              status: element.status,
               path: element.path.replaceAll('.MP4', '_processed.json'));
 
           var jsonUrl = await fileservice.getUrlFromFile(temp);

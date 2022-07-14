@@ -16,18 +16,51 @@ final fileDetailMiniServiceProvider =
 });
 
 class FileService extends ChangeNotifier {
-  FileService(ChangeNotifierProviderRef<FileService> ref) {
-    var userProvider = ref.read(userChangeProvider);
+  FileService(ChangeNotifierProviderRef<FileService> reff) {
+    var userProvider = reff.read(userChangeProvider);
+    ref = reff;
     if (userProvider.loggedInUser.value != null) {
       if (userProvider.loggedInUser.value!.role == Roles.superAdmin.index) {
         load();
+      } else {
+        loadUserData();
       }
     }
   }
+  late ChangeNotifierProviderRef<FileService> ref;
   final List<FileDetailMini> files = [];
+  final List<FileDetailMini> userFiles = [];
 
   load() async {
     await fetchAll(fromServer: true);
+  }
+
+  loadUserData() async {
+    await fetchUserFiles();
+  }
+
+  fetchUserFiles() async {
+    var userProvider = ref.read(userChangeProvider);
+    if (userProvider.loggedInUser.value != null) {
+      try {
+        var response = await client.get(
+            Uri.parse(
+                "${baseURL}file/assigned/${userProvider.loggedInUser.value?.id}"),
+            headers: {"Content-Type": "application/json"});
+
+        if (response.statusCode == 200) {
+          userFiles.clear();
+          userFiles.addAll(fileDetailMiniFromJson(response.body));
+          notifyListeners();
+        } else {
+          var error = jsonDecode(response.body);
+
+          throw error['message'];
+        }
+      } catch (e, s) {
+        throw "$e $s";
+      }
+    }
   }
 
   Future<FileDetail> fetchOne(String id) async {
@@ -214,7 +247,8 @@ class FileService extends ChangeNotifier {
             filename: element.filename,
             location: element.location,
             path: element.path.replaceAll(".MP4", "_processed.json"),
-            isUseable: element.isUseable);
+            isUseable: element.isUseable,
+            status: element.status);
 
         var url = await getUrlFromFile(temp);
         if (url.isNotEmpty) {
