@@ -148,6 +148,8 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                                   if (UniversalPlatform.isDesktop) {
                                     widget.leftDesktop!.player
                                         .seek(seekedPosition);
+                                    widget.rightDesktop!.player
+                                        .seek(seekedPosition);
                                   } else {
                                     widget.leftWeb!.seekTo(seekedPosition);
                                   }
