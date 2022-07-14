@@ -5,6 +5,7 @@ import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class VideoSideBar extends StatelessWidget {
   VideoSideBar({Key? key, required this.size, required this.role})
@@ -51,8 +52,8 @@ class VideoSideBar extends StatelessWidget {
               child: Container(
                   width: 30.sw(),
                   height: 155.sh(),
-                  color: Color(0xffE4F5FF),
-                  child: Icon(
+                  color: const Color(0xffE4F5FF),
+                  child: const Icon(
                     Icons.chevron_right_rounded,
                     color: Colors.black,
                   )),
@@ -109,7 +110,7 @@ class VideoSideBar extends StatelessWidget {
                                   color: Theme.of(context).primaryColor,
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               FilterIconButton(),
 
                               //     ),
@@ -124,10 +125,14 @@ class VideoSideBar extends StatelessWidget {
                                   .watch(userChangeProvider)
                                   .loggedInUser
                                   .value;
+                              final fileService =
+                                  ref.watch(fileDetailMiniServiceProvider);
+                              final files = fileService.userFiles;
+
                               return ListView.separated(
                                   itemBuilder: (context, index) {
                                     return VideoAssignCard(
-                                      item: items[index],
+                                      item: files[index],
                                       thisUser: thisUser!,
                                     );
                                   },
@@ -136,7 +141,7 @@ class VideoSideBar extends StatelessWidget {
                                       height: 8.sh(),
                                     );
                                   },
-                                  itemCount: items.length);
+                                  itemCount: files.length);
                             }),
                           )
                         ],

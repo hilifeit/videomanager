@@ -21,6 +21,7 @@ class FileDetailMini {
       required this.location,
       required this.path,
       required this.isUseable,
+      required this.status,
       this.foundPath = ''
       // required this.area
       });
@@ -29,6 +30,7 @@ class FileDetailMini {
   final String filename, path;
   String foundPath;
   final Location location;
+  final Status status;
   final List<OriginalLocation> originalLocation = [];
   bool isUseable;
   // final Area area;
@@ -45,7 +47,8 @@ class FileDetailMini {
           filename: filename,
           location: location,
           path: path,
-          isUseable: isUseable
+          isUseable: isUseable,
+          status: status
           // area: area
           );
 
@@ -54,7 +57,8 @@ class FileDetailMini {
       filename: json["filename"],
       location: Location.fromJson(json["location"]),
       isUseable: json["useable"],
-      path: json["path"]
+      path: json["path"],
+      status: Status.fromJson(json["status"] ?? jsonDecode('{"status":0}'))
       // area: Area.fromJson(json["area"])
       );
 
@@ -124,5 +128,25 @@ class Area {
         "area": area,
         "city": city,
         "state": state,
+      };
+}
+
+class Status {
+  Status({
+    required this.status,
+  });
+
+  final int status;
+
+  Status copyWith({required int status}) => Status(
+        status: status,
+      );
+
+  factory Status.fromJson(Map<String, dynamic> json) => Status(
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
       };
 }

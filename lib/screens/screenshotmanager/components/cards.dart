@@ -1,6 +1,7 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class ShopCard extends StatelessWidget {
   const ShopCard({Key? key, required this.shop}) : super(key: key);
@@ -88,7 +89,7 @@ class VideoAssignCard extends StatelessWidget {
     required this.item,
   }) : super(key: key);
   final UserModelMini thisUser;
-  final VideoAssignCardItems item;
+  final FileDetailMini item;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +115,7 @@ class VideoAssignCard extends StatelessWidget {
               SizedBox(
                 width: 70.sw(),
                 child: Text(
-                  item.fileName,
+                  item.filename,
                   style: kTextStyleIbmMedium.copyWith(
                       fontSize: 12.ssp(), color: Colors.black),
                 ),
@@ -138,7 +139,7 @@ class VideoAssignCard extends StatelessWidget {
                       SizedBox(
                         width: 60.sw(),
                         child: Text(
-                          item.screenShot.toString(),
+                          10.toString(),
                           style: kTextStyleIbmMedium.copyWith(
                               fontSize: 12.ssp(), color: lightBlack),
                         ),
@@ -159,7 +160,7 @@ class VideoAssignCard extends StatelessWidget {
                       SizedBox(
                         width: 60.sw(),
                         child: Text(
-                          item.shops.toString(),
+                          10.toString(),
                           style: kTextStyleIbmMedium.copyWith(
                               fontSize: 12.ssp(), color: lightBlack),
                         ),
@@ -169,7 +170,7 @@ class VideoAssignCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              StatusCard(status: item.status)
+              StatusCard(status: item.status.status.toString())
             ],
           ),
         ),
