@@ -13,10 +13,9 @@ final mutedProvider = StateProvider<bool>((ref) {
 });
 
 class PlayVideo extends HookConsumerWidget {
-  PlayVideo({required this.videoFile, Key? key, required this.role})
-      : super(key: key);
+  PlayVideo({this.videoFile, Key? key, required this.role}) : super(key: key);
   final int role;
-  final FileDetail videoFile;
+  final FileDetail? videoFile;
 
   final List<CustomMenuItem> menus = [
     CustomMenuItem(label: "User", value: 0.toString()),
@@ -34,22 +33,24 @@ class PlayVideo extends HookConsumerWidget {
   VideoDimensions dimension = const VideoDimensions(1920, 1080);
 
   late PlayerController player = PlayerController(
-    player: Player(id: videoFile.foundPath.length, videoDimensions: dimension),
-    duration: Duration(
-      hours: videoFile.info.duration.hour,
-      minutes: videoFile.info.duration.minute,
-      seconds: videoFile.info.duration.second,
-      milliseconds: videoFile.info.duration.millisecond,
-    ),
+    player: Player(id: media.resource.length, videoDimensions: dimension),
+    duration: videoFile != null
+        ? Duration(
+            hours: videoFile!.info.duration.hour,
+            minutes: videoFile!.info.duration.minute,
+            seconds: videoFile!.info.duration.second,
+            milliseconds: videoFile!.info.duration.millisecond,
+          )
+        : Duration.zero,
   );
 
-  late VideoPlayerController controller =
-      VideoPlayerController.network(videoFile.foundPath)
-        ..initialize().then((_) {
-          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        }).catchError((e) {
-          print(" $e text");
-        });
+  late VideoPlayerController controller = VideoPlayerController.network(
+      videoFile != null ? videoFile!.foundPath : '')
+    ..initialize().then((_) {
+      // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+    }).catchError((e) {
+      print(" $e text");
+    });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -191,7 +192,7 @@ class CustomVideoPlayer extends StatelessWidget {
 // }
 
 class SingleVideoPlayerControls extends HookConsumerWidget {
-  SingleVideoPlayerControls({this.web, this.desktop, Key? key})
+  const SingleVideoPlayerControls({this.web, this.desktop, Key? key})
       : super(key: key);
 
   final VideoPlayerController? web;
@@ -200,7 +201,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller =
-        useAnimationController(duration: Duration(milliseconds: 15));
+        useAnimationController(duration: const Duration(milliseconds: 15));
 
     final double volume = ref.watch(volumeProvider.state).state;
     final bool mute = ref.watch(mutedProvider.state).state;

@@ -4,6 +4,10 @@ import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 
+class StartEndTime {
+  late Duration leftStart, leftEnd, rightStart, rightEnd;
+}
+
 class CustomVideo extends StatefulWidget {
   const CustomVideo({Key? key, required this.leftFile, required this.rightFile})
       : super(key: key);
@@ -20,36 +24,46 @@ class _VideoState extends State<CustomVideo> {
   @override
   void initState() {
     super.initState();
+    var timeData = calculateStartTime(widget.leftFile, widget.rightFile);
     if (UniversalPlatform.isDesktop) {
       VideoDimensions dimension = const VideoDimensions(1920, 1080);
 
       Media mediaLeft = Media.network(
           widget.leftFile.foundPath.replaceAll(" ", "%20"),
+          startTime: Duration.zero + timeData.leftStart,
+          stopTime: getTimeinDuration(widget.leftFile.info.duration) +
+              timeData.leftEnd,
           parse: true);
 
       Media mediaRight = Media.network(
           widget.rightFile.foundPath.replaceAll(" ", "%20"),
+          startTime: Duration.zero + timeData.rightStart,
+          stopTime: getTimeinDuration(widget.rightFile.info.duration) +
+              timeData.rightEnd,
           parse: true);
 
+      // print('${timeData.leftStart} ${timeData.leftEnd}');
+      // print('${timeData.rightStart} ${timeData.rightEnd}');
+
+      // print('${mediaRight.startTime}${mediaRight.stopTime}');
+      Duration finalDuration = mediaLeft.stopTime - mediaLeft.startTime;
       player1 = PlayerController(
           player: Player(
               id: widget.leftFile.foundPath.length, videoDimensions: dimension),
-          duration: Duration(
-              milliseconds: int.parse(mediaLeft.metas["duration"].toString())));
+          duration: finalDuration);
 
       player2 = PlayerController(
           player: Player(
               id: widget.rightFile.foundPath.length,
               videoDimensions: dimension),
-          duration: Duration(
-              milliseconds:
-                  int.parse(mediaRight.metas["duration"].toString())));
+          duration: finalDuration);
 
       player1!.player.open(mediaLeft, autoStart: false);
       player2!.player.open(mediaRight, autoStart: false);
     } else {
-      _controller1 = VideoPlayerController.network(widget.leftFile.foundPath)
-        ..initialize().then((_) {
+      _controller1 = VideoPlayerController.network(
+        widget.leftFile.foundPath,
+      )..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           setState(() {});
         }).catchError((e) {
@@ -179,6 +193,48 @@ class _VideoState extends State<CustomVideo> {
         ],
       ),
     );
+  }
+
+  StartEndTime calculateStartTime(FileDetail left, FileDetail right) {
+    StartEndTime data = StartEndTime();
+    var leftEndinDuration = getTimeinDuration(left.info.modifiedDate);
+    var rightEndinDuration = getTimeinDuration(right.info.modifiedDate);
+
+    var leftStartinDuration = getTimeinDuration(
+        left.info.modifiedDate.subtract(getTimeinDuration(left.info.duration)));
+    var rightStartinDuration = getTimeinDuration(right.info.modifiedDate
+        .subtract(getTimeinDuration(right.info.duration)));
+
+    if (leftStartinDuration > rightStartinDuration) {
+      data.leftStart = Duration.zero;
+      data.rightStart = leftStartinDuration - rightStartinDuration;
+    } else if (leftStartinDuration == rightStartinDuration) {
+      data.leftStart = Duration.zero;
+      data.rightStart = Duration.zero;
+    } else {
+      data.leftStart = rightStartinDuration - leftStartinDuration;
+      data.rightStart = Duration.zero;
+    }
+
+    if (leftEndinDuration < rightEndinDuration) {
+      data.leftEnd = Duration.zero;
+      data.rightEnd = leftEndinDuration - rightEndinDuration;
+    } else if (leftEndinDuration == rightEndinDuration) {
+      data.leftEnd = Duration.zero;
+      data.rightEnd = Duration.zero;
+    } else {
+      data.leftEnd = rightEndinDuration - leftEndinDuration;
+      data.rightEnd = Duration.zero;
+    }
+    return data;
+  }
+
+  Duration getTimeinDuration(DateTime date) {
+    return Duration(
+        hours: date.hour,
+        minutes: date.minute,
+        seconds: date.second,
+        milliseconds: date.millisecond);
   }
 
   Builder CustomVideoPlayer(
