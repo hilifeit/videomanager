@@ -1,4 +1,4 @@
-import 'package:videomanager/screens/components/helper/overlayentry.dart';
+import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class CustomMenuItem {
@@ -33,7 +33,9 @@ class MenuItemWidget extends ConsumerWidget {
       child: GestureDetector(
         onTap: (() {
           ref.read(indexState.state).state = item.id;
-          CustomOverlayEntry().closeVideoBar();
+          if (CustomOverlayEntry().videoBarOpen) {
+            CustomOverlayEntry().closeVideoBar();
+          }
           if (CustomOverlayEntry().isMenuOpen) {
             CustomOverlayEntry().closeFilter();
           }

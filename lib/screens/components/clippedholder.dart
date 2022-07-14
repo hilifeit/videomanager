@@ -81,3 +81,44 @@ class ClippedHolderClipper extends CustomClipper<Path> {
     return false;
   }
 }
+
+
+class CustomREctClipper extends CustomClipper<Path> {
+  CustomREctClipper({
+    required this.bigWidth,
+    required this.bigHeight,
+    required this.smallWidth,
+    required this.smallHeight,
+    required this.bigleft,
+    required this.bigtop,
+  });
+  final double bigWidth, bigHeight, smallWidth, smallHeight, bigleft, bigtop;
+
+  @override
+  getClip(Size size) {
+    // TODO: implement getClip
+
+    Path path = Path();
+
+    path.addRect(Rect.fromLTWH(
+      bigleft,
+      bigHeight / 2 - smallHeight / 2,
+      smallWidth,
+      smallHeight,
+    ));
+    path.addRect(Rect.fromLTWH(bigleft, bigtop, bigWidth, bigHeight));
+
+    // path.addOval(Rect.fromCircle(center: Offset(left, top), radius: radius));
+    // path.addOval(Rect.fromCircle(
+    //     center: Offset(size.width / 2, size.height / 2),
+    //     radius: size.width / 2));
+    path.fillType = PathFillType.evenOdd;
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper oldClipper) {
+    // TODO: implement shouldReclip
+    return false;
+  }
+}

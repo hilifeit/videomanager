@@ -1,47 +1,6 @@
 import 'package:videomanager/screens/components/videosidebar/filteroverlay.dart';
 import 'package:videomanager/screens/components/videosidebar/videosidebar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
-
-class CustomREctClipper extends CustomClipper<Path> {
-  CustomREctClipper({
-    required this.bigWidth,
-    required this.bigHeight,
-    required this.smallWidth,
-    required this.smallHeight,
-    required this.bigleft,
-    required this.bigtop,
-  });
-  final double bigWidth, bigHeight, smallWidth, smallHeight, bigleft, bigtop;
-
-  @override
-  getClip(Size size) {
-    // TODO: implement getClip
-
-    Path path = Path();
-
-    path.addRect(Rect.fromLTWH(
-      bigleft,
-      bigHeight / 2 - smallHeight / 2,
-      smallWidth,
-      smallHeight,
-    ));
-    path.addRect(Rect.fromLTWH(bigleft, bigtop, bigWidth, bigHeight));
-
-    // path.addOval(Rect.fromCircle(center: Offset(left, top), radius: radius));
-    // path.addOval(Rect.fromCircle(
-    //     center: Offset(size.width / 2, size.height / 2),
-    //     radius: size.width / 2));
-    path.fillType = PathFillType.evenOdd;
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper oldClipper) {
-    // TODO: implement shouldReclip
-    return false;
-  }
-}
 
 class CustomOverlayEntry {
   static final CustomOverlayEntry _instance = CustomOverlayEntry._internal();
@@ -50,20 +9,23 @@ class CustomOverlayEntry {
 
   CustomOverlayEntry._internal();
 
-  late OverlayEntry overlay;
+  late OverlayEntry videobar;
   late OverlayEntry loader;
   late OverlayEntry filter;
   late BuildContext context;
 
   bool isMenuOpen = false;
+  bool videoBarOpen = false;
   closeVideoBar() {
-    overlay.remove();
+    videobar.remove();
+    videoBarOpen = !videoBarOpen;
   }
 
   showvideoBar(c, role) {
     OverlayState overlayState = Overlay.of(c)!;
-    createOverlay(c, role);
-    overlayState.insert(overlay);
+    videoSideBarOverlay(c, role);
+    overlayState.insert(videobar);
+    videoBarOpen = !videoBarOpen;
   }
 
   showLoader() {
@@ -160,11 +122,11 @@ class CustomOverlayEntry {
     );
   }
 
-  createOverlay(BuildContext context, role) {
+  videoSideBarOverlay(BuildContext context, role) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     var size = renderBox.size;
-    overlay = OverlayEntry(builder: (context) {
+    videobar = OverlayEntry(builder: (context) {
       return Positioned(
           right: 0,
           bottom: 73.sh(),
@@ -177,52 +139,5 @@ class CustomOverlayEntry {
             size: size,
           ));
     });
-  }
-}
-
-final filterItemProvider = StateProvider<FilterItemWidgetItem?>((ref) {
-  return null;
-});
-
-class FilterIconButton extends ConsumerWidget {
-  FilterIconButton({Key? key}) : super(key: key);
-
-  final FocusNode foucusNode = FocusNode();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final filterSelect = ref.watch(filterItemProvider.state).state;
-    return InkWell(
-      onTap: () {
-        if (CustomOverlayEntry().isMenuOpen) {
-          CustomOverlayEntry().closeFilter();
-        } else {
-          CustomOverlayEntry().showFilter(context);
-        }
-      },
-      child: Row(
-        children: [
-          if (filterSelect != null)
-            Padding(
-              padding: EdgeInsets.only(right: 5.sw()),
-              child: Container(
-                  padding: EdgeInsets.all(
-                    7.sw(),
-                  ),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: FilterItemWidget(item: filterSelect)),
-            ),
-          Container(
-            padding: EdgeInsets.all(10.sr()),
-            decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(4.sr())),
-            child:
-                Icon(Videomanager.filter, color: Colors.white, size: 18.ssp()),
-          ),
-        ],
-      ),
-    );
   }
 }

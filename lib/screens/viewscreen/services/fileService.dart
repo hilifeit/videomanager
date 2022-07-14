@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:videomanager/screens/components/helper/disk.dart';
-import 'package:videomanager/screens/components/helper/overlayentry.dart';
+import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';

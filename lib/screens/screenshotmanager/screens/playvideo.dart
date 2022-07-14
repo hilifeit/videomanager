@@ -1,4 +1,4 @@
-import 'package:videomanager/screens/components/helper/overlayentry.dart';
+import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
@@ -207,7 +207,14 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
     return Row(
       children: [
         IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            if (UniversalPlatform.isDesktop) {
+              desktop!.player
+                  .seek(((desktop!.duration)) - Duration(seconds: 10));
+            } else {
+              web!.seekTo((await (web!.position))! - Duration(seconds: 10));
+            }
+          },
           icon: Icon(
             Videomanager.rewind,
             color: Colors.white,
@@ -304,5 +311,14 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         ),
       ],
     );
+  }
+}
+
+class VideoTime extends StatelessWidget {
+  const VideoTime({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
