@@ -33,7 +33,7 @@ class MenuItemWidget extends ConsumerWidget {
       child: GestureDetector(
         onTap: (() {
           ref.read(indexState.state).state = item.id;
-          CustomOverlayEntry().closeVideoBar();
+          // CustomOverlayEntry().closeVideoBar();
           if (CustomOverlayEntry().isMenuOpen) {
             CustomOverlayEntry().closeFilter();
           }

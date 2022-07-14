@@ -4,20 +4,27 @@ import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/components/helper/overlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 
 final fileDetailMiniServiceProvider =
     ChangeNotifierProvider<FileService>((ref) {
-  return FileService();
+  return FileService(ref);
 });
 
 class FileService extends ChangeNotifier {
-  FileService() {
-    load();
+  FileService(ChangeNotifierProviderRef<FileService> ref) {
+    var userProvider = ref.read(userChangeProvider);
+    if (userProvider.loggedInUser.value != null) {
+      if (userProvider.loggedInUser.value!.role == Roles.superAdmin.index) {
+        load();
+      }
+    }
   }
-  List<FileDetailMini> files = [];
+  final List<FileDetailMini> files = [];
 
   load() async {
     await fetchAll(fromServer: true);
@@ -48,7 +55,8 @@ class FileService extends ChangeNotifier {
             headers: {"Content-Type": "application/json"});
         CustomOverlayEntry().closeLoader();
         if (response.statusCode == 200) {
-          files = fileDetailMiniFromJson(response.body).toList();
+          files.clear();
+          files.addAll(fileDetailMiniFromJson(response.body).toList());
 
           List<int> states = [];
           List<String> district = [];
@@ -75,7 +83,9 @@ class FileService extends ChangeNotifier {
     } else {
       var filesJson = await storage.read("files");
       if (filesJson != null) {
-        files = fileDetailMiniFromJson(filesJson).toList();
+        files.clear();
+
+        files.addAll(fileDetailMiniFromJson(filesJson).toList());
         await Future.forEach<FileDetailMini>(files, (element) {
           element.boundingBox = boundingBoxOffset(element.location.coordinates);
           // if (!states.contains(element.area.state)) {

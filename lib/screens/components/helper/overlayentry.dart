@@ -1,7 +1,6 @@
 import 'package:videomanager/screens/components/videosidebar/filteroverlay.dart';
 import 'package:videomanager/screens/components/videosidebar/videosidebar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/cards.dart';
 
 class CustomREctClipper extends CustomClipper<Path> {
   CustomREctClipper({
