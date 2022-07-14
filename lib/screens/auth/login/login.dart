@@ -9,7 +9,7 @@ final passwordvisibileProvider = StateProvider<bool>((ref) {
   return true;
 });
 final checkBoxStateProvider = StateProvider<bool>((ref) {
-  return false;
+  return true;
 });
 
 class Login extends ConsumerWidget {

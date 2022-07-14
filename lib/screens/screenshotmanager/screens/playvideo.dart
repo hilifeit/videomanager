@@ -1,4 +1,7 @@
+
+
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
+import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
@@ -25,15 +28,18 @@ class PlayVideo extends HookConsumerWidget {
   // bool showOverlay = false;
 
   late OverlayEntry overlayEntry;
-  Media media = Media.network(
+  // ? desktop
+
+  late Media media = Media.network(
       "http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4"
           .replaceAll(" ", "%20"),
       parse: true);
 
   VideoDimensions dimension = const VideoDimensions(1920, 1080);
-
   late PlayerController player = PlayerController(
-    player: Player(id: media.resource.length, videoDimensions: dimension),
+    player: Player(
+        id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
+        videoDimensions: dimension),
     duration: videoFile != null
         ? Duration(
             hours: videoFile!.info.duration.hour,
@@ -41,12 +47,18 @@ class PlayVideo extends HookConsumerWidget {
             seconds: videoFile!.info.duration.second,
             milliseconds: videoFile!.info.duration.millisecond,
           )
-        : Duration.zero,
+        :
+        // ? Duration as per
+        Duration(minutes: 10),
   );
 
   late VideoPlayerController controller = VideoPlayerController.network(
-      videoFile != null ? videoFile!.foundPath : '')
+      videoFile != null
+          ? videoFile!.foundPath
+          : 'http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4')
     ..initialize().then((_) {
+      
+
       // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
     }).catchError((e) {
       print(" $e text");
@@ -54,10 +66,10 @@ class PlayVideo extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    player.player.open(media, autoStart: false);
+    if (UniversalPlatform.isDesktop) {
+      player.player.open(media, autoStart: false);
+    }
 
-    // player.player.play();
-    // if (UniversalPlatform.isDesktop) {}
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
@@ -210,8 +222,12 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         IconButton(
           onPressed: () async {
             if (UniversalPlatform.isDesktop) {
-              desktop!.player
-                  .seek(((desktop!.duration)) - Duration(seconds: 10));
+              desktop!.player.seek(((desktop!.player.position.position!)) -
+                  Duration(seconds: 10));
+              if (!desktop!.player.playback.isPlaying) {
+                desktop!.player.play();
+                controller.forward();
+              }
             } else {
               web!.seekTo((await (web!.position))! - Duration(seconds: 10));
             }
@@ -258,17 +274,28 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         IconButton(
           onPressed: () {
             if (volume != 0 && mute) {
-              desktop!.player.setVolume(volume);
+              if (UniversalPlatform.isDesktop) {
+                desktop!.player.setVolume(volume);
+              } else {
+                web!.setVolume(volume);
+              }
 
               ref.read(mutedProvider.state).state = false;
             } else if (volume == 0 && mute) {
-              desktop!.player.setVolume(0);
-
               ref.read(mutedProvider.state).state = false;
               ref.read(volumeProvider.state).state = 0.2;
+              if (UniversalPlatform.isDesktop) {
+                desktop!.player.setVolume(volume);
+              } else {
+                web!.setVolume(volume);
+              }
             } else {
-              desktop!.player.setVolume(0);
               ref.read(mutedProvider.state).state = true;
+              if (UniversalPlatform.isDesktop) {
+                desktop!.player.setVolume(0);
+              } else {
+                web!.setVolume(0);
+              }
             }
           },
           icon: mute || volume == 0
@@ -295,7 +322,11 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
             },
             onChanged: (val) {
               ref.read(volumeProvider.state).state = val;
-              desktop!.player.setVolume(val);
+              if (UniversalPlatform.isDesktop) {
+                desktop!.player.setVolume(val);
+              } else {
+                web!.setVolume(val);
+              }
 
               if (volume != 0) {
                 ref.read(mutedProvider.state).state = false;
@@ -304,22 +335,48 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 24.sw(),
         ),
-        Text(
-          '5:00 / 10:00',
-          style: kTextStyleInterMedium.copyWith(
-              fontSize: 14.ssp(),
-              color: const Color(0xffeaeaea).withAlpha(180)),
+        VideoTime(
+          web: web,
+          desktop: desktop,
         ),
       ],
     );
   }
 }
 
-class VideoTime extends StatelessWidget {
-  const VideoTime({Key? key}) : super(key: key);
+final timeProvider = StateProvider<Duration>((ref) {
+  return Duration.zero;
+});
+
+class VideoTime extends ConsumerWidget {
+  VideoTime({Key? key, this.web, this.desktop}) : super(key: key);
+  final VideoPlayerController? web;
+  final PlayerController? desktop;
+  double maxSliderValue = 100;
+  double progress = 0;
+  late Duration length;
 
   @override
-  Widget build(BuildContext context) {
-    return Container();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(timeProvider.state).state;
+    if (UniversalPlatform.isDesktop) {
+      length = desktop!.duration;
+      ref.read(timeProvider.state).state = desktop!.player.position.position!;
+      desktop!.player.positionStream.listen((event) {
+        ref.read(timeProvider.state).state = event.position!;
+      });
+    } else {
+      length = web!.value.duration;
+      ref.read(timeProvider.state).state = web!.value.position;
+      web!.addListener(() {
+        ref.read(timeProvider.state).state = web!.value.position;
+      });
+    }
+
+    return Text(
+      '${intToTime(current.inSeconds)} / ${intToTime(length.inSeconds)}',
+      style: kTextStyleInterMedium.copyWith(
+          fontSize: 14.ssp(), color: const Color(0xffeaeaea).withAlpha(180)),
+    );
   }
 }

@@ -12,41 +12,69 @@ class CustomOverlayEntry {
   late OverlayEntry videobar;
   late OverlayEntry loader;
   late OverlayEntry filter;
+  late OverlayEntry videotime;
   late BuildContext context;
 
   bool isMenuOpen = false;
   bool videoBarOpen = false;
+  bool videoTimeStampOpen = false;
+  bool loaderOpen = false;
+
   closeVideoBar() {
     videobar.remove();
     videoBarOpen = !videoBarOpen;
   }
 
   showvideoBar(c, role) {
-    OverlayState overlayState = Overlay.of(c)!;
-    videoSideBarOverlay(c, role);
-    overlayState.insert(videobar);
-    videoBarOpen = !videoBarOpen;
+    if (!videoBarOpen) {
+      OverlayState overlayState = Overlay.of(c)!;
+      videoSideBarOverlay(c, role);
+      overlayState.insert(videobar);
+      videoBarOpen = !videoBarOpen;
+    }
   }
 
   showLoader() {
-    Future.delayed(const Duration(milliseconds: 15), () {
-      OverlayState state = Overlay.of(context)!;
-      loader = progressIndicatorOverlay(context);
-      state.insert(loader);
-    });
+    if (!loaderOpen) {
+      Future.delayed(const Duration(milliseconds: 15), () {
+        OverlayState state = Overlay.of(context)!;
+        loader = progressIndicatorOverlay(context);
+        state.insert(loader);
+        loaderOpen = !loaderOpen;
+      });
+    }
   }
 
   closeLoader() {
     Future.delayed(const Duration(milliseconds: 18), () {
       loader.remove();
+      loaderOpen = !loaderOpen;
     });
   }
 
+  showVideoTimeStamp() {
+    if (!videoTimeStampOpen) {
+      Future.delayed(Duration(milliseconds: 10), () {
+        OverlayState timeState = Overlay.of(context)!;
+        videoTimeStamp(context);
+        timeState.insert(videotime);
+        videoTimeStampOpen = !videoTimeStampOpen;
+      });
+    }
+  }
+
+  closeVideoTimeStamp() {
+    videotime.remove();
+    videoTimeStampOpen = !videoTimeStampOpen;
+  }
+
   showFilter(BuildContext c) {
-    OverlayState filterState = Overlay.of(c)!;
-    filterOverlay(c);
-    filterState.insert(filter);
-    isMenuOpen = !isMenuOpen;
+    if (!isMenuOpen) {
+      OverlayState filterState = Overlay.of(c)!;
+      filterOverlay(c);
+      filterState.insert(filter);
+      isMenuOpen = !isMenuOpen;
+    }
   }
 
   closeFilter() {
@@ -66,6 +94,24 @@ class CustomOverlayEntry {
           child: CircularProgressIndicator(
             color: Theme.of(context).primaryColor,
           ),
+        ),
+      );
+    }));
+  }
+
+  videoTimeStamp(BuildContext context) {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    var size = renderBox.size;
+    videotime = OverlayEntry(builder: ((context) {
+      return Positioned(
+        left: 0,
+        bottom: 73.sh(),
+        width: size.width,
+        height: 203.sh(),
+        child: Container(
+          height: 203.sh(),
+          width: double.infinity,
+          color: Colors.amber,
         ),
       );
     }));

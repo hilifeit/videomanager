@@ -34,6 +34,7 @@ class Player {
   seek(Duration duration) {}
   pause() {}
   play() {}
+  setVolume(vol) {}
   PositionState get position => PositionState();
 }
 
@@ -44,7 +45,13 @@ class VideoDimensions {
 class Media {
   Media._();
 
-  static network(dynamic url, {bool parse = false}) {}
+  static network(dynamic url,
+      {bool parse = false,
+      Duration startTime = Duration.zero,
+      Duration stopTime = Duration.zero}) {}
+  Duration get startTime => Duration.zero;
+  Duration get stopTime => Duration.zero;
+  String get resource => "";
   Map<String, dynamic> get metas => {};
 }
 
