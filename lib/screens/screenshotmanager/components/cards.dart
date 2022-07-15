@@ -193,16 +193,15 @@ class StatusCard extends StatelessWidget {
 
   final String status;
   late Color color;
+  List<Status> items = [
+    Status(status: 'Pending', color: danger),
+    Status(status: 'Complete', color: sucess),
+    Status(status: 'Ongoing', color: primaryColor),
+    Status(status: 'Approved', color: sucess),
+    Status(status: 'Rejected', color: danger)
+  ];
   @override
   Widget build(BuildContext context) {
-    List<Status> items = [
-      Status(status: 'Pending', color: danger),
-      Status(status: 'Complete', color: sucess),
-      Status(status: 'Ongoing', color: primaryColor),
-      Status(status: 'Approved', color: sucess),
-      Status(status: 'Rejected', color: danger)
-    ];
-
     for (var element in items) {
       if (element.status == status) {
         color = element.color;
@@ -215,12 +214,13 @@ class StatusCard extends StatelessWidget {
       height: 22.sh(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.sr()),
-        color: color.withOpacity(0.16),
+        color: items[int.parse(status)].color.withOpacity(0.16),
       ),
       child: Center(
         child: Text(
-          status,
-          style: kTextStyleIbmMedium.copyWith(fontSize: 13.ssp(), color: color),
+          items[int.parse(status)].status,
+          style: kTextStyleIbmMedium.copyWith(
+              fontSize: 13.ssp(), color: items[int.parse(status)].color),
         ),
       ),
     );
