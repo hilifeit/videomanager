@@ -99,21 +99,80 @@ class CustomOverlayEntry {
     }));
   }
 
+  final heightChangeProvider = StateProvider<double>((ref) {
+    return 203.sh();
+  });
+
   videoTimeStamp(BuildContext context) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     var size = renderBox.size;
+    double defaultHeight = 213.sh();
+    double minHeight = 58.sh();
     videotime = OverlayEntry(builder: ((context) {
-      return Positioned(
-        left: 0,
-        bottom: 73.sh(),
-        width: size.width,
-        height: 203.sh(),
-        child: Container(
-          height: 203.sh(),
-          width: double.infinity,
-          color: Colors.amber,
-        ),
-      );
+      return Consumer(builder: (context, ref, c) {
+        final customHeight = ref.watch(heightChangeProvider.state).state;
+        return Positioned(
+          left: 0,
+          bottom: 73.sh(),
+          width: size.width,
+          height: customHeight,
+          child: Stack(
+            children: [
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.amber,
+              ),
+              Positioned(
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onDoubleTap: () {
+                      if (customHeight == defaultHeight) {
+                        ref.read(heightChangeProvider.state).state = minHeight;
+                      } else if (customHeight == minHeight) {
+                        ref.read(heightChangeProvider.state).state =
+                            defaultHeight;
+                      } else {
+                        if (((defaultHeight - customHeight) <
+                            (customHeight - minHeight))) {
+                          ref.read(heightChangeProvider.state).state =
+                              defaultHeight;
+                        } else {
+                          ref.read(heightChangeProvider.state).state =
+                              minHeight;
+                        }
+                      }
+                    },
+                    onVerticalDragUpdate: (details) {
+                      // ref.read(heightChangeProvider.state).state -=
+                      //     details.delta.dy;
+
+                      double h = customHeight - 2 * details.delta.dy;
+                      if (h < minHeight) {
+                        ref.read(heightChangeProvider.state).state = minHeight;
+                      } else if (h > defaultHeight) {
+                        ref.read(heightChangeProvider.state).state =
+                            defaultHeight;
+                      } else {
+                        ref.read(heightChangeProvider.state).state = h;
+                      }
+                      print(details.delta);
+                      print(customHeight);
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.resizeUpDown,
+                      child: Container(
+                        height: 2,
+                        color: Colors.red,
+                      ),
+                    ),
+                  )),
+            ],
+          ),
+        );
+      });
     }));
   }
 

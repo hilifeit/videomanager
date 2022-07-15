@@ -170,7 +170,7 @@ class VideoAssignCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              StatusCard(status: item.status.status.toString())
+              StatusCard(status: itemStatus[item.status.status].status),
             ],
           ),
         ),
@@ -178,6 +178,14 @@ class VideoAssignCard extends StatelessWidget {
     );
   }
 }
+
+List<Status> itemStatus = [
+  Status(status: 'Pending', color: danger),
+  Status(status: 'Ongoing', color: primaryColor),
+  Status(status: 'Rejected', color: danger),
+  Status(status: 'Complete', color: sucess),
+  Status(status: 'Approved', color: sucess),
+];
 
 class Status {
   Status({required this.status, required this.color});
@@ -195,15 +203,7 @@ class StatusCard extends StatelessWidget {
   late Color color;
   @override
   Widget build(BuildContext context) {
-    List<Status> items = [
-      Status(status: 'Pending', color: danger),
-      Status(status: 'Complete', color: sucess),
-      Status(status: 'Ongoing', color: primaryColor),
-      Status(status: 'Approved', color: sucess),
-      Status(status: 'Rejected', color: danger)
-    ];
-
-    for (var element in items) {
+    for (var element in itemStatus) {
       if (element.status == status) {
         color = element.color;
         break;

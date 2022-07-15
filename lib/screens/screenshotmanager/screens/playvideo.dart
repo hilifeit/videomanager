@@ -1,5 +1,3 @@
-
-
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -57,8 +55,6 @@ class PlayVideo extends HookConsumerWidget {
           ? videoFile!.foundPath
           : 'http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4')
     ..initialize().then((_) {
-      
-
       // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
     }).catchError((e) {
       print(" $e text");
@@ -69,6 +65,7 @@ class PlayVideo extends HookConsumerWidget {
     if (UniversalPlatform.isDesktop) {
       player.player.open(media, autoStart: false);
     }
+    CustomOverlayEntry().showVideoTimeStamp();
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -102,57 +99,72 @@ class PlayVideo extends HookConsumerWidget {
           Container(
             height: 73.sh(),
             color: primaryColor,
-            child: Row(
+            child: Stack(
               children: [
-                SizedBox(
-                  width: 51.sw(),
-                ),
-                SingleVideoPlayerControls(
-                  desktop: player,
-                  web: controller,
-                ),
-                const Spacer(),
-                Text(
-                  'FileName',
-                  style: kTextStyleInterMedium.copyWith(
-                    fontSize: 18.ssp(),
-                    color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 51.sw(),
+                      ),
+                      SingleVideoPlayerControls(
+                        desktop: player,
+                        web: controller,
+                      ),
+                      const Spacer(),
+                      Text(
+                        'FileName',
+                        style: kTextStyleInterMedium.copyWith(
+                          fontSize: 18.ssp(),
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 43.sw(),
+                      ),
+                      Container(
+                        width: 50.sr(),
+                        height: 50.sr(),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(right: 3.sw(), bottom: 3.sh()),
+                        child: Icon(
+                          Videomanager.camera,
+                          color: Theme.of(context).primaryColor,
+                          size: 24.ssp(),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 32.sw(),
+                      ),
+                      CustomElevatedButton(
+                        width: 120.sw(),
+                        height: 40.sw(),
+                        color: Colors.white,
+                        onPressedElevated: () {},
+                        elevatedButtonText: "Submit",
+                        elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
+                          fontSize: 20.ssp(),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 47.sw(),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  width: 43.sw(),
-                ),
-                Container(
-                  width: 50.sr(),
-                  height: 50.sr(),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
+                Positioned(
+                  child: LinearProgressIndicator(
+                    value: 0.3,
+                    backgroundColor: Colors.transparent,
+                    color: sucess,
+                    minHeight: 4.sh(),
                   ),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(right: 3.sw(), bottom: 3.sh()),
-                  child: Icon(
-                    Videomanager.camera,
-                    color: Theme.of(context).primaryColor,
-                    size: 24.ssp(),
-                  ),
-                ),
-                SizedBox(
-                  width: 32.sw(),
-                ),
-                CustomElevatedButton(
-                  width: 120.sw(),
-                  height: 40.sw(),
-                  color: Colors.white,
-                  onPressedElevated: () {},
-                  elevatedButtonText: "Submit",
-                  elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
-                    fontSize: 20.ssp(),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                SizedBox(
-                  width: 47.sw(),
                 ),
               ],
             ),
