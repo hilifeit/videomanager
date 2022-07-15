@@ -1,6 +1,8 @@
-import 'package:videomanager/screens/components/videosidebar/filteroverlay.dart';
-import 'package:videomanager/screens/components/videosidebar/videosidebar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteritembutton.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteroverlay.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/timeline.dart';
 
 class CustomOverlayEntry {
   static final CustomOverlayEntry _instance = CustomOverlayEntry._internal();
@@ -54,7 +56,7 @@ class CustomOverlayEntry {
 
   showVideoTimeStamp() {
     if (!videoTimeStampOpen) {
-      Future.delayed(Duration(milliseconds: 10), () {
+      Future.delayed(const Duration(milliseconds: 10), () {
         OverlayState timeState = Overlay.of(context)!;
         videoTimeStamp(context);
         timeState.insert(videotime);
@@ -102,18 +104,9 @@ class CustomOverlayEntry {
   videoTimeStamp(BuildContext context) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     var size = renderBox.size;
+
     videotime = OverlayEntry(builder: ((context) {
-      return Positioned(
-        left: 0,
-        bottom: 73.sh(),
-        width: size.width,
-        height: 203.sh(),
-        child: Container(
-          height: 203.sh(),
-          width: double.infinity,
-          color: Colors.amber,
-        ),
-      );
+      return Timeline(size: size);
     }));
   }
 
@@ -177,7 +170,7 @@ class CustomOverlayEntry {
           right: 0,
           bottom: 73.sh(),
           height: size.height - 73.sh(),
-          width: 533.sw(),
+          width: 560.sw(),
 
           //  top: renderBox.globalToLocal(point),
           child: VideoSideBar(

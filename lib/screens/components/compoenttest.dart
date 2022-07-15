@@ -10,8 +10,7 @@ class AddRemarksOnSubmit extends ConsumerWidget {
   }) : super(key: key);
   Duration? duration;
   double? progress;
-  int? sxshot,outlet;
-
+  int? sxshot, outlet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,7 +90,7 @@ class AddRemarksOnSubmit extends ConsumerWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 6.sh(),
+                  height: 20.sh(),
                 ),
                 InputTextField(
                     title: 'Remarks', isVisible: true, onChanged: (val) {}),

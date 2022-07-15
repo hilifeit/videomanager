@@ -42,7 +42,7 @@ class UserService extends ChangeNotifier {
     if (userJson != null) {
       loggedInUser.value = UserModelMini.fromJson(userJson);
     }
-    CustomOverlayEntry().showVideoTimeStamp();
+    
   }
 
   store() async {

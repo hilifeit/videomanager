@@ -1,7 +1,5 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
-import 'package:videomanager/screens/users/model/usermodelmini.dart';
-import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class ShopCard extends StatelessWidget {
   const ShopCard({Key? key, required this.shop}) : super(key: key);
@@ -69,160 +67,13 @@ class ShopCard extends StatelessWidget {
   }
 }
 
-class VideoAssignCardItems {
-  VideoAssignCardItems(
-      {required this.fileName,
-      required this.status,
-      // required this.filedetail,
-      required this.screenShot,
-      required this.shops});
-  // final FileDetailMini filedetail;
-  final String fileName, status;
-  final int screenShot;
-  final int shops;
-}
 
-class VideoAssignCard extends StatelessWidget {
-  const VideoAssignCard({
-    Key? key,
-    required this.thisUser,
-    required this.item,
-  }) : super(key: key);
-  final UserModelMini thisUser;
-  final FileDetailMini item;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 412.sw(),
-      height: 73.sh(),
-      child: Card(
-        color: const Color(0xffECF0F2),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.5.sw()),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 88.sw(),
-                child: Text(
-                  thisUser.superVisor != null ? thisUser.superVisor!.name : '',
-                  style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 15.ssp(), color: cardHeader),
-                ),
-              ),
-              const Spacer(),
-              SizedBox(
-                width: 70.sw(),
-                child: Text(
-                  item.filename,
-                  style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 12.ssp(), color: Colors.black),
-                ),
-              ),
-              SizedBox(
-                width: 10.sw(),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Videomanager.image_icon_group,
-                        color: lightBlack,
-                        size: 9.5.ssp(),
-                      ),
-                      SizedBox(
-                        width: 5.sw(),
-                      ),
-                      SizedBox(
-                        width: 60.sw(),
-                        child: Text(
-                          10.toString(),
-                          style: kTextStyleIbmMedium.copyWith(
-                              fontSize: 12.ssp(), color: lightBlack),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Videomanager.shop,
-                        color: lightBlack,
-                        size: 9.5.ssp(),
-                      ),
-                      SizedBox(
-                        width: 5.sw(),
-                      ),
-                      SizedBox(
-                        width: 60.sw(),
-                        child: Text(
-                          10.toString(),
-                          style: kTextStyleIbmMedium.copyWith(
-                              fontSize: 12.ssp(), color: lightBlack),
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(),
-              StatusCard(status: item.status.status.toString())
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// List<Status> itemStatus = [
+//   Status(status: 'Pending', color: danger),
+//   Status(status: 'Ongoing', color: primaryColor),
+//   Status(status: 'Rejected', color: danger),
+//   Status(status: 'Complete', color: sucess),
+//   Status(status: 'Approved', color: sucess),
+// ];
 
-class Status {
-  Status({required this.status, required this.color});
-  final String status;
-  final Color color;
-}
-
-class StatusCard extends StatelessWidget {
-  StatusCard({
-    Key? key,
-    required this.status,
-  }) : super(key: key);
-
-  final String status;
-  late Color color;
-  List<Status> items = [
-    Status(status: 'Pending', color: danger),
-    Status(status: 'Complete', color: sucess),
-    Status(status: 'Ongoing', color: primaryColor),
-    Status(status: 'Approved', color: sucess),
-    Status(status: 'Rejected', color: danger)
-  ];
-  @override
-  Widget build(BuildContext context) {
-    for (var element in items) {
-      if (element.status == status) {
-        color = element.color;
-        break;
-      }
-    }
-
-    return Container(
-      width: 95.sw(),
-      height: 22.sh(),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4.sr()),
-        color: items[int.parse(status)].color.withOpacity(0.16),
-      ),
-      child: Center(
-        child: Text(
-          items[int.parse(status)].status,
-          style: kTextStyleIbmMedium.copyWith(
-              fontSize: 13.ssp(), color: items[int.parse(status)].color),
-        ),
-      ),
-    );
-  }
-}

@@ -1,7 +1,7 @@
 import 'package:videomanager/screens/components/compoenttest.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/playvideo.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboard.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -50,7 +50,7 @@ class Holder extends ConsumerWidget {
               : Expanded(
                   child: index != 1
                       ? AnimatedIndexedStack(index: index, children: [
-                          PlayVideo(role: thisUser.role),
+                          ScreenshotDashboard(role: thisUser.role),
                         ])
                       : const SettingsHolder(),
                 ),
