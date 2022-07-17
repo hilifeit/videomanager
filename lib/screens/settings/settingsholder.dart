@@ -26,34 +26,35 @@ class SettingsHolder extends ConsumerWidget {
               child: SettingsBar(
             settingsIndexState: settingIndexProvider,
           )),
-          Expanded(
-              flex: 5,
-              child: (() {
-                if (settingsindex == 0) {
-                  return MapSettings(
-                    mapSetting: setting.mapSetting,
-                  );
-                }
-                if (settingsindex == 1) {
-                  return VideoSettings(
-                    videoSetting: setting.videoSetting,
-                  );
-                }
-                if (settingsindex == 2) {
-                  return UserSettings(
-                    userSetting: setting.userSetting,
-                  );
-                }
-                if (settingsindex == 3) {
-                  return LocationSettings(
-                    locationSetting: setting.locationSetting,
-                  );
-                }
+          if (ResponsiveLayout.isDesktop)
+            Expanded(
+                flex: 5,
+                child: (() {
+                  if (settingsindex == 0) {
+                    return MapSettings(
+                      mapSetting: setting.mapSetting,
+                    );
+                  }
+                  if (settingsindex == 1) {
+                    return VideoSettings(
+                      videoSetting: setting.videoSetting,
+                    );
+                  }
+                  if (settingsindex == 2) {
+                    return UserSettings(
+                      userSetting: setting.userSetting,
+                    );
+                  }
+                  if (settingsindex == 3) {
+                    return LocationSettings(
+                      locationSetting: setting.locationSetting,
+                    );
+                  }
 
-                return Container(
-                  color: Colors.amber,
-                );
-              }())),
+                  return Container(
+                    color: Colors.amber,
+                  );
+                }())),
         ],
       ),
     );

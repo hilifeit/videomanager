@@ -25,8 +25,9 @@ class TimeLineTop extends StatelessWidget {
           ),
           CustomPaint(
             size: Size(double.infinity, 50.sh()),
-            painter: const TimeRulerPainter(
-                duration: Duration(minutes: 11, seconds: 47), height: 40),
+            painter: TimeRulerPainter(
+                duration: const Duration(minutes: 6, seconds: 47),
+                height: 40.sh()),
           ),
           Consumer(builder: (context, ref, c) {
             final left = ref.watch(leftValueProvider.state).state;

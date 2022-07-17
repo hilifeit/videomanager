@@ -34,15 +34,15 @@ class MenuItemWidget extends ConsumerWidget {
         onTap: (() {
           ref.read(indexState.state).state = item.id;
 
-          if (CustomOverlayEntry().videoBarOpen) {
-            CustomOverlayEntry().closeVideoBar();
-          }
-          if (CustomOverlayEntry().videoTimeStampOpen) {
-            CustomOverlayEntry().closeVideoTimeStamp();
-          }
-          if (CustomOverlayEntry().isMenuOpen) {
-            CustomOverlayEntry().closeFilter();
-          }
+          // if (CustomOverlayEntry().videoBarOpen) {
+          //   CustomOverlayEntry().closeVideoBar();
+          // }
+          // if (CustomOverlayEntry().videoTimeStampOpen) {
+          //   CustomOverlayEntry().closeVideoTimeStamp();
+          // }
+          // if (CustomOverlayEntry().isMenuOpen) {
+          //   CustomOverlayEntry().closeFilter();
+          // }
         }),
         child: Card(
           elevation: 0,

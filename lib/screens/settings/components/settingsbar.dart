@@ -15,19 +15,21 @@ class SettingsBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: const Color(0xff40667d0d).withOpacity(0.05),
+      color: const Color(0x40667d0d).withOpacity(0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 15.sh(), left: 43.sw()),
-            child: Text(
-              'Settings',
-              style: kTextStyleIbmSemiBold.copyWith(
-                  color: primaryColor, fontSize: 21.ssp()),
+          if (ResponsiveLayout.isDesktop) ...[
+            Padding(
+              padding: EdgeInsets.only(top: 15.sh(), left: 43.sw()),
+              child: Text(
+                'Settings',
+                style: kTextStyleIbmSemiBold.copyWith(
+                    color: primaryColor, fontSize: 21.ssp()),
+              ),
             ),
-          ),
-          SizedBox(height: 39.sh()),
+            SizedBox(height: 39.sh()),
+          ],
           Expanded(
             child: ListView.separated(
                 scrollDirection: Axis.vertical,

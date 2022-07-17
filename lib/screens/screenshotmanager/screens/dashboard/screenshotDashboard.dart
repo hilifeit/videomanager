@@ -64,9 +64,13 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (UniversalPlatform.isDesktop) {
-      player.player.open(media, autoStart: false);
-    }
+    // if (UniversalPlatform.isDesktop) {
+    //   try {
+    //     player.player.open(media, autoStart: false);
+    //   } catch (e, s) {
+    //     print("$e $s error");
+    //   }
+    // }
     CustomOverlayEntry().showVideoTimeStamp();
 
     return Align(
@@ -79,10 +83,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
               children: [
                 Column(
                   children: [
-                    Expanded(
-                      child: CustomVideoPlayer(
-                          player: player.player, controller: controller),
-                    ),
+                    // Expanded(
+                    //   child: CustomVideoPlayer(
+                    //       player: player.player, controller: controller),
+                    // ),
                     Container(
                       color: Colors.black,
                       height: 58.sh(),
@@ -120,10 +124,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
                       SizedBox(
                         width: 51.sw(),
                       ),
-                      SingleVideoPlayerControls(
-                        desktop: player,
-                        web: controller,
-                      ),
+                      // SingleVideoPlayerControls(
+                      //   desktop: player,
+                      //   web: controller,
+                      // ),
                       const Spacer(),
                       Text(
                         'FileName',

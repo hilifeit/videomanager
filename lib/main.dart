@@ -5,6 +5,7 @@ import 'dart:html'
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:videomanager/screens/components/responsivelayout.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -18,7 +19,7 @@ void main() async {
   }
   await GetStorage.init();
   //storage.erase();
-  customSocket.connect();
+  // customSocket.connect();
   runApp(Phoenix(child: const MyApp()));
 }
 
@@ -28,22 +29,37 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(1920, 1080),
-      builder: (_, child) {
-        return ProviderScope(
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Demo',
-            themeMode: ThemeMode.light,
-            darkTheme: ThemeData(brightness: Brightness.dark),
-            theme: lightTheme,
-            home: const Loader(),
+    return LayoutBuilder(builder: (context, constraints) {
+      return ScreenUtilInit(
+        designSize: checkWidth(constraints),
+        builder: (_, child) {
+          return ProviderScope(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Demo',
+              themeMode: ThemeMode.light,
+              darkTheme: ThemeData(brightness: Brightness.dark),
+              theme: lightTheme,
+              home: const Loader(),
 
-            // home: const Scaffold(body: Loader())
-          ),
-        );
-      },
-    );
+              // home: const Scaffold(body: Loader())
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  Size checkWidth(BoxConstraints constraints) {
+    if (constraints.maxWidth < 500) {
+      ResponsiveLayout.setMobile();
+      return const Size(450, 400);
+    } else if (constraints.maxWidth < 1100) {
+      ResponsiveLayout.setTablet();
+      return const Size(850, 700);
+    } else {
+      ResponsiveLayout.setDesktop();
+      return const Size(1920, 1080);
+    }
   }
 }

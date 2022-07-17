@@ -31,7 +31,7 @@ class CustomOverlayEntry {
 
   showvideoBar(c, role) {
     if (!videoBarOpen) {
-      print(videoTimeStampOpen);
+      // print(videoTimeStampOpen);
       OverlayState overlayState = Overlay.of(c)!;
       videoSideBarOverlay(c, role);
       overlayState.insert(videobar);

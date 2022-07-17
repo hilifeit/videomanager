@@ -17,15 +17,16 @@ class ViewScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Expanded(
-              child: Filter(
-                mapController: controller,
+            if (ResponsiveLayout.isDesktop)
+              Expanded(
+                child: Filter(
+                  mapController: controller,
+                ),
               ),
-            ),
             Expanded(
               flex: 5,
               child: MapScreen(
-                draw: false,
+                draw: true,
                 controller: controller,
                 isvisible: true,
               ),

@@ -30,11 +30,17 @@ class Holder extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: secondaryColor,
+      appBar: ResponsiveLayout.isMobile || ResponsiveLayout.isTablet
+          ? AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+            )
+          : null,
       body: Column(
         children: [
-          MenuBar(
-            indexState: indexProvider,
-          ),
+          if (ResponsiveLayout.isDesktop)
+            MenuBar(
+              indexState: indexProvider,
+            ),
           (thisUser!.role > 0)
               ? Expanded(
                   child: index != 4
@@ -57,6 +63,45 @@ class Holder extends ConsumerWidget {
                 ),
         ],
       ),
+      bottomNavigationBar:
+          ResponsiveLayout.isMobile || ResponsiveLayout.isTablet
+              ? BottomNavigationBar(
+                  backgroundColor: Colors.red,
+                  selectedItemColor: Theme.of(context).primaryColor,
+                  unselectedItemColor:
+                      Theme.of(context).primaryColor.withAlpha(120),
+                  showUnselectedLabels: true,
+                  currentIndex: index,
+                  onTap: (value) {
+                    ref.read(indexProvider.state).state = value;
+                  },
+                  items: (thisUser.role > 0)
+                      ? [
+                          const BottomNavigationBarItem(
+                              label: 'Dashboard',
+                              icon: Icon(Videomanager.dashboard)),
+                          const BottomNavigationBarItem(
+                              label: 'Users', icon: Icon(Videomanager.users)),
+                          const BottomNavigationBarItem(
+                              label: 'Outlets',
+                              icon: Icon(Videomanager.outlets)),
+                          const BottomNavigationBarItem(
+                              label: 'Video',
+                              icon: Icon(Videomanager.play_video)),
+                          const BottomNavigationBarItem(
+                              label: "Settings",
+                              icon: Icon(Videomanager.settings))
+                        ]
+                      : [
+                          const BottomNavigationBarItem(
+                              label: 'Dashboard',
+                              icon: Icon(Videomanager.dashboard)),
+                          const BottomNavigationBarItem(
+                              label: "Settings",
+                              icon: Icon(Videomanager.settings))
+                        ],
+                )
+              : null,
     );
   }
 }

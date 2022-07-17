@@ -465,7 +465,7 @@ class Painter extends CustomPainter {
     selectedPointsProvider.currentSelection.value = finalselectedFileList;
 
     selectedPointsProvider.draw(customCanvas);
-    if (debug && files.isNotEmpty) {
+    if (debug && files.isNotEmpty && ResponsiveLayout.isDesktop) {
       canvas.drawRect(
           Rect.fromLTWH(0, 0, size.width, 40),
           paint
