@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filterservice.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 
 final filterItemProvider = StateProvider<List<int?>>((ref) {
@@ -13,7 +14,7 @@ class FilterIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filterSelect = ref.watch(filterItemProvider.state).state;
+    final filterSelect = ref.watch(filterModuleServiceProvider).selectedItems;
     return Row(
       children: [
         Text(
@@ -24,11 +25,11 @@ class FilterIconButton extends ConsumerWidget {
           ),
         ),
         SizedBox(
-          width: 15.sw(),
+          width: 10.sw(),
         ),
         if (filterSelect.isNotEmpty)
           Wrap(
-              spacing: 15.sw(),
+              spacing: 10.sw(),
               children: List.generate(
                 filterSelect.length,
                 (index) => StatusCard(status: filterSelect[index].toString()),

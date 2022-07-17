@@ -16,18 +16,27 @@ class FilterItemWidget extends StatelessWidget {
   final FilterItemWidgetItem item;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        item.icon,
-        SizedBox(
-          width: 9.06.sw(),
-        ),
-        Text(
-          item.text,
-          style: kTextStyleIbmRegular.copyWith(
-              fontSize: 14.ssp(), color: Colors.black),
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 14.sh(),
+      ),
+      color: item.selected
+          ? Color(0xff40667D).withOpacity(0.5)
+          : Colors.transparent,
+      child: Row(
+        children: [
+          item.icon,
+          SizedBox(
+            width: 9.06.sw(),
+          ),
+          Text(
+            item.text,
+            style: kTextStyleIbmRegular.copyWith(
+                fontSize: 14.ssp(),
+                color: item.selected ? Colors.white : Colors.black),
+          ),
+        ],
+      ),
     );
   }
 }
