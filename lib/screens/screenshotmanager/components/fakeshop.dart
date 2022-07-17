@@ -5,16 +5,16 @@ List<Shop> shops = [
   Shop(
       shopName: "Hilife Kirana",
       category: "Kirana",
-      shopSize: "1 shutter",
+      shopSize: 1 ,
       color: Colors.red),
   Shop(
       shopName: "Hilife Wholesale",
       category: "WholeSale",
-      shopSize: "2 shutter",
+      shopSize: 2 ,
       color: Colors.amber),
   Shop(
       shopName: "Hilife Department",
       category: "Department",
-      shopSize: "3 shutter",
+      shopSize: 3 ,
       color: Colors.blue),
 ];

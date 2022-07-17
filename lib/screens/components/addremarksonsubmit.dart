@@ -42,14 +42,17 @@ class AddRemarksOnSubmit extends ConsumerWidget {
                   color: Colors.white,
                 ),
               ),
-              InkWell(
-                onTap: () {},
-                child: Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 18.ssp(),
-                ),
+              CloseButton(
+                color: Colors.white,
               ),
+              // InkWell(
+              //   onTap: () {},
+              //   child: Icon(
+              //     Icons.close,
+              //     color: Colors.white,
+              //     size: 18.ssp(),
+              //   ),
+              // ),
             ],
           ),
         ),

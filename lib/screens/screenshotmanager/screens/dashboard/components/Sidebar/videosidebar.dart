@@ -72,7 +72,7 @@ class VideoSideBar extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                        left: 37.sw(), right: 37.sw(), bottom: 0.sh()),
+                        left: 20.sw(), right: 20.sw(), bottom: 5.sh()),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

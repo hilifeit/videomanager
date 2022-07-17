@@ -1,4 +1,3 @@
-import 'package:videomanager/screens/components/afterfileselection/afterfileselection.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteroverlay.dart';
 
@@ -9,79 +8,71 @@ final filterModuleServiceProvider =
 
 class FilterService extends ChangeNotifier {
   FilterService._();
-  List<int> selectedItems = [];
+  List<int> _selectedItems = [];
+  set selectedItems(List<int> int) {
+    _selectedItems.addAll(int.toList());
+  }
+
+  List<int> get selectedItems => _selectedItems;
 
   List<FilterItemWidgetItem> filterItems = [
     FilterItemWidgetItem(
-        icon: Icon(
-          Videomanager.pending,
-          color: Colors.black,
-          size: 14.88.ssp(),
-        ),
-        text: 'Pending'),
+      iconData: Videomanager.pending,
+      text: 'Pending',
+    ),
     FilterItemWidgetItem(
-        icon: Icon(
-          Icons.done,
-          color: Colors.black,
-          size: 14.88.ssp(),
-        ),
-        text: 'Complete'),
+      iconData: Icons.done,
+      text: 'Complete',
+    ),
     FilterItemWidgetItem(
-        icon: Icon(
-          Videomanager.ongoing,
-          color: Colors.black,
-          size: 14.88.ssp(),
-        ),
-        text: 'Ongoing'),
+      iconData: Videomanager.ongoing,
+      text: 'Ongoing',
+    ),
     FilterItemWidgetItem(
-      icon: Icon(
-        Videomanager.complete,
-        color: Colors.black,
-        size: 14.88.ssp(),
-      ),
+      iconData: Videomanager.complete,
       text: 'Approved',
     ),
     FilterItemWidgetItem(
-        icon: Padding(
-          padding: EdgeInsets.only(left: 2.sw()),
-          child: SvgPicture.asset(
-            'assets/images/rejected.svg',
-            color: Colors.white,
-            width: 12.57.sw(),
-            height: 13.62.sh(),
-          ),
-        ),
-        text: 'Rejected'),
+      iconData: 'assets/images/rejected.svg',
+      text: 'Rejected',
+    ),
     FilterItemWidgetItem(
-      icon: Icon(
-        Videomanager.refresh,
-        color: Colors.black,
-        size: 14.88.ssp(),
-      ),
+      iconData: Videomanager.refresh,
       text: 'All',
     ),
   ];
 
-  addItems(int index) {
-    if (selectedItems.isEmpty) {
-      selectedItems.add(index);
+  addItems(
+    int index,
+  ) {
+    if (_selectedItems.isEmpty) {
+      _selectedItems.add(index);
       filterItems[index].selected = true;
-      notifyListeners();
     } else {
-      if (selectedItems.contains(index)) {
-        selectedItems.remove(index);
+      if (_selectedItems.contains(index)) {
+        _selectedItems.remove(index);
         filterItems[index].selected = false;
       } else {
-        selectedItems.add(index);
+        _selectedItems.add(index);
         filterItems[index].selected = true;
       }
+    }
+    // print(_selectedItems);
+    notifyListeners();
+  }
 
-      // for (var element in selectedItems) {
-      //   if (element != index) {
-      //     selectedItems.add(index);
-      //     notifyListeners();
-      //   }
-      // }
+  removeItems(int index) {
+    _selectedItems.remove(index);
+    filterItems[index].selected = false;
+    // print(_selectedItems);
+    notifyListeners();
+  }
+
+  reset() {
+    _selectedItems = [];
+    for (int i = 0; i < filterItems.length; i++) {
+      filterItems[i].selected = false;
+      notifyListeners();
     }
   }
 }

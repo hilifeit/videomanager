@@ -141,7 +141,7 @@ class CustomMenuDropDown extends ConsumerWidget {
     final selectedValue = ref.watch(valueProvider.state).state;
 
     return Container(
-      height: 55.sh(),
+      height: 65.sh(),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
@@ -150,7 +150,7 @@ class CustomMenuDropDown extends ConsumerWidget {
         border: Border.all(
           color: lightGrey,
         ),
-        color: helperText != '' ? lightGrey.withOpacity(0.22) : Colors.white,
+        color: Colors.white,
       ),
       child: DropdownButton<CustomMenuItem>(
           selectedItemBuilder: (context) {
@@ -166,27 +166,18 @@ class CustomMenuDropDown extends ConsumerWidget {
               );
             }).toList();
           },
-          isExpanded: helperText != '' ? false : true,
+          isExpanded: true,
           underline: Container(),
           value: selectedValue,
-          icon: helperText != ''
-              ? Expanded(
-                  child: icon ??
-                      Icon(
-                        Videomanager.down,
-                        size: 8.5.sr(),
-                        color: Colors.black,
-                      ),
-                )
-              : Padding(
-                  padding: EdgeInsets.only(right: 24.sw()),
-                  child: icon ??
-                      Icon(
-                        Videomanager.down,
-                        size: 8.5.sr(),
-                        color: Colors.black,
-                      ),
+          icon: Padding(
+            padding: EdgeInsets.only(right: 24.sw()),
+            child: icon ??
+                Icon(
+                  Videomanager.down,
+                  size: 8.5.sr(),
+                  color: Colors.black,
                 ),
+          ),
           items: values.map<DropdownMenuItem<CustomMenuItem>>((vall) {
             return DropdownMenuItem<CustomMenuItem>(
               value: vall,

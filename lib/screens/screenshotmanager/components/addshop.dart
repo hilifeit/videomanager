@@ -18,16 +18,53 @@ final List<CustomMenuItem> category = [
 ];
 final List<CustomMenuItem> shopSize = [
   CustomMenuItem(
-    label: "1 shutter",
+    label: "1",
     value: 0.toString(),
   ),
   CustomMenuItem(
-    label: "2 shutter",
+    label: "2",
     value: 1.toString(),
   ),
   CustomMenuItem(
-    label: "3 shutter",
+    label: "3",
     value: 2.toString(),
+  ),
+];
+
+final List<CustomMenuItem> roadFace = [
+  CustomMenuItem(
+    label: "1",
+    value: 1.toString(),
+  ),
+  CustomMenuItem(
+    label: "2",
+    value: 2.toString(),
+  ),
+  CustomMenuItem(
+    label: "3",
+    value: 3.toString(),
+  ),
+];
+final List<CustomMenuItem> roadFaceSide = [
+  CustomMenuItem(
+    label: "0.5",
+    value: 0.5.toString(),
+  ),
+  CustomMenuItem(
+    label: "1",
+    value: 1.toString(),
+  ),
+  CustomMenuItem(
+    label: "1.5",
+    value: 1.5.toString(),
+  ),
+  CustomMenuItem(
+    label: "2",
+    value: 2.toString(),
+  ),
+  CustomMenuItem(
+    label: "2.5",
+    value: 2.5.toString(),
   ),
 ];
 
@@ -41,6 +78,17 @@ final markercolorProvider = StateProvider<Color>((ref) {
   return primaryColor;
 });
 
+final shopProvider = StateProvider<Shop>((ref) {
+  return Shop(roadFace: 1);
+});
+
+final roadFace2Provider = StateProvider<bool>((ref) {
+  return false;
+});
+final roadFace3Provider = StateProvider<bool>((ref) {
+  return false;
+});
+
 class AddEditShop extends ConsumerWidget {
   AddEditShop({
     this.shop,
@@ -51,9 +99,16 @@ class AddEditShop extends ConsumerWidget {
   bool edit;
   late CustomMenuItem editCategory;
   late CustomMenuItem editShopSize;
+  late CustomMenuItem editRoadFace;
+
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final markerColor = ref.watch(markercolorProvider.state).state;
+    final addNewShop = ref.watch(shopProvider.state).state;
+    final roadFace2Show = ref.watch(roadFace2Provider.state).state;
+    final roadFace3Show = ref.watch(roadFace3Provider.state).state;
+
     int colorIndex = 0;
     List<MarkerColor> colors = [
       MarkerColor(
@@ -96,7 +151,7 @@ class AddEditShop extends ConsumerWidget {
           break;
         }
       }
-      ref.read(markercolorProvider.state).state = shop!.color;
+      ref.read(markercolorProvider.state).state = shop!.color!;
     }
 
     for (var element in colors) {
@@ -107,7 +162,7 @@ class AddEditShop extends ConsumerWidget {
     }
 
     return Container(
-      height: 550.sh(),
+      height: 845.sh(),
       width: 525.sw(),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -134,149 +189,303 @@ class AddEditShop extends ConsumerWidget {
                   color: Colors.white,
                 ),
               ),
-              InkWell(
-                onTap: () {},
-                child: Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 18.ssp(),
-                ),
+              CloseButton(
+                color: Colors.white,
               ),
+              // InkWell(
+              //   onTap: () {},
+              //   child: Icon(
+              //     Icons.close,
+              //     color: Colors.white,
+              //     size: 18.ssp(),
+              //   ),
+              // ),
             ],
           ),
         ),
-        Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: 20.5.sw(), vertical: 5.sh()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InputTextField(
-                value: edit ? shop!.shopName : '',
-                fillColor: Colors.white,
-                title: 'Shop Name',
-                isVisible: true,
-                onChanged: (val) {
-                  shop!.shopName = val;
-                },
-              ),
-              SizedBox(
-                height: 20.5.sh(),
-              ),
-              Text(
-                'Category',
-                style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
-              ),
-              SizedBox(
-                height: 7.sh(),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.sr()),
-                    border: Border.all(
-                      color: lightGrey,
-                    )),
-                child: CustomMenuDropDown(
-                    icon: Icon(
-                      Icons.expand_more,
-                      size: 20.sr(),
-                      color: darkGrey,
-                    ),
-                    value: edit ? editCategory : category.first,
-                    onChanged: (val) {
-                      shop!.category = val.label;
-                    },
-                    values: category,
-                    helperText: ""),
-              ),
-              SizedBox(
-                height: 21.sh(),
-              ),
-              Text(
-                'Shop Size',
-                style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
-              ),
-              SizedBox(
-                height: 7.sh(),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.sr()),
-                    border: Border.all(
-                      color: lightGrey,
-                    )),
-                child: CustomMenuDropDown(
-                    icon: Icon(
-                      Icons.expand_more,
-                      size: 20.sr(),
-                      color: darkGrey,
-                    ),
-                    value: edit ? editShopSize : shopSize.first,
-                    onChanged: (val) {
-                      shop!.shopSize = val.label;
-                    },
-                    values: shopSize,
-                    helperText: ""),
-              ),
-              SizedBox(
-                height: 20.5.sh(),
-              ),
-              Text(
-                'Marker Colors',
-                style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
-              ),
-              SizedBox(
-                height: 23.sh(),
-              ),
-              Wrap(
-                  children: List.generate(
-                colors.length,
-                (index) => colorIndex == index
-                    ? Padding(
-                        padding: EdgeInsets.only(right: 16.sw()),
-                        child: Container(
-                          height: 30.sr(),
-                          width: 30.sr(),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.sr()),
-                              border: Border.all(
-                                color: colors[index].color,
-                              )),
-                          child: Icon(
-                            Videomanager.brush,
-                            size: 16.15.ssp(),
-                            color: colors[index].color,
-                          ),
-                        ))
-                    : Padding(
-                        padding: EdgeInsets.only(right: 16.sw()),
-                        child: SelectMarkerColor(
-                          radius: 15.sr(),
-                          item: colors[index],
-                        ),
+        Expanded(
+          child: Scrollbar(
+            controller: _scrollController,
+            thumbVisibility: true,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20.5.sw(), vertical: 5.sh()),
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 5.sh(),
                       ),
-              )),
-              SizedBox(
-                height: 20.sh(),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: CustomElevatedButton(
-                    width: 120.sw(),
-                    height: 49.sh(),
-                    elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
-                        fontSize: 20.ssp(), color: Colors.white),
-                    onPressedElevated: () {
-                      shop!.color = markerColor;
+                      InputTextField(
+                        value: edit ? shop!.shopName! : '',
+                        fillColor: Colors.white,
+                        title: 'Shop Name',
+                        isVisible: true,
+                        onChanged: (val) {
+                          shop!.shopName = val;
+                        },
+                      ),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      Text(
+                        'Category',
+                        style:
+                            kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
+                      ),
+                      SizedBox(
+                        height: 7.sh(),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.sr()),
+                            border: Border.all(
+                              color: lightGrey,
+                            )),
+                        child: CustomMenuDropDown(
+                            icon: Icon(
+                              Icons.expand_more,
+                              size: 20.sr(),
+                              color: darkGrey,
+                            ),
+                            value: edit ? editCategory : category.first,
+                            onChanged: (val) {
+                              shop!.category = val.label;
+                            },
+                            values: category,
+                            helperText: ""),
+                      ),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      Text(
+                        'Shop Size',
+                        style:
+                            kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
+                      ),
+                      SizedBox(
+                        height: 7.sh(),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.sr()),
+                            border: Border.all(
+                              color: lightGrey,
+                            )),
+                        child: CustomMenuDropDown(
+                            icon: Icon(
+                              Icons.expand_more,
+                              size: 20.sr(),
+                              color: darkGrey,
+                            ),
+                            value: edit ? editShopSize : shopSize.first,
+                            onChanged: (val) {
+                              shop!.shopSize = int.parse(val.label);
+                            },
+                            values: shopSize,
+                            helperText: "shutter"),
+                      ),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      InputTextField(
+                          fillColor: Colors.white,
+                          title: 'Contact Number',
+                          isVisible: true,
+                          onChanged: (val) {}),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      Text(
+                        'Road Face',
+                        style:
+                            kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
+                      ),
+                      SizedBox(
+                        height: 7.sh(),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4.sr()),
+                            border: Border.all(
+                              color: lightGrey,
+                            )),
+                        child: CustomMenuDropDown(
+                            icon: Icon(
+                              Icons.expand_more,
+                              size: 20.sr(),
+                              color: darkGrey,
+                            ),
+                            value: edit
+                                ? editRoadFace
+                                : roadFace[addNewShop.roadFace! - 1],
+                            onChanged: (val) {
+                              addNewShop.roadFace = int.parse(val.value);
 
-                      // TODO : save
-                    },
-                    elevatedButtonText: 'Save'),
+                              if (int.parse(val.value) == 2) {
+                                ref.read(roadFace2Provider.state).state = true;
+                                ref.read(roadFace3Provider.state).state = false;
+                              } else if (int.parse(val.value) == 3) {
+                                ref.read(roadFace2Provider.state).state = true;
+                                ref.read(roadFace3Provider.state).state = true;
+                                // print(roadFaceShow);
+
+                              } else {
+                                // for (int i = 0; i < roadFaceShow.length; i++) {
+                                ref.read(roadFace2Provider.state).state = false;
+                                ref.read(roadFace3Provider.state).state = false;
+                                // }
+                              }
+                            },
+                            values: roadFace,
+                            helperText: ""),
+                      ),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DropDownWithText(
+                            text: 'Road Face 1',
+                            value: edit ? editRoadFace : roadFaceSide.first,
+                            values: roadFaceSide,
+                          ),
+                          if (roadFace2Show)
+                            DropDownWithText(
+                              text: 'Road Face 2',
+                              value: edit ? editRoadFace : roadFaceSide.first,
+                              values: roadFaceSide,
+                            ),
+                          if (roadFace3Show)
+                            DropDownWithText(
+                              text: 'Road Face 3',
+                              value: edit ? editRoadFace : roadFaceSide.first,
+                              values: roadFaceSide,
+                            ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      Text(
+                        'Marker Colors',
+                        style:
+                            kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
+                      ),
+                      SizedBox(
+                        height: 19.sh(),
+                      ),
+                      Wrap(
+                          children: List.generate(
+                        colors.length,
+                        (index) => colorIndex == index
+                            ? Padding(
+                                padding: EdgeInsets.only(right: 16.sw()),
+                                child: Container(
+                                  height: 30.sr(),
+                                  width: 30.sr(),
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(15.sr()),
+                                      border: Border.all(
+                                        color: colors[index].color,
+                                      )),
+                                  child: Icon(
+                                    Videomanager.brush,
+                                    size: 16.15.ssp(),
+                                    color: colors[index].color,
+                                  ),
+                                ))
+                            : Padding(
+                                padding: EdgeInsets.only(right: 16.sw()),
+                                child: SelectMarkerColor(
+                                  radius: 15.sr(),
+                                  item: colors[index],
+                                ),
+                              ),
+                      )),
+                      SizedBox(
+                        height: 20.sh(),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: CustomElevatedButton(
+                            width: 120.sw(),
+                            height: 49.sh(),
+                            elevatedButtonTextStyle:
+                                kTextStyleInterMedium.copyWith(
+                                    fontSize: 20.ssp(), color: Colors.white),
+                            onPressedElevated: () {
+                              // shop!.color = markerColor;
+
+                              // TODO : save
+                            },
+                            elevatedButtonText: 'Save'),
+                      ),
+                      SizedBox(
+                        height: 10.sh(),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ],
+            ),
           ),
         ),
       ]),
+    );
+  }
+}
+
+class DropDownWithText extends StatelessWidget {
+  const DropDownWithText({
+    Key? key,
+    required this.text,
+    required this.values,
+    required this.value,
+  }) : super(key: key);
+
+  final String text;
+  final List<CustomMenuItem> values;
+  final CustomMenuItem value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text,
+          style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
+        ),
+        SizedBox(
+          height: 7.sh(),
+        ),
+        Container(
+          width: 126.sw(),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.sr()),
+              border: Border.all(
+                color: lightGrey,
+              )),
+          child: CustomMenuDropDown(
+              icon: Icon(
+                Icons.expand_more,
+                size: 20.sr(),
+                color: darkGrey,
+              ),
+              value: value,
+              onChanged: (val) {
+                // shop!.shopSize = int.parse(val.label);
+              },
+              values: values,
+              helperText: ""),
+        ),
+      ],
     );
   }
 }

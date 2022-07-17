@@ -2,9 +2,9 @@ import 'package:videomanager/screens/others/exporter.dart';
 
 class FilterItemWidgetItem {
   FilterItemWidgetItem(
-      {required this.icon, required this.text, this.selected = false});
+      {required this.iconData, required this.text, this.selected = false});
+  final Object iconData;
   final String text;
-  final Widget icon;
   bool selected;
 }
 
@@ -16,6 +16,8 @@ class FilterItemWidget extends StatelessWidget {
   final FilterItemWidgetItem item;
   @override
   Widget build(BuildContext context) {
+    Color color = item.selected ? Colors.white : Colors.black;
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 14.sh(),
@@ -25,15 +27,28 @@ class FilterItemWidget extends StatelessWidget {
           : Colors.transparent,
       child: Row(
         children: [
-          item.icon,
+          item.iconData is IconData
+              ? Icon(
+                  item.iconData as IconData,
+                  color: color,
+                  size: 14.88.ssp(),
+                )
+              : Padding(
+                  padding: EdgeInsets.only(left: 2.sw()),
+                  child: SvgPicture.asset(
+                    item.iconData.toString(),
+                    color: color,
+                    width: 12.57.sw(),
+                    height: 13.62.sh(),
+                  ),
+                ),
           SizedBox(
             width: 9.06.sw(),
           ),
           Text(
             item.text,
-            style: kTextStyleIbmRegular.copyWith(
-                fontSize: 14.ssp(),
-                color: item.selected ? Colors.white : Colors.black),
+            style:
+                kTextStyleIbmRegular.copyWith(fontSize: 14.ssp(), color: color),
           ),
         ],
       ),

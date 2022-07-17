@@ -15,27 +15,35 @@ String userModelMiniToJson(Shop data) => json.encode(data.toJson());
 
 class Shop {
   Shop({
-    required this.shopName,
-    required this.category,
-    required this.shopSize,
-    required this.color,
+    this.shopName,
+    this.category,
+    this.shopSize,
+    this.phone,
+    this.roadFace,
+    this.color,
   });
 
-  String shopName;
-  String category;
-  String shopSize;
-  Color color;
+  String? shopName;
+  String? category;
+  int? shopSize;
+  int? phone;
+  int? roadFace;
+  Color? color;
 
   Shop copyWith({
-    required String shopName,
-    required String category,
-    required String shopSize,
-    required Color color,
+    String? shopName,
+    String? category,
+    int? shopSize,
+    int? phone,
+    int? roadFace,
+    Color? color,
   }) =>
       Shop(
         shopName: shopName,
         category: category,
         shopSize: shopSize,
+        phone: phone,
+        roadFace: roadFace,
         color: color,
       );
 
@@ -43,6 +51,8 @@ class Shop {
         shopName: json["shopName"],
         category: json["category"],
         shopSize: json["shopSize"],
+        phone: json["phone"],
+        roadFace: json["roadFace"],
         color: json["color"],
       );
 
@@ -50,6 +60,8 @@ class Shop {
         "shopName": shopName,
         "category": category,
         "shopSize": shopSize,
+        "phone": phone,
+        "roadFace": roadFace,
         "color": color,
       };
 }

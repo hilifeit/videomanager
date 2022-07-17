@@ -1,6 +1,7 @@
-import 'package:videomanager/screens/components/compoenttest.dart';
+import 'package:videomanager/screens/components/addremarksonsubmit.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboard.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
@@ -40,7 +41,7 @@ class Holder extends ConsumerWidget {
                       ? AnimatedIndexedStack(index: index, children: [
                           ViewScreen(),
                           const Users(),
-                          AddRemarksOnSubmit(),
+                          AddEditShop(),
                           Container()
                           // futureBuilder
                           // PlayVideo(videoFile: videoFile, role: role),

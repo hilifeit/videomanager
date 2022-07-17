@@ -24,8 +24,26 @@ class Timeline extends ConsumerWidget {
             height: double.infinity,
             width: double.infinity,
             child: Column(
-              children: const [
-                TimeLineTop(),
+              children: [
+                GestureDetector(
+                    onDoubleTap: () {
+                      if (customHeight == defaultHeight) {
+                        ref.read(heightChangeProvider.state).state = minHeight;
+                      } else if (customHeight == minHeight) {
+                        ref.read(heightChangeProvider.state).state =
+                            defaultHeight;
+                      } else {
+                        if (((defaultHeight - customHeight) <
+                            (customHeight - minHeight))) {
+                          ref.read(heightChangeProvider.state).state =
+                              defaultHeight;
+                        } else {
+                          ref.read(heightChangeProvider.state).state =
+                              minHeight;
+                        }
+                      }
+                    },
+                    child: TimeLineTop()),
                 Expanded(child: TimeLineCanvas())
               ],
             ),
@@ -35,21 +53,6 @@ class Timeline extends ConsumerWidget {
               top: 0,
               right: 0,
               child: GestureDetector(
-                onDoubleTap: () {
-                  if (customHeight == defaultHeight) {
-                    ref.read(heightChangeProvider.state).state = minHeight;
-                  } else if (customHeight == minHeight) {
-                    ref.read(heightChangeProvider.state).state = defaultHeight;
-                  } else {
-                    if (((defaultHeight - customHeight) <
-                        (customHeight - minHeight))) {
-                      ref.read(heightChangeProvider.state).state =
-                          defaultHeight;
-                    } else {
-                      ref.read(heightChangeProvider.state).state = minHeight;
-                    }
-                  }
-                },
                 onVerticalDragUpdate: (details) {
                   // ref.read(heightChangeProvider.state).state -=
                   //     details.delta.dy;

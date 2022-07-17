@@ -59,6 +59,7 @@ class AddUser extends ConsumerWidget {
     // }
 
     return Scrollbar(
+      thumbVisibility: true,
       controller: _scrollController,
       child: SingleChildScrollView(
         controller: _scrollController,

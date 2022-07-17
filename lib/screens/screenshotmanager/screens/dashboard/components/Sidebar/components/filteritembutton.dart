@@ -14,25 +14,54 @@ class FilterIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filterSelect = ref.watch(filterModuleServiceProvider).selectedItems;
+    final filterService = ref.watch(filterModuleServiceProvider);
+    final filterSelect = filterService.selectedItems;
     return Row(
       children: [
-        Text(
-          'Filtered By:',
-          style: kTextStyleIbmRegular.copyWith(
-            fontSize: 11.ssp(),
-            color: Colors.black,
+        if (filterSelect.isNotEmpty)
+          Text(
+            'Filtered By:',
+            style: kTextStyleIbmRegular.copyWith(
+              fontSize: 13.ssp(),
+              color: Colors.black,
+            ),
           ),
-        ),
         SizedBox(
-          width: 10.sw(),
+          width: 8.sw(),
         ),
         if (filterSelect.isNotEmpty)
           Wrap(
               spacing: 10.sw(),
               children: List.generate(
                 filterSelect.length,
-                (index) => StatusCard(status: filterSelect[index].toString()),
+                (index) => Container(
+                  width: 65.sw(),
+                  height: 27.sh(),
+                  child: Stack(
+                    // clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                          left: 0,
+                          bottom: 0,
+                          child: StatusCard(
+                              status: filterSelect[index].toString())),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: InkWell(
+                          onTap: () {
+                            filterService.removeItems(filterSelect[index]);
+                          },
+                          child: Icon(
+                            Videomanager.close,
+                            color: darkGrey,
+                            size: 10.sr(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               )),
         Spacer(),
         InkWell(

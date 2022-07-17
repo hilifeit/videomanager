@@ -125,45 +125,38 @@ class CustomOverlayEntry {
           top: buttonPosition.dy + size.height + 2.sh(),
           left: buttonPosition.dx - 117.sw() + size.width,
           child: Material(
-            child: Container(
+            child: SizedBox(
               height: 159.sh(),
               width: 117.sw(),
               child: Consumer(builder: (context, ref, c) {
                 final filterItems =
                     ref.watch(filterModuleServiceProvider).filterItems;
-                // filterItems
-                return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(
-                      filterItems.length,
-                      (index) => filterItems[index] != filterItems.last
-                          ? Consumer(builder: (context, ref, c) {
-                              final filterService =
-                                  ref.watch(filterModuleServiceProvider);
-                              final selecteditems = filterService.selectedItems;
-                              return InkWell(
+
+                return Consumer(builder: (context, ref, c) {
+                  final filterService = ref.watch(filterModuleServiceProvider);
+                  return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(
+                        filterItems.length,
+                        (index) => filterItems[index] != filterItems.last
+                            ? InkWell(
                                 onTap: () {
                                   filterService.addItems(index);
-                                  filterService.notifyListeners();
-                                  // closeFilter();
                                 },
                                 child: FilterItemWidget(
                                   item: filterItems[index],
                                 ),
-                              );
-                            })
-                          : InkWell(
-                              onTap: () {
-                                ref
-                                    .read(filterModuleServiceProvider)
-                                    .selectedItems = [];
-                                closeFilter();
-                              },
-                              child: FilterItemWidget(
-                                item: filterItems[index],
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  filterService.reset();
+                                },
+                                child: FilterItemWidget(
+                                  item: filterItems[index],
+                                ),
                               ),
-                            ),
-                    ));
+                      ));
+                });
               }),
             ),
           ),
