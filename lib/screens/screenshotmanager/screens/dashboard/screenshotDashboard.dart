@@ -44,15 +44,23 @@ class ScreenshotDashboard extends HookConsumerWidget {
         const Duration(minutes: 10),
   );
 
-  late VideoPlayerController controller = VideoPlayerController.network(
-      videoFile != null
-          ? videoFile!.foundPath
-          : 'http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4')
-    ..initialize().then((_) {
-      // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-    }).catchError((e) {
-      print(" $e text");
-    });
+  late VideoPlayerController? controller = getPlayerController();
+
+  VideoPlayerController? getPlayerController() {
+    if (UniversalPlatform.isDesktop) {
+      return null;
+    }
+    var controller = VideoPlayerController.network(videoFile != null
+        ? videoFile!.foundPath
+        : 'http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4')
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+      }).catchError((e) {
+        print(" $e text");
+      });
+
+    return controller;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
