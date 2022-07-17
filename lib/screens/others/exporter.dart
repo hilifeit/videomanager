@@ -23,6 +23,7 @@ export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
+export 'package:videomanager/screens/components/socket.dart';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
 export 'package:videomanager/screens/others/theme.dart';

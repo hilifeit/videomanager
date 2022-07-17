@@ -78,6 +78,18 @@ class MenuBar extends ConsumerWidget {
               ),
             ),
           ),
+          IconButton(
+              onPressed: () {
+                var currentUser = ref.read(userChangeProvider);
+
+                customSocket.socket.emit("notification",
+                    "New Notification from ${currentUser.loggedInUser.value!.name}");
+              },
+              tooltip: "Send Notificattion",
+              icon: const Icon(
+                Icons.send_sharp,
+                color: Colors.white,
+              )),
           const Spacer(),
           Padding(
             padding: EdgeInsets.only(

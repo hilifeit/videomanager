@@ -54,6 +54,7 @@ dependencies:
   syncfusion_flutter_gauges: ^20.2.36
   dart_vlc: ^0.3.0
   universal_platform: ^1.0.0+1
+  socket_io_client: ^2.0.0
 
 
 
