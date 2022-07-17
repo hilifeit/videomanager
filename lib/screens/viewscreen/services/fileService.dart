@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
+import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
@@ -9,6 +9,7 @@ import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 final fileDetailMiniServiceProvider =
     ChangeNotifierProvider<FileService>((ref) {
@@ -31,6 +32,8 @@ class FileService extends ChangeNotifier {
   final List<FileDetailMini> files = [];
   final List<FileDetailMini> userFiles = [];
 
+  late final selectedFile = Property<FileDetailMini?>(null, notifyListeners);
+
   load() async {
     await fetchAll(fromServer: true);
   }
@@ -51,6 +54,7 @@ class FileService extends ChangeNotifier {
         if (response.statusCode == 200) {
           userFiles.clear();
           userFiles.addAll(fileDetailMiniFromJson(response.body));
+          if (userFiles.isNotEmpty) selectedFile.value = userFiles.first;
           notifyListeners();
         } else {
           var error = jsonDecode(response.body);

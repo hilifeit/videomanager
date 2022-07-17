@@ -19,14 +19,19 @@ class Timeline extends ConsumerWidget {
       width: size.width,
       height: customHeight,
       child: Stack(
+        clipBehavior: Clip.hardEdge,
         children: [
           SizedBox(
             height: double.infinity,
             width: double.infinity,
-            child: Column(
-              children: const [
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              children: [
+                const SizedBox(
+                  height: double.infinity,
+                ),
+                const TimeLineCanvas(),
                 TimeLineTop(),
-                Expanded(child: TimeLineCanvas())
               ],
             ),
           ),
