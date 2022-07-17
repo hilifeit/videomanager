@@ -1,9 +1,9 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteroverlay.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 
-final filterItemProvider = StateProvider<FilterItemWidgetItem?>((ref) {
-  return null;
+final filterItemProvider = StateProvider<List<int?>>((ref) {
+  return [];
 });
 
 class FilterIconButton extends ConsumerWidget {
@@ -14,28 +14,35 @@ class FilterIconButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterSelect = ref.watch(filterItemProvider.state).state;
-    return InkWell(
-      onTap: () {
-        if (CustomOverlayEntry().isMenuOpen) {
-          CustomOverlayEntry().closeFilter();
-        } else {
-          CustomOverlayEntry().showFilter(context);
-        }
-      },
-      child: Row(
-        children: [
-          if (filterSelect != null)
-            Padding(
-              padding: EdgeInsets.only(right: 5.sw()),
-              child: Container(
-                  padding: EdgeInsets.all(
-                    7.sw(),
-                  ),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: FilterItemWidget(item: filterSelect)),
-            ),
-          Container(
+    return Row(
+      children: [
+        Text(
+          'Filtered By:',
+          style: kTextStyleIbmRegular.copyWith(
+            fontSize: 11.ssp(),
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(
+          width: 15.sw(),
+        ),
+        if (filterSelect.isNotEmpty)
+          Wrap(
+              spacing: 15.sw(),
+              children: List.generate(
+                filterSelect.length,
+                (index) => StatusCard(status: filterSelect[index].toString()),
+              )),
+        Spacer(),
+        InkWell(
+          onTap: () {
+            if (CustomOverlayEntry().isMenuOpen) {
+              CustomOverlayEntry().closeFilter();
+            } else {
+              CustomOverlayEntry().showFilter(context);
+            }
+          },
+          child: Container(
             padding: EdgeInsets.all(10.sr()),
             decoration: BoxDecoration(
                 color: primaryColor,
@@ -43,8 +50,8 @@ class FilterIconButton extends ConsumerWidget {
             child:
                 Icon(Videomanager.filter, color: Colors.white, size: 18.ssp()),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

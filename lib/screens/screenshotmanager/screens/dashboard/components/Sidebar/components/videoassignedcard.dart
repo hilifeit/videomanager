@@ -87,7 +87,7 @@ class VideoAssignCard extends StatelessWidget {
                       Icon(
                         Videomanager.shop,
                         color: lightBlack,
-                        size: 9.5.ssp(),
+                        size: 10.48.ssp(),
                       ),
                       SizedBox(
                         width: 5.sw(),

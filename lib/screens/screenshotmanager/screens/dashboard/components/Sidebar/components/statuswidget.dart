@@ -24,9 +24,9 @@ class StatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 //     for (var element in items) {
-// =======
+
 //     for (var element in itemStatus) {
-// >>>>>>> b9d715c2dd3f6bb4d7c77c4ab326489f4f8c5940
+
 //       if (element.status == status) {
 //         color = element.color;
 //         break;
@@ -34,7 +34,7 @@ class StatusCard extends StatelessWidget {
 //     }
 
     return Container(
-      width: 95.sw(),
+      width: 60.sw(),
       height: 22.sh(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.sr()),

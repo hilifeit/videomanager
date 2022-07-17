@@ -1,8 +1,10 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteritembutton.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteroverlay.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filterservice.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/timeline.dart';
+import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 
 class CustomOverlayEntry {
   static final CustomOverlayEntry _instance = CustomOverlayEntry._internal();
@@ -29,6 +31,7 @@ class CustomOverlayEntry {
 
   showvideoBar(c, role) {
     if (!videoBarOpen) {
+      print(videoTimeStampOpen);
       OverlayState overlayState = Overlay.of(c)!;
       videoSideBarOverlay(c, role);
       overlayState.insert(videobar);
@@ -128,6 +131,9 @@ class CustomOverlayEntry {
               height: 159.sh(),
               width: 117.sw(),
               child: Consumer(builder: (context, ref, c) {
+                final filterItems =
+                    ref.watch(filterModuleServiceProvider).items;
+                // filterItems
                 return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: List.generate(
@@ -135,8 +141,25 @@ class CustomOverlayEntry {
                       (index) => filterItems[index] != filterItems.last
                           ? InkWell(
                               onTap: () {
-                                ref.read(filterItemProvider.state).state =
-                                    filterItems[index];
+                                final filterSelect =
+                                    ref.watch(filterItemProvider.state).state;
+                                if (filterSelect.isEmpty) {
+                                  ref
+                                      .read(filterItemProvider.state)
+                                      .state
+                                      .add(index);
+                                  print(filterSelect.length);
+                                } else {
+                                  for (var element in filterSelect) {
+                                    if (element != index) {
+                                      ref
+                                          .read(filterItemProvider.state)
+                                          .state
+                                          .add(index);
+                                    }
+                                  }
+                                }
+
                                 closeFilter();
                               },
                               child: FilterItemWidget(
@@ -145,7 +168,7 @@ class CustomOverlayEntry {
                             )
                           : InkWell(
                               onTap: () {
-                                ref.read(filterItemProvider.state).state = null;
+                                ref.read(filterItemProvider.state).state = [];
                                 closeFilter();
                               },
                               child: FilterItemWidget(

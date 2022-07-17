@@ -80,24 +80,19 @@ class VideoSideBar extends StatelessWidget {
                           height: 480.sh(),
                           child: Consumer(builder: (context, ref, c) {
                             return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Videos',
-                                      style: kTextStyleIbmMedium.copyWith(
-                                        fontSize: 18.ssp(),
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    FilterIconButton(),
-
-                                    //     ),
-                                  ],
+                                Text(
+                                  'Videos',
+                                  style: kTextStyleIbmMedium.copyWith(
+                                    fontSize: 18.ssp(),
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
+                                SizedBox(
+                                  height: 12.sh(),
+                                ),
+                                FilterIconButton(),
                                 SizedBox(
                                   height: 13.sh(),
                                 ),
