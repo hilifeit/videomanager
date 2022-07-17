@@ -19,12 +19,18 @@ class Timeline extends ConsumerWidget {
       width: size.width,
       height: customHeight,
       child: Stack(
+        clipBehavior: Clip.hardEdge,
         children: [
           SizedBox(
             height: double.infinity,
             width: double.infinity,
-            child: Column(
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
               children: [
+                const SizedBox(
+                  height: double.infinity,
+                ),
+                const TimeLineCanvas(),
                 GestureDetector(
                     onDoubleTap: () {
                       if (customHeight == defaultHeight) {
@@ -44,7 +50,6 @@ class Timeline extends ConsumerWidget {
                       }
                     },
                     child: TimeLineTop()),
-                Expanded(child: TimeLineCanvas())
               ],
             ),
           ),

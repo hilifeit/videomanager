@@ -46,6 +46,8 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         IconButton(
           onPressed: () {
             if (UniversalPlatform.isDesktop) {
+              desktop!.player.open(Media.network(
+                  'http://localhost:8000/disk1/Dambar/Nepal/State5/Arghanchi/Highway/Day1/Left/GH019838.MP4'));
               if (desktop!.player.playback.isPlaying) {
                 desktop!.player.pause();
                 controller.reverse();
@@ -137,10 +139,10 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 24.sw(),
         ),
-        VideoTime(
-          web: web,
-          desktop: desktop,
-        ),
+        // VideoTime(
+        //   web: web,
+        //   desktop: desktop,
+        // ),
       ],
     );
   }

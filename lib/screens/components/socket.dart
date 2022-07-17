@@ -6,7 +6,7 @@ final customSocket = CustomSocket._();
 
 class CustomSocket {
   CustomSocket._();
-  late final Socket socket;
+  late Socket socket;
   connect() {
     try {
       socket = io(
@@ -18,6 +18,9 @@ class CustomSocket {
       if (!socket.connected) {
         socket.connect();
         socket.onConnect((data) => print("Connected: $data"));
+        socket.onConnectError((data) => snack.error(data));
+        socket.onConnectTimeout((data) => snack.error(data));
+        socket.onDisconnect((data) => null);
         socket.on("notification", (data) {
           snack.info(data);
         });
