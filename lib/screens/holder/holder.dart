@@ -89,6 +89,7 @@ class Holder extends ConsumerWidget {
                 : Expanded(
                     child: index != 1
                         ? AnimatedIndexedStack(index: index, children: [
+                            // const DashBoard(),
                             ScreenshotDashboard(thisUser: thisUser),
                           ])
                         : const SettingsHolder(),

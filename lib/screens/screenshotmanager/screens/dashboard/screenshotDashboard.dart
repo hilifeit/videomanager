@@ -1,5 +1,7 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
@@ -22,31 +24,41 @@ class ScreenshotDashboard extends HookConsumerWidget {
   late OverlayEntry overlayEntry;
   // ? desktop
 
-  late Media media = Media.network(
-      "http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4"
-          .replaceAll(" ", "%20"),
-      parse: true);
+  late Media media;
 
   VideoDimensions dimension = const VideoDimensions(1920, 1080);
-  late PlayerController player = PlayerController(
-    player: Player(
-        id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
-        videoDimensions: dimension),
-    duration: videoFile != null
-        ? Duration(
-            hours: videoFile!.info.duration.hour,
-            minutes: videoFile!.info.duration.minute,
-            seconds: videoFile!.info.duration.second,
-            milliseconds: videoFile!.info.duration.millisecond,
-          )
-        :
-        // ? Duration as per
-        const Duration(minutes: 10),
-  );
+  late PlayerController? player = getDesktopPlayerController();
 
-  late VideoPlayerController? controller = getPlayerController();
+  late VideoPlayerController? controller = getWebPlayerController();
+  PlayerController? getDesktopPlayerController() {
+    if (!UniversalPlatform.isDesktop) {
+      return null;
+    }
+    media = Media.network(
+        "http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4"
+            .replaceAll(" ", "%20"),
+        parse: true);
 
-  VideoPlayerController? getPlayerController() {
+    var player = PlayerController(
+      player: Player(
+          id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
+          videoDimensions: dimension),
+      duration: videoFile != null
+          ? Duration(
+              hours: videoFile!.info.duration.hour,
+              minutes: videoFile!.info.duration.minute,
+              seconds: videoFile!.info.duration.second,
+              milliseconds: videoFile!.info.duration.millisecond,
+            )
+          :
+          // ? Duration as per
+          const Duration(minutes: 10),
+    );
+    player.player.open(media, autoStart: false);
+    return player;
+  }
+
+  VideoPlayerController? getWebPlayerController() {
     if (UniversalPlatform.isDesktop) {
       return null;
     }
@@ -64,14 +76,6 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // if (UniversalPlatform.isDesktop) {
-    //   try {
-    //     player.player.open(media, autoStart: false);
-    //   } catch (e, s) {
-    //     print("$e $s error");
-    //   }
-    // }
-
     if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
       CustomOverlayEntry().showVideoTimeStamp();
     }
@@ -86,10 +90,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
               children: [
                 Column(
                   children: [
-                    // Expanded(
-                    //   child: CustomVideoPlayer(
-                    //       player: player.player, controller: controller),
-                    // ),
+                    Expanded(
+                      child: CustomVideoPlayer(
+                          player: player!.player, controller: controller),
+                    ),
                     Container(
                       color: Colors.black,
                       height: 58.sh(),
@@ -128,10 +132,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
                       SizedBox(
                         width: 51.sw(),
                       ),
-                      // SingleVideoPlayerControls(
-                      //   desktop: player,
-                      //   web: controller,
-                      // ),
+                      SingleVideoPlayerControls(
+                        desktop: player,
+                        web: controller,
+                      ),
                       const Spacer(),
                       Text(
                         'FileName',

@@ -14,8 +14,8 @@ class FilterIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filterService = ref.watch(filterModuleServiceProvider);
-    final filterSelect = filterService.selectedItems;
+    final filterSelect = ref.watch(filterModuleServiceProvider).selectedItems;
+    // final filterSelect = filterService.selectedItems;
     return Row(
       children: [
         if (filterSelect.isNotEmpty)
@@ -34,7 +34,7 @@ class FilterIconButton extends ConsumerWidget {
               spacing: 10.sw(),
               children: List.generate(
                 filterSelect.length,
-                (index) => Container(
+                (index) => SizedBox(
                   width: 65.sw(),
                   height: 27.sh(),
                   child: Stack(
@@ -50,7 +50,9 @@ class FilterIconButton extends ConsumerWidget {
                         top: 0,
                         child: InkWell(
                           onTap: () {
-                            filterService.removeItems(filterSelect[index]);
+                            ref
+                                .read(filterModuleServiceProvider)
+                                .removeItems(filterSelect[index]);
                           },
                           child: Icon(
                             Videomanager.close,
@@ -63,7 +65,7 @@ class FilterIconButton extends ConsumerWidget {
                   ),
                 ),
               )),
-        Spacer(),
+        const Spacer(),
         InkWell(
           onTap: () {
             if (CustomOverlayEntry().isMenuOpen) {

@@ -52,7 +52,7 @@ final CustomSnackBar snack = CustomSnackBar();
 // final CustomShowMessage message = CustomShowMessage();
 
 logout() {
-  // customSocket.socket.disconnect();
+  customSocket.socket.disconnect();
   storage.remove(userStorageKey);
   CustomOverlayEntry().closeVideoTimeStamp();
   Phoenix.rebirth(CustomKeys().context!);
