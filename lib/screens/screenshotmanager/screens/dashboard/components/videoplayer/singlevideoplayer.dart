@@ -11,9 +11,8 @@ final timeProvider = StateProvider<Duration>((ref) {
 });
 
 class CustomVideoPlayer extends StatelessWidget {
-  CustomVideoPlayer({Key? key, required this.player, this.controller})
-      : super(key: key);
-  final Player player;
+  CustomVideoPlayer({Key? key, this.player, this.controller}) : super(key: key);
+  final Player? player;
   final VideoPlayerController? controller;
   bool buffering = false;
   @override

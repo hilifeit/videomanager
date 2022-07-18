@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
@@ -88,18 +89,23 @@ class ScreenshotDashboard extends HookConsumerWidget {
             flex: 14,
             child: Stack(
               children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child: CustomVideoPlayer(
-                          player: player!.player, controller: controller),
-                    ),
-                    Container(
-                      color: Colors.black,
-                      height: 58.sh(),
-                    )
-                  ],
-                ),
+                if (ResponsiveLayout.isDesktop)
+                  Column(
+                    children: [
+                      Expanded(
+                        child: CustomVideoPlayer(
+                            player: player == null ? null : player!.player,
+                            controller: controller),
+                      ),
+                      Container(
+                        color: Colors.black,
+                        height: 58.sh(),
+                      )
+                    ],
+                  ),
+                if (!ResponsiveLayout.isDesktop)
+                  VideoSideBar(
+                      size: const Size.fromHeight(500), thisUser: thisUser),
                 if (!ResponsiveLayout.isMobile)
                   Align(
                     alignment: Alignment.centerRight,
@@ -120,79 +126,82 @@ class ScreenshotDashboard extends HookConsumerWidget {
               ],
             ),
           ),
-          Container(
-            height: 73.sh(),
-            color: primaryColor,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 51.sw(),
-                      ),
-                      SingleVideoPlayerControls(
-                        desktop: player,
-                        web: controller,
-                      ),
-                      const Spacer(),
-                      Text(
-                        'FileName',
-                        style: kTextStyleInterMedium.copyWith(
-                          fontSize: 18.ssp(),
+          if (ResponsiveLayout.isDesktop)
+            Container(
+              height: 73.sh(),
+              color: primaryColor,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 51.sw(),
+                        ),
+                        SingleVideoPlayerControls(
+                          desktop: player,
+                          web: controller,
+                        ),
+                        const Spacer(),
+                        Text(
+                          'FileName',
+                          style: kTextStyleInterMedium.copyWith(
+                            fontSize: 18.ssp(),
+                            color: Colors.white,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 43.sw(),
+                        ),
+                        Container(
+                          width: 50.sr(),
+                          height: 50.sr(),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          alignment: Alignment.center,
+                          padding:
+                              EdgeInsets.only(right: 3.sw(), bottom: 3.sh()),
+                          child: Icon(
+                            Videomanager.camera,
+                            color: Theme.of(context).primaryColor,
+                            size: 24.ssp(),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 32.sw(),
+                        ),
+                        CustomElevatedButton(
+                          width: 120.sw(),
+                          height: 40.sw(),
                           color: Colors.white,
+                          onPressedElevated: () {},
+                          elevatedButtonText: "Submit",
+                          elevatedButtonTextStyle:
+                              kTextStyleInterMedium.copyWith(
+                            fontSize: 20.ssp(),
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 43.sw(),
-                      ),
-                      Container(
-                        width: 50.sr(),
-                        height: 50.sr(),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
+                        SizedBox(
+                          width: 47.sw(),
                         ),
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(right: 3.sw(), bottom: 3.sh()),
-                        child: Icon(
-                          Videomanager.camera,
-                          color: Theme.of(context).primaryColor,
-                          size: 24.ssp(),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 32.sw(),
-                      ),
-                      CustomElevatedButton(
-                        width: 120.sw(),
-                        height: 40.sw(),
-                        color: Colors.white,
-                        onPressedElevated: () {},
-                        elevatedButtonText: "Submit",
-                        elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
-                          fontSize: 20.ssp(),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 47.sw(),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  child: LinearProgressIndicator(
-                    value: 0.3,
-                    backgroundColor: Colors.transparent,
-                    color: sucess,
-                    minHeight: 4.sh(),
+                  Positioned(
+                    child: LinearProgressIndicator(
+                      value: 0.3,
+                      backgroundColor: Colors.transparent,
+                      color: sucess,
+                      minHeight: 4.sh(),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );

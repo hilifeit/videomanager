@@ -1,6 +1,4 @@
-import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/videoscreenshot/videoscreenshot.dart';
-import 'package:videomanager/screens/dashboard/table.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/widgets/widgets.dart';
 
@@ -21,101 +19,44 @@ class DashBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.amber,
-      body: Column(children: [
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Expanded(flex: 2, child: TargetCard()),
-              Expanded(child: UsersCard()),
-              Expanded(child: AssignedVideoCard()),
-              Expanded(child: VideoScreenshot(value: 10)),
-              Expanded(
-                child: ScreenShotReview(),
-              ),
-              Expanded(
-                flex: 2,
-                child: CustomTable(),
-              )
-            ],
-          ),
-        ),
-        Expanded(
-          child: Row(
-            children: [
-              AssignManager(video: 14),
-              const OutletCard(),
-              Card(
-                color: const Color(0xfffffdeb),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 20.sh(),
-                      left: 21.sw(),
-                      right: 25.sw(),
-                      bottom: 20.sh()),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              width: 42.sw(),
-                              height: 42.sh(),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  6.sr(),
-                                ),
-                                color:
-                                    const Color(0xff696CFF).withOpacity(0.16),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 12.sh(),
-                                  horizontal: 9.sw(),
-                                ),
-                                child: const Image(
-                                    image: AssetImage(
-                                        'assets/images/credit-card.png')),
-                              )),
-                          SizedBox(
-                            height: 16.sh(),
-                          ),
-                          Text(
-                            'Junk File',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 15.ssp(), color: cardHeader),
-                          ),
-                          SizedBox(
-                            height: 2.2.sh(),
-                          ),
-                          Text('200',
-                              style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 22.ssp(),
-                                color: const Color(0xff566a7f),
-                              )),
-                          SizedBox(
-                            height: 8.8.sh(),
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.arrow_upward,
-                                size: 9.58.ssp(),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      const Icon(Icons.more_vert),
-                    ],
-                  ),
+      body: Column(
+        children: [
+          Expanded(
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 1,
+              children: [
+                GridView.count(
+                  crossAxisCount: 3,
+                  children: [
+                    GridView.count(
+                      crossAxisCount: 4,
+                      children: const [
+                        TargetCard(),
+                        ScreenShotReview(),
+                        OutletCard(),
+                        AssignedVideoCard(),
+                        TargetCard(),
+                        ScreenShotReview(),
+                        OutletCard(),
+                        AssignedVideoCard()
+                      ],
+                    ),
+                    const VideoScreenshot(value: 10),
+                    const ScreenShotReview(),
+                  ],
                 ),
-              )
-            ],
+              ],
+            ),
           ),
-        ),
-      ]),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: const [UsersCard()],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

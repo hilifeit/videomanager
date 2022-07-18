@@ -37,22 +37,23 @@ class VideoSideBar extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Row(
         children: [
-          InkWell(
-            onTap: () {
-              if (CustomOverlayEntry().isMenuOpen) {
-                CustomOverlayEntry().closeFilter();
-              }
-              CustomOverlayEntry().closeVideoBar();
-            },
-            child: Container(
-                width: 30.sw(),
-                height: 155.sh(),
-                color: const Color(0xffE4F5FF),
-                child: const Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.black,
-                )),
-          ),
+          if (ResponsiveLayout.isDesktop)
+            InkWell(
+              onTap: () {
+                if (CustomOverlayEntry().isMenuOpen) {
+                  CustomOverlayEntry().closeFilter();
+                }
+                CustomOverlayEntry().closeVideoBar();
+              },
+              child: Container(
+                  width: 30.sw(),
+                  height: 155.sh(),
+                  color: const Color(0xffE4F5FF),
+                  child: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: Colors.black,
+                  )),
+            ),
           Expanded(
             child: Container(
               color: Colors.white,
