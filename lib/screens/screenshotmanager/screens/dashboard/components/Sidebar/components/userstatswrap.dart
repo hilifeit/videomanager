@@ -31,9 +31,11 @@ class UserStatsWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 46.sw(),
-      runSpacing: 15.sh(),
+    return GridView.count(
+      crossAxisSpacing: 46.sw(),
+      mainAxisSpacing: 37.sh(),
+      childAspectRatio: 1.5,
+      crossAxisCount: 2,
       children: List.generate(
         cardItems.length,
         (index) => CustomCard(
@@ -41,5 +43,12 @@ class UserStatsWrap extends StatelessWidget {
         ),
       ),
     );
+
+    // Wrap(
+    //   spacing: 46.sw(),
+    //   runSpacing: 15.sh(),
+    //   children:
+
+    // );
   }
 }

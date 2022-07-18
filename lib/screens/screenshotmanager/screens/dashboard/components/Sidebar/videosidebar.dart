@@ -2,13 +2,10 @@ import 'package:map/map.dart';
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/widgets/widgets.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteritembutton.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filterservice.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/userstatswrao.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/userstatswrap.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/videoassignedcard.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/component/userstats.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -63,12 +60,16 @@ class VideoSideBar extends StatelessWidget {
               child: Column(
                 children: [
                   thisUser.role == 0
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 37.sw(), vertical: 10.sh()),
-                          child: UserStatsWrap(),
+                      ? Expanded(
+                          flex: 3,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 37.sw(), vertical: 10.sh()),
+                            child: UserStatsWrap(),
+                          ),
                         )
                       : Expanded(
+                          flex: 3,
                           // height: size.height - 535.sh(),
                           child: MapScreen(
                             isvisible: false,
@@ -76,104 +77,106 @@ class VideoSideBar extends StatelessWidget {
                             controller: MapController(location: home),
                           ),
                         ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.sw(),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: 475.sh(),
-                          child: Consumer(builder: (context, ref, c) {
-                            // final thisUser = ref
-                            //     .watch(userChangeProvider)
-                            //     .loggedInUser
-                            //     .value;
-                            final fileService =
-                                ref.watch(fileDetailMiniServiceProvider);
-                            final files = fileService.userFiles;
-                            final filterService =
-                                ref.watch(filterModuleServiceProvider);
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (thisUser.role == 1) ...[
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20.sw(),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Consumer(builder: (context, ref, c) {
+                              // final thisUser = ref
+                              //     .watch(userChangeProvider)
+                              //     .loggedInUser
+                              //     .value;
+                              final fileService =
+                                  ref.watch(fileDetailMiniServiceProvider);
+                              final files = fileService.userFiles;
+                              final filterService =
+                                  ref.watch(filterModuleServiceProvider);
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (thisUser.role == 1) ...[
+                                    Text(
+                                      'Assigned Area',
+                                      style: kTextStyleIbmMedium.copyWith(
+                                        fontSize: 18.ssp(),
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.sh(),
+                                    ),
+                                    Wrap(
+                                      children: List.generate(
+                                        areaItems.length,
+                                        (index) => InkWell(
+                                          onTap: () {},
+                                          child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 16.sw()),
+                                              child: AreaCard(
+                                                item: areaItems[index],
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 44.sh(),
+                                    ),
+                                  ],
                                   Text(
-                                    'Assigned Area',
+                                    'Videos',
                                     style: kTextStyleIbmMedium.copyWith(
                                       fontSize: 18.ssp(),
                                       color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 20.sh(),
+                                    height: 10.sh(),
                                   ),
-                                  Wrap(
-                                    children: List.generate(
-                                      areaItems.length,
-                                      (index) => InkWell(
-                                        onTap: () {},
-                                        child: Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 16.sw()),
-                                            child: AreaCard(
-                                              item: areaItems[index],
-                                            )),
-                                      ),
+                                  FilterIconButton(),
+                                  SizedBox(
+                                    height: 13.sh(),
+                                  ),
+                                  Expanded(
+                                    child: ListView.separated(
+                                        itemBuilder: (context, index) {
+                                          return VideoAssignCard(
+                                            item: files[index],
+                                            thisUser: thisUser,
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return SizedBox(
+                                            height: 8.sh(),
+                                          );
+                                        },
+                                        itemCount: files.length),
+                                  ),
+                                  if (thisUser.role == 1) ...[
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: CustomElevatedButton(
+                                          icon: Videomanager
+                                              .add_user_svgrepo_com_1,
+                                          onPressedElevated: () {},
+                                          elevatedButtonText: 'Assign'),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 44.sh(),
-                                  ),
+                                    SizedBox(
+                                      height: 23.sh(),
+                                    ),
+                                  ],
                                 ],
-                                Text(
-                                  'Videos',
-                                  style: kTextStyleIbmMedium.copyWith(
-                                    fontSize: 18.ssp(),
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.sh(),
-                                ),
-                                FilterIconButton(),
-                                SizedBox(
-                                  height: 13.sh(),
-                                ),
-                                Expanded(
-                                  child: ListView.separated(
-                                      itemBuilder: (context, index) {
-                                        return VideoAssignCard(
-                                          item: files[index],
-                                          thisUser: thisUser,
-                                        );
-                                      },
-                                      separatorBuilder: (context, index) {
-                                        return SizedBox(
-                                          height: 8.sh(),
-                                        );
-                                      },
-                                      itemCount: files.length),
-                                ),
-                                if (thisUser.role == 1) ...[
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: CustomElevatedButton(
-                                        icon:
-                                            Videomanager.add_user_svgrepo_com_1,
-                                        onPressedElevated: () {},
-                                        elevatedButtonText: 'Assign'),
-                                  ),
-                                  SizedBox(
-                                    height: 23.sh(),
-                                  ),
-                                ],
-                              ],
-                            );
-                          }),
-                        ),
-                      ],
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
