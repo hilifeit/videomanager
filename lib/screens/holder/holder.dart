@@ -1,4 +1,3 @@
-import 'package:videomanager/screens/components/addremarksonsubmit.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
@@ -57,7 +56,7 @@ class Holder extends ConsumerWidget {
               : Expanded(
                   child: index != 1
                       ? AnimatedIndexedStack(index: index, children: [
-                          ScreenshotDashboard(role: thisUser.role),
+                          ScreenshotDashboard(thisUser: thisUser),
                         ])
                       : const SettingsHolder(),
                 ),

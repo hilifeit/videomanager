@@ -52,6 +52,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.elevatedButtonTextStyle,
     this.elevatedButtonPadding,
     this.color,
+    this.icon,
   }) : super(key: key);
 
   final Function onPressedElevated;
@@ -60,6 +61,7 @@ class CustomElevatedButton extends StatelessWidget {
   TextStyle? elevatedButtonTextStyle;
   EdgeInsetsGeometry? elevatedButtonPadding;
   Color? color;
+  IconData? icon;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -74,13 +76,24 @@ class CustomElevatedButton extends StatelessWidget {
         onPressed: () {
           onPressedElevated();
         },
-        child: Text(
-          elevatedButtonText,
-          style: elevatedButtonTextStyle ??
-              kTextStyleIbmRegular.copyWith(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            if (icon != null)
+              Icon(
+                icon,
                 color: Colors.white,
-                fontSize: 17.ssp(),
+                size: 15.ssp(),
               ),
+            Text(
+              elevatedButtonText,
+              style: elevatedButtonTextStyle ??
+                  kTextStyleIbmRegular.copyWith(
+                    color: Colors.white,
+                    fontSize: 17.ssp(),
+                  ),
+            ),
+          ],
         ),
       ),
     );

@@ -33,15 +33,19 @@ class MenuItemWidget extends ConsumerWidget {
       child: GestureDetector(
         onTap: (() {
           ref.read(indexState.state).state = item.id;
+          final customOverlay = CustomOverlayEntry();
 
-          // if (CustomOverlayEntry().videoBarOpen) {
-          //   CustomOverlayEntry().closeVideoBar();
-          // }
-          // if (CustomOverlayEntry().videoTimeStampOpen) {
-          //   CustomOverlayEntry().closeVideoTimeStamp();
-          // }
-          // if (CustomOverlayEntry().isMenuOpen) {
-          //   CustomOverlayEntry().closeFilter();
+          if (customOverlay.videoBarOpen) {
+            customOverlay.closeVideoBar();
+          }
+          if (customOverlay.videoTimeStampOpen) {
+            customOverlay.closeVideoTimeStamp();
+          }
+          if (customOverlay.isMenuOpen) {
+            customOverlay.closeFilter();
+          }
+          // if (item.id == 3 && !customOverlay.videoTimeStampOpen) {
+          //   customOverlay.showVideoTimeStamp();
           // }
         }),
         child: Card(
