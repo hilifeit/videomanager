@@ -34,7 +34,6 @@ class CustomTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fileService = ref.watch(fileDetailMiniServiceProvider);
     final files = fileService.files;
-    print(files.length);
     return Scaffold(
       body: CustomDataTable(
         empty: CustomShowMessage.nodata(),

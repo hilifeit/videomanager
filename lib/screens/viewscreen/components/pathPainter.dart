@@ -194,16 +194,13 @@ class Painter extends CustomPainter {
                 "${element.location.coordinates.first} ${element.location.coordinates.last} ${originalLocationData.first.lat} ${originalLocationData.first.lng} ${originalLocationData.last.lat} ${originalLocationData.last.lng}");
           }
         };
-        tapSecondary = (TapUpDetails detail) {
+        tapSecondary = (Offset globalPostion) {
           tap();
 
           showMenu(
               context: context,
-              position: RelativeRect.fromLTRB(
-                  detail.globalPosition.dx,
-                  detail.globalPosition.dy,
-                  detail.globalPosition.dx + 1,
-                  detail.globalPosition.dy + 1),
+              position: RelativeRect.fromLTRB(globalPostion.dx,
+                  globalPostion.dy, globalPostion.dx + 1, globalPostion.dy + 1),
               items: [
                 PopupMenuItem(
                   child: CustomPopUpMenuItemChild(
@@ -394,7 +391,9 @@ class Painter extends CustomPainter {
           customCanvas.drawPath(path, paint, onTapUp: (details) {
             tap();
           }, onSecondaryTapUp: (detail) {
-            tapSecondary(detail);
+            tapSecondary(detail.globalPosition);
+          }, onLongPressStart: (detail) {
+            tapSecondary(detail.globalPosition);
           });
         }
         if (selectedPointsProvider.selectedPoints.isEmpty ||
@@ -412,7 +411,9 @@ class Painter extends CustomPainter {
               customCanvas.drawPath(path, paint, onTapUp: (details) {
                 // tap();
               }, onSecondaryTapUp: (detail) {
-                tapSecondary(detail);
+                tapSecondary(detail.globalPosition);
+              }, onLongPressStart: (detail) {
+                tapSecondary(detail.globalPosition);
               });
 
               newPaint.style = PaintingStyle.stroke;
@@ -422,7 +423,9 @@ class Painter extends CustomPainter {
                     onTapUp: ((details) {
                   tap();
                 }), onSecondaryTapUp: (detail) {
-                  tapSecondary(detail);
+                  tapSecondary(detail.globalPosition);
+                }, onLongPressStart: (detail) {
+                  tapSecondary(detail.globalPosition);
                 }, hitTestBehavior: hitBehaviorTranslucent);
               }
 
@@ -432,7 +435,9 @@ class Painter extends CustomPainter {
                 customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
                   tap();
                 }), onSecondaryTapUp: (detail) {
-                  tapSecondary(detail);
+                  tapSecondary(detail.globalPosition);
+                }, onLongPressStart: (detail) {
+                  tapSecondary(detail.globalPosition);
                 }, hitTestBehavior: hitBehaviorTranslucent);
               }
             } else {
@@ -440,7 +445,9 @@ class Painter extends CustomPainter {
                 customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
                   tap();
                 }), onSecondaryTapUp: (detail) {
-                  tapSecondary(detail);
+                  tapSecondary(detail.globalPosition);
+                }, onLongPressStart: (detail) {
+                  tapSecondary(detail.globalPosition);
                 }, hitTestBehavior: hitBehaviorTranslucent);
               }
             }
@@ -451,7 +458,9 @@ class Painter extends CustomPainter {
                     onTapUp: ((details) {
                   tap();
                 }), onSecondaryTapUp: (detail) {
-                  tapSecondary(detail);
+                  tapSecondary(detail.globalPosition);
+                }, onLongPressStart: (detail) {
+                  tapSecondary(detail.globalPosition);
                 }, hitTestBehavior: hitBehaviorTranslucent);
               }
             }

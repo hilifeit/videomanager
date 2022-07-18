@@ -19,7 +19,7 @@ class CustomCardItem {
 }
 
 class CustomCard extends StatelessWidget {
-  CustomCard({Key? key, required this.item}) : super(key: key);
+  const CustomCard({Key? key, required this.item}) : super(key: key);
   final CustomCardItem item;
   final color = Colors.black;
 

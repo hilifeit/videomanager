@@ -5,7 +5,6 @@ import 'dart:html'
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:videomanager/screens/components/responsivelayout.dart';
 import 'package:videomanager/screens/load.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -19,7 +18,7 @@ void main() async {
   }
   await GetStorage.init();
   //storage.erase();
-  // customSocket.connect();
+  customSocket.connect();
   runApp(Phoenix(child: const MyApp()));
 }
 
@@ -30,6 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
+      print("here");
       return ScreenUtilInit(
         designSize: checkWidth(constraints),
         builder: (_, child) {

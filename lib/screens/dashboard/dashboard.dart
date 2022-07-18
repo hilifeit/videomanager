@@ -1,11 +1,8 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
-import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
-import 'package:videomanager/screens/components/custominfo.dart';
+import 'package:videomanager/screens/components/videoscreenshot/videoscreenshot.dart';
+import 'package:videomanager/screens/dashboard/table.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/widgets/widgets.dart';
-import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 List<CustomCardItem> items = [
   CustomCardItem(
@@ -25,86 +22,98 @@ class DashBoard extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.amber,
       body: Column(children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TargetCard(),
-            const UsersCard(),
-            const AssignedVideoCard(),
-            const ScreenShotReview(),
-          ],
-        ),
-        Row(
-          children: [
-            AssignManager(video: 14),
-            const OutletCard(),
-            Card(
-              color: const Color(0xfffffdeb),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: 20.sh(),
-                    left: 21.sw(),
-                    right: 25.sw(),
-                    bottom: 20.sh()),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            width: 42.sw(),
-                            height: 42.sh(),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                6.sr(),
-                              ),
-                              color: const Color(0xff696CFF).withOpacity(0.16),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 12.sh(),
-                                horizontal: 9.sw(),
-                              ),
-                              child: const Image(
-                                  image: AssetImage(
-                                      'assets/images/credit-card.png')),
-                            )),
-                        SizedBox(
-                          height: 16.sh(),
-                        ),
-                        Text(
-                          'Junk File',
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 15.ssp(), color: cardHeader),
-                        ),
-                        SizedBox(
-                          height: 2.2.sh(),
-                        ),
-                        Text('200',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 22.ssp(),
-                              color: const Color(0xff566a7f),
-                            )),
-                        SizedBox(
-                          height: 8.8.sh(),
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.arrow_upward,
-                              size: 9.58.ssp(),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    const Icon(Icons.more_vert),
-                  ],
-                ),
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Expanded(flex: 2, child: TargetCard()),
+              Expanded(child: UsersCard()),
+              Expanded(child: AssignedVideoCard()),
+              Expanded(child: VideoScreenshot(value: 10)),
+              Expanded(
+                child: ScreenShotReview(),
               ),
-            )
-          ],
+              Expanded(
+                flex: 2,
+                child: CustomTable(),
+              )
+            ],
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              AssignManager(video: 14),
+              const OutletCard(),
+              Card(
+                color: const Color(0xfffffdeb),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: 20.sh(),
+                      left: 21.sw(),
+                      right: 25.sw(),
+                      bottom: 20.sh()),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              width: 42.sw(),
+                              height: 42.sh(),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  6.sr(),
+                                ),
+                                color:
+                                    const Color(0xff696CFF).withOpacity(0.16),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 12.sh(),
+                                  horizontal: 9.sw(),
+                                ),
+                                child: const Image(
+                                    image: AssetImage(
+                                        'assets/images/credit-card.png')),
+                              )),
+                          SizedBox(
+                            height: 16.sh(),
+                          ),
+                          Text(
+                            'Junk File',
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 15.ssp(), color: cardHeader),
+                          ),
+                          SizedBox(
+                            height: 2.2.sh(),
+                          ),
+                          Text('200',
+                              style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 22.ssp(),
+                                color: const Color(0xff566a7f),
+                              )),
+                          SizedBox(
+                            height: 8.8.sh(),
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.arrow_upward,
+                                size: 9.58.ssp(),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      const Icon(Icons.more_vert),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ]),
     );
@@ -399,71 +408,75 @@ class TargetCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: EdgeInsets.only(right: 32.82.sw()),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Hey Popular Koju!',
-                    style: TextStyle(
-                      fontFamily: 'Ibm',
-                      fontStyle: FontStyle.italic,
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w100,
-                      color: const Color(0xffBABABA),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.sh(),
-                  ),
-                  Text(
-                    'Screenshot target this month',
-                    style: kTextStyleIbmRegular.copyWith(
-                        fontSize: 13.ssp(),
-                        color: Theme.of(context).primaryColor),
-                  ),
-                  SizedBox(
-                    height: 20.6.sh(),
-                  ),
-                  Text(
-                    '100k',
-                    style: kTextStyleIbmSemiBold.copyWith(
-                        fontSize: 26.ssp(),
-                        color: Theme.of(context).primaryColor),
-                  ),
-                  Text(
-                    '78% of target',
-                    style: kTextStyleIbmRegular.copyWith(
-                        fontSize: 13.ssp(), color: const Color(0xffA1ACB8)),
-                  ),
-                  SizedBox(
-                    height: 10.sh(),
-                  ),
-                  SizedBox(
-                    height: 30.sh(),
-                    width: 130.sw(),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          padding: MaterialStateProperty.resolveWith(
-                              (states) => EdgeInsets.zero),
-                          backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => primaryColor)),
-                      onPressed: () {},
-                      child: Text(
-                        'View Screenshot',
-                        style: kTextStyleIbmRegular.copyWith(
-                            fontSize: 13.ssp(), color: Colors.white),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(right: 32.82.sw()),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Hey Popular Koju!',
+                      style: TextStyle(
+                        fontFamily: 'Ibm',
+                        fontStyle: FontStyle.italic,
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w100,
+                        color: const Color(0xffBABABA),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 5.sh(),
+                    ),
+                    Text(
+                      'Screenshot target this month',
+                      style: kTextStyleIbmRegular.copyWith(
+                          fontSize: 13.ssp(),
+                          color: Theme.of(context).primaryColor),
+                    ),
+                    SizedBox(
+                      height: 20.6.sh(),
+                    ),
+                    Text(
+                      '100k',
+                      style: kTextStyleIbmSemiBold.copyWith(
+                          fontSize: 26.ssp(),
+                          color: Theme.of(context).primaryColor),
+                    ),
+                    Text(
+                      '78% of target',
+                      style: kTextStyleIbmRegular.copyWith(
+                          fontSize: 13.ssp(), color: const Color(0xffA1ACB8)),
+                    ),
+                    SizedBox(
+                      height: 10.sh(),
+                    ),
+                    SizedBox(
+                      height: 30.sh(),
+                      width: 130.sw(),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.resolveWith(
+                                (states) => EdgeInsets.zero),
+                            backgroundColor: MaterialStateColor.resolveWith(
+                                (states) => primaryColor)),
+                        onPressed: () {},
+                        child: Text(
+                          'View Screenshot',
+                          style: kTextStyleIbmRegular.copyWith(
+                              fontSize: 13.ssp(), color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Container(
-              width: 96.51.sw(),
-              height: 155.78.sh(),
-              color: Colors.tealAccent,
+            Expanded(
+              child: Container(
+                // width: 96.51.sw(),
+                // height: 155.78.sh(),
+                color: Colors.tealAccent,
+              ),
             ),
           ],
         ),
@@ -471,4 +484,3 @@ class TargetCard extends StatelessWidget {
     );
   }
 }
-

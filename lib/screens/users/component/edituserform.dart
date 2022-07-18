@@ -35,7 +35,7 @@ class EditUser extends ConsumerWidget {
     var editSelectManager = ref.watch(editManagerSelectProvider.state).state;
     final addNewUser = ref.watch(edituserProvider.state).state;
 
-    var dd;
+    late CustomMenuItem dd;
     if (selectedUser != null && selectedUser.role != 2) {
       addNewUser
         ..username = selectedUser.username
@@ -300,6 +300,9 @@ class EditUser extends ConsumerWidget {
                             outlinedButtonText: 'Cancel',
                             elevatedButtonText: 'Edit',
                             onPressedOutlined: () {
+                              if (!ResponsiveLayout.isDesktop) {
+                                Navigator.pop(context);
+                              }
                               ref.read(editUserProvider.state).state = false;
                               ref.read(userChangeProvider).selectedUser.value =
                                   null;
@@ -379,7 +382,8 @@ class EditUser extends ConsumerWidget {
                                                     .fetchAll();
                                                 snack.success(
                                                     "User Edited Sucessfully");
-                                              } catch (e, s) {
+                                                Navigator.pop(context);
+                                              } catch (e) {
                                                 snack.error(e);
                                               }
                                             }
