@@ -29,11 +29,11 @@ class CustomOverlayEntry {
     videoBarOpen = !videoBarOpen;
   }
 
-  showvideoBar(c, role) {
+  showvideoBar(c, thisUser) {
     if (!videoBarOpen) {
       // print(videoTimeStampOpen);
       OverlayState overlayState = Overlay.of(c)!;
-      videoSideBarOverlay(c, role);
+      videoSideBarOverlay(c, thisUser);
       overlayState.insert(videobar);
       videoBarOpen = !videoBarOpen;
     }
@@ -165,7 +165,7 @@ class CustomOverlayEntry {
     );
   }
 
-  videoSideBarOverlay(BuildContext context, role) {
+  videoSideBarOverlay(BuildContext context, thisUser) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     var size = renderBox.size;
@@ -178,7 +178,7 @@ class CustomOverlayEntry {
 
           //  top: renderBox.globalToLocal(point),
           child: VideoSideBar(
-            role: role,
+            thisUser: thisUser,
             size: size,
           ));
     });

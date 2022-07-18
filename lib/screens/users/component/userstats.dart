@@ -1,38 +1,39 @@
 import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/components/widgets/widgets.dart';
 
 class UserStats extends StatelessWidget {
   UserStats({
     Key? key,
   }) : super(key: key);
 
-  final List<CustomCard> items = [
-    CustomCard(
-        isvisible: false,
+  final List<CustomCardItem> items = [
+    CustomCardItem(
+        
         height: 139.sh(),
         width: 235.sw(),
         number: 15,
         text: 'Video Uploaded',
         color: const Color(0xffBADBEF),
         icon: Videomanager.videooutline),
-    CustomCard(
-        isvisible: false,
+    CustomCardItem(
+    
         height: 139.sh(),
         width: 235.sw(),
         number: 15,
         text: 'Video Assigned',
         color: const Color(0xffBDD0FF),
         icon: Videomanager.add_user_svgrepo_com_1),
-    CustomCard(
-        isvisible: false,
+    CustomCardItem(
+   
         height: 139.sh(),
         width: 235.sw(),
         number: 15,
         text: 'Review issued',
         color: const Color(0xffC2BDFF),
         icon: Videomanager.refresh),
-    CustomCard(
-        isvisible: false,
+    CustomCardItem(
+  
         height: 139.sh(),
         width: 235.sw(),
         number: 15,
@@ -66,7 +67,7 @@ class UserStats extends StatelessWidget {
               );
             },
             itemBuilder: (_, index) {
-              return items[index];
+              return CustomCard(item: items[index]);
             },
           ),
         ),

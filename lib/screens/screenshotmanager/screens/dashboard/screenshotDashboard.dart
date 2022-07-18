@@ -1,13 +1,15 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 
 class ScreenshotDashboard extends HookConsumerWidget {
-  ScreenshotDashboard({this.videoFile, Key? key, required this.role})
+  ScreenshotDashboard({this.videoFile, Key? key, required this.thisUser})
       : super(key: key);
-  final int role;
+  final UserModelMini thisUser;
   final FileDetail? videoFile;
 
   final List<CustomMenuItem> menus = [
@@ -70,7 +72,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
     //   }
     // }
 
-    if (ResponsiveLayout.isDesktop) {
+    if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
       CustomOverlayEntry().showVideoTimeStamp();
     }
 
@@ -99,7 +101,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                     alignment: Alignment.centerRight,
                     child: InkWell(
                       onTap: () {
-                        CustomOverlayEntry().showvideoBar(context, role);
+                        CustomOverlayEntry().showvideoBar(context, thisUser);
                       },
                       child: Container(
                           width: 30.sw(),

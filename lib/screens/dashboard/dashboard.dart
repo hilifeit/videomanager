@@ -4,10 +4,11 @@ import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/components/custominfo.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/components/widgets/widgets.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
-List<CustomCard> items = [
-  CustomCard(
+List<CustomCardItem> items = [
+  CustomCardItem(
       height: 139.sh(),
       width: 229.sw(),
       number: 15,
@@ -471,72 +472,3 @@ class TargetCard extends StatelessWidget {
   }
 }
 
-class CustomCard extends StatelessWidget {
-  const CustomCard({
-    Key? key,
-    required this.height,
-    required this.width,
-    required this.number,
-    required this.text,
-    required this.color,
-    required this.icon,
-    this.isvisible = true,
-  }) : super(key: key);
-  final double height;
-  final double width;
-  final int number;
-  final String text;
-  final Color color;
-  final IconData icon;
-  final bool isvisible;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: height,
-        width: width,
-        child: Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.sr())),
-          color: color,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                number.toString(),
-                style: kTextStyleInterMedium.copyWith(
-                  fontSize: 37.ssp(min: 18),
-                ),
-              ),
-              if (!isvisible)
-                Icon(
-                  icon,
-                  color: Colors.black,
-                  size: 24.sr(min: 14),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (isvisible) ...[
-                    Icon(
-                      icon,
-                      color: Colors.black,
-                      size: 24.sr(),
-                    ),
-                    SizedBox(
-                      width: 19.36.sw(),
-                    ),
-                  ],
-                  Text(
-                    text,
-                    style: kTextStyleInterMedium.copyWith(
-                        fontSize: 24.ssp(min: 14)),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ));
-  }
-}

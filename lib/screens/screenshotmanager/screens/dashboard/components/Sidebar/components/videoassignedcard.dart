@@ -16,6 +16,10 @@ class VideoAssignCardItems {
   final int shops;
 }
 
+final videoAssignCheckProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
 class VideoAssignCard extends StatelessWidget {
   const VideoAssignCard({
     Key? key,
@@ -27,89 +31,127 @@ class VideoAssignCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 412.sw(),
-      height: 73.sh(),
-      child: Card(
-        color: const Color(0xffECF0F2),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.5.sw()),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 88.sw(),
-                child: Text(
-                  thisUser.superVisor != null ? thisUser.superVisor!.name : '',
-                  style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 15.ssp(), color: cardHeader),
-                ),
-              ),
-              const Spacer(),
-              SizedBox(
-                width: 70.sw(),
-                child: Text(
-                  item.filename,
-                  style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 12.ssp(), color: Colors.black),
-                ),
-              ),
-              // SizedBox(
-              //   width: 10.sw(),
-              // ),
-              const Spacer(),
-              Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (thisUser.role == 1)
+          Consumer(builder: (context, ref, c) {
+            final isChecked = ref.watch(videoAssignCheckProvider.state).state;
+            return Checkbox(
+              value: isChecked,
+              onChanged: (val) {
+                ref.read(videoAssignCheckProvider.state).state = val!;
+              },
+            );
+          }),
+        Expanded(
+          // width: 412.sw(),
+          // height: 73.sh(),
+          child: Card(
+            color: const Color(0xffECF0F2),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 24.5.sw(), vertical: 16.sh()),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Videomanager.image_icon_group,
-                        color: lightBlack,
-                        size: 9.5.ssp(),
-                      ),
-                      SizedBox(
-                        width: 5.sw(),
-                      ),
-                      SizedBox(
-                        // width: 30.sw(),
-                        child: Text(
-                          10.toString(),
-                          style: kTextStyleIbmMedium.copyWith(
-                              fontSize: 12.ssp(), color: lightBlack),
-                        ),
-                      )
-                    ],
+                  SizedBox(
+                    width: 100.sw(),
+                    child: Column(
+                      children: [
+                        if (thisUser.role == 0)
+                          Text(
+                            thisUser.superVisor != null
+                                ? thisUser.superVisor!.name
+                                : '',
+                            style: kTextStyleIbmMedium.copyWith(
+                                fontSize: 15.ssp(), color: cardHeader),
+                          ),
+                        if (thisUser.role == 1) ...[
+                          Text(
+                            // TODO: video assigned to whom? "username"
+                            'Not Assigned',
+                            style: kTextStyleIbmMedium.copyWith(
+                                fontSize: 15.ssp(), color: cardHeader),
+                          ),
+
+                          // TODO: if video Assigned available show user's "name"
+                          // Text(
+                          //   'Name',
+                          //   style: kTextStyleIbmMedium.copyWith(
+                          //       fontSize: 15.ssp(), color: cardHeader),
+                          // ),
+                        ]
+                      ],
+                    ),
                   ),
-                  Row(
+                  const Spacer(),
+                  SizedBox(
+                    width: 70.sw(),
+                    child: Text(
+                      item.filename,
+                      style: kTextStyleIbmMedium.copyWith(
+                          fontSize: 12.ssp(), color: Colors.black),
+                    ),
+                  ),
+                  // SizedBox(
+                  //   width: 10.sw(),
+                  // ),
+                  const Spacer(),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Videomanager.shop,
-                        color: lightBlack,
-                        size: 10.48.ssp(),
+                      Row(
+                        children: [
+                          Icon(
+                            Videomanager.image_icon_group,
+                            color: lightBlack,
+                            size: 9.5.ssp(),
+                          ),
+                          SizedBox(
+                            width: 5.sw(),
+                          ),
+                          SizedBox(
+                            // width: 30.sw(),
+                            child: Text(
+                              10.toString(),
+                              style: kTextStyleIbmMedium.copyWith(
+                                  fontSize: 12.ssp(), color: lightBlack),
+                            ),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 5.sw(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Videomanager.shop,
+                            color: lightBlack,
+                            size: 10.48.ssp(),
+                          ),
+                          SizedBox(
+                            width: 5.sw(),
+                          ),
+                          SizedBox(
+                            // width: 30.sw(),
+                            child: Text(
+                              10.toString(),
+                              style: kTextStyleIbmMedium.copyWith(
+                                  fontSize: 12.ssp(), color: lightBlack),
+                            ),
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        // width: 30.sw(),
-                        child: Text(
-                          10.toString(),
-                          style: kTextStyleIbmMedium.copyWith(
-                              fontSize: 12.ssp(), color: lightBlack),
-                        ),
-                      )
                     ],
                   ),
+                  const Spacer(),
+                  StatusCard(status: item.status.status.toString()),
                 ],
               ),
-              const Spacer(),
-              StatusCard(status: item.status.status.toString()),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

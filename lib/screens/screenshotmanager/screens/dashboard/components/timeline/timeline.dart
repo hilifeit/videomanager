@@ -70,8 +70,6 @@ class Timeline extends ConsumerWidget {
                   } else {
                     ref.read(heightChangeProvider.state).state = h;
                   }
-                  print(details.delta);
-                  print(customHeight);
                 },
                 child: MouseRegion(
                   cursor: SystemMouseCursors.resizeUpDown,
