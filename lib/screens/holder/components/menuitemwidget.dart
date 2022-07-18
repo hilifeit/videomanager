@@ -41,7 +41,7 @@ class MenuItemWidget extends ConsumerWidget {
           if (customOverlay.videoTimeStampOpen) {
             customOverlay.closeVideoTimeStamp();
           }
-          if (customOverlay.isMenuOpen) {
+          if (customOverlay.isFilterMenuOpen) {
             customOverlay.closeFilter();
           }
           // if (item.id == 3 && !customOverlay.videoTimeStampOpen) {

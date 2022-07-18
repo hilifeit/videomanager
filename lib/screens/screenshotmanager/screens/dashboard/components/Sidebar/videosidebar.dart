@@ -39,7 +39,7 @@ class VideoSideBar extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              if (CustomOverlayEntry().isMenuOpen) {
+              if (CustomOverlayEntry().isFilterMenuOpen) {
                 CustomOverlayEntry().closeFilter();
               }
               CustomOverlayEntry().closeVideoBar();

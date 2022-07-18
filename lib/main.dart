@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      print("here");
+   
       return ScreenUtilInit(
         designSize: checkWidth(constraints),
         builder: (_, child) {

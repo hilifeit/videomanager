@@ -68,7 +68,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
       }).catchError((e) {
-        print(" $e text");
+        print(" $e");
       });
 
     return controller;
