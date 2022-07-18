@@ -19,7 +19,7 @@ class CustomOverlayEntry {
   late OverlayEntry videotime;
   late BuildContext context;
 
-  bool isMenuOpen = false;
+  bool isFilterMenuOpen = false;
   bool videoBarOpen = false;
   bool videoTimeStampOpen = false;
   bool loaderOpen = false;
@@ -31,7 +31,6 @@ class CustomOverlayEntry {
 
   showvideoBar(c, thisUser) {
     if (!videoBarOpen) {
-      // print(videoTimeStampOpen);
       OverlayState overlayState = Overlay.of(c)!;
       videoSideBarOverlay(c, thisUser);
       overlayState.insert(videobar);
@@ -74,18 +73,18 @@ class CustomOverlayEntry {
   }
 
   showFilter(BuildContext c) {
-    if (!isMenuOpen) {
+    if (!isFilterMenuOpen) {
       OverlayState filterState = Overlay.of(c)!;
       filterOverlay(c);
       filterState.insert(filter);
-      isMenuOpen = !isMenuOpen;
+      isFilterMenuOpen = !isFilterMenuOpen;
     }
   }
 
   closeFilter() {
     Future.delayed(const Duration(milliseconds: 18), () {
       filter.remove();
-      isMenuOpen = !isMenuOpen;
+      isFilterMenuOpen = !isFilterMenuOpen;
     });
   }
 
@@ -113,7 +112,11 @@ class CustomOverlayEntry {
     }));
   }
 
+ 
+
   filterOverlay(BuildContext context) {
+    
+
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     late Offset buttonPosition;
@@ -137,25 +140,16 @@ class CustomOverlayEntry {
                   return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: List.generate(
-                        filterItems.length,
-                        (index) => filterItems[index] != filterItems.last
-                            ? InkWell(
+                          filterItems.length,
+                          (index) => InkWell(
+                           
                                 onTap: () {
                                   filterService.addItems(index);
                                 },
                                 child: FilterItemWidget(
                                   item: filterItems[index],
                                 ),
-                              )
-                            : InkWell(
-                                onTap: () {
-                                  filterService.reset();
-                                },
-                                child: FilterItemWidget(
-                                  item: filterItems[index],
-                                ),
-                              ),
-                      ));
+                              )));
                 });
               }),
             ),

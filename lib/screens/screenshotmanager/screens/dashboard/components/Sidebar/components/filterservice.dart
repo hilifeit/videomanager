@@ -36,10 +36,6 @@ class FilterService extends ChangeNotifier {
       iconData: 'assets/images/rejected.svg',
       text: 'Rejected',
     ),
-    FilterItemWidgetItem(
-      iconData: Videomanager.refresh,
-      text: 'All',
-    ),
   ];
 
   addItems(
@@ -57,14 +53,14 @@ class FilterService extends ChangeNotifier {
         filterItems[index].selected = true;
       }
     }
-    // print(_selectedItems);
+    
     notifyListeners();
   }
 
   removeItems(int index) {
     _selectedItems.remove(index);
     filterItems[index].selected = false;
-    // print(_selectedItems);
+   
     notifyListeners();
   }
 

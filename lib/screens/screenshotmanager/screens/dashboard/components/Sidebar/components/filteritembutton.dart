@@ -10,8 +10,6 @@ final filterItemProvider = StateProvider<List<int?>>((ref) {
 class FilterIconButton extends ConsumerWidget {
   FilterIconButton({Key? key}) : super(key: key);
 
-  final FocusNode foucusNode = FocusNode();
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterSelect = ref.watch(filterModuleServiceProvider).selectedItems;
@@ -68,7 +66,7 @@ class FilterIconButton extends ConsumerWidget {
         const Spacer(),
         InkWell(
           onTap: () {
-            if (CustomOverlayEntry().isMenuOpen) {
+            if (CustomOverlayEntry().isFilterMenuOpen) {
               CustomOverlayEntry().closeFilter();
             } else {
               CustomOverlayEntry().showFilter(context);

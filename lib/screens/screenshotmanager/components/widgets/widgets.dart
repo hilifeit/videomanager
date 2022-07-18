@@ -26,34 +26,35 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: item.height ?? 128.sh(),
-        width: item.width ?? 183.sw(),
+        // height: item.height ?? 128.sh(),
+        // width: item.width ?? 183.sw(),
         child: Card(
-          color: item.color,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                item.number.toString(),
-                style: kTextStyleIbmMedium.copyWith(
-                    fontSize: 37.ssp(min: 18), color: color),
-              ),
-              Icon(
-                item.icon,
-                color: color,
-                size: 20.sr(
-                  min: 14,
-                ),
-              ),
-              Text(
-                item.text,
-                style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 24.ssp(min: 14),
-                  color: color,
-                ),
-              ),
-            ],
+      color: item.color,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            item.number.toString(),
+            style: kTextStyleIbmMedium.copyWith(
+                fontSize: ResponsiveLayout.isDesktop ? 37 : 24.ssp(min: 18),
+                color: color),
           ),
-        ));
+          Icon(
+            item.icon,
+            color: color,
+            size: 20.sr(
+              min: 14,
+            ),
+          ),
+          Text(
+            item.text,
+            style: kTextStyleIbmSemiBold.copyWith(
+              fontSize: ResponsiveLayout.isDesktop ? 24 : 18.ssp(min: 14),
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }
