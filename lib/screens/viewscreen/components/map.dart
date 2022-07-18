@@ -102,7 +102,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       GestureType.onTapDown,
                       GestureType.onSecondaryTapDown,
                       GestureType.onSecondaryTapUp,
-                      GestureType.onForcePressEnd
+                      GestureType.onForcePressEnd,
+                      GestureType.onLongPressEnd,
+                      GestureType.onLongPressStart,
 
                       // GestureType.onLongPressMoveUpdate
                     ],
@@ -212,8 +214,14 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: SizedBox(
-                                            width: 613.sw(),
-                                            height: 180.sh(),
+                                            width: ResponsiveLayout.isDesktop
+                                                ? 613.sw()
+                                                : transformer
+                                                        .constraints.maxWidth *
+                                                    .85.sr(),
+                                            height: ResponsiveLayout.isDesktop
+                                                ? 180.sh()
+                                                : 120.sh(),
                                             child: VideoDetails(
                                               isDetailed: false,
                                               showMap: false,
@@ -393,6 +401,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       bool roundShape = false,
       String? tooltip}) {
     return FloatingActionButton(
+      heroTag: icon.toString(),
       elevation: 5,
       shape: RoundedRectangleBorder(
           borderRadius: !roundShape

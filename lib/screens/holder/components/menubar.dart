@@ -1,5 +1,5 @@
-import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
 import 'package:videomanager/screens/holder/components/menuitemwidget.dart';
+import 'package:videomanager/screens/holder/components/profilemenu.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 
@@ -38,15 +38,11 @@ class MenuBar extends ConsumerWidget {
   ];
 
   final StateProvider<int> indexState;
-  final buttonProvider = StateProvider<bool>((ref) {
-    return true;
-  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
     final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
-    final button = ref.watch(buttonProvider.state).state;
 
     //onPressed
     final height = 101.sh();
@@ -91,58 +87,7 @@ class MenuBar extends ConsumerWidget {
                 color: Colors.white,
               )),
           const Spacer(),
-          Padding(
-            padding: EdgeInsets.only(
-                top: 13.sh(), right: 61.08.sw(), bottom: 13.sh()),
-            child: PopupMenuButton(
-              offset: Offset(0, height / 2 + 22.ssp()),
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                      onTap: () async {
-                        Future.delayed(const Duration(milliseconds: 1), () {
-                          return showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CustomDialog(
-                                    textSecond: 'logout?',
-                                    elevatedButtonText: 'Yes',
-                                    onPressedElevated: () async {
-                                      logout();
-                                    });
-                              });
-                        });
-                      },
-                      child: CustomPopUpMenuItemChild(
-                          icon: Videomanager.logout, text: 'Logout'))
-                ];
-              },
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 180.sw(),
-                    child: Text(
-                      maxLines: 2,
-                      // "asdsad",
-                      // userName.user.username,
-                      thisUser.name,
-
-                      style: kTextStyleIbmSemiBold.copyWith(
-                          fontSize: 17.ssp(min: 10), color: Colors.white),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20.sw(),
-                  ),
-                  Icon(
-                    (button) ? Videomanager.down : Videomanager.up,
-                    color: Colors.white,
-                    size: 15.sr(),
-                  )
-                ],
-              ),
-            ),
-          )
+          ProfileMenu(),
         ],
       ),
     );

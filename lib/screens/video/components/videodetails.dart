@@ -29,7 +29,9 @@ class VideoDetails extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Padding(
-              padding: EdgeInsets.only(left: 31.04.sw(), right: 80.05.sw()),
+              padding: EdgeInsets.only(
+                  left: 31.04.sw(),
+                  right: ResponsiveLayout.isDesktop ? 80.05.sw() : 31.04.sw()),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -23,6 +23,7 @@ export 'package:videomanager/screens/components/animatedindexedstack.dart';
 export 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 export 'package:videomanager/screens/components/helper/extension.dart';
 export 'package:videomanager/screens/components/helper/keys.dart';
+export 'package:videomanager/screens/components/responsivelayout.dart';
 export 'package:videomanager/screens/components/socket.dart';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
@@ -30,11 +31,11 @@ export 'package:videomanager/screens/others/theme.dart';
 export 'package:videomanager/screens/others/validator.dart';
 export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
-export 'package:videomanager/screens/components/responsivelayout.dart';
 
 //
-// const baseURL = "http://192.168.16.106:5000/v1/";
-const baseURL = "http://localhost:5000/v1/";
+const baseURL = "http://192.168.16.106:5000/v1/";
+// const baseURL = "http://localhost:5000/v1/";
+//const baseURL = "http://10.0.2.2:5000/v1/";
 final client = http.Client();
 
 final LatLng home = LatLng(26.4721557, 87.32396419999999);

@@ -1,7 +1,5 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
@@ -71,7 +69,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
     //     print("$e $s error");
     //   }
     // }
-    CustomOverlayEntry().showVideoTimeStamp();
+
+    if (ResponsiveLayout.isDesktop) {
+      CustomOverlayEntry().showVideoTimeStamp();
+    }
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -93,22 +94,23 @@ class ScreenshotDashboard extends HookConsumerWidget {
                     )
                   ],
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: () {
-                      CustomOverlayEntry().showvideoBar(context, role);
-                    },
-                    child: Container(
-                        width: 30.sw(),
-                        height: 155.sh(),
-                        color: const Color(0xffE4F5FF),
-                        child: const Icon(
-                          Icons.chevron_left_rounded,
-                          color: Colors.black,
-                        )),
+                if (!ResponsiveLayout.isMobile)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        CustomOverlayEntry().showvideoBar(context, role);
+                      },
+                      child: Container(
+                          width: 30.sw(),
+                          height: 155.sh(),
+                          color: const Color(0xffE4F5FF),
+                          child: const Icon(
+                            Icons.chevron_left_rounded,
+                            color: Colors.black,
+                          )),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

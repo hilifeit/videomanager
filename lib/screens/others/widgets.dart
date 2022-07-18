@@ -303,7 +303,7 @@ class InputTextField extends StatelessWidget {
                 ? 'Write remarks if any'
                 : isVisible
                     ? 'Enter ${title.toLowerCase()}'
-                    : '$title',
+                    : title,
             hintStyle: hintStyle ??
                 kTextStyleIbmRegular.copyWith(
                   fontSize: 16.ssp(),
