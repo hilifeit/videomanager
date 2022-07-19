@@ -112,11 +112,7 @@ class CustomOverlayEntry {
     }));
   }
 
- 
-
   filterOverlay(BuildContext context) {
-    
-
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
     late Offset buttonPosition;
@@ -142,7 +138,6 @@ class CustomOverlayEntry {
                       children: List.generate(
                           filterItems.length,
                           (index) => InkWell(
-                           
                                 onTap: () {
                                   filterService.addItems(index);
                                 },
@@ -171,9 +166,17 @@ class CustomOverlayEntry {
           width: 560.sw(),
 
           //  top: renderBox.globalToLocal(point),
-          child: VideoSideBar(
-            thisUser: thisUser,
-            size: size,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              if (isFilterMenuOpen) {
+                closeFilter();
+              }
+            },
+            child: VideoSideBar(
+              thisUser: thisUser,
+              size: size,
+            ),
           ));
     });
   }

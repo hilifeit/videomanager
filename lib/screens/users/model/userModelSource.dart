@@ -1,6 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:intl/intl.dart';
-import 'package:videomanager/screens/components/customdialogbox/customdialogbox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
@@ -55,7 +54,8 @@ class UserModelSource extends DataTableSource {
       DataCell(
         Consumer(builder: (context, ref, c) {
           final thisUser = ref.watch(userChangeProvider).loggedInUser;
-          return (thisUser.value!.role > user.role || thisUser.value!.id == user.id)
+          return (thisUser.value!.role > user.role ||
+                  thisUser.value!.id == user.id)
               ? PopupMenuButton(
                   offset: const Offset(0, 0),
                   itemBuilder: (BuildContext context) {
@@ -183,7 +183,6 @@ class CustomPopUpMenuItemChild extends StatelessWidget {
     );
   }
 }
-
 
 class TableUserCard extends StatelessWidget {
   const TableUserCard({

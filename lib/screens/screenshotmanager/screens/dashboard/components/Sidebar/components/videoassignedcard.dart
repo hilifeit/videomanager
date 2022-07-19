@@ -47,106 +47,110 @@ class VideoAssignCard extends StatelessWidget {
         Expanded(
           // width: 412.sw(),
           // height: 73.sh(),
-          child: Card(
-            color: const Color(0xffECF0F2),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 24.5.sw(), vertical: 16.sh()),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 100.sw(),
-                    child: Column(
-                      children: [
-                        if (thisUser.role == 0)
-                          Text(
-                            thisUser.superVisor != null
-                                ? thisUser.superVisor!.name
-                                : '',
-                            style: kTextStyleIbmMedium.copyWith(
-                                fontSize: 15.ssp(), color: cardHeader),
-                          ),
-                        if (thisUser.role == 1) ...[
-                          Text(
-                            // TODO: video assigned to whom? "username"
-                            'Not Assigned',
-                            style: kTextStyleIbmMedium.copyWith(
-                                fontSize: 15.ssp(), color: cardHeader),
-                          ),
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            
+            child: Card(
+              color: const Color(0xffECF0F2),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 24.5.sw(), vertical: 16.sh()),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 100.sw(),
+                      child: Column(
+                        children: [
+                          if (thisUser.role == 0)
+                            Text(
+                              thisUser.superVisor != null
+                                  ? thisUser.superVisor!.name
+                                  : '',
+                              style: kTextStyleIbmMedium.copyWith(
+                                  fontSize: 15.ssp(), color: cardHeader),
+                            ),
+                          if (thisUser.role == 1) ...[
+                            Text(
+                              // TODO: video assigned to whom? "username"
+                              'Not Assigned',
+                              style: kTextStyleIbmMedium.copyWith(
+                                  fontSize: 15.ssp(), color: cardHeader),
+                            ),
 
-                          // TODO: if video Assigned available show user's "name"
-                          // Text(
-                          //   'Name',
-                          //   style: kTextStyleIbmMedium.copyWith(
-                          //       fontSize: 15.ssp(), color: cardHeader),
-                          // ),
-                        ]
+                            // TODO: if video Assigned available show user's "name"
+                            // Text(
+                            //   'Name',
+                            //   style: kTextStyleIbmMedium.copyWith(
+                            //       fontSize: 15.ssp(), color: cardHeader),
+                            // ),
+                          ]
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: 70.sw(),
+                      child: Text(
+                        item.filename,
+                        style: kTextStyleIbmMedium.copyWith(
+                            fontSize: 12.ssp(), color: Colors.black),
+                      ),
+                    ),
+                    // SizedBox(
+                    //   width: 10.sw(),
+                    // ),
+                    const Spacer(),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Videomanager.image_icon_group,
+                              color: lightBlack,
+                              size: 9.5.ssp(),
+                            ),
+                            SizedBox(
+                              width: 5.sw(),
+                            ),
+                            SizedBox(
+                              // width: 30.sw(),
+                              child: Text(
+                                10.toString(),
+                                style: kTextStyleIbmMedium.copyWith(
+                                    fontSize: 12.ssp(), color: lightBlack),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Videomanager.shop,
+                              color: lightBlack,
+                              size: 10.48.ssp(),
+                            ),
+                            SizedBox(
+                              width: 5.sw(),
+                            ),
+                            SizedBox(
+                              // width: 30.sw(),
+                              child: Text(
+                                10.toString(),
+                                style: kTextStyleIbmMedium.copyWith(
+                                    fontSize: 12.ssp(), color: lightBlack),
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: 70.sw(),
-                    child: Text(
-                      item.filename,
-                      style: kTextStyleIbmMedium.copyWith(
-                          fontSize: 12.ssp(), color: Colors.black),
-                    ),
-                  ),
-                  // SizedBox(
-                  //   width: 10.sw(),
-                  // ),
-                  const Spacer(),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Videomanager.image_icon_group,
-                            color: lightBlack,
-                            size: 9.5.ssp(),
-                          ),
-                          SizedBox(
-                            width: 5.sw(),
-                          ),
-                          SizedBox(
-                            // width: 30.sw(),
-                            child: Text(
-                              10.toString(),
-                              style: kTextStyleIbmMedium.copyWith(
-                                  fontSize: 12.ssp(), color: lightBlack),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Videomanager.shop,
-                            color: lightBlack,
-                            size: 10.48.ssp(),
-                          ),
-                          SizedBox(
-                            width: 5.sw(),
-                          ),
-                          SizedBox(
-                            // width: 30.sw(),
-                            child: Text(
-                              10.toString(),
-                              style: kTextStyleIbmMedium.copyWith(
-                                  fontSize: 12.ssp(), color: lightBlack),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  StatusCard(status: item.status.status.toString()),
-                ],
+                    const Spacer(),
+                    StatusCard(status: item.status.status.toString()),
+                  ],
+                ),
               ),
             ),
           ),
