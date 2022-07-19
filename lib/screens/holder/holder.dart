@@ -4,6 +4,7 @@ import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/holder/components/profilemenu.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboard.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -89,8 +90,8 @@ class Holder extends ConsumerWidget {
                 : Expanded(
                     child: index != 1
                         ? AnimatedIndexedStack(index: index, children: [
-                            DashBoard(),
-                            //ScreenshotDashboard(thisUser: thisUser),
+                            // DashBoard(),
+                            ScreenshotDashboard(thisUser: thisUser),
                           ])
                         : const SettingsHolder(),
                   ),

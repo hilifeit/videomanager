@@ -16,20 +16,6 @@ class VideoSideBar extends StatelessWidget {
   final Size size;
 
   final UserModelMini thisUser;
-  List<VideoAssignCardItems> items = [
-    VideoAssignCardItems(
-        fileName: "rapa", screenShot: 451, shops: 2150, status: 'Pending'),
-    VideoAssignCardItems(
-        fileName: "bagmati", screenShot: 155, shops: 52, status: 'Approved'),
-    VideoAssignCardItems(
-        fileName: "gandaki", screenShot: 144, shops: 5555, status: 'Complete'),
-    VideoAssignCardItems(
-        fileName: "daada", screenShot: 451, shops: 55, status: 'Rejected'),
-    VideoAssignCardItems(
-        fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
-    VideoAssignCardItems(
-        fileName: "rapaddti", screenShot: 451, shops: 211, status: 'Ongoing'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +90,15 @@ class VideoSideBar extends StatelessWidget {
                               final selectedFilter = ref
                                   .watch(filterModuleServiceProvider)
                                   .selectedItems;
+                              int count = 0;
+
+                              // for (int i = 0; i < files.length; i++) {
+                              //   if (selectedFilter
+                              //       .contains(files[i].status.status)) {
+                              //     count++;
+                              //   }
+                              // }
+
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -151,31 +146,38 @@ class VideoSideBar extends StatelessWidget {
                                     height: 13.sh(),
                                   ),
                                   Expanded(
-                                    child: ListView.separated(
-                                        itemBuilder: (context, index) {
-                                          if (selectedFilter.isNotEmpty) {
-                                            if (selectedFilter.contains(
-                                                files[index].status.status)) {
+                                    child: selectedFilter.isNotEmpty
+                                        ? ListView.separated(
+                                            itemBuilder: (context, index) {
+                                              if (selectedFilter.contains(
+                                                  files[index].status.status)) {
+                                                return VideoAssignCard(
+                                                  item: files[index],
+                                                  thisUser: thisUser,
+                                                );
+                                              } else {
+                                                return Container();
+                                              }
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              return SizedBox(
+                                                height: 8.sh(),
+                                              );
+                                            },
+                                            itemCount: files.length)
+                                        : ListView.separated(
+                                            itemBuilder: (context, index) {
                                               return VideoAssignCard(
                                                 item: files[index],
                                                 thisUser: thisUser,
                                               );
-                                            } else {
-                                              return Container();
-                                            }
-                                          } else {
-                                            return VideoAssignCard(
-                                              item: files[index],
-                                              thisUser: thisUser,
-                                            );
-                                          }
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return SizedBox(
-                                            height: 8.sh(),
-                                          );
-                                        },
-                                        itemCount: files.length),
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              return SizedBox(
+                                                height: 8.sh(),
+                                              );
+                                            },
+                                            itemCount: files.length),
                                   ),
                                   if (thisUser.role == 1) ...[
                                     Align(

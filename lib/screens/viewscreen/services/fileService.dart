@@ -34,17 +34,43 @@ class FileService extends ChangeNotifier {
   final List<FileDetailMini> files = [];
   final List<FileDetailMini> userFiles = [];
   final List<FileDetailMini> filterFiles = [
-    FileDetailMini(id: '111111', filename: 'adadada', location: Location(type: "type", coordinates: [[1.11,11.1]]), path: 'path', isUseable: true, status: Status(status: 0)),
-    FileDetailMini(id: '111111', filename: '132', location: Location(type: "type", coordinates: [[1.11,11.1]]), path: 'path', isUseable: true, status: Status(status: 1)),
-    FileDetailMini(id: '111111', filename: 'ttrtr', location: Location(type: "type", coordinates: [[1.11,11.1]]), path: 'path', isUseable: true, status: Status(status: 2)),
-    FileDetailMini(id: '111111', filename: 'bbbbb', location: Location(type: "type", coordinates: [[1.11,11.1]]), path: 'path', isUseable: true, status: Status(status: 3)),
-    FileDetailMini(id: '111111', filename: 'lllll', location: Location(type: "type", coordinates: [[1.11,11.1]]), path: 'path', isUseable: true, status: Status(status: 4)),
+    FileDetailMini(
+        id: '111111',
+        filename: 'adadada',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 0)),
+    FileDetailMini(
+        id: '111111',
+        filename: '132',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 1)),
+    FileDetailMini(
+        id: '111111',
+        filename: 'ttrtr',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 2)),
+    FileDetailMini(
+        id: '111111',
+        filename: 'bbbbb',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 3)),
   ];
-
-
-
-
-  
 
   late final selectedFile = Property<FileDetailMini?>(null, notifyListeners);
 
