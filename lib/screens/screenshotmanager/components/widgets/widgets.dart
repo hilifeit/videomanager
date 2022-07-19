@@ -49,7 +49,7 @@ class CustomCard extends StatelessWidget {
           Text(
             item.text,
             style: kTextStyleIbmSemiBold.copyWith(
-              fontSize: ResponsiveLayout.isDesktop ? 24 : 18.ssp(min: 14),
+              fontSize: ResponsiveLayout.isDesktop ? 24.ssp() : 18.ssp(min: 14),
               color: color,
             ),
           ),

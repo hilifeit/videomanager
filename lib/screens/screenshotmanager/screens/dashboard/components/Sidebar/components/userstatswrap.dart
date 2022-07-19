@@ -32,9 +32,9 @@ class UserStatsWrap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisSpacing: ResponsiveLayout.isDesktop ? 46.sw() : 13.sw(),
-      mainAxisSpacing: ResponsiveLayout.isDesktop ? 37.sh() : 10.sh(),
-      childAspectRatio: 1.5,
+      crossAxisSpacing: ResponsiveLayout.isDesktop ? 47.sw() : 13.sw(),
+      mainAxisSpacing: ResponsiveLayout.isDesktop ? 30.sh() : 10.sh(),
+      childAspectRatio: 1.429,
       crossAxisCount: ResponsiveLayout.isTablet ? 4 : 2,
       children: List.generate(
         cardItems.length,
@@ -43,12 +43,5 @@ class UserStatsWrap extends StatelessWidget {
         ),
       ),
     );
-
-    // Wrap(
-    //   spacing: 46.sw(),
-    //   runSpacing: 15.sh(),
-    //   children:
-
-    // );
   }
 }

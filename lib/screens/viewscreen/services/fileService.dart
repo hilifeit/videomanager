@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filterservice.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -25,12 +26,51 @@ class FileService extends ChangeNotifier {
         load();
       } else {
         loadUserData();
+        // filterFile();
       }
     }
   }
   late ChangeNotifierProviderRef<FileService> ref;
   final List<FileDetailMini> files = [];
   final List<FileDetailMini> userFiles = [];
+  final List<FileDetailMini> filterFiles = [
+    FileDetailMini(
+        id: '111111',
+        filename: 'adadada',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 0)),
+    FileDetailMini(
+        id: '111111',
+        filename: '132',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 1)),
+    FileDetailMini(
+        id: '111111',
+        filename: 'ttrtr',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 2)),
+    FileDetailMini(
+        id: '111111',
+        filename: 'bbbbb',
+        location: Location(type: "type", coordinates: [
+          [1.11, 11.1]
+        ]),
+        path: 'path',
+        isUseable: true,
+        status: Status(status: 3)),
+  ];
 
   late final selectedFile = Property<FileDetailMini?>(null, notifyListeners);
 
@@ -40,6 +80,7 @@ class FileService extends ChangeNotifier {
 
   loadUserData() async {
     await fetchUserFiles();
+    print(fileDetailMiniToJson(userFiles));
   }
 
   fetchUserFiles() async {
