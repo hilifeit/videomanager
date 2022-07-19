@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-   
       return ScreenUtilInit(
         designSize: checkWidth(constraints),
         builder: (_, child) {
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
   }
 
   Size checkWidth(BoxConstraints constraints) {
-    if (constraints.maxWidth < 500) {
+    if (constraints.maxWidth < 550) {
       ResponsiveLayout.setMobile();
       return const Size(450, 400);
     } else if (constraints.maxWidth < 1100) {

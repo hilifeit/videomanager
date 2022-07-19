@@ -32,7 +32,7 @@ class DashBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.amber,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: LayoutBuilder(builder: (context, constraints) {
           return GridView.custom(
               padding: EdgeInsets.all(28.sr()),
@@ -46,7 +46,7 @@ class DashBoard extends StatelessWidget {
                           alignment: AlignmentDirectional.center),
                       const WovenGridTile(
                         1.2,
-                        crossAxisRatio: 0.65,
+                        crossAxisRatio: 0.75,
                         alignment: AlignmentDirectional.center,
                       ),
                       const WovenGridTile(1.5),
@@ -72,35 +72,82 @@ class DashBoard extends StatelessWidget {
               childrenDelegate: SliverChildBuilderDelegate(
                   childCount: items.length, (context, index) {
                 if (index == 0) {
+                  List<Widget> firstItems = [
+                    const TargetCard(),
+                    const UsersCard(),
+                    const OutletCard(),
+                    const OutletCard(),
+                    const UsersCard(),
+                    const ScreenShotReview(),
+                    const UsersCard(),
+                  ];
+                  final ScrollController controller = ScrollController();
+                  if (ResponsiveLayout.isMobile) {
+                    return LayoutBuilder(builder: (context, constraints) {
+                      return Scrollbar(
+                        controller: controller,
+                        child: ListView.separated(
+                            controller: controller,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (_, index) {
+                              return SizedBox(
+                                  width: constraints.maxWidth,
+                                  height: constraints.maxHeight,
+                                  child: index == 0
+                                      ? firstItems[index]
+                                      : Row(
+                                          children: [
+                                            Expanded(
+                                                child: firstItems[index + 1]),
+                                            Expanded(
+                                                child: firstItems[index + 2])
+                                          ],
+                                        ));
+                            },
+                            separatorBuilder: (_, index) {
+                              return SizedBox(
+                                width: 12.sw(),
+                              );
+                            },
+                            itemCount: 5),
+                      );
+                    });
+                  }
                   return StaggeredGrid.count(
-                    crossAxisCount: 4,
+                    crossAxisCount: ResponsiveLayout.isDesktop
+                        ? 4
+                        : ResponsiveLayout.isTablet
+                            ? 3
+                            : 2,
                     mainAxisSpacing: 15.sh(),
                     crossAxisSpacing: 15.sh(),
-                    children: [
-                      const StaggeredGridTile.count(
-                          mainAxisCellCount: 1.25,
-                          // mainAxisExtent: 202.sh(),
-                          crossAxisCellCount: 2,
-                          child: TargetCard()),
-                      const StaggeredGridTile.fit(
+                    children: firstItems.map((e) {
+                      if (firstItems.indexOf(e) == 0) {
+                        return StaggeredGridTile.count(
+                            mainAxisCellCount: 1.25,
+                            // mainAxisExtent: 202.sh(),
+                            crossAxisCellCount: 2,
+                            child: e);
+                      }
+                      return StaggeredGridTile.fit(
                           // mainAxisCellCount: 1,
                           crossAxisCellCount: 1,
-                          child: UsersCard()),
-                      ...List.generate(
-                        3,
-                        (index) => const StaggeredGridTile.fit(
-                            // mainAxisCellCount: 1,
-                            crossAxisCellCount: 1,
-                            child: OutletCard()),
-                      ),
-                      ...List.generate(
-                        2,
-                        (index) => const StaggeredGridTile.fit(
-                            // mainAxisCellCount: 1,
-                            crossAxisCellCount: 1,
-                            child: ScreenShotReview()),
-                      )
-                    ],
+                          child: e);
+                    }).toList()
+                    // ...List.generate(firstItems.length, (index) {
+                    //   if (index == 0) {
+                    //     return StaggeredGridTile.count(
+                    //         mainAxisCellCount: 1.25,
+                    //         // mainAxisExtent: 202.sh(),
+                    //         crossAxisCellCount: 2,
+                    //         child: firstItems[0]);
+                    //   }
+                    //   return StaggeredGridTile.fit(
+                    //       // mainAxisCellCount: 1,
+                    //       crossAxisCellCount: 1,
+                    //       child: firstItems[index]);
+                    // })
+                    ,
                   );
                 } else if (index == 4) {
                   return StaggeredGrid.count(
@@ -111,7 +158,6 @@ class DashBoard extends StatelessWidget {
                       ...List.generate(
                           4,
                           (index) => const StaggeredGridTile.fit(
-                              // mainAxisCellCount: 1,
                               crossAxisCellCount: 1,
                               child: AssignedVideoCard()))
                     ],

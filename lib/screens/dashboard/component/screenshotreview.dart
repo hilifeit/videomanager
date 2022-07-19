@@ -11,51 +11,58 @@ class ScreenShotReview extends StatelessWidget {
       return Card(
           color: const Color(0xffF4FCFF),
           child: Padding(
-            padding: EdgeInsets.only(
-                top: 10.sh(), left: 19.sw(), right: 25.sh(), bottom: 15.sh()),
+            padding: EdgeInsets.only(top: 10.sh(), bottom: 15.sh()),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Screenshot Review',
-                  style: kTextStyleIbmSemiBold.copyWith(
-                    fontSize: 14.ssp(),
-                    color: const Color(0xff697A8D),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.sw()),
+                  child: Text(
+                    'Screenshot Review',
+                    style: kTextStyleIbmSemiBold.copyWith(
+                      fontSize: 14.ssp(),
+                      color: const Color(0xff697A8D),
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 8.sh(),
                 ),
-                SizedBox(
-                  width: 102.sr(),
-                  height: 102.sr(),
-                  child: Padding(
-                    padding: EdgeInsets.all(4.sr()),
-                    child: CustomPaint(
-                      painter: CustomScreenshotMarkPainter(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '72%',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 22.ssp(),
-                              color: const Color(0xff566a7f),
-                            ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 102.sr(),
+                      height: 102.sr(),
+                      child: Padding(
+                        padding: EdgeInsets.all(4.sr()),
+                        child: CustomPaint(
+                          painter: CustomScreenshotMarkPainter(),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '72%',
+                                style: kTextStyleIbmSemiBold.copyWith(
+                                  fontSize: 20.ssp(),
+                                  color: const Color(0xff566a7f),
+                                ),
+                              ),
+                              Text(
+                                textAlign: TextAlign.center,
+                                'Screenshot review\nto be done',
+                                style: kTextStyleIbmRegular.copyWith(
+                                  fontSize: 10.ssp(),
+                                  color: const Color(0xffA1ACB8),
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            textAlign: TextAlign.center,
-                            'Screenshot review\nto be done',
-                            style: kTextStyleIbmRegular.copyWith(
-                              fontSize: 11.ssp(),
-                              color: const Color(0xffA1ACB8),
-                            ),
-                          ),
-                        ],
+                          // size: Size(102.sr(), 102.sr(),
+                        ),
                       ),
-                      // size: Size(102.sr(), 102.sr(),
                     ),
-                  ),
+                  ],
                 )
               ],
             ),

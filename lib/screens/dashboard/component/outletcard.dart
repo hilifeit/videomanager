@@ -10,7 +10,8 @@ class OutletCard extends StatelessWidget {
     return Card(
       color: const Color(0xffEFF9FF),
       child: Padding(
-        padding: EdgeInsets.only(top: 14.sh(), left: 19.sw(), bottom: 17.sh()),
+        padding: EdgeInsets.only(
+            top: 14.sh(), left: 19.sw(), bottom: 17.sh(), right: 16.sw()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
