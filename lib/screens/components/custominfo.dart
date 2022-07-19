@@ -37,23 +37,9 @@ class CustomInfo extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 40.sh(),
+          height: 10.ssp(),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image(
-                height: 160.4.sh(),
-                width: 174.4.sw(),
-                image: AssetImage('assets/images/$image.png')),
-            // SizedBox(
-            //   width: 20.sw(),
-            // ),
-          ],
-        ),
-        SizedBox(
-          height: 10.sh(),
-        ),
+        Expanded(child: Image(image: AssetImage('assets/images/$image.png'))),
         Text(
           textBold,
           style: kTextStyleInterMedium.copyWith(

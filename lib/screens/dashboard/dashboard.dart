@@ -1,4 +1,11 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:videomanager/screens/components/videoscreenshot/videoscreenshot.dart';
+import 'package:videomanager/screens/dashboard/component/assignedVideoCard.dart';
+import 'package:videomanager/screens/dashboard/component/outletcard.dart';
+import 'package:videomanager/screens/dashboard/component/screenshotreview.dart';
+import 'package:videomanager/screens/dashboard/component/targetdard.dart';
+import 'package:videomanager/screens/dashboard/component/usercard.dart';
+import 'package:videomanager/screens/dashboard/table.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/widgets/widgets.dart';
 
@@ -13,415 +20,105 @@ List<CustomCardItem> items = [
 ];
 
 class DashBoard extends StatelessWidget {
-  const DashBoard({Key? key}) : super(key: key);
-
+  DashBoard({Key? key}) : super(key: key);
+  List<Widget> items = [
+    const CustomTable(),
+    const VideoScreenshot(value: 100),
+    const CustomTable(),
+    const CustomTable(),
+    const VideoScreenshot(value: 50),
+    const CustomTable(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber,
-      body: Column(
-        children: [
-          Expanded(
-            child: GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 1,
-              children: [
-                GridView.count(
-                  crossAxisCount: 3,
-                  children: [
-                    GridView.count(
-                      crossAxisCount: 4,
-                      children: const [
-                        TargetCard(),
-                        ScreenShotReview(),
-                        OutletCard(),
-                        AssignedVideoCard(),
-                        TargetCard(),
-                        ScreenShotReview(),
-                        OutletCard(),
-                        AssignedVideoCard()
-                      ],
-                    ),
-                    const VideoScreenshot(value: 10),
-                    const ScreenShotReview(),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 3,
-              children: const [UsersCard()],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ScreenShotReview extends StatelessWidget {
-  const ScreenShotReview({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        color: const Color(0xffF4FCFF),
-        child: Padding(
-          padding: EdgeInsets.only(
-              top: 14.sh(), left: 19.sw(), right: 25.sh(), bottom: 15.sh()),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Screenshot\nReview',
-                style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 15.ssp(),
-                  color: const Color(0xff697A8D),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 4.sw()),
-                child: SizedBox(
-                    height: 118.sr(),
-                    width: 118.sr(),
-                    child: Stack(
-                      children: [
-                        const Image(
-                            image: AssetImage('assets/images/Oval.png')),
-                        Center(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '72%',
-                              style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 22.ssp(),
-                                color: const Color(0xff566a7f),
-                              ),
-                            ),
-                            Text(
-                              textAlign: TextAlign.center,
-                              'Screenshot review\nto be done',
-                              style: kTextStyleIbmRegular.copyWith(
-                                fontSize: 11.ssp(),
-                                color: const Color(0xffA1ACB8),
-                              ),
-                            ),
-                          ],
-                        )),
-                      ],
-                    )),
-              )
-            ],
-          ),
-        ));
-  }
-}
-
-class OutletCard extends StatelessWidget {
-  const OutletCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xffEFF9FF),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: 14.sh(), left: 19.sw(), right: 18.93.sh(), bottom: 17.sh()),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Outlet',
-              style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 15.ssp(), color: cardHeader),
-            ),
-            SizedBox(
-              height: 8.sh(),
-            ),
-            Text(
-              '104',
-              style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 26.ssp(), color: cardHeader),
-            ),
-            SizedBox(
-              height: 5.sh(),
-            ),
-            Container(
-              height: 22.sh(),
-              width: 53.sw(),
-              color: Theme.of(context).primaryColor.withOpacity(0.16),
-              child: Center(
-                child: Text(
-                  '+34%',
-                  style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 13.ssp(),
-                      color: Theme.of(context).primaryColor),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 18.sh(),
-            ),
-            Text(
-              'Outlet Reach',
-              style: kTextStyleIbmRegular.copyWith(
-                  fontSize: 13.ssp(), color: const Color(0xffA1ACB8)),
-            ),
-            SizedBox(
-              height: 3.sh(),
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  height: 8.sh(),
-                  width: 89.sw(),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(7.sr())),
-                    child: const LinearProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                      value: 0.5,
-                      backgroundColor: Color(0xffECEEF1),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 9.39.sw(),
-                ),
-                Text(
-                  '50%',
-                  style: kTextStyleIbmRegular.copyWith(
-                    fontSize: 13.ssp(),
-                    color: cardHeader,
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AssignedVideoCard extends StatelessWidget {
-  const AssignedVideoCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xfffffdeb),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: 20.sh(), left: 21.sw(), right: 25.sw(), bottom: 20.sh()),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 42.sw(),
-                  height: 42.sh(),
-                  color: const Color(0xffafafaf),
-                ),
-                SizedBox(
-                  height: 16.sh(),
-                ),
-                Text(
-                  'Videos Assigned',
-                  style: kTextStyleIbmSemiBold.copyWith(
-                      fontSize: 15.ssp(), color: cardHeader),
-                ),
-                SizedBox(
-                  height: 2.2.sh(),
-                ),
-                Text(
-                  '40 users',
-                  style: TextStyle(
-                    fontFamily: 'Ibm',
-                    fontStyle: FontStyle.italic,
-                    fontSize: 22.sp,
-                    fontWeight: FontWeight.w100,
-                    color: const Color(0xff566A7F),
-                  ),
-                ),
-                SizedBox(
-                  height: 13.08.sh(),
-                ),
-                Text(
-                  'More video to be assigned',
-                  style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 10.ssp(), color: const Color(0xffff3e1d)),
-                ),
-              ],
-            ),
-            const Icon(Icons.more_vert),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class UsersCard extends StatelessWidget {
-  const UsersCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xfffff0f0),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: 20.sh(), left: 21.sw(), right: 25.81.sw(), bottom: 10.sh()),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 42.sw(),
-                  height: 42.sh(),
-                  color: const Color(0xffafafaf),
-                ),
-                SizedBox(
-                  height: 16.sh(),
-                ),
-                Text(
-                  'Users',
-                  style: kTextStyleIbmSemiBold.copyWith(
-                    fontSize: 15.ssp(),
-                    color: cardHeader,
-                  ),
-                ),
-                SizedBox(
-                  height: 2.2.sh(),
-                ),
-                Text(
-                  '104',
-                  style: kTextStyleIbmSemiBold.copyWith(
-                      fontSize: 22.ssp(), color: cardHeader),
-                ),
-                SizedBox(
-                  height: 11.8.sh(),
-                ),
-                Container(
-                  height: 24.75.sh(),
-                  width: 99.sw(),
-                  color: Colors.tealAccent,
-                ),
-              ],
-            ),
-            SizedBox(
-              width: 17.69.sw(),
-            ),
-            const Icon(Icons.more_vert),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class TargetCard extends StatelessWidget {
-  const TargetCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xfffbfbfb),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: 19.sh(), left: 24.sw(), bottom: 20.sh(), right: 35.79.sw()),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(right: 32.82.sw()),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hey Popular Koju!',
-                      style: TextStyle(
-                        fontFamily: 'Ibm',
-                        fontStyle: FontStyle.italic,
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w100,
-                        color: const Color(0xffBABABA),
+        backgroundColor: Colors.amber,
+        body: LayoutBuilder(builder: (context, constraints) {
+          return GridView.custom(
+              padding: EdgeInsets.all(28.sr()),
+              gridDelegate: SliverWovenGridDelegate.count(
+                  // crossAxisSpacing: 30.sw(),
+                  mainAxisSpacing: 28.sh(),
+                  pattern: [
+                    if (ResponsiveLayout.isDesktop) ...[
+                      const WovenGridTile(1.5,
+                          crossAxisRatio: 1,
+                          alignment: AlignmentDirectional.center),
+                      const WovenGridTile(
+                        1.2,
+                        crossAxisRatio: 0.65,
+                        alignment: AlignmentDirectional.center,
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.sh(),
-                    ),
-                    Text(
-                      'Screenshot target this month',
-                      style: kTextStyleIbmRegular.copyWith(
-                          fontSize: 13.ssp(),
-                          color: Theme.of(context).primaryColor),
-                    ),
-                    SizedBox(
-                      height: 20.6.sh(),
-                    ),
-                    Text(
-                      '100k',
-                      style: kTextStyleIbmSemiBold.copyWith(
-                          fontSize: 26.ssp(),
-                          color: Theme.of(context).primaryColor),
-                    ),
-                    Text(
-                      '78% of target',
-                      style: kTextStyleIbmRegular.copyWith(
-                          fontSize: 13.ssp(), color: const Color(0xffA1ACB8)),
-                    ),
-                    SizedBox(
-                      height: 10.sh(),
-                    ),
-                    SizedBox(
-                      height: 30.sh(),
-                      width: 130.sw(),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.resolveWith(
-                                (states) => EdgeInsets.zero),
-                            backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => primaryColor)),
-                        onPressed: () {},
-                        child: Text(
-                          'View Screenshot',
-                          style: kTextStyleIbmRegular.copyWith(
-                              fontSize: 13.ssp(), color: Colors.white),
-                        ),
-                      ),
-                    ),
+                      const WovenGridTile(1.5),
+                    ]
+                    // else if (ResponsiveLayout.isTablet) ...[
+                    //   const WovenGridTile(1.2,
+                    //       crossAxisRatio: 1,
+                    //       alignment: AlignmentDirectional.center),
+                    //   const WovenGridTile(
+                    //     1,
+                    //     crossAxisRatio: 0.8,
+                    //     alignment: AlignmentDirectional.center,
+                    //   ),
+                    // ]
+
+                    else ...[
+                      const WovenGridTile(1.5,
+                          crossAxisRatio: 1,
+                          alignment: AlignmentDirectional.center),
+                    ]
                   ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                // width: 96.51.sw(),
-                // height: 155.78.sh(),
-                color: Colors.tealAccent,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                  crossAxisCount: ResponsiveLayout.isDesktop ? 3 : 1),
+              childrenDelegate: SliverChildBuilderDelegate(
+                  childCount: items.length, (context, index) {
+                if (index == 0) {
+                  return StaggeredGrid.count(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 15.sh(),
+                    crossAxisSpacing: 15.sh(),
+                    children: [
+                      const StaggeredGridTile.count(
+                          mainAxisCellCount: 1.25,
+                          // mainAxisExtent: 202.sh(),
+                          crossAxisCellCount: 2,
+                          child: TargetCard()),
+                      const StaggeredGridTile.fit(
+                          // mainAxisCellCount: 1,
+                          crossAxisCellCount: 1,
+                          child: UsersCard()),
+                      ...List.generate(
+                        3,
+                        (index) => const StaggeredGridTile.fit(
+                            // mainAxisCellCount: 1,
+                            crossAxisCellCount: 1,
+                            child: OutletCard()),
+                      ),
+                      ...List.generate(
+                        2,
+                        (index) => const StaggeredGridTile.fit(
+                            // mainAxisCellCount: 1,
+                            crossAxisCellCount: 1,
+                            child: ScreenShotReview()),
+                      )
+                    ],
+                  );
+                } else if (index == 4) {
+                  return StaggeredGrid.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10.sr(),
+                    crossAxisSpacing: 10.sr(),
+                    children: [
+                      ...List.generate(
+                          4,
+                          (index) => const StaggeredGridTile.fit(
+                              // mainAxisCellCount: 1,
+                              crossAxisCellCount: 1,
+                              child: AssignedVideoCard()))
+                    ],
+                  );
+                }
+                return items[index];
+              }));
+        }));
   }
 }
