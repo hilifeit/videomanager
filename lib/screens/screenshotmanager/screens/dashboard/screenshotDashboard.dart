@@ -1,8 +1,6 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
@@ -78,7 +76,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
-      CustomOverlayEntry().showVideoTimeStamp();
+      // CustomOverlayEntry().showVideoTimeStamp();
     }
 
     return Align(
@@ -92,11 +90,11 @@ class ScreenshotDashboard extends HookConsumerWidget {
                 if (ResponsiveLayout.isDesktop)
                   Column(
                     children: [
-                      Expanded(
-                        child: CustomVideoPlayer(
-                            player: player == null ? null : player!.player,
-                            controller: controller),
-                      ),
+                      // Expanded(
+                      //   child: CustomVideoPlayer(
+                      //       player: player == null ? null : player!.player,
+                      //       controller: controller),
+                      // ),
                       Container(
                         color: Colors.black,
                         height: 58.sh(),
@@ -139,10 +137,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
                         SizedBox(
                           width: 51.sw(),
                         ),
-                        SingleVideoPlayerControls(
-                          desktop: player,
-                          web: controller,
-                        ),
+                        // SingleVideoPlayerControls(
+                        //   desktop: player,
+                        //   web: controller,
+                        // ),
                         const Spacer(),
                         Text(
                           'FileName',

@@ -13,70 +13,67 @@ class VideoScreenshot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: const Color(0xffE4F4FF),
-      child: SizedBox(
-        // height: 382.sh(),
-        // color: Colors.amber,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Total Sxcreen taken out of',
+      child: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Stack(
+              children: [
+                Container(
+                  // color: Colors.grey.withOpacity(0.5),
+                  child: Gauge(value: value),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        value.toString(),
+                        style: kTextStyleIbmSemiBold.copyWith(
+                            fontSize: 28.ssp(), color: primaryColor),
+                      ),
+                      Text(
+                        'Out of 100 videos',
+                        style: kTextStyleIbmSemiBold.copyWith(
+                            fontSize: 13.ssp(), color: primaryColor),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned.fill(
+                  bottom: 20.sh(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Total Sxcreen taken out of',
+                        style: kTextStyleIbmSemiBold.copyWith(
+                            fontSize: 13..ssp(),
+                            color: const Color(0xffA1ACB8)),
+                      ),
+                      Text('100 videos',
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 13..ssp(),
-                              color: const Color(0xffA1ACB8)),
-                        ),
-                        Text('100 videos',
-                            style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 13..ssp(),
-                                color: const Color(0xff697A8D)))
-                      ],
-                    ),
+                              color: const Color(0xff697A8D)))
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          value.toString(),
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 38.ssp(), color: primaryColor),
-                        ),
-                        Text(
-                          'Out of 100 videos',
-                          style: kTextStyleIbmSemiBold.copyWith(
-                              fontSize: 13.ssp(), color: primaryColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    color: Colors.grey.withOpacity(0.5),
-                    child: Gauge(value: value),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 16.sh(),
-            ),
-            Expanded(
-              child: CustomElevatedButton(
-                  // width: 202.96.sw(),
-                  // height: 36.4.sh(),
-                  onPressedElevated: () {},
-                  elevatedButtonText: 'View Screenshot'),
-            )
-          ],
-        ),
+          ),
+
+          // const Spacer(),
+
+          CustomElevatedButton(
+              width: 202.96.sw(),
+              height: 36.4.sh(),
+              onPressedElevated: () {},
+              elevatedButtonText: 'View Screenshot'),
+          SizedBox(
+            height: 30.sh(),
+          )
+        ],
       ),
     );
   }
