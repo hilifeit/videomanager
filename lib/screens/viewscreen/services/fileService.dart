@@ -80,7 +80,6 @@ class FileService extends ChangeNotifier {
 
   loadUserData() async {
     await fetchUserFiles();
-    print(fileDetailMiniToJson(userFiles));
   }
 
   fetchUserFiles() async {
