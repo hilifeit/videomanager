@@ -1,7 +1,7 @@
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
-const String socketUrl = 'http://192.168.16.106:3000';
+const String socketUrl = 'http://192.168.1.73:3000';
 final customSocket = CustomSocket._();
 
 class CustomSocket {
