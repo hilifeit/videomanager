@@ -33,7 +33,7 @@ export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
 
 //
-const baseURL = "http://192.168.16.106:5000/v1/";
+const baseURL = "http://192.168.1.73:5000/v1/";
 
 // const baseURL = "http://localhost:5000/v1/";
 //const baseURL = "http://10.0.2.2:5000/v1/";
