@@ -33,7 +33,7 @@ export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
 
 //
-const baseURL = "http://192.168.1.73:5000/v1/";
+const baseURL = "http://192.168.1.74:5000/v1/";
 
 // const baseURL = "http://localhost:5000/v1/";
 //const baseURL = "http://10.0.2.2:5000/v1/";
@@ -54,6 +54,8 @@ final CustomSnackBar snack = CustomSnackBar();
 logout() {
   customSocket.socket.disconnect();
   storage.remove(userStorageKey);
-  CustomOverlayEntry().closeVideoTimeStamp();
+  if (CustomOverlayEntry().videoTimeStampOpen) {
+    CustomOverlayEntry().closeVideoTimeStamp();
+  }
   Phoenix.rebirth(CustomKeys().context!);
 }

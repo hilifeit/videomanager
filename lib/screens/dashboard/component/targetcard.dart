@@ -10,8 +10,7 @@ class TargetCard extends StatelessWidget {
     return Card(
       color: const Color(0xfffbfbfb),
       child: Padding(
-        padding: EdgeInsets.only(
-            top: 19.sh(), left: 24.sw(), bottom: 20.sh(), right: 10.sw()),
+        padding: EdgeInsets.only(top: 19.sh(), left: 24.sw(), right: 10.sw()),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -72,6 +71,9 @@ class TargetCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20.sh(),
+                  ),
                 ],
               ),
             ),
@@ -79,10 +81,9 @@ class TargetCard extends StatelessWidget {
             //   width: 15.sw(),
             // ),
             Expanded(
-              child: Container(
-                // width: 96.51.sw(),
-                // height: 155.78.sh(),
-                color: Colors.tealAccent,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Image.asset('assets/images/award.png'),
               ),
             ),
           ],

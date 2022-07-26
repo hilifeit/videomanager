@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filterservice.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
@@ -44,7 +42,7 @@ class FileService extends ChangeNotifier {
         isUseable: true,
         status: Status(status: 0)),
     FileDetailMini(
-        id: '111111',
+        id: '111',
         filename: '132',
         location: Location(type: "type", coordinates: [
           [1.11, 11.1]
@@ -53,7 +51,7 @@ class FileService extends ChangeNotifier {
         isUseable: true,
         status: Status(status: 1)),
     FileDetailMini(
-        id: '111111',
+        id: '11111221',
         filename: 'ttrtr',
         location: Location(type: "type", coordinates: [
           [1.11, 11.1]
@@ -62,7 +60,7 @@ class FileService extends ChangeNotifier {
         isUseable: true,
         status: Status(status: 2)),
     FileDetailMini(
-        id: '111111',
+        id: '111177711',
         filename: 'bbbbb',
         location: Location(type: "type", coordinates: [
           [1.11, 11.1]

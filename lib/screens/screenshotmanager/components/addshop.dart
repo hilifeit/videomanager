@@ -347,12 +347,14 @@ class AddEditShop extends ConsumerWidget {
                         height: 19.sh(),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           DropDownWithText(
                             text: 'Road Face 1',
                             value: edit ? editRoadFace : roadFaceSide.first,
                             values: roadFaceSide,
+                          ),
+                          SizedBox(
+                            width: 53.sw(),
                           ),
                           if (roadFace2Show)
                             DropDownWithText(
@@ -360,6 +362,9 @@ class AddEditShop extends ConsumerWidget {
                               value: edit ? editRoadFace : roadFaceSide.first,
                               values: roadFaceSide,
                             ),
+                          SizedBox(
+                            width: 53.sw(),
+                          ),
                           if (roadFace3Show)
                             DropDownWithText(
                               text: 'Road Face 3',

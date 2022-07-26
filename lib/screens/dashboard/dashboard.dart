@@ -3,7 +3,7 @@ import 'package:videomanager/screens/components/videoscreenshot/videoscreenshot.
 import 'package:videomanager/screens/dashboard/component/assignedVideoCard.dart';
 import 'package:videomanager/screens/dashboard/component/outletcard.dart';
 import 'package:videomanager/screens/dashboard/component/screenshotreview.dart';
-import 'package:videomanager/screens/dashboard/component/targetdard.dart';
+import 'package:videomanager/screens/dashboard/component/targetcard.dart';
 import 'package:videomanager/screens/dashboard/component/usercard.dart';
 import 'package:videomanager/screens/dashboard/table.dart';
 import 'package:videomanager/screens/others/exporter.dart';
