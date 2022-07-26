@@ -183,15 +183,13 @@ class Painter extends CustomPainter {
               status: element.status,
               path: element.path.replaceAll('.MP4', '_processed.json'));
 
-
-
-            var originalLocationData = await fileservice.fetchOriginalLocation(temp.id);
+          if (element.originalLocation.isEmpty) {
+            var originalLocationData =
+                await fileservice.fetchOriginalLocation(temp.id);
             fileservice.addOriginalLocation(element, originalLocationData);
-               
-            // var metrics=selectedPointsProvider.path.value.computeMetrics();
+          }
 
-            
-          
+          // var metrics=selectedPointsProvider.path.value.computeMetrics();
         };
         tapSecondary = (Offset globalPostion) {
           tap();
