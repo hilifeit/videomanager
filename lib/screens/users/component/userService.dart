@@ -53,7 +53,7 @@ class UserService extends ChangeNotifier {
   fetchOne(String id) async {
     try {
       var response = await tunnelRequest(
-          () => client.get(Uri.parse("${baseURL}user/$id"), headers: {
+          () => client.get(Uri.parse("${CustomIP.apiBaseUrl}user/$id"), headers: {
                 "Content-Type": "application/json",
                 "x-access-token": loggedInUser.value!.accessToken!
               }));
@@ -72,7 +72,7 @@ class UserService extends ChangeNotifier {
     // try {
     if (loggedInUser.value != null) {
       var response = await tunnelRequest(
-          () => client.get(Uri.parse("$baseURL$userEndPoint"), headers: {
+          () => client.get(Uri.parse("${CustomIP.apiBaseUrl}$userEndPoint"), headers: {
                 "Content-Type": "application/json",
                 "x-access-token": loggedInUser.value!.accessToken!
               }));
@@ -120,7 +120,8 @@ class UserService extends ChangeNotifier {
       required String password,
       required bool remember}) async {
     try {
-      var response = await client.post(Uri.parse("${baseURL}auth/login"),
+   
+      var response = await client.post(Uri.parse("${CustomIP.apiBaseUrl}auth/login"),
           headers: {
             "Content-Type": "application/json",
           },
@@ -147,6 +148,7 @@ class UserService extends ChangeNotifier {
         throw error['message'];
       }
     } catch (e, s) {
+      print("$e $s");
       throw "$e $s";
     }
   }
@@ -154,7 +156,7 @@ class UserService extends ChangeNotifier {
   Future<bool> getToken() async {
     try {
       var response = await client.post(
-        Uri.parse("${baseURL}auth/token"),
+        Uri.parse("${CustomIP.apiBaseUrl}auth/token"),
         headers: {
           "Content-Type": "application/json",
           "x-refresh-token": loggedInUser.value!.refreshToken!
@@ -188,7 +190,7 @@ class UserService extends ChangeNotifier {
   Future<bool> delete({required String id}) async {
     try {
       var response = await tunnelRequest(() => client.delete(
-            Uri.parse("$baseURL$userEndPoint/$id"),
+            Uri.parse("$CustomIP.apiBaseUrl$userEndPoint/$id"),
             headers: {
               "Content-Type": "application/json",
               "x-access-token": loggedInUser.value!.accessToken!
@@ -214,7 +216,7 @@ class UserService extends ChangeNotifier {
 
   Future<bool> add({required AddNewUser addUser}) async {
     try {
-      var response = await client.post(Uri.parse("$baseURL$userEndPoint"),
+      var response = await client.post(Uri.parse("$CustomIP.apiBaseUrl$userEndPoint"),
           headers: {
             "Content-Type": "application/json",
             "x-access-token": loggedInUser.value!.accessToken!
@@ -248,7 +250,7 @@ class UserService extends ChangeNotifier {
       {required Map<String, dynamic> map, required String id}) async {
     try {
       var response = await tunnelRequest(
-          () => client.put(Uri.parse("$baseURL$userEndPoint/$id"),
+          () => client.put(Uri.parse("$CustomIP.apiBaseUrl$userEndPoint/$id"),
               headers: {
                 "Content-Type": "application/json",
                 "x-access-token": loggedInUser.value!.accessToken!
@@ -275,7 +277,7 @@ class UserService extends ChangeNotifier {
     // if (UserService._().
     //loggedInUser.value == null) throw "Login to continue";
     try {
-      var response = await client.post(Uri.parse("${baseURL}area"),
+      var response = await client.post(Uri.parse("${CustomIP.apiBaseUrl}area"),
           headers: {
             "Content-Type": "application/json",
             "x-access-token": loggedInUser.value!.accessToken!

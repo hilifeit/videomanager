@@ -12,7 +12,7 @@ class SearchService extends ChangeNotifier {
   search(String query) async {
     try {
       var response = await client.get(
-          Uri.parse("${baseURL}file/search?q=$query"),
+          Uri.parse("${CustomIP.apiBaseUrl}file/search?q=$query"),
           headers: {"Content-Type": "application/json"});
       if (response.statusCode == 200) {
         SearchItem temp = searchItemFromJson(response.body);
