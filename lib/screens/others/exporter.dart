@@ -1,5 +1,6 @@
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart' as http;
+import 'package:universal_platform/universal_platform.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/snackbar/customsnackbar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -33,7 +34,7 @@ export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
 
 //
-const baseURL = "http://192.168.1.73:5000/v1/";
+final baseURL = "${UniversalPlatform.isWeb?Uri.base.toString().split(":")[1].replaceAll("//","http://"):const String.fromEnvironment("HOST")}:5000/v1/";
 
 // const baseURL = "http://localhost:5000/v1/";
 //const baseURL = "http://10.0.2.2:5000/v1/";
@@ -45,6 +46,7 @@ final LatLng home = LatLng(26.4721557, 87.32396419999999);
 final storage = GetStorage();
 
 final snackVisibleProvider = StateProvider<bool>((ref) {
+  print(baseURL);
   return false;
 });
 

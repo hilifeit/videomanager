@@ -120,6 +120,7 @@ class UserService extends ChangeNotifier {
       required String password,
       required bool remember}) async {
     try {
+   
       var response = await client.post(Uri.parse("${baseURL}auth/login"),
           headers: {
             "Content-Type": "application/json",
@@ -147,6 +148,7 @@ class UserService extends ChangeNotifier {
         throw error['message'];
       }
     } catch (e, s) {
+      print("$e $s");
       throw "$e $s";
     }
   }
