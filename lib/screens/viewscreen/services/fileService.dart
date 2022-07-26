@@ -89,7 +89,7 @@ class FileService extends ChangeNotifier {
       try {
         var response = await client.get(
             Uri.parse(
-                "${baseURL}file/assigned/${userProvider.loggedInUser.value?.id}"),
+                "${CustomIP.apiBaseUrl}file/assigned/${userProvider.loggedInUser.value?.id}"),
             headers: {"Content-Type": "application/json"});
 
         if (response.statusCode == 200) {
@@ -110,7 +110,7 @@ class FileService extends ChangeNotifier {
 
   Future<FileDetail> fetchOne(String id) async {
     try {
-      var response = await client.get(Uri.parse("${baseURL}file/$id"),
+      var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}file/$id"),
           headers: {"Content-Type": "application/json"});
 
       if (response.statusCode == 200) {
@@ -129,7 +129,7 @@ class FileService extends ChangeNotifier {
     if (fromServer) {
       try {
         CustomOverlayEntry().showLoader();
-        var response = await client.get(Uri.parse("${baseURL}file"),
+        var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}file"),
             headers: {"Content-Type": "application/json"});
         CustomOverlayEntry().closeLoader();
         if (response.statusCode == 200) {
@@ -187,10 +187,10 @@ class FileService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<OriginalLocation>> fetchOriginalLocation(String url) async {
+  Future<List<OriginalLocation>> fetchOriginalLocation(String id) async {
     final List<OriginalLocation> originalLocation = [];
     try {
-      var response = await client.get(Uri.parse(url));
+      var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}video/$id?json=true"));
       if (response.statusCode == 200) {
         originalLocation.addAll(originalLocationFromJson(response.body));
         return originalLocation;
@@ -209,7 +209,7 @@ class FileService extends ChangeNotifier {
 
   Future<bool> edit(FileDetailMini file, {dynamic data}) async {
     try {
-      var response = await client.put(Uri.parse("${baseURL}file/${file.id}"),
+      var response = await client.put(Uri.parse("${CustomIP.apiBaseUrl}file/${file.id}"),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(data));
       if (response.statusCode == 200) {
@@ -248,6 +248,8 @@ class FileService extends ChangeNotifier {
     //print(rec);
     return rec;
   }
+
+
 
   Future<String> getUrlFromFile(FileDetailMini file) async {
     var paths = file.path.replaceAll("\\", "/").split("/");

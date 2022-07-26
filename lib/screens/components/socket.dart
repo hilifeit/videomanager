@@ -1,7 +1,7 @@
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
-const String socketUrl = 'http://192.168.1.74:3000';
+
 final customSocket = CustomSocket._();
 
 class CustomSocket {
@@ -10,7 +10,7 @@ class CustomSocket {
   connect() {
     try {
       socket = io(
-          socketUrl,
+          CustomIP.socketBaseUrl,
           OptionBuilder()
               .setTransports(['websocket'])
               .disableAutoConnect()

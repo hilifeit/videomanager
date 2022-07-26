@@ -28,16 +28,16 @@ export 'package:videomanager/screens/components/responsivelayout.dart';
 export 'package:videomanager/screens/components/socket.dart';
 // own components
 export 'package:videomanager/screens/others/constant.dart';
+export 'package:videomanager/screens/others/ip.dart';
 export 'package:videomanager/screens/others/theme.dart';
 export 'package:videomanager/screens/others/validator.dart';
 export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
 
 //
-final baseURL = "${UniversalPlatform.isWeb?Uri.base.toString().split(":")[1].replaceAll("//","http://"):const String.fromEnvironment("HOST")}:5000/v1/";
 
-// const baseURL = "http://localhost:5000/v1/";
-//const baseURL = "http://10.0.2.2:5000/v1/";
+
+
 
 final client = http.Client();
 
@@ -46,7 +46,7 @@ final LatLng home = LatLng(26.4721557, 87.32396419999999);
 final storage = GetStorage();
 
 final snackVisibleProvider = StateProvider<bool>((ref) {
-  print(baseURL);
+
   return false;
 });
 
@@ -59,3 +59,4 @@ logout() {
   CustomOverlayEntry().closeVideoTimeStamp();
   Phoenix.rebirth(CustomKeys().context!);
 }
+

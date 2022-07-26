@@ -8,7 +8,7 @@
             "name": "videomanager",
             "request": "launch",
             "type": "dart",
-            "toolArgs":["--dart-define","HOST="]
+            "toolArgs":["--dart-define","HOST=http://192.168.1.74"]
         },
         {
             "name": "videomanager (profile mode)",
@@ -24,4 +24,4 @@
         }
     ]
 }
-// http://192.168.1.74/
+// 
