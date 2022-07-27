@@ -51,8 +51,10 @@ class CustomOverlayEntry {
 
   closeLoader() {
     Future.delayed(const Duration(milliseconds: 18), () {
-      loader.remove();
-      loaderOpen = !loaderOpen;
+      if (loaderOpen) {
+        loader.remove();
+        loaderOpen = !loaderOpen;
+      }
     });
   }
 
