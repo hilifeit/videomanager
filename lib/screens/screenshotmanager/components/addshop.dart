@@ -79,7 +79,7 @@ final markercolorProvider = StateProvider<Color>((ref) {
 });
 
 final shopProvider = StateProvider<Shop>((ref) {
-  return Shop(roadFace: 1);
+  return Shop(roadFaceNum: 1);
 });
 
 final roadFace2Provider = StateProvider<bool>((ref) {
@@ -321,9 +321,9 @@ class AddEditShop extends ConsumerWidget {
                             ),
                             value: edit
                                 ? editRoadFace
-                                : roadFace[addNewShop.roadFace! - 1],
+                                : roadFace[addNewShop.roadFaceNum! - 1],
                             onChanged: (val) {
-                              addNewShop.roadFace = int.parse(val.value);
+                              addNewShop.roadFaceNum = int.parse(val.value);
 
                               if (int.parse(val.value) == 2) {
                                 ref.read(roadFace2Provider.state).state = true;

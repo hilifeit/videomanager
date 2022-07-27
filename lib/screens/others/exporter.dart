@@ -35,13 +35,6 @@ export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/videomanager_icons.dart';
 
 //
-<<<<<<< HEAD
-const baseURL = "http://192.168.1.74:5000/v1/";
-=======
->>>>>>> 4233aebee012506b375155de255c252f58daaa35
-
-
-
 
 final client = http.Client();
 
@@ -50,7 +43,6 @@ final LatLng home = LatLng(26.4721557, 87.32396419999999);
 final storage = GetStorage();
 
 final snackVisibleProvider = StateProvider<bool>((ref) {
-
   return false;
 });
 
@@ -65,4 +57,3 @@ logout() {
   }
   Phoenix.rebirth(CustomKeys().context!);
 }
-
