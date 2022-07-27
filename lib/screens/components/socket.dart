@@ -1,7 +1,6 @@
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
-
 final customSocket = CustomSocket._();
 
 class CustomSocket {

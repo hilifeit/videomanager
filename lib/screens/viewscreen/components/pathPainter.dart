@@ -226,44 +226,58 @@ class Painter extends CustomPainter {
                 PopupMenuItem(
                     onTap: () async {
                       CustomOverlayEntry().showLoader();
-                      var firstVideoUrl =
-                          await fileservice.getUrlFromFile(element);
-
-                      if (firstVideoUrl.isNotEmpty) {
+                      var firstVideoExists =
+                          await fileservice.fileExists(element.id);
+                      if (firstVideoExists) {
                         FileDetailMini? secondVideo = findFile(
                             visibleFilesList: visibleFilesList,
                             file: element,
                             fileRect: item);
-                        element.foundPath = firstVideoUrl;
                         var leftFile = await fileservice.fetchOne(element.id);
-                        leftFile.foundPath = element.foundPath;
-
-                        var secondVideoUrl = firstVideoUrl;
+                        leftFile.foundPath = getVideoUrl(element.id);
                         if (secondVideo != null) {
-                          secondVideoUrl =
-                              await fileservice.getUrlFromFile(secondVideo);
-                          secondVideo.foundPath = secondVideoUrl;
+                          var secondVideoExists =
+                              await fileservice.fileExists(secondVideo.id);
+                          if (secondVideoExists) {
+                            var rightFile =
+                                await fileservice.fetchOne(secondVideo.id);
+                            rightFile.foundPath = getVideoUrl(secondVideo.id);
+                            CustomOverlayEntry().closeLoader();
 
-                          var rightFile =
-                              await fileservice.fetchOne(secondVideo.id);
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () async {
+                              CustomOverlayEntry().closeLoader();
+                              await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return CustomVideo(
+                                      leftFile: leftFile,
+                                      rightFile: rightFile,
+                                    );
+                                  });
 
-                          rightFile.foundPath = secondVideo.foundPath;
+                              transformer.controller.drag(0.1, 0.1);
+                            });
+                          } else {
+                            CustomOverlayEntry().closeLoader();
+                            await snack.info("Adjacent Video not found");
+                            Future.delayed(const Duration(milliseconds: 800),
+                                () async {
+                              CustomOverlayEntry().closeLoader();
+                              await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return CustomVideo(
+                                      leftFile: leftFile,
+                                      rightFile: leftFile,
+                                    );
+                                  });
 
-                          // print(secondVideo.id);
-                          CustomOverlayEntry().closeLoader();
-                          await showDialog(
-                              context: context,
-                              builder: (_) {
-                                return CustomVideo(
-                                  leftFile: leftFile,
-                                  rightFile: rightFile,
-                                );
-                              });
-
-                          // SelectedArea.transformer.controller.zoom =
-                          //     SelectedArea.transformer.controller.zoom - 0.1;
-                          transformer.controller.drag(0.1, 0.1);
+                              transformer.controller.drag(0.1, 0.1);
+                            });
+                          }
                         } else {
+                          CustomOverlayEntry().closeLoader();
                           await snack.info("Adjacent Video not found");
                           Future.delayed(const Duration(milliseconds: 800),
                               () async {
@@ -280,10 +294,66 @@ class Painter extends CustomPainter {
                             transformer.controller.drag(0.1, 0.1);
                           });
                         }
-                      } else {
-                        CustomOverlayEntry().closeLoader();
-                        snack.error("Video not found!");
                       }
+                      // CustomOverlayEntry().showLoader();
+                      // var firstVideoUrl =
+                      //     await fileservice.getUrlFromFile(element);
+
+                      // if (firstVideoUrl.isNotEmpty) {
+                      //   FileDetailMini? secondVideo = findFile(
+                      //       visibleFilesList: visibleFilesList,
+                      //       file: element,
+                      //       fileRect: item);
+                      //   element.foundPath = firstVideoUrl;
+                      //   var leftFile = await fileservice.fetchOne(element.id);
+                      //   leftFile.foundPath = element.foundPath;
+
+                      //   var secondVideoUrl = firstVideoUrl;
+                      //   if (secondVideo != null) {
+                      //     secondVideoUrl =
+                      //         await fileservice.getUrlFromFile(secondVideo);
+                      //     secondVideo.foundPath = secondVideoUrl;
+
+                      //     var rightFile =
+                      //         await fileservice.fetchOne(secondVideo.id);
+
+                      //     rightFile.foundPath = secondVideo.foundPath;
+
+                      //     // print(secondVideo.id);
+                      //     CustomOverlayEntry().closeLoader();
+                      //     await showDialog(
+                      //         context: context,
+                      //         builder: (_) {
+                      //           return CustomVideo(
+                      //             leftFile: leftFile,
+                      //             rightFile: rightFile,
+                      //           );
+                      //         });
+
+                      //     // SelectedArea.transformer.controller.zoom =
+                      //     //     SelectedArea.transformer.controller.zoom - 0.1;
+                      //     transformer.controller.drag(0.1, 0.1);
+                      //   } else {
+                      //     await snack.info("Adjacent Video not found");
+                      //     Future.delayed(const Duration(milliseconds: 800),
+                      //         () async {
+                      //       CustomOverlayEntry().closeLoader();
+                      //       await showDialog(
+                      //           context: context,
+                      //           builder: (_) {
+                      //             return CustomVideo(
+                      //               leftFile: leftFile,
+                      //               rightFile: leftFile,
+                      //             );
+                      //           });
+
+                      //       transformer.controller.drag(0.1, 0.1);
+                      //     });
+                      //   }
+                      // } else {
+                      //   CustomOverlayEntry().closeLoader();
+                      //   snack.error("Video not found!");
+                      // }
                     },
                     child: CustomPopUpMenuItemChild(
                       icon: Videomanager.play_video,

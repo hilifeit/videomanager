@@ -205,6 +205,21 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  Future<bool> fileExists(String id) async {
+    try {
+      var response =
+          await client.head(Uri.parse("${CustomIP.apiBaseUrl}video/$id"));
+      // print(response.body);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   updateOneFileUsable(FileDetailMini file, bool value) {
     files[files.indexOf(file)].isUseable = value;
     notifyListeners();

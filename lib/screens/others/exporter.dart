@@ -36,9 +36,6 @@ export 'package:videomanager/videomanager_icons.dart';
 
 //
 
-
-
-
 final client = http.Client();
 
 final LatLng home = LatLng(26.4721557, 87.32396419999999);
@@ -46,10 +43,9 @@ final LatLng home = LatLng(26.4721557, 87.32396419999999);
 final storage = GetStorage();
 
 final snackVisibleProvider = StateProvider<bool>((ref) {
-
   return false;
 });
-
+String getVideoUrl(String id) => "${CustomIP.apiBaseUrl}video/$id";
 final CustomSnackBar snack = CustomSnackBar();
 // final CustomShowMessage message = CustomShowMessage();
 
@@ -59,4 +55,3 @@ logout() {
   CustomOverlayEntry().closeVideoTimeStamp();
   Phoenix.rebirth(CustomKeys().context!);
 }
-
