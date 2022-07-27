@@ -59,9 +59,7 @@ class VideoAssignCard extends ConsumerWidget {
                     .selectUserVideoFile(item.id);
               },
               child: Card(
-                color: selected == item.id
-                    ? Color(0xff40667d).withOpacity(0.5)
-                    : Color(0xffECF0F2),
+                color: selected == item.id ? Color(0xffECF0F2) : Colors.white,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: 24.5.sw(), vertical: 16.sh()),
@@ -78,7 +76,10 @@ class VideoAssignCard extends ConsumerWidget {
                                     ? thisUser.superVisor!.name
                                     : '',
                                 style: kTextStyleIbmMedium.copyWith(
-                                    fontSize: 15.ssp(), color: cardHeader),
+                                    fontSize: 15.ssp(),
+                                    color: selected == item.id
+                                        ? blackColor
+                                        : cardHeader),
                               ),
                             if (thisUser.role == 1) ...[
                               Text(
@@ -118,7 +119,9 @@ class VideoAssignCard extends ConsumerWidget {
                             children: [
                               Icon(
                                 Videomanager.image_icon_group,
-                                color: lightBlack,
+                                color: selected == item.id
+                                    ? blackColor
+                                    : lightBlack,
                                 size: 9.5.ssp(),
                               ),
                               SizedBox(
@@ -129,7 +132,10 @@ class VideoAssignCard extends ConsumerWidget {
                                 child: Text(
                                   10.toString(),
                                   style: kTextStyleIbmMedium.copyWith(
-                                      fontSize: 12.ssp(), color: lightBlack),
+                                      fontSize: 12.ssp(),
+                                      color: selected == item.id
+                                          ? blackColor
+                                          : lightBlack),
                                 ),
                               )
                             ],
@@ -139,7 +145,9 @@ class VideoAssignCard extends ConsumerWidget {
                             children: [
                               Icon(
                                 Videomanager.shop,
-                                color: lightBlack,
+                                color: selected == item.id
+                                    ? blackColor
+                                    : lightBlack,
                                 size: 10.48.ssp(),
                               ),
                               SizedBox(
@@ -150,7 +158,10 @@ class VideoAssignCard extends ConsumerWidget {
                                 child: Text(
                                   10.toString(),
                                   style: kTextStyleIbmMedium.copyWith(
-                                      fontSize: 12.ssp(), color: lightBlack),
+                                      fontSize: 12.ssp(),
+                                      color: selected == item.id
+                                          ? blackColor
+                                          : lightBlack),
                                 ),
                               )
                             ],

@@ -8,12 +8,13 @@ const lightGrey = Color(0xffd1d1d1);
 const lightBlack = Color(0xff4b4b4b);
 const darkGrey = Color(0xffBABABA);
 const danger = Color(0xffDC3545);
-final dangerWO = Color(0xffDC3545).withOpacity(0.16);
+// final dangerWO = Color(0xffDC3545).withOpacity(0.16);
 const dangerSecondary = Color(0xffE4CBCD);
-const sucess = Color(0xff28A745);
+const successColor = Color(0xff28A745);
 const sucessSecondary = Color(0xffC9DCCD);
 const primarySecondary = Color(0xffCDD2D6);
 const cardHeader = Color(0xff697A8D);
+const blackColor = Colors.black;
 
 var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',

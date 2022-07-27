@@ -8,7 +8,7 @@ class CustomSnackBar {
         content: CustomSnackBarContent(
           icon: Videomanager.sucess,
           message: message.toString(),
-          color: sucess,
+          color: successColor,
         ));
   }
 

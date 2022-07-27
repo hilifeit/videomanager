@@ -65,7 +65,11 @@ class Holder extends ConsumerWidget {
                       const Spacer(
                         flex: 2,
                       ),
-                      Expanded(child: FittedBox(child: ProfileMenu()))
+                      Expanded(
+                          child: Padding(
+                        padding: EdgeInsets.only(right: 10.sw()),
+                        child: FittedBox(child: ProfileMenu()),
+                      ))
                     ],
                   ),
                 ),

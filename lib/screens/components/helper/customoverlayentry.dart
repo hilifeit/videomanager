@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteritembutton.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filteroverlay.dart';
@@ -18,6 +19,7 @@ class CustomOverlayEntry {
   late OverlayEntry filter;
   late OverlayEntry videotime;
   late BuildContext context;
+  late OverlayEntry logout;
 
   bool isFilterMenuOpen = false;
   bool videoBarOpen = false;
@@ -154,6 +156,25 @@ class CustomOverlayEntry {
     );
   }
 
+  logoutOverlay(BuildContext context) {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+
+    late Offset buttonPosition;
+    buttonPosition = renderBox.localToGlobal(Offset.zero);
+    var size = renderBox.size;
+    logout = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          top: buttonPosition.dy + size.height + 2.sh(),
+          left: buttonPosition.dx - 117.sw() + size.width,
+          child: Material(
+              child: CustomPopUpMenuItemChild(
+                  icon: Videomanager.logout, text: 'Logout')),
+        );
+      },
+    );
+  }
+
   videoSideBarOverlay(BuildContext context, thisUser) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;
 
@@ -161,8 +182,8 @@ class CustomOverlayEntry {
     videobar = OverlayEntry(builder: (context) {
       return Positioned(
           right: 0,
-          bottom: 73.sh(),
-          height: size.height - 73.sh(),
+          bottom: 0,
+          height: size.height,
           width: 560.sw(),
 
           //  top: renderBox.globalToLocal(point),

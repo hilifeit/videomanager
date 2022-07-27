@@ -26,7 +26,7 @@ Container messageCard() {
                 backgroundColor: Colors.white,
                 child: CircleAvatar(
                   radius: 6.sr(),
-                  backgroundColor: sucess,
+                  backgroundColor: successColor,
                 ),
               ),
             ),

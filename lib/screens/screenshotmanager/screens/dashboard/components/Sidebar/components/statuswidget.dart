@@ -16,9 +16,9 @@ class StatusCard extends StatelessWidget {
   late Color color;
   List<Status> items = [
     Status(status: 'Pending', color: danger),
-    Status(status: 'Complete', color: sucess),
+    Status(status: 'Complete', color: successColor),
     Status(status: 'Ongoing', color: primaryColor),
-    Status(status: 'Approved', color: sucess),
+    Status(status: 'Approved', color: successColor),
     Status(status: 'Rejected', color: danger)
   ];
   @override

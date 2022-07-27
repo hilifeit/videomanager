@@ -96,23 +96,6 @@ class ScreenshotDashboard extends HookConsumerWidget {
                 if (!ResponsiveLayout.isDesktop)
                   VideoSideBar(
                       size: const Size.fromHeight(500), thisUser: thisUser),
-                if (!ResponsiveLayout.isMobile)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        CustomOverlayEntry().showvideoBar(context, thisUser);
-                      },
-                      child: Container(
-                          width: 30.sw(),
-                          height: 155.sh(),
-                          color: const Color(0xffE4F5FF),
-                          child: const Icon(
-                            Icons.chevron_left_rounded,
-                            color: Colors.black,
-                          )),
-                    ),
-                  ),
               ],
             ),
           ),
@@ -185,7 +168,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                     child: LinearProgressIndicator(
                       value: 0.3,
                       backgroundColor: Colors.transparent,
-                      color: sucess,
+                      color: successColor,
                       minHeight: 4.sh(),
                     ),
                   ),
