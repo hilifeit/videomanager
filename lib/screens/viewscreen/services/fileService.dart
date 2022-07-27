@@ -107,7 +107,8 @@ class FileService extends ChangeNotifier {
 
   Future<FileDetail> fetchOne(String id) async {
     try {
-      var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}file/$id"),
+      var response = await client.get(
+          Uri.parse("${CustomIP.apiBaseUrl}file/$id"),
           headers: {"Content-Type": "application/json"});
 
       if (response.statusCode == 200) {
@@ -187,12 +188,29 @@ class FileService extends ChangeNotifier {
   Future<List<OriginalLocation>> fetchOriginalLocation(String id) async {
     final List<OriginalLocation> originalLocation = [];
     try {
-      var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}video/$id?json=true"));
+      var response = await client
+          .get(Uri.parse("${CustomIP.apiBaseUrl}video/$id?json=true"));
+      // print(response.body);
       if (response.statusCode == 200) {
         originalLocation.addAll(originalLocationFromJson(response.body));
         return originalLocation;
       } else {
         throw response.statusCode;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> fileExists(String id) async {
+    try {
+      var response =
+          await client.head(Uri.parse("${CustomIP.apiBaseUrl}video/$id"));
+      // print(response.body);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       rethrow;
@@ -206,7 +224,8 @@ class FileService extends ChangeNotifier {
 
   Future<bool> edit(FileDetailMini file, {dynamic data}) async {
     try {
-      var response = await client.put(Uri.parse("${CustomIP.apiBaseUrl}file/${file.id}"),
+      var response = await client.put(
+          Uri.parse("${CustomIP.apiBaseUrl}file/${file.id}"),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(data));
       if (response.statusCode == 200) {
@@ -245,8 +264,6 @@ class FileService extends ChangeNotifier {
     //print(rec);
     return rec;
   }
-
-
 
   Future<String> getUrlFromFile(FileDetailMini file) async {
     var paths = file.path.replaceAll("\\", "/").split("/");
