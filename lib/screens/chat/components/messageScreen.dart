@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/chat/components/messageBox.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class MessageScreen extends StatelessWidget {
@@ -5,8 +6,6 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.green,
-    );
+    return Container();
   }
 }
