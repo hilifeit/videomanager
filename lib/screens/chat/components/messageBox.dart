@@ -1,35 +1,52 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
 class CustomMessageBox extends StatelessWidget {
-  CustomMessageBox({Key? key, this.ownMessage = true, required this.message})
+  CustomMessageBox(
+      {Key? key,
+      this.ownMessage = true,
+      required this.message,
+      this.messageTime})
       : super(key: key);
 
   final bool ownMessage;
   late Color color = ownMessage ? primaryColor : Colors.grey;
   final String message;
+  DateTime? messageTime;
   @override
   Widget build(BuildContext context) {
+    messageTime ??= DateTime.now();
     return LayoutBuilder(builder: (context, constraints) {
       return Row(
         children: [
           if (!ownMessage) Spacer(),
-          Container(
-            constraints: BoxConstraints(maxWidth: constraints.maxWidth * .65),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.sr()),
-              color: color,
-            ),
-            child: CustomPaint(
-              painter: ChatBoxPainter(color: color, own: ownMessage),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 20.ssp(), vertical: 15.ssp()),
-                child: Text(
-                  message,
-                  style: TextStyle(color: Colors.white),
+          Column(
+            crossAxisAlignment:
+                ownMessage ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            children: [
+              Container(
+                constraints:
+                    BoxConstraints(maxWidth: constraints.maxWidth * .65),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.sr()),
+                  color: color,
+                ),
+                child: CustomPaint(
+                  painter: ChatBoxPainter(color: color, own: ownMessage),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20.ssp(), vertical: 15.ssp()),
+                    child: Text(
+                      message,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
-            ),
+              SizedBox(height: 2.sh()),
+              Text(
+                messageTime.toString().substring(0, 16),
+              )
+            ],
           ),
           if (ownMessage) Spacer()
         ],
@@ -50,13 +67,13 @@ class ChatBoxPainter extends CustomPainter {
     Path path = Path();
     if (own) {
       path.addPolygon([
-        Offset(10.sw(), size.height * .6),
+        Offset(10.sw(), size.height * .65),
         Offset(30.sw(), size.height),
         Offset(-10.sw(), size.height),
       ], true);
     } else {
       path.addPolygon([
-        Offset(size.width - 10.sw(), size.height * .6),
+        Offset(size.width - 10.sw(), size.height * .65),
         Offset(size.width - 30.sw(), size.height),
         Offset(size.width + 10.sw(), size.height),
       ], true);

@@ -21,7 +21,11 @@ class MessageScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 30.sw()),
           child: Column(
             children: [
-              CustomMessageBox(message: "This is my message"),
+              CustomMessageBox(
+                message: "This is my message",
+                messageTime:
+                    (DateTime.now().subtract(Duration(days: 1, hours: 2))),
+              ),
               SizedBox(
                 height: 20.sh(),
               ),
