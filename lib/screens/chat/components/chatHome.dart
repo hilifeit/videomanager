@@ -13,27 +13,34 @@ class ChatHome extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  'Chats',
-                  style: kTextStyleIbmMedium.copyWith(
-                    fontSize: 14.ssp(),
-                    color: Colors.black,
+            Padding(
+              padding: EdgeInsets.all(20.ssp()),
+              child: Row(
+                children: [
+                  Text(
+                    'Chats',
+                    style: kTextStyleIbmMedium.copyWith(
+                      fontSize: 14.ssp(),
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                Spacer(),
-                Icon(
-                  Videomanager.search,
-                  color: lightBlack,
-                  size: 14.ssp(),
-                ),
-              ],
+                  Spacer(),
+                  if (ResponsiveLayout.isMobile)
+                    GestureDetector(
+                      onTap: () {},
+                      child: Icon(
+                        Videomanager.search,
+                        color: lightBlack,
+                        size: 14.ssp(),
+                      ),
+                    ),
+                ],
+              ),
             ),
             if (!ResponsiveLayout.isMobile) ...[
-              SizedBox(
-                height: 20.sh(),
-              ),
+              // SizedBox(
+              //   height: 20.sh(),
+              // ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.sw()),
                 child: Container(
@@ -42,10 +49,10 @@ class ChatHome extends StatelessWidget {
                   height: 35.sh(),
                 ),
               ),
+              SizedBox(
+                height: 20.sh(),
+              ),
             ],
-            SizedBox(
-              height: 20.sh(),
-            ),
             Expanded(
               child: ListView.separated(
                   itemBuilder: ((context, index) {
@@ -53,6 +60,7 @@ class ChatHome extends StatelessWidget {
                   }),
                   separatorBuilder: ((context, index) => Divider(
                         thickness: 2,
+                        height: 20.sh(),
                       )),
                   itemCount: 5),
             ),

@@ -186,6 +186,7 @@ class FileService extends ChangeNotifier {
         return false;
       }
     } catch (e) {
+      snack.error(e);
       rethrow;
     }
   }
