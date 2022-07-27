@@ -5,10 +5,9 @@ import 'package:videomanager/screens/settings/screens/mapsettings/components/sli
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 class SingleVideoPlayerControls extends HookConsumerWidget {
-  SingleVideoPlayerControls(
-      {required this.selectedVideo, this.web, this.desktop, Key? key})
+  SingleVideoPlayerControls({this.web, this.desktop, Key? key})
       : super(key: key);
-  final String selectedVideo;
+
   final VideoPlayerController? web;
   final PlayerController? desktop;
 
@@ -46,27 +45,25 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         ),
         IconButton(
           onPressed: () {
-            if (selectedVideo != "") {
-              if (UniversalPlatform.isDesktop) {
-                // desktop!.player.open(Media.network(
-                //   getVideoUrl("62931b515e4df91e44463cea"),
-                // ));
-                if (desktop!.player.playback.isPlaying) {
-                  desktop!.player.pause();
-                  controller.reverse();
-                } else {
-                  desktop!.player.play();
-
-                  controller.forward();
-                }
+            if (UniversalPlatform.isDesktop) {
+              // desktop!.player.open(Media.network(
+              //   getVideoUrl("62931b515e4df91e44463cea"),
+              // ));
+              if (desktop!.player.playback.isPlaying) {
+                desktop!.player.pause();
+                controller.reverse();
               } else {
-                if (web!.value.isPlaying) {
-                  web!.pause();
-                  controller.reverse();
-                } else {
-                  web!.play();
-                  controller.forward();
-                }
+                desktop!.player.play();
+
+                controller.forward();
+              }
+            } else {
+              if (web!.value.isPlaying) {
+                web!.pause();
+                controller.reverse();
+              } else {
+                web!.play();
+                controller.forward();
               }
             }
           },

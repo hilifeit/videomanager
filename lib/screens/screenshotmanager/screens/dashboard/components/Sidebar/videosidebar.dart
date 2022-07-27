@@ -149,7 +149,9 @@ class VideoSideBar extends StatelessWidget {
                                         ? ListView.separated(
                                             itemBuilder: (context, index) {
                                               if (selectedFilter.contains(
-                                                  files[index].status.status)) {
+                                                  files![index]
+                                                      .status
+                                                      .status)) {
                                                 return VideoAssignCard(
                                                   item: files[index],
                                                   thisUser: thisUser,
@@ -163,11 +165,11 @@ class VideoSideBar extends StatelessWidget {
                                                 height: 8.sh(),
                                               );
                                             },
-                                            itemCount: files.length)
+                                            itemCount: files!.length)
                                         : ListView.separated(
                                             itemBuilder: (context, index) {
                                               return VideoAssignCard(
-                                                item: files[index],
+                                                item: files![index],
                                                 thisUser: thisUser,
                                               );
                                             },
@@ -176,7 +178,7 @@ class VideoSideBar extends StatelessWidget {
                                                 height: 8.sh(),
                                               );
                                             },
-                                            itemCount: files.length),
+                                            itemCount: files!.length),
                                   ),
                                   if (thisUser.role == 1) ...[
                                     Align(

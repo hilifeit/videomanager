@@ -11,14 +11,10 @@ import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 
 class ScreenshotDashboard extends HookConsumerWidget {
   ScreenshotDashboard(
-      {this.selectedVideo = "",
-      this.videoFile,
-      Key? key,
-      required this.thisUser})
+      {required this.videoFile, Key? key, required this.thisUser})
       : super(key: key);
   final UserModelMini thisUser;
-  final FileDetail? videoFile;
-  final String selectedVideo;
+  final FileDetail videoFile;
 
   final List<CustomMenuItem> menus = [
     CustomMenuItem(label: "User", value: 0.toString()),
@@ -27,7 +23,6 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   // bool showOverlay = false;
 
-  late OverlayEntry overlayEntry;
   // ? desktop
 
   late Media media;
@@ -40,23 +35,17 @@ class ScreenshotDashboard extends HookConsumerWidget {
     if (!UniversalPlatform.isDesktop) {
       return null;
     }
-    media = Media.network(getVideoUrl(selectedVideo), parse: true);
+    media = Media.network(getVideoUrl(videoFile.id), parse: true);
 
     var player = PlayerController(
-      player: Player(
-          id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
-          videoDimensions: dimension),
-      duration: videoFile != null
-          ? Duration(
-              hours: videoFile!.info.duration.hour,
-              minutes: videoFile!.info.duration.minute,
-              seconds: videoFile!.info.duration.second,
-              milliseconds: videoFile!.info.duration.millisecond,
-            )
-          :
-          // ? Duration as per
-          const Duration(minutes: 10),
-    );
+        player: Player(
+            id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
+            videoDimensions: dimension),
+        duration: Duration(
+            hours: videoFile.info.duration.hour,
+            minutes: videoFile.info.duration.minute,
+            seconds: videoFile.info.duration.second,
+            milliseconds: videoFile.info.duration.millisecond));
     player.player.open(media, autoStart: false);
     return player;
   }
@@ -66,9 +55,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
       return null;
     }
     var controller = VideoPlayerController.network(
-      videoFile != null
-          ? videoFile!.foundPath
-          : getVideoUrl("62931b515e4df91e44463cea"),
+      getVideoUrl(videoFile.id),
     )..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
       }).catchError((e) {
@@ -81,7 +68,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
-      // CustomOverlayEntry().showVideoTimeStamp();
+      CustomOverlayEntry().showVideoTimeStamp();
     }
 
     return Align(
@@ -143,7 +130,6 @@ class ScreenshotDashboard extends HookConsumerWidget {
                           width: 51.sw(),
                         ),
                         SingleVideoPlayerControls(
-                          selectedVideo: selectedVideo,
                           desktop: player,
                           web: controller,
                         ),

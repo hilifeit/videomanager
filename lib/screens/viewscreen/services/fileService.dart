@@ -23,6 +23,7 @@ class FileService extends ChangeNotifier {
       if (userProvider.loggedInUser.value!.role == Roles.superAdmin.index) {
         load();
       } else {
+        userFiles = null;
         loadUserData();
         // filterFile();
       }
@@ -30,47 +31,11 @@ class FileService extends ChangeNotifier {
   }
   late ChangeNotifierProviderRef<FileService> ref;
   final List<FileDetailMini> files = [];
-  final List<FileDetailMini> userFiles = [];
-  // final List<FileDetailMini> filterFiles = [
-  //   FileDetailMini(
-  //       id: '111111',
-  //       filename: 'adadada',
-  //       location: Location(type: "type", coordinates: [
-  //         [1.11, 11.1]
-  //       ]),
-  //       path: 'path',
-  //       isUseable: true,
-  //       status: Status(status: 0)),
-  //   FileDetailMini(
-  //       id: '111',
-  //       filename: '132',
-  //       location: Location(type: "type", coordinates: [
-  //         [1.11, 11.1]
-  //       ]),
-  //       path: 'path',
-  //       isUseable: true,
-  //       status: Status(status: 1)),
-  //   FileDetailMini(
-  //       id: '11111221',
-  //       filename: 'ttrtr',
-  //       location: Location(type: "type", coordinates: [
-  //         [1.11, 11.1]
-  //       ]),
-  //       path: 'path',
-  //       isUseable: true,
-  //       status: Status(status: 2)),
-  //   FileDetailMini(
-  //       id: '111177711',
-  //       filename: 'bbbbb',
-  //       location: Location(type: "type", coordinates: [
-  //         [1.11, 11.1]
-  //       ]),
-  //       path: 'path',
-  //       isUseable: true,
-  //       status: Status(status: 3)),
-  // ];
+  late List<FileDetailMini>? userFiles;
 
   late final selectedFile = Property<FileDetailMini?>(null, notifyListeners);
+  // late final selectedUserFileMini = Property<FileDetailMini?>(null, notifyListeners);
+  late final selectedUserFile = Property<FileDetail?>(null, notifyListeners);
 
   load() async {
     await fetchAll(fromServer: true);
@@ -78,6 +43,11 @@ class FileService extends ChangeNotifier {
 
   loadUserData() async {
     await fetchUserFiles();
+  }
+
+  selectUserVideoFile(String id) async {
+    selectedUserFile.value = await fetchOne(id);
+    notifyListeners();
   }
 
   fetchUserFiles() async {
@@ -90,10 +60,13 @@ class FileService extends ChangeNotifier {
             headers: {"Content-Type": "application/json"});
 
         if (response.statusCode == 200) {
-          userFiles.clear();
-          userFiles.addAll(fileDetailMiniFromJson(response.body));
-          if (userFiles.isNotEmpty) selectedFile.value = userFiles.first;
-          notifyListeners();
+          // userFiles = [];
+
+          userFiles = fileDetailMiniFromJson(response.body).toList();
+          if (userFiles!.isNotEmpty) {
+            selectedUserFile.value = await fetchOne(userFiles!.first.id);
+            notifyListeners();
+          }
         } else {
           var error = jsonDecode(response.body);
 

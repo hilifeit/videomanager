@@ -2,6 +2,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class VideoAssignCardItems {
   VideoAssignCardItems(
@@ -19,9 +20,6 @@ class VideoAssignCardItems {
 final videoAssignCheckProvider = StateProvider<bool>((ref) {
   return false;
 });
-final assignCardSelectProvider = StateProvider<String>((ref) {
-  return "";
-});
 
 class VideoAssignCard extends ConsumerWidget {
   const VideoAssignCard({
@@ -34,7 +32,8 @@ class VideoAssignCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selected = ref.watch(assignCardSelectProvider.state).state;
+    final selected =
+        ref.watch(fileDetailMiniServiceProvider).selectedUserFile.value?.id;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -55,7 +54,9 @@ class VideoAssignCard extends ConsumerWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
-                ref.read(assignCardSelectProvider.state).state = item.id;
+                ref
+                    .read(fileDetailMiniServiceProvider)
+                    .selectUserVideoFile(item.id);
               },
               child: Card(
                 color: selected == item.id
