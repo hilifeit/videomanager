@@ -1,4 +1,5 @@
 import 'package:map/map.dart';
+import 'package:videomanager/screens/chat/chatHolder.dart';
 import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/holder/components/profilemenu.dart';
@@ -81,7 +82,7 @@ class Holder extends ConsumerWidget {
                             ViewScreen(),
                             const Users(),
                             AddEditShop(),
-                            Container()
+                            ChatHolder(),
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])
@@ -118,8 +119,7 @@ class Holder extends ConsumerWidget {
                         const BottomNavigationBarItem(
                             label: 'Outlets', icon: Icon(Videomanager.outlets)),
                         const BottomNavigationBarItem(
-                            label: 'Video',
-                            icon: Icon(Videomanager.play_video)),
+                            label: 'Chat', icon: Icon(Icons.chat)),
                         const BottomNavigationBarItem(
                             label: "Settings",
                             icon: Icon(Videomanager.settings))

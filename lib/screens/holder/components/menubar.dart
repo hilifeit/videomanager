@@ -26,7 +26,7 @@ class MenuBar extends ConsumerWidget {
       notify: true,
       number: 60000,
     ),
-    CustomMenuItem(title: 'Play Video', icon: Videomanager.play_video, id: 3),
+    CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 3),
     CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 4),
 
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
