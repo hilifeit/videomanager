@@ -79,7 +79,7 @@ final markercolorProvider = StateProvider<Color>((ref) {
 });
 
 final shopProvider = StateProvider<Shop>((ref) {
-  return Shop(roadFace: 1);
+  return Shop(roadFaceNum: 1);
 });
 
 final roadFace2Provider = StateProvider<bool>((ref) {
@@ -321,9 +321,9 @@ class AddEditShop extends ConsumerWidget {
                             ),
                             value: edit
                                 ? editRoadFace
-                                : roadFace[addNewShop.roadFace! - 1],
+                                : roadFace[addNewShop.roadFaceNum! - 1],
                             onChanged: (val) {
-                              addNewShop.roadFace = int.parse(val.value);
+                              addNewShop.roadFaceNum = int.parse(val.value);
 
                               if (int.parse(val.value) == 2) {
                                 ref.read(roadFace2Provider.state).state = true;
@@ -347,12 +347,14 @@ class AddEditShop extends ConsumerWidget {
                         height: 19.sh(),
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           DropDownWithText(
                             text: 'Road Face 1',
                             value: edit ? editRoadFace : roadFaceSide.first,
                             values: roadFaceSide,
+                          ),
+                          SizedBox(
+                            width: 53.sw(),
                           ),
                           if (roadFace2Show)
                             DropDownWithText(
@@ -360,6 +362,9 @@ class AddEditShop extends ConsumerWidget {
                               value: edit ? editRoadFace : roadFaceSide.first,
                               values: roadFaceSide,
                             ),
+                          SizedBox(
+                            width: 53.sw(),
+                          ),
                           if (roadFace3Show)
                             DropDownWithText(
                               text: 'Road Face 3',

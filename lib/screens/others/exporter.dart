@@ -55,6 +55,8 @@ logout() {
     CustomOverlayEntry().closeVideoTimeStamp();
   }
   storage.remove(userStorageKey);
-
+  if (CustomOverlayEntry().videoTimeStampOpen) {
+    CustomOverlayEntry().closeVideoTimeStamp();
+  }
   Phoenix.rebirth(CustomKeys().context!);
 }

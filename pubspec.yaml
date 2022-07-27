@@ -88,6 +88,7 @@ flutter:
     - assets/images/Oval.png
     - assets/images/rejected.png
     - assets/images/rejected.svg
+    - assets/images/award.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

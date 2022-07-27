@@ -19,7 +19,7 @@ class Shop {
     this.category,
     this.shopSize,
     this.phone,
-    this.roadFace,
+    this.roadFaceNum,
     this.color,
   });
 
@@ -27,7 +27,7 @@ class Shop {
   String? category;
   int? shopSize;
   int? phone;
-  int? roadFace;
+  int? roadFaceNum;
   Color? color;
 
   Shop copyWith({
@@ -43,7 +43,7 @@ class Shop {
         category: category,
         shopSize: shopSize,
         phone: phone,
-        roadFace: roadFace,
+        roadFaceNum: roadFace,
         color: color,
       );
 
@@ -52,7 +52,7 @@ class Shop {
         category: json["category"],
         shopSize: json["shopSize"],
         phone: json["phone"],
-        roadFace: json["roadFace"],
+        roadFaceNum: json["roadFace"],
         color: json["color"],
       );
 
@@ -61,7 +61,7 @@ class Shop {
         "category": category,
         "shopSize": shopSize,
         "phone": phone,
-        "roadFace": roadFace,
+        "roadFace": roadFaceNum,
         "color": color,
       };
 }

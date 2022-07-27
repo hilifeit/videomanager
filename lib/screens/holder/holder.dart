@@ -1,16 +1,18 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
-import 'package:videomanager/screens/dashboard/dashboard.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/holder/components/profilemenu.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/videoassignedcard.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboard.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboardHolder.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/users.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 
 final indexProvider = StateProvider<int>((ref) {
@@ -92,7 +94,10 @@ class Holder extends ConsumerWidget {
                     child: index != 1
                         ? AnimatedIndexedStack(index: index, children: [
                             // DashBoard(),
-                            ScreenshotDashboard(thisUser: thisUser),
+
+                            ScreenshotDashboardHolder(
+                              thisUser: thisUser,
+                            )
                           ])
                         : const SettingsHolder(),
                   ),
@@ -135,6 +140,19 @@ class Holder extends ConsumerWidget {
               )
             : null,
       ),
+    );
+  }
+}
+
+class NoTask extends StatelessWidget {
+  NoTask({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Take a break! You have no tasks.'),
     );
   }
 }

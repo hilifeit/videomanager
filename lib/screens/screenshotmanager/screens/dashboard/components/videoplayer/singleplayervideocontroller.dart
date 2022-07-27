@@ -5,7 +5,7 @@ import 'package:videomanager/screens/settings/screens/mapsettings/components/sli
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 class SingleVideoPlayerControls extends HookConsumerWidget {
-  const SingleVideoPlayerControls({this.web, this.desktop, Key? key})
+  SingleVideoPlayerControls({this.web, this.desktop, Key? key})
       : super(key: key);
 
   final VideoPlayerController? web;
@@ -46,8 +46,9 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         IconButton(
           onPressed: () {
             if (UniversalPlatform.isDesktop) {
-              desktop!.player.open(Media.network(
-                  'http://localhost:8000/disk1/Dambar/Nepal/State5/Arghanchi/Highway/Day1/Left/GH019838.MP4'));
+              // desktop!.player.open(Media.network(
+              //   getVideoUrl("62931b515e4df91e44463cea"),
+              // ));
               if (desktop!.player.playback.isPlaying) {
                 desktop!.player.pause();
                 controller.reverse();
@@ -139,10 +140,10 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 24.sw(),
         ),
-        // VideoTime(
-        //   web: web,
-        //   desktop: desktop,
-        // ),
+        VideoTime(
+          web: web,
+          desktop: desktop,
+        ),
       ],
     );
   }

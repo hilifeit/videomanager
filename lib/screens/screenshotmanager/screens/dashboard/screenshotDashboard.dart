@@ -1,6 +1,8 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
@@ -8,10 +10,11 @@ import 'package:videomanager/screens/video/components/models/playerController.da
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 
 class ScreenshotDashboard extends HookConsumerWidget {
-  ScreenshotDashboard({this.videoFile, Key? key, required this.thisUser})
+  ScreenshotDashboard(
+      {required this.videoFile, Key? key, required this.thisUser})
       : super(key: key);
   final UserModelMini thisUser;
-  final FileDetail? videoFile;
+  final FileDetail videoFile;
 
   final List<CustomMenuItem> menus = [
     CustomMenuItem(label: "User", value: 0.toString()),
@@ -20,7 +23,6 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   // bool showOverlay = false;
 
-  late OverlayEntry overlayEntry;
   // ? desktop
 
   late Media media;
@@ -33,26 +35,17 @@ class ScreenshotDashboard extends HookConsumerWidget {
     if (!UniversalPlatform.isDesktop) {
       return null;
     }
-    media = Media.network(
-        "http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4"
-            .replaceAll(" ", "%20"),
-        parse: true);
+    media = Media.network(getVideoUrl(videoFile.id), parse: true);
 
     var player = PlayerController(
-      player: Player(
-          id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
-          videoDimensions: dimension),
-      duration: videoFile != null
-          ? Duration(
-              hours: videoFile!.info.duration.hour,
-              minutes: videoFile!.info.duration.minute,
-              seconds: videoFile!.info.duration.second,
-              milliseconds: videoFile!.info.duration.millisecond,
-            )
-          :
-          // ? Duration as per
-          const Duration(minutes: 10),
-    );
+        player: Player(
+            id: UniversalPlatform.isDesktop ? media.resource.length : 1511,
+            videoDimensions: dimension),
+        duration: Duration(
+            hours: videoFile.info.duration.hour,
+            minutes: videoFile.info.duration.minute,
+            seconds: videoFile.info.duration.second,
+            milliseconds: videoFile.info.duration.millisecond));
     player.player.open(media, autoStart: false);
     return player;
   }
@@ -61,10 +54,9 @@ class ScreenshotDashboard extends HookConsumerWidget {
     if (UniversalPlatform.isDesktop) {
       return null;
     }
-    var controller = VideoPlayerController.network(videoFile != null
-        ? videoFile!.foundPath
-        : 'http://192.168.16.106:8000/disk1/Aasish/Nepal/State3/Chitwan/Bharatpur/Day1/Left/GH019130.MP4')
-      ..initialize().then((_) {
+    var controller = VideoPlayerController.network(
+      getVideoUrl(videoFile.id),
+    )..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
       }).catchError((e) {
         print(" $e");
@@ -76,7 +68,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
-      // CustomOverlayEntry().showVideoTimeStamp();
+      CustomOverlayEntry().showVideoTimeStamp();
     }
 
     return Align(
@@ -90,11 +82,11 @@ class ScreenshotDashboard extends HookConsumerWidget {
                 if (ResponsiveLayout.isDesktop)
                   Column(
                     children: [
-                      // Expanded(
-                      //   child: CustomVideoPlayer(
-                      //       player: player == null ? null : player!.player,
-                      //       controller: controller),
-                      // ),
+                      Expanded(
+                        child: CustomVideoPlayer(
+                            player: player == null ? null : player!.player,
+                            controller: controller),
+                      ),
                       Container(
                         color: Colors.black,
                         height: 58.sh(),
@@ -137,10 +129,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
                         SizedBox(
                           width: 51.sw(),
                         ),
-                        // SingleVideoPlayerControls(
-                        //   desktop: player,
-                        //   web: controller,
-                        // ),
+                        SingleVideoPlayerControls(
+                          desktop: player,
+                          web: controller,
+                        ),
                         const Spacer(),
                         Text(
                           'FileName',
@@ -205,8 +197,3 @@ class ScreenshotDashboard extends HookConsumerWidget {
     );
   }
 }
-
-
-
-
-
