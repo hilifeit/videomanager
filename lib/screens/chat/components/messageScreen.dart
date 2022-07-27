@@ -30,6 +30,13 @@ class MessageScreen extends StatelessWidget {
                     "This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
                 ownMessage: false,
               ),
+              SizedBox(
+                height: 20.sh(),
+              ),
+              CustomMessageBox(message: "हामीले कहिले गर्ने यस्तो? 😒😒😒😒😒"),
+              SizedBox(
+                height: 20.sh(),
+              ),
             ],
           ),
         )

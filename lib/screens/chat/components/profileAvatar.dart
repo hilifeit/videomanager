@@ -24,7 +24,7 @@ class ProfileAvatar extends StatelessWidget {
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 radius: 0.3 * profileradius.sr(),
-                backgroundColor: sucess,
+                backgroundColor: successColor,
               ),
             ),
           ),
