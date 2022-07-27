@@ -51,7 +51,10 @@ final CustomSnackBar snack = CustomSnackBar();
 
 logout() {
   customSocket.socket.disconnect();
+  if (CustomOverlayEntry().videoTimeStampOpen) {
+    CustomOverlayEntry().closeVideoTimeStamp();
+  }
   storage.remove(userStorageKey);
-  CustomOverlayEntry().closeVideoTimeStamp();
+
   Phoenix.rebirth(CustomKeys().context!);
 }
