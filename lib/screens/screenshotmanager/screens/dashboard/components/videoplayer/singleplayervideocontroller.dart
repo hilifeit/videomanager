@@ -5,9 +5,10 @@ import 'package:videomanager/screens/settings/screens/mapsettings/components/sli
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 class SingleVideoPlayerControls extends HookConsumerWidget {
-  const SingleVideoPlayerControls({this.web, this.desktop, Key? key})
+  SingleVideoPlayerControls(
+      {required this.selectedVideo, this.web, this.desktop, Key? key})
       : super(key: key);
-
+  final String selectedVideo;
   final VideoPlayerController? web;
   final PlayerController? desktop;
 
@@ -45,24 +46,27 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         ),
         IconButton(
           onPressed: () {
-            if (UniversalPlatform.isDesktop) {
-              desktop!.player.open(Media.network(
-                  'http://localhost:8000/disk1/Dambar/Nepal/State5/Arghanchi/Highway/Day1/Left/GH019838.MP4'));
-              if (desktop!.player.playback.isPlaying) {
-                desktop!.player.pause();
-                controller.reverse();
-              } else {
-                desktop!.player.play();
+            if (selectedVideo != "") {
+              if (UniversalPlatform.isDesktop) {
+                // desktop!.player.open(Media.network(
+                //   getVideoUrl("62931b515e4df91e44463cea"),
+                // ));
+                if (desktop!.player.playback.isPlaying) {
+                  desktop!.player.pause();
+                  controller.reverse();
+                } else {
+                  desktop!.player.play();
 
-                controller.forward();
-              }
-            } else {
-              if (web!.value.isPlaying) {
-                web!.pause();
-                controller.reverse();
+                  controller.forward();
+                }
               } else {
-                web!.play();
-                controller.forward();
+                if (web!.value.isPlaying) {
+                  web!.pause();
+                  controller.reverse();
+                } else {
+                  web!.play();
+                  controller.forward();
+                }
               }
             }
           },
@@ -139,10 +143,10 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 24.sw(),
         ),
-        // VideoTime(
-        //   web: web,
-        //   desktop: desktop,
-        // ),
+        VideoTime(
+          web: web,
+          desktop: desktop,
+        ),
       ],
     );
   }

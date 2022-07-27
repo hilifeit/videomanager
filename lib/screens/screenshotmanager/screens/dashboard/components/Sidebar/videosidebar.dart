@@ -86,11 +86,10 @@ class VideoSideBar extends StatelessWidget {
                               final fileService =
                                   ref.watch(fileDetailMiniServiceProvider);
                               // fileService.filterFile();
-                              final files = fileService.filterFiles;
+                              final files = fileService.userFiles;
                               final selectedFilter = ref
                                   .watch(filterModuleServiceProvider)
                                   .selectedItems;
-                              int count = 0;
 
                               // for (int i = 0; i < files.length; i++) {
                               //   if (selectedFilter
