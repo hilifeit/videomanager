@@ -99,13 +99,14 @@ class AssignManager extends ConsumerWidget {
                   InputTextField(
                     fillColor: Colors.white,
                     title: 'Area Name',
+                    limit: true,
+                    limitNumber: 20,
                     suffixText: '${files.length.toString()} Videos',
                     suffixStyle: kTextStyleIbmMedium.copyWith(
                       fontSize: 13.ssp(),
                       color: primaryColor,
                     ),
-                    validator: (val) =>
-                        validateUserName(val!, label: 'Area Name'),
+                    validator: (val) => validateArea(val!),
                     isVisible: true,
                     onChanged: (val) {
                       area.name = val;
@@ -178,6 +179,7 @@ class AssignManager extends ConsumerWidget {
                                         .createAreaAndAssign(dataMap);
                                     snack.success("Area Assigned Succesfully");
                                   } catch (e, s) {
+                                    print("$e $s");
                                     snack.error(e);
                                   }
                                 },
@@ -237,7 +239,7 @@ class AreaCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: item.color,
         borderRadius: BorderRadius.circular(
-          2.sr(),
+          4.sr(),
         ),
       ),
       child: Padding(

@@ -145,6 +145,18 @@ String? validateUserName(String value, {String label = "username"}) {
 //   }
 // }
 
+String? validateArea(String value, {String label = "Area"}) {
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
+  if (value.isEmpty) {
+    return 'Please enter Area';
+  } else if (value.length > 20) {
+    return '$label should not be greater than 20 characters';
+  } else {
+    return null;
+  }
+}
+
 String? validateLastName(String value) {
   // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
   // RegExp regExp = RegExp(pattern as String);

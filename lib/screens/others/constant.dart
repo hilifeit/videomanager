@@ -13,28 +13,30 @@ const dangerSecondary = Color(0xffE4CBCD);
 const successColor = Color(0xff28A745);
 const sucessSecondary = Color(0xffC9DCCD);
 const primarySecondary = Color(0xffCDD2D6);
-const cardHeader = Color(0xff697A8D);
+const notExactlyPrimary = Color(0xff697A8D);
+const greyish = Color(0xffa1acbb);
 const blackColor = Colors.black;
+const whiteColor = Colors.white;
 
 var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 16.sp,
   fontWeight: FontWeight.w600,
-  color: const Color(0xffBABABA),
+  color: darkGrey,
 );
 
 var kTextStyleIbmMedium = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 16.sp,
   fontWeight: FontWeight.w500,
-  color: const Color(0xffBABABA),
+  color: darkGrey,
 );
 
 var kTextStyleIbmRegular = TextStyle(
   fontFamily: 'Ibm',
   fontSize: 16.ssp(),
   fontWeight: FontWeight.w400,
-  color: const Color(0xffBABABA),
+  color: darkGrey,
 );
 
 var kTextStyleInterMedium = TextStyle(

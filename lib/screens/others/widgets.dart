@@ -233,6 +233,8 @@ class InputTextField extends StatelessWidget {
   final String value;
   final Function(String) onChanged;
   bool isdigits;
+  bool limit;
+  int limitNumber;
   InputTextField(
       {Key? key,
       required this.title,
@@ -245,6 +247,8 @@ class InputTextField extends StatelessWidget {
       this.style,
       this.onTap,
       this.isdigits = false,
+      this.limit = false,
+      this.limitNumber = 10,
       this.suffixText,
       this.suffixStyle,
       required this.onChanged})
@@ -270,7 +274,7 @@ class InputTextField extends StatelessWidget {
           maxLines: title == 'Remarks' ? 3 : 1,
           controller: TextEditingController(text: value),
           inputFormatters: [
-            if (isdigits) LengthLimitingTextInputFormatter(10),
+            if (limit) LengthLimitingTextInputFormatter(limitNumber),
             isdigits
                 ? FilteringTextInputFormatter.digitsOnly
                 : FilteringTextInputFormatter.singleLineFormatter

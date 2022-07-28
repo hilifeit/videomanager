@@ -30,7 +30,7 @@ class UsersCard extends StatelessWidget {
                     'Users',
                     style: kTextStyleIbmSemiBold.copyWith(
                       fontSize: 15.ssp(),
-                      color: cardHeader,
+                      color: notExactlyPrimary,
                     ),
                   ),
                   SizedBox(
@@ -39,7 +39,7 @@ class UsersCard extends StatelessWidget {
                   Text(
                     '104',
                     style: kTextStyleIbmSemiBold.copyWith(
-                        fontSize: 22.ssp(), color: cardHeader),
+                        fontSize: 22.ssp(), color: notExactlyPrimary),
                   ),
                   SizedBox(
                     height: 11.8.sh(),

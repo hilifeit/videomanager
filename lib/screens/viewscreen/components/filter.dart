@@ -4,6 +4,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 
@@ -107,52 +108,90 @@ class Filter extends StatelessWidget {
             itemCount: 1,
           ),
         ),
+        Divider(),
         Expanded(
           flex: 3,
-          child: Container(
-            color: Colors.teal,
-            child: Consumer(builder: (context, ref, c) {
-              final areas = ref.watch(fileDetailMiniServiceProvider).areas;
-              return ListView.separated(
-                itemCount: areas.length,
-                itemBuilder: (_, index) {
-                  return Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          AreaCard(
-                            item: AreaCardItem(
-                                text: areas[index].name, color: Colors.amber),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                "Assigned to: ${areas[index].assignedTo.name}",
-                                style: kTextStyleIbmRegularBlack,
-                              ),
-                              Text(
-                                areas[index].assignedBy.name,
-                                style: kTextStyleIbmRegularBlack,
-                              ),
-                            ],
-                          ),
-                          StatusCard(status: areas[index].status.toString())
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                separatorBuilder: (_, index) {
-                  return SizedBox(
-                    height: 10.sh(),
-                  );
-                },
-              );
-            }),
-          ),
+          child: Consumer(builder: (context, ref, c) {
+            final areas = ref.watch(fileDetailMiniServiceProvider).areas;
+            return ListView.separated(
+              itemCount: areas.length,
+              itemBuilder: (_, index) {
+                return AssignedAreaCard(area: areas[index]);
+              },
+              separatorBuilder: (_, index) {
+                return SizedBox(
+                  height: 8.sh(),
+                );
+              },
+            );
+          }),
         )
       ],
+    );
+  }
+}
+
+class AssignedAreaCard extends StatelessWidget {
+  const AssignedAreaCard({
+    Key? key,
+    required this.area,
+  }) : super(key: key);
+
+  final AreaModel area;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onLongPress: () {},
+      onTap: () {},
+      child: Card(
+        color:
+            // area.selected ?
+            Color(0xffECF0F2),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                radius: 20.sr(),
+                backgroundColor: notExactlyPrimary,
+                child: Text(
+                  '200',
+                  style: kTextStyleIbmSemiBold.copyWith(
+                      fontSize: 14.ssp(), color: whiteColor),
+                ),
+              ),
+              SizedBox(
+                width: 10.sw(),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    area.name,
+                    style: kTextStyleIbmMedium.copyWith(
+                      fontSize: 15.ssp(),
+                      color: notExactlyPrimary,
+                    ),
+                  ),
+                  Text(
+                    area.assignedTo.name,
+                    style: kTextStyleIbmMedium.copyWith(
+                      fontSize: 13.ssp(),
+                      color: greyish,
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              StatusCard(
+                status: area.status.toString(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

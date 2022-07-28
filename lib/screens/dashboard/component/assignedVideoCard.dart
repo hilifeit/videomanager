@@ -30,7 +30,7 @@ class AssignedVideoCard extends StatelessWidget {
                   Text(
                     'Videos Assigned',
                     style: kTextStyleIbmSemiBold.copyWith(
-                        fontSize: 15.ssp(), color: cardHeader),
+                        fontSize: 15.ssp(), color: notExactlyPrimary),
                   ),
                   SizedBox(
                     height: 2.2.sh(),
