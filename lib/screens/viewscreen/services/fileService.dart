@@ -5,6 +5,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
+import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
@@ -33,12 +34,17 @@ class FileService extends ChangeNotifier {
   final List<FileDetailMini> files = [];
   late List<FileDetailMini>? userFiles;
 
+  final List<AreaModel> areas = [];
+
   late final selectedFile = Property<FileDetailMini?>(null, notifyListeners);
   // late final selectedUserFileMini = Property<FileDetailMini?>(null, notifyListeners);
   late final selectedUserFile = Property<FileDetail?>(null, notifyListeners);
 
   load() async {
+    CustomOverlayEntry().showLoader();
+    await fetchAllArea();
     await fetchAll(fromServer: true);
+    CustomOverlayEntry().closeLoader();
   }
 
   loadUserData() async {
@@ -96,13 +102,28 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  fetchAllArea() async {
+    try {
+      var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}area"),
+          headers: {"Content-Type": "application/json"});
+      if (response.statusCode == 200) {
+        areas.clear();
+        areas.addAll(areaModelFromJson(response.body));
+        notifyListeners();
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e, s) {
+      throw e;
+    }
+  }
+
   fetchAll({bool fromServer = false}) async {
     if (fromServer) {
       try {
-        CustomOverlayEntry().showLoader();
         var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}file"),
             headers: {"Content-Type": "application/json"});
-        CustomOverlayEntry().closeLoader();
+
         if (response.statusCode == 200) {
           files.clear();
           files.addAll(fileDetailMiniFromJson(response.body).toList());
@@ -156,6 +177,27 @@ class FileService extends ChangeNotifier {
     files[index].originalLocation.addAll(data);
 
     notifyListeners();
+  }
+
+  createAreaAndAssign(Map data) async {
+    var userProvider = ref.read(userChangeProvider);
+    try {
+      var response = await client.post(Uri.parse("${CustomIP.apiBaseUrl}area"),
+          body: jsonEncode(data),
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userProvider.loggedInUser.value!.accessToken!
+          });
+      // print(response.body);
+      if (response.statusCode == 201) {
+        areas.add(AreaModel.fromJson(jsonDecode(response.body)));
+        notifyListeners();
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<List<OriginalLocation>> fetchOriginalLocation(String id) async {
