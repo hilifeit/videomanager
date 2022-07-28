@@ -190,7 +190,8 @@ class FileService extends ChangeNotifier {
           });
       // print(response.body);
       if (response.statusCode == 201) {
-        //populate area list
+        areas.add(AreaModel.fromJson(jsonDecode(response.body)));
+        notifyListeners();
       } else {
         throw response.statusCode;
       }
