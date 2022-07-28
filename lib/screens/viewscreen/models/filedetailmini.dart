@@ -100,7 +100,7 @@ class Location {
         "coordinates": List<dynamic>.from(
             coordinates.map((x) => List<dynamic>.from(x.map((x) => x)))),
       };
-      static Location empty()=>Location(type: '', coordinates: []);
+  static Location empty() => Location(type: 'LineString', coordinates: []);
 }
 
 class Area {
