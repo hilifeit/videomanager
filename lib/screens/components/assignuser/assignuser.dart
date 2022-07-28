@@ -2,17 +2,30 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
+import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class AssignManager extends ConsumerWidget {
   AssignManager({
     Key? key,
-    this.fileDetail,
-    required this.video,
-  }) : super(key: key);
-  FileDetailMini? fileDetail;
-  final int video;
+    required this.files,
+    required this.points,
 
+  }) : super(key: key);
+  final List<FileDetailMini> files;
+  final List<LatLng> points;
+
+  late AreaModel area=createArea();
+
+  AreaModel createArea(){
+      var area=AreaModel.empty();
+      area.location.coordinates.addAll(points.map((e) => [
+        e.longitude,e.latitude
+      ]));
+
+      return area;
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userService = ref.watch(userChangeProvider);
@@ -82,8 +95,8 @@ class AssignManager extends ConsumerWidget {
                 ),
                 InputTextField(
                   fillColor: Colors.white,
-                  title: 'Area ',
-                  suffixText: '${video.toString()} Videos',
+                  title: 'Area Name',
+                  suffixText: '${files.length.toString()} Videos',
                   suffixStyle: kTextStyleIbmMedium.copyWith(
                     fontSize: 13.ssp(),
                     color: primaryColor,

@@ -215,8 +215,9 @@ class Painter extends CustomPainter {
                               titlePadding: EdgeInsets.zero,
                               contentPadding: EdgeInsets.zero,
                               content: AssignManager(
-                                video: 14,
-                                fileDetail: element,
+                              
+                                files: [],
+                                points: [],
                               ),
                             );
                           });

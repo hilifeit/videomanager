@@ -9,7 +9,7 @@ final editManagerSelectProvider = StateProvider<bool>((ref) {
   return false;
 });
 
-enum Roles { user, manager, superAdmin }
+
 
 String getRole(int value) {
   var role = Roles.values.elementAt(value);

@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/clippedholder.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -290,17 +291,34 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    var fileService =
-                                        ref.read(fileDetailMiniServiceProvider);
+                                  
 
-                                    await fileService.fixLocationData(
-                                        selectedAreaService
-                                            .refinedSelection.value);
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          // debugPrint(selectedPoints.length.toString());
+                                          return AlertDialog(
+                                            backgroundColor: Colors.transparent,
+                                            titlePadding: EdgeInsets.zero,
+                                            contentPadding: EdgeInsets.zero,
+                                            content: AssignManager(
+                                              files: selectedAreaService
+                                .refinedSelection.value,
+                                points: selectedPoints,
+                                            ),
+                                          );
+                                        });
+                                    // var fileService =
+                                    //     ref.read(fileDetailMiniServiceProvider);
 
-                                    await fileService
-                                        .updateLocationDataInServer(
-                                            selectedAreaService
-                                                .refinedSelection.value);
+                                    // await fileService.fixLocationData(
+                                    //     selectedAreaService
+                                    //         .refinedSelection.value);
+
+                                    // await fileService
+                                    //     .updateLocationDataInServer(
+                                    //         selectedAreaService
+                                    //             .refinedSelection.value);
 
                                     // print(fileService.files[10175].id);
 
