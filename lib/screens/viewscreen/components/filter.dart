@@ -2,6 +2,7 @@ import 'package:map/map.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 
 class Filter extends StatelessWidget {
@@ -104,6 +105,24 @@ class Filter extends StatelessWidget {
             itemCount: 1,
           ),
         ),
+        Expanded(
+          child: Consumer(builder: (context, ref, c) {
+            final areas = ref.watch(fileDetailMiniServiceProvider).areas;
+            return ListView.separated(
+              itemCount: areas.length,
+              itemBuilder: (_, index) {
+                return ListTile(
+                  title: Text(''),
+                );
+              },
+              separatorBuilder: (_, index) {
+                return SizedBox(
+                  height: 10.sh(),
+                );
+              },
+            );
+          }),
+        )
       ],
     );
   }
