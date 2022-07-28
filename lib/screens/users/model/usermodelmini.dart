@@ -74,6 +74,7 @@ class UserModelMini {
         "accessToken": accessToken,
         "refreshToken": refreshToken,
       };
+      static UserModelMini empty()=>UserModelMini(id: '', name: '', role: 0, createdAt: DateTime.now());
 }
 
 class SuperVisor {

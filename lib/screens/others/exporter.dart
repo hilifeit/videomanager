@@ -32,6 +32,7 @@ export 'package:videomanager/screens/others/ip.dart';
 export 'package:videomanager/screens/others/theme.dart';
 export 'package:videomanager/screens/others/validator.dart';
 export 'package:videomanager/screens/others/widgets.dart';
+export 'package:videomanager/screens/others/enums.dart';
 export 'package:videomanager/videomanager_icons.dart';
 
 //
