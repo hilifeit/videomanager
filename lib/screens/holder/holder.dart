@@ -42,9 +42,11 @@ class Holder extends ConsumerWidget {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: secondaryColor,
-        drawer: Drawer(
-          child: Filter(mapController: controller),
-        ),
+        drawer: ResponsiveLayout.isDesktop
+            ? null
+            : Drawer(
+                child: Filter(mapController: controller),
+              ),
         appBar: !ResponsiveLayout.isDesktop
             ? PreferredSize(
                 preferredSize:
