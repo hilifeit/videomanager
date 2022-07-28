@@ -20,6 +20,7 @@ class Shop {
     this.shopSize,
     this.phone,
     this.roadFaceNum,
+    this.roadFace,
     this.color,
   });
 
@@ -28,6 +29,7 @@ class Shop {
   int? shopSize;
   int? phone;
   int? roadFaceNum;
+  RoadFace? roadFace;
   Color? color;
 
   Shop copyWith({
@@ -35,7 +37,8 @@ class Shop {
     String? category,
     int? shopSize,
     int? phone,
-    int? roadFace,
+    int? roadFaceNum,
+    RoadFace? roadFace,
     Color? color,
   }) =>
       Shop(
@@ -43,7 +46,8 @@ class Shop {
         category: category,
         shopSize: shopSize,
         phone: phone,
-        roadFaceNum: roadFace,
+        roadFaceNum: roadFaceNum,
+        roadFace: roadFace,
         color: color,
       );
 
@@ -52,7 +56,8 @@ class Shop {
         category: json["category"],
         shopSize: json["shopSize"],
         phone: json["phone"],
-        roadFaceNum: json["roadFace"],
+        roadFaceNum: json["roadFaceNum"],
+        roadFace: RoadFace.fromJson(json["superVisor"]),
         color: json["color"],
       );
 
@@ -61,7 +66,43 @@ class Shop {
         "category": category,
         "shopSize": shopSize,
         "phone": phone,
-        "roadFace": roadFaceNum,
+        "roadFaceNum": roadFaceNum,
+        "roadFace": roadFace != null ? roadFace!.toJson() : null,
         "color": color,
+      };
+}
+
+class RoadFace {
+  RoadFace({
+    required this.roadFace1,
+    this.roadFace2,
+    this.roadFace3,
+  });
+
+  int roadFace1;
+  int? roadFace2;
+  int? roadFace3;
+
+  RoadFace copyWith({
+    required int roadFace1,
+    int? roadFace2,
+    int? roadFace3,
+  }) =>
+      RoadFace(
+        roadFace1: roadFace1,
+        roadFace2: roadFace2,
+        roadFace3: roadFace3,
+      );
+
+  factory RoadFace.fromJson(Map<String, dynamic> json) => RoadFace(
+        roadFace1: json["_roadFace1"],
+        roadFace2: json["roadFace2"],
+        roadFace3: json["roadFace3"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "roadFace1": roadFace1,
+        "roadFace2": roadFace2,
+        "roadFace3": roadFace3,
       };
 }

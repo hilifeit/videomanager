@@ -108,6 +108,16 @@ class AddEditShop extends ConsumerWidget {
     final addNewShop = ref.watch(shopProvider.state).state;
     final roadFace2Show = ref.watch(roadFace2Provider.state).state;
     final roadFace3Show = ref.watch(roadFace3Provider.state).state;
+    if (edit) {
+      addNewShop
+        ..shopName = shop!.shopName
+        ..category = shop!.category
+        ..shopSize = shop!.shopSize
+        ..phone = shop!.phone
+        ..roadFaceNum = shop!.roadFaceNum
+        ..roadFace = shop!.roadFace
+        ..color = shop!.color;
+    }
 
     int colorIndex = 0;
     List<MarkerColor> colors = [
@@ -146,7 +156,7 @@ class AddEditShop extends ConsumerWidget {
         }
       }
       for (var element in shopSize) {
-        if (element.label == shop!.shopSize) {
+        if (element.label == shop!.shopSize.toString()) {
           editShopSize = shopSize[shopSize.indexOf(element)];
           break;
         }
@@ -225,7 +235,7 @@ class AddEditShop extends ConsumerWidget {
                         title: 'Shop Name',
                         isVisible: true,
                         onChanged: (val) {
-                          shop!.shopName = val;
+                          addNewShop.shopName = val;
                         },
                       ),
                       SizedBox(
@@ -253,7 +263,7 @@ class AddEditShop extends ConsumerWidget {
                             ),
                             value: edit ? editCategory : category.first,
                             onChanged: (val) {
-                              shop!.category = val.label;
+                              addNewShop.category = val.label;
                             },
                             values: category,
                             helperText: ""),
@@ -283,7 +293,7 @@ class AddEditShop extends ConsumerWidget {
                             ),
                             value: edit ? editShopSize : shopSize.first,
                             onChanged: (val) {
-                              shop!.shopSize = int.parse(val.label);
+                              addNewShop.shopSize = int.parse(val.label);
                             },
                             values: shopSize,
                             helperText: "shutter"),
@@ -295,7 +305,9 @@ class AddEditShop extends ConsumerWidget {
                           fillColor: Colors.white,
                           title: 'Contact Number',
                           isVisible: true,
-                          onChanged: (val) {}),
+                          onChanged: (val) {
+                            addNewShop.phone = int.parse(val);
+                          }),
                       SizedBox(
                         height: 19.sh(),
                       ),
@@ -352,6 +364,10 @@ class AddEditShop extends ConsumerWidget {
                             text: 'Road Face 1',
                             value: edit ? editRoadFace : roadFaceSide.first,
                             values: roadFaceSide,
+                            onChanged: (val) {
+                              addNewShop.roadFace!.roadFace1 =
+                                  int.parse(val.value);
+                            },
                           ),
                           SizedBox(
                             width: 53.sw(),
@@ -361,6 +377,10 @@ class AddEditShop extends ConsumerWidget {
                               text: 'Road Face 2',
                               value: edit ? editRoadFace : roadFaceSide.first,
                               values: roadFaceSide,
+                              onChanged: (val) {
+                                addNewShop.roadFace!.roadFace2 =
+                                    int.parse(val.value);
+                              },
                             ),
                           SizedBox(
                             width: 53.sw(),
@@ -370,6 +390,10 @@ class AddEditShop extends ConsumerWidget {
                               text: 'Road Face 3',
                               value: edit ? editRoadFace : roadFaceSide.first,
                               values: roadFaceSide,
+                              onChanged: (val) {
+                                addNewShop.roadFace!.roadFace3 =
+                                    int.parse(val.value);
+                              },
                             ),
                         ],
                       ),
@@ -452,11 +476,13 @@ class DropDownWithText extends StatelessWidget {
     required this.text,
     required this.values,
     required this.value,
+    required this.onChanged,
   }) : super(key: key);
 
   final String text;
   final List<CustomMenuItem> values;
   final CustomMenuItem value;
+  final Function(CustomMenuItem) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -485,7 +511,7 @@ class DropDownWithText extends StatelessWidget {
               ),
               value: value,
               onChanged: (val) {
-                // shop!.shopSize = int.parse(val.label);
+                onChanged(val);
               },
               values: values,
               helperText: ""),
