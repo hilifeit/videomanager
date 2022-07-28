@@ -3,7 +3,7 @@ import 'package:videomanager/screens/others/exporter.dart';
 class CustomMessageBox extends StatelessWidget {
   CustomMessageBox(
       {Key? key,
-      this.ownMessage = true,
+      this.ownMessage = false,
       required this.message,
       this.messageTime})
       : super(key: key);
@@ -18,10 +18,10 @@ class CustomMessageBox extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       return Row(
         children: [
-          if (!ownMessage) Spacer(),
+          if (ownMessage) Spacer(),
           Column(
             crossAxisAlignment:
-                ownMessage ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                !ownMessage ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             children: [
               Container(
                 constraints:
@@ -49,7 +49,7 @@ class CustomMessageBox extends StatelessWidget {
               )
             ],
           ),
-          if (ownMessage) Spacer()
+          if (!ownMessage) Spacer()
         ],
       );
     });
@@ -66,15 +66,18 @@ class ChatBoxPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.fill;
     Path path = Path();
-    if (own) {
+    if (!own) {
+      // (size.height <= 200) ? size.height : -
       path.addPolygon([
-        Offset(10.sw(), size.height * .65),
+        Offset(10.sw(),
+            (size.height <= 200) ? size.height * .65 : size.height * .9),
         Offset(30.sw(), size.height),
         Offset(-10.sw(), size.height),
       ], true);
     } else {
       path.addPolygon([
-        Offset(size.width - 10.sw(), size.height * .65),
+        Offset(size.width - 10.sw(),
+            (size.height <= 200) ? size.height * .65 : size.height * .9),
         Offset(size.width - 30.sw(), size.height),
         Offset(size.width + 10.sw(), size.height),
       ], true);

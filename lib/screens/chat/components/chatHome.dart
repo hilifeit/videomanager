@@ -56,7 +56,7 @@ class ChatHome extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                   itemBuilder: ((context, index) {
-                    return messageCard();
+                    return UserMessageCard();
                   }),
                   separatorBuilder: ((context, index) => Divider(
                         thickness: 2,

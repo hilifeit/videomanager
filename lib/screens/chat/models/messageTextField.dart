@@ -10,18 +10,18 @@ class MessageTextField extends StatelessWidget {
   final Widget? suffixIcon;
   @override
   Widget build(BuildContext context) {
-    return Container( 
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.sr()),
       ),
-      child: 
-          TextFormField(
-            maxLines: 3,
-            minLines: 1,
-          ),
-          
-        
-      
+      child: TextFormField(
+        decoration: InputDecoration( 
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
+        ),
+        maxLines: 3,
+        minLines: 1,
+      ),
     );
   }
 }

@@ -85,11 +85,11 @@ class CustomPopUpMenuItemChild extends StatelessWidget {
   CustomPopUpMenuItemChild({
     Key? key,
     this.width,
-    required this.icon,
+    this.icon,
     required this.text,
   }) : super(key: key);
   double? width;
-  final IconData icon;
+  final IconData? icon;
   final String text;
 
   @override
