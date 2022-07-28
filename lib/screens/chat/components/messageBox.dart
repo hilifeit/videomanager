@@ -35,9 +35,10 @@ class CustomMessageBox extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: 20.ssp(), vertical: 15.ssp()),
-                    child: Text(
+                    child: SelectableText(
                       message,
-                      style: TextStyle(color: Colors.white),
+                      style: kTextStyleIbmRegular.copyWith(
+                          color: Colors.white, fontSize: 18.ssp()),
                     ),
                   ),
                 ),
