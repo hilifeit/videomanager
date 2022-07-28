@@ -2,6 +2,7 @@ import 'package:map/map.dart';
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
+import 'package:videomanager/screens/viewscreen/components/AssignedAreaCard.dart';
 import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
@@ -119,7 +120,11 @@ class Filter extends StatelessWidget {
             return ListView.separated(
               itemCount: areas.length,
               itemBuilder: (_, index) {
-                return AssignedAreaCard(area: areas[index]);
+                return AssignedAreaCard(
+                    area: areas[index],
+                    selected: selectedArea != null
+                        ? selectedArea == areas[index]
+                        : false);
               },
               separatorBuilder: (_, index) {
                 return SizedBox(
@@ -130,76 +135,6 @@ class Filter extends StatelessWidget {
           }),
         )
       ],
-    );
-  }
-}
-
-class AssignedAreaCard extends ConsumerWidget {
-  AssignedAreaCard({
-    Key? key,
-    required this.area,
-    this.selected = false,
-  }) : super(key: key);
-
-  final AreaModel area;
-  bool selected;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return InkWell(
-      onLongPress: () {},
-      onTap: () {
-        var selectedAreaService = ref.read(selectedAreaServiceProvider);
-        selectedAreaService
-          ..selectArea(area)
-          ..refine();
-      },
-      child: Card(
-        color: selected ? Color(0xffECF0F2) : whiteColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CircleAvatar(
-                radius: 20.sr(),
-                backgroundColor: notExactlyPrimary,
-                child: Text(
-                  '200',
-                  style: kTextStyleIbmSemiBold.copyWith(
-                      fontSize: 14.ssp(), color: whiteColor),
-                ),
-              ),
-              SizedBox(
-                width: 10.sw(),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    area.name,
-                    style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 15.ssp(),
-                      color: notExactlyPrimary,
-                    ),
-                  ),
-                  Text(
-                    area.assignedTo.name,
-                    style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 13.ssp(),
-                      color: greyish,
-                    ),
-                  ),
-                ],
-              ),
-              Spacer(),
-              StatusCard(
-                status: area.status.toString(),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

@@ -203,6 +203,7 @@ class SelectedArea extends ChangeNotifier {
     refinedSelection.value = [];
     currentSelection.value = [];
     refined.value = false;
+    selectedArea.value = null;
   }
 }
 
