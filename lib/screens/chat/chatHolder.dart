@@ -11,7 +11,7 @@ class ChatHolder extends StatelessWidget {
       children: [
         Expanded(
           flex: 1,
-          child: MessageScreen(),
+          child: ChatHome(),
         ),
         if (!ResponsiveLayout.isMobile)
           Expanded(
