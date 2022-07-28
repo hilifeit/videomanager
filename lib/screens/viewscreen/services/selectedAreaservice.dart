@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 final selectedAreaServiceProvider = ChangeNotifierProvider<SelectedArea>((ref) {
@@ -18,7 +19,7 @@ class SelectedArea extends ChangeNotifier {
       UnmodifiableListView(_selectedPoints
           .map((e) => transformer.fromLatLngToXYCoords(e))
           .toList());
-
+  late final selectedArea = Property<AreaModel?>(null, notifyListeners);
   late final selectedHandle = Property<int?>(null, notifyListeners);
   late final path = Property<Path>(Path(), () {});
 
@@ -39,6 +40,23 @@ class SelectedArea extends ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  selectArea(AreaModel area) {
+    selectedHandle.value = null;
+    _selectedPoints.clear();
+    _selectedPoints
+        .addAll(area.location.coordinates.map((e) => LatLng(e.last, e.first)));
+
+    refinedSelection.value = [];
+    path.value.reset();
+    pathClosed.value = true;
+    path.value
+        .addPolygon(selectedPointsToOffset(transformer), pathClosed.value);
+    refined.value = true;
+    pathSelected.value = true;
+    selectedArea.value = area;
+    notifyListeners();
   }
 
   moveHandle({required Offset newPosition}) {
@@ -185,6 +203,7 @@ class SelectedArea extends ChangeNotifier {
     refinedSelection.value = [];
     currentSelection.value = [];
     refined.value = false;
+    selectedArea.value = null;
   }
 }
 

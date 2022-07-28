@@ -18,7 +18,7 @@ class OutletCard extends StatelessWidget {
             Text(
               'Outlet',
               style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 15.ssp(), color: cardHeader),
+                  fontSize: 15.ssp(), color: notExactlyPrimary),
             ),
             SizedBox(
               height: 8.sh(),
@@ -26,7 +26,7 @@ class OutletCard extends StatelessWidget {
             Text(
               '104',
               style: kTextStyleIbmSemiBold.copyWith(
-                  fontSize: 26.ssp(), color: cardHeader),
+                  fontSize: 26.ssp(), color: notExactlyPrimary),
             ),
             SizedBox(
               height: 5.sh(),
@@ -78,7 +78,7 @@ class OutletCard extends StatelessWidget {
                     '50%',
                     style: kTextStyleIbmRegular.copyWith(
                       fontSize: 13.ssp(),
-                      color: cardHeader,
+                      color: notExactlyPrimary,
                     ),
                   ),
                 )

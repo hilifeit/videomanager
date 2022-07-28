@@ -277,6 +277,7 @@ class EditUser extends ConsumerWidget {
                         InputTextField(
                           value: addNewUser.mobile.toString(),
                           isdigits: true,
+                          limit: true,
                           title: 'Mobile Number',
                           isVisible: true,
                           fillColor: Colors.white,

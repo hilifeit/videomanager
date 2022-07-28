@@ -48,23 +48,23 @@ final List<CustomMenuItem> roadFace = [
 final List<CustomMenuItem> roadFaceSide = [
   CustomMenuItem(
     label: "0.5",
-    value: 0.5.toString(),
-  ),
-  CustomMenuItem(
-    label: "1",
     value: 1.toString(),
   ),
   CustomMenuItem(
-    label: "1.5",
-    value: 1.5.toString(),
-  ),
-  CustomMenuItem(
-    label: "2",
+    label: "1",
     value: 2.toString(),
   ),
   CustomMenuItem(
+    label: "1.5",
+    value: 3.toString(),
+  ),
+  CustomMenuItem(
+    label: "2",
+    value: 4.toString(),
+  ),
+  CustomMenuItem(
     label: "2.5",
-    value: 2.5.toString(),
+    value: 5.toString(),
   ),
 ];
 
@@ -79,7 +79,10 @@ final markercolorProvider = StateProvider<Color>((ref) {
 });
 
 final shopProvider = StateProvider<Shop>((ref) {
-  return Shop(roadFaceNum: 1);
+  return Shop(
+    roadFaceNum: 1,
+    roadFace: RoadFace(roadFace1: 1, roadFace2: 1, roadFace3: 1),
+  );
 });
 
 final roadFace2Provider = StateProvider<bool>((ref) {
@@ -302,6 +305,8 @@ class AddEditShop extends ConsumerWidget {
                         height: 19.sh(),
                       ),
                       InputTextField(
+                          isdigits: true,
+                          limit: true,
                           fillColor: Colors.white,
                           title: 'Contact Number',
                           isVisible: true,
@@ -340,6 +345,7 @@ class AddEditShop extends ConsumerWidget {
                               if (int.parse(val.value) == 2) {
                                 ref.read(roadFace2Provider.state).state = true;
                                 ref.read(roadFace3Provider.state).state = false;
+                                addNewShop.roadFace!.roadFace3 != 1;
                               } else if (int.parse(val.value) == 3) {
                                 ref.read(roadFace2Provider.state).state = true;
                                 ref.read(roadFace3Provider.state).state = true;
@@ -349,6 +355,8 @@ class AddEditShop extends ConsumerWidget {
                                 // for (int i = 0; i < roadFaceShow.length; i++) {
                                 ref.read(roadFace2Provider.state).state = false;
                                 ref.read(roadFace3Provider.state).state = false;
+                                addNewShop.roadFace!.roadFace2 != 1;
+                                addNewShop.roadFace!.roadFace3 != 1;
                                 // }
                               }
                             },
@@ -362,7 +370,9 @@ class AddEditShop extends ConsumerWidget {
                         children: [
                           DropDownWithText(
                             text: 'Road Face 1',
-                            value: edit ? editRoadFace : roadFaceSide.first,
+                            value: edit
+                                ? editRoadFace
+                                : roadFaceSide[addNewShop.roadFace!.roadFace1],
                             values: roadFaceSide,
                             onChanged: (val) {
                               addNewShop.roadFace!.roadFace1 =
@@ -375,7 +385,10 @@ class AddEditShop extends ConsumerWidget {
                           if (roadFace2Show)
                             DropDownWithText(
                               text: 'Road Face 2',
-                              value: edit ? editRoadFace : roadFaceSide.first,
+                              value: edit
+                                  ? editRoadFace
+                                  : roadFaceSide[
+                                      addNewShop.roadFace!.roadFace2!],
                               values: roadFaceSide,
                               onChanged: (val) {
                                 addNewShop.roadFace!.roadFace2 =
