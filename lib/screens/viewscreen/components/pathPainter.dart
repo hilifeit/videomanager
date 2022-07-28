@@ -59,6 +59,7 @@ class Painter extends CustomPainter {
     final files = fileservice.files;
     final stroke = settingService.setting.mapSetting.stroke.toDouble();
     final handleDragged = selectedPointsProvider.selectedHandle;
+
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
@@ -215,7 +216,6 @@ class Painter extends CustomPainter {
                               titlePadding: EdgeInsets.zero,
                               contentPadding: EdgeInsets.zero,
                               content: AssignManager(
-                              
                                 files: [],
                                 points: [],
                               ),

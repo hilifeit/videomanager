@@ -7,6 +7,7 @@ import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class Filter extends StatelessWidget {
   const Filter({Key? key, required this.mapController}) : super(key: key);
@@ -113,6 +114,8 @@ class Filter extends StatelessWidget {
           flex: 3,
           child: Consumer(builder: (context, ref, c) {
             final areas = ref.watch(fileDetailMiniServiceProvider).areas;
+            final selectedArea =
+                ref.watch(selectedAreaServiceProvider).selectedArea.value;
             return ListView.separated(
               itemCount: areas.length,
               itemBuilder: (_, index) {
@@ -131,23 +134,28 @@ class Filter extends StatelessWidget {
   }
 }
 
-class AssignedAreaCard extends StatelessWidget {
-  const AssignedAreaCard({
+class AssignedAreaCard extends ConsumerWidget {
+  AssignedAreaCard({
     Key? key,
     required this.area,
+    this.selected = false,
   }) : super(key: key);
 
   final AreaModel area;
+  bool selected;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onLongPress: () {},
-      onTap: () {},
+      onTap: () {
+        var selectedAreaService = ref.read(selectedAreaServiceProvider);
+        selectedAreaService
+          ..selectArea(area)
+          ..refine();
+      },
       child: Card(
-        color:
-            // area.selected ?
-            Color(0xffECF0F2),
+        color: selected ? Color(0xffECF0F2) : whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
