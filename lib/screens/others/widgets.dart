@@ -227,7 +227,8 @@ class InputTextField extends StatelessWidget {
   bool isVisible = true;
   final String? Function(String? val)? validator;
   final Function()? onTap;
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   TextStyle? hintStyle, suffixStyle;
   final TextStyle? style;
   final String value;
@@ -244,6 +245,7 @@ class InputTextField extends StatelessWidget {
       required this.isVisible,
       this.fillColor,
       this.prefixIcon,
+      this.suffixIcon,
       this.style,
       this.onTap,
       this.isdigits = false,
@@ -291,6 +293,7 @@ class InputTextField extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon: prefixIcon,
             suffixText: suffixText,
+            suffixIcon: suffixIcon,
             suffixStyle: suffixStyle,
             fillColor: fillColor,
             filled: true,
