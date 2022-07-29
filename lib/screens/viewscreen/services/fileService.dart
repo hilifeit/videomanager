@@ -114,6 +114,7 @@ class FileService extends ChangeNotifier {
         throw response.statusCode;
       }
     } catch (e, s) {
+      print("$e $s");
       throw e;
     }
   }

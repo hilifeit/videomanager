@@ -34,7 +34,7 @@ class AssignedAreaCard extends ConsumerWidget {
                 radius: 20.sr(),
                 backgroundColor: notExactlyPrimary,
                 child: Text(
-                  '200',
+                  '${area.files}',
                   style: kTextStyleIbmSemiBold.copyWith(
                       fontSize: 14.ssp(), color: whiteColor),
                 ),
