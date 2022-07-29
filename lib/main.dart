@@ -18,7 +18,7 @@ void main() async {
   }
   await GetStorage.init();
   //storage.erase();
-  customSocket.connect();
+  // customSocket.connect();
   runApp(Phoenix(child: const MyApp()));
 }
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
               theme: lightTheme,
               home: const Loader(),
 
-              // home: const Scaffold(body: Loader())             
+              // home: const Scaffold(body: Loader())
             ),
           );
         },
@@ -62,4 +62,3 @@ class MyApp extends StatelessWidget {
     }
   }
 }
-
