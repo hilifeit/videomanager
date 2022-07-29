@@ -11,11 +11,13 @@ class CustomOutlinedButton extends StatelessWidget {
     required this.outlinedButtonText,
     this.width,
     this.height,
+    this.borderColor,
   }) : super(key: key);
 
   final Function onPressedOutlined;
   final String outlinedButtonText;
   double? width, height;
+  Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class CustomOutlinedButton extends StatelessWidget {
       height: height ?? 46.sh(),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.sr()),
-          border: Border.all(color: Colors.black)),
+          border: Border.all(color: borderColor ?? Colors.black)),
       child: Consumer(builder: (context, ref, c) {
         return TextButton(
             onPressed: () {
@@ -33,7 +35,7 @@ class CustomOutlinedButton extends StatelessWidget {
             child: Text(
               outlinedButtonText,
               style: kTextStyleIbmRegular.copyWith(
-                color: Colors.black,
+                color: borderColor ?? Colors.black,
                 fontSize: 17.ssp(),
               ),
             ));
@@ -53,6 +55,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.elevatedButtonPadding,
     this.color,
     this.icon,
+    this.enabled = true,
   }) : super(key: key);
 
   final Function onPressedElevated;
@@ -62,6 +65,7 @@ class CustomElevatedButton extends StatelessWidget {
   EdgeInsetsGeometry? elevatedButtonPadding;
   Color? color;
   IconData? icon;
+  bool enabled;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -71,10 +75,12 @@ class CustomElevatedButton extends StatelessWidget {
         style: ButtonStyle(
             padding: MaterialStateProperty.resolveWith(
                 (states) => elevatedButtonPadding ?? EdgeInsets.zero),
-            backgroundColor: MaterialStateColor.resolveWith(
-                (states) => color ?? Theme.of(context).primaryColor)),
+            backgroundColor: MaterialStateColor.resolveWith((states) =>
+                enabled ? color ?? Theme.of(context).primaryColor : darkGrey)),
         onPressed: () {
-          onPressedElevated();
+          if (enabled) {
+            onPressedElevated();
+          }
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

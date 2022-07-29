@@ -52,10 +52,10 @@ class MyApp extends StatelessWidget {
   Size checkWidth(BoxConstraints constraints) {
     if (constraints.maxWidth < 550) {
       ResponsiveLayout.setMobile();
-      return const Size(450, 400);
+      return const Size(414, 896);
     } else if (constraints.maxWidth < 1100) {
       ResponsiveLayout.setTablet();
-      return const Size(850, 700);
+      return const Size(768, 1024);
     } else {
       ResponsiveLayout.setDesktop();
       return const Size(1920, 1080);
