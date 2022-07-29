@@ -2,11 +2,17 @@ import 'package:videomanager/screens/chat/components/chatHome.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class ProfileAvatar extends StatelessWidget {
-  ProfileAvatar({Key? key, this.profileradius = 20, this.isChatHome = true, this.nameFontSize=14})
+  ProfileAvatar(
+      {Key? key,
+      this.profileradius = 20,
+      this.showDetails = false,
+      this.nameFontSize = 14,
+      })
       : super(key: key);
   double profileradius, nameFontSize;
-  bool isChatHome;
+  bool showDetails;
   
+
   @override
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -31,7 +37,7 @@ class ProfileAvatar extends StatelessWidget {
           ),
         ],
       ),
-      if (!isChatHome) ...[
+      if (showDetails) ...[
         SizedBox(
           width: 30.sw(),
         ),
@@ -51,6 +57,7 @@ class ProfileAvatar extends StatelessWidget {
           ],
         )
       ],
+     
     ]);
   }
 }
