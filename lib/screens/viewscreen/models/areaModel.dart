@@ -14,18 +14,18 @@ String areaModelToJson(List<AreaModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class AreaModel {
-  AreaModel({
-    required this.id,
-    required this.name,
-    required this.assignedTo,
-    required this.assignedBy,
-    required this.location,
-    required this.status,
-    required this.enabled,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.v,
-  });
+  AreaModel(
+      {required this.id,
+      required this.name,
+      required this.assignedTo,
+      required this.assignedBy,
+      required this.location,
+      required this.status,
+      required this.enabled,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.v,
+      required this.files});
 
   String id;
   String name;
@@ -36,6 +36,7 @@ class AreaModel {
   bool enabled;
   DateTime createdAt;
   DateTime updatedAt;
+  int files;
   int v;
 
   AreaModel copyWith({
@@ -61,6 +62,7 @@ class AreaModel {
         createdAt: createdAt,
         updatedAt: updatedAt,
         v: v,
+        files: files,
       );
 
   factory AreaModel.fromJson(Map<String, dynamic> json) => AreaModel(
@@ -74,6 +76,7 @@ class AreaModel {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
+        files: json["files"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -100,6 +103,7 @@ class AreaModel {
         enabled: true,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        v: 0);
+        v: 0,
+        files: 0);
   }
 }
