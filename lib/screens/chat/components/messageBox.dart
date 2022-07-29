@@ -19,13 +19,16 @@ class CustomMessageBox extends StatelessWidget {
       return Row(
         children: [
           if (ownMessage) Spacer(),
+          SizedBox(
+            width: 10.sw(),
+          ),
           Column(
             crossAxisAlignment:
                 !ownMessage ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             children: [
               Container(
                 constraints:
-                    BoxConstraints(maxWidth: constraints.maxWidth * .65),
+                    BoxConstraints(maxWidth: constraints.maxWidth * .55),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.sr()),
                   color: color,
@@ -43,11 +46,14 @@ class CustomMessageBox extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 2.sh()),
+              SizedBox(height: 6.sh()),
               Text(
                 messageTime.toString().substring(0, 16),
               )
             ],
+          ),
+          SizedBox(
+            width: 10.sw(),
           ),
           if (!ownMessage) Spacer()
         ],

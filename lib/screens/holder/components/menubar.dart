@@ -33,7 +33,8 @@ class MenuBar extends ConsumerWidget {
   ];
   final List<CustomMenuItem> itemsUser = [
     CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
-    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 1),
+    CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 1),
+    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 2),
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
 
