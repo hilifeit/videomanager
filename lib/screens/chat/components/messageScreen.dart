@@ -19,7 +19,7 @@ class MessageScreen extends StatelessWidget {
           Row(
             children: [
               ProfileAvatar(
-                isChatHome: false,
+                showDetails: true,
                 profileradius: 30.sr(),
                 nameFontSize: 20.ssp(),
               ),
@@ -51,48 +51,50 @@ class MessageScreen extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30.sw()),
-            child: Column(
-              children: [
-                CustomMessageBox(
-                  message: "This is my message",
-                  ownMessage: true,
-                  messageTime:
-                      (DateTime.now().subtract(Duration(days: 1, hours: 2))),
-                ),
-                SizedBox(
-                  height: 20.sh(),
-                ),
-                CustomMessageBox(
-                  message:
-                      " aceholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
-                ),
-                SizedBox(
-                  height: 20.sh(),
-                ),
-                CustomMessageBox(
-                  message: "हामीले कहिले गर्ने यस्तो? 😒😒😒😒😒",
-                  ownMessage: true,
-                ),
-                SizedBox(
-                  height: 20.sh(),
-                ),
-                CustomMessageBox(
-                  message:
-                      "हामीले कहिले गर्ने यस्तो? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.😒😒😒😒😒  aceholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
-                  ownMessage: true,
-                ),
-                CustomMessageBox(
-                  message:
-                      "Hello shruti dee 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣",
-                  ownMessage: true,
-                ),
-                SizedBox(
-                  height: 20.sh(),
-                ),
-                SizedBox(
-                  height: 20.sh(),
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CustomMessageBox(
+                    message: "This is my message",
+                    ownMessage: true,
+                    messageTime:
+                        (DateTime.now().subtract(Duration(days: 1, hours: 2))),
+                  ),
+                  SizedBox(
+                    height: 20.sh(),
+                  ),
+                  CustomMessageBox(
+                    message:
+                        " aceholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
+                  ),
+                  SizedBox(
+                    height: 20.sh(),
+                  ),
+                  CustomMessageBox(
+                    message: "हामीले कहिले गर्ने यस्तो? 😒😒😒😒😒",
+                    ownMessage: true,
+                  ),
+                  SizedBox(
+                    height: 20.sh(),
+                  ),
+                  CustomMessageBox(
+                    message:
+                        "हामीले कहिले गर्ने यस्तो? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.😒😒😒😒😒  aceholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
+                    ownMessage: true,
+                  ),
+                  CustomMessageBox(
+                    message:
+                        "Hello shruti dee 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣",
+                    ownMessage: true,
+                  ),
+                  SizedBox(
+                    height: 20.sh(),
+                  ),
+                  SizedBox(
+                    height: 20.sh(),
+                  ),
+                ],
+              ),
             ),
           ),
           Spacer(),

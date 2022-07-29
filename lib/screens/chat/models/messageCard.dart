@@ -12,7 +12,9 @@ class UserMessageCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProfileAvatar(),
+          ProfileAvatar(
+            showDetails: false,
+          ),
           SizedBox(
             width: 30.sw(),
           ),
