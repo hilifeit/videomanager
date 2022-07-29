@@ -103,19 +103,27 @@ class FileService extends ChangeNotifier {
   }
 
   fetchAllArea() async {
-    try {
-      var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}area"),
-          headers: {"Content-Type": "application/json"});
-      if (response.statusCode == 200) {
-        areas.clear();
-        areas.addAll(areaModelFromJson(response.body));
-        notifyListeners();
-      } else {
-        throw response.statusCode;
+    var userProvider = ref.read(userChangeProvider);
+    if (userProvider.loggedInUser.value != null) {
+      try {
+        var response = await client.get(
+          Uri.parse("${CustomIP.apiBaseUrl}area"),
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userProvider.loggedInUser.value!.accessToken!
+          },
+        );
+        if (response.statusCode == 200) {
+          areas.clear();
+          areas.addAll(areaModelFromJson(response.body));
+          notifyListeners();
+        } else {
+          throw response.statusCode;
+        }
+      } catch (e, s) {
+        print("$e $s");
+        throw e;
       }
-    } catch (e, s) {
-      print("$e $s");
-      throw e;
     }
   }
 
