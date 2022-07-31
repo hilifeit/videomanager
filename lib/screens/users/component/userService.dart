@@ -67,6 +67,14 @@ class UserService extends ChangeNotifier {
     }
   }
 
+  changeActiveStatus({required String id, required bool isActive}) {
+    var userIndex = _users.indexWhere((element) => element.id == id);
+    if (userIndex >= 0) {
+      _users[userIndex].isActive = isActive;
+      notifyListeners();
+    }
+  }
+
   fetchAll() async {
     // try {
     if (loggedInUser.value != null) {

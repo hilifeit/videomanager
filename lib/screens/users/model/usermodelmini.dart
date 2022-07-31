@@ -14,15 +14,15 @@ UserModelMini userModelMiniFromJson(String str) =>
 String userModelMiniToJson(UserModelMini data) => json.encode(data.toJson());
 
 class UserModelMini {
-  UserModelMini({
-    required this.id,
-    required this.name,
-    required this.role,
-    required this.createdAt,
-    this.superVisor,
-    this.accessToken,
-    this.refreshToken,
-  });
+  UserModelMini(
+      {required this.id,
+      required this.name,
+      required this.role,
+      required this.createdAt,
+      this.superVisor,
+      this.accessToken,
+      this.refreshToken,
+      this.isActive = false});
 
   String id;
   String name;
@@ -31,6 +31,7 @@ class UserModelMini {
   SuperVisor? superVisor;
   String? accessToken;
   String? refreshToken;
+  bool isActive;
 
   UserModelMini copyWith({
     required String id,
@@ -74,7 +75,8 @@ class UserModelMini {
         "accessToken": accessToken,
         "refreshToken": refreshToken,
       };
-      static UserModelMini empty()=>UserModelMini(id: '', name: '', role: 0, createdAt: DateTime.now());
+  static UserModelMini empty() =>
+      UserModelMini(id: '', name: '', role: 0, createdAt: DateTime.now());
 }
 
 class SuperVisor {

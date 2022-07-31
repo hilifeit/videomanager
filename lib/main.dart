@@ -18,7 +18,7 @@ void main() async {
   }
   await GetStorage.init();
   // storage.erase();
-  // customSocket.connect();
+
   runApp(Phoenix(child: const MyApp()));
 }
 

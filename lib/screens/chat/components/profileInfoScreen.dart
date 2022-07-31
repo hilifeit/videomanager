@@ -43,6 +43,7 @@ class ProfileInfoScreen extends StatelessWidget {
                       return ProfileAvatar(
                         name: users[index].name,
                         showDetails: true,
+                        isActive: users[index].isActive,
                       );
                     },
                     separatorBuilder: (_, index) {

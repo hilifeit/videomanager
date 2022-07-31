@@ -28,6 +28,18 @@ class CustomSocket {
           socket.on("notification", (data) {
             snack.info(data);
           });
+          socket.on("active", (data) {
+            CustomKeys()
+                .ref!
+                .read(userChangeProvider)
+                .changeActiveStatus(id: data, isActive: true);
+          });
+          socket.on("inActive", (data) {
+            CustomKeys()
+                .ref!
+                .read(userChangeProvider)
+                .changeActiveStatus(id: data, isActive: false);
+          });
         }
       } else {
         print("no user");
