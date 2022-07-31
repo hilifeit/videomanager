@@ -38,7 +38,10 @@ class ProfileInfoScreen extends StatelessWidget {
               builder: (_, ref, c) {
                 final userProvider = ref.watch(userChangeProvider);
                 final users = userProvider.users;
-
+                users.sort(
+                  (b, a) =>
+                      a.isActive.toString().compareTo(b.isActive.toString()),
+                );
                 return ListView.separated(
                     itemBuilder: (_, index) {
                       if (users[index].id ==
