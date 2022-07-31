@@ -23,11 +23,14 @@ class CustomSocket {
           socket.onConnect((data) => print("Connected: $data"));
           socket.onConnectError((data) => snack.error(data));
           socket.onConnectTimeout((data) => snack.error(data));
+          socket.onError((data) => snack.error(data));
           socket.onDisconnect((data) => null);
           socket.on("notification", (data) {
             snack.info(data);
           });
         }
+      } else {
+        print("no user");
       }
     } catch (e) {
       print('$e');
