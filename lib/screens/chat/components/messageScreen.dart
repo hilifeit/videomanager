@@ -4,163 +4,154 @@ import 'package:videomanager/screens/chat/models/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 class MessageScreen extends ConsumerWidget {
   const MessageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userProvider = ref.read(userChangeProvider);
+    final selectedUser = ref.watch(userChangeProvider).selectedChatUser.value;
     return Scaffold(
-      appBar: !ResponsiveLayout.isDesktop ? AppBar() : null,
+      appBar: ResponsiveLayout.isMobile ? AppBar() : null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 50.sw()),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 60.sh(),
-            ),
-            Row(
-              children: [
-                ProfileAvatar(
-                  showDetails: true,
-                  profileradius: 30.sr(),
-                  nameFontSize: 20.ssp(),
-                ),
-                const Spacer(),
-                PopupMenuButton(itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem(
-                      onTap: () {},
-                      child: CustomPopUpMenuItemChild(text: 'View Profile'),
-                    ),
-                    PopupMenuItem(
-                      onTap: () {},
-                      child:
-                          CustomPopUpMenuItemChild(text: 'Mute Notification'),
-                    ),
-                    PopupMenuItem(
-                      onTap: () {},
-                      child: CustomPopUpMenuItemChild(text: 'Block User'),
-                    )
-                  ];
-                  ;
-                })
-              ],
-            ),
-            SizedBox(
-              height: 15.sh(),
-            ),
-            Divider(
-              thickness: 2,
-            ),
-
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30.sw()),
-                child: SingleChildScrollView(
-                  // clipBehavior: Clip.none,
-                  child: Column(
+        child: selectedUser == null
+            ? const Center(
+                child: Text("Select a user to start conversation"),
+              )
+            : Column(
+                children: [
+                  SizedBox(
+                    height: 60.sh(),
+                  ),
+                  Row(
                     children: [
-                      SizedBox(
-                        height: 50.sh(),
+                      ProfileAvatar(
+                        showDetails: true,
+                        profileradius: 30.sr(),
+                        nameFontSize: 20.ssp(),
+                        name: selectedUser.name,
+                        isActive: selectedUser.isActive,
                       ),
-                      Consumer(builder: (context, ref, covariant) {
-                        final integerService =
-                            ref.watch(chatServiceChangeProvider);
-                        final integer = integerService.integer;
-                        return CustomMessageBox(
-                          message: integer
-                              .map((element) => element.toString())
-                              .toString(),
-                          ownMessage: true,
-                          messageTime: (DateTime.now()
-                              .subtract(Duration(days: 1, hours: 2))),
-                        );
-                      }),
-                      SizedBox(
-                        height: 20.sh(),
-                      ),
-                      CustomMessageBox(
-                        message:
-                            " aceholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
-                      ),
-                      SizedBox(
-                        height: 20.sh(),
-                      ),
-                      CustomMessageBox(
-                        message: "हामीले कहिले गर्ने यस्तो? 😒😒😒😒😒",
-                        ownMessage: true,
-                      ),
-                      SizedBox(
-                        height: 20.sh(),
-                      ),
-                      CustomMessageBox(
-                        message:
-                            "हामीले कहिले गर्ने यस्तो? Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.😒😒😒😒😒  aceholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.This is your message asds aa saas a a dasd a  das da dass  sds sd s dsds dss dsd s ds dsds d sds as ak nnks  nkn ks n nk nks nskn ksnkskk sksk knknk snsnksnks nk nk ns nksn",
-                        ownMessage: true,
-                      ),
-                      CustomMessageBox(
-                        message:
-                            "Hello shruti dee 🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣🤣",
-                        ownMessage: true,
-                      ),
-                      SizedBox(
-                        height: 20.sh(),
-                      ),
-                      SizedBox(
-                        height: 20.sh(),
-                      ),
+                      const Spacer(),
+                      PopupMenuButton(itemBuilder: (BuildContext context) {
+                        return [
+                          PopupMenuItem(
+                            onTap: () {},
+                            child:
+                                CustomPopUpMenuItemChild(text: 'View Profile'),
+                          ),
+                          PopupMenuItem(
+                            onTap: () {},
+                            child: CustomPopUpMenuItemChild(
+                                text: 'Mute Notification'),
+                          ),
+                          PopupMenuItem(
+                            onTap: () {},
+                            child: CustomPopUpMenuItemChild(text: 'Block User'),
+                          )
+                        ];
+                        ;
+                      })
                     ],
                   ),
-                ),
+                  SizedBox(
+                    height: 15.sh(),
+                  ),
+
+                  const Divider(
+                    thickness: 2,
+                  ),
+
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.sw()),
+                      child: Stack(
+                        children: [
+                          SingleChildScrollView(
+                            // clipBehavior: Clip.none,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 50.sh(),
+                                ),
+                                SizedBox(
+                                  height: 20.sh(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Consumer(
+                            builder: (_, ref, c) {
+                              final isTyping =
+                                  ref.watch(userChangeProvider).isTyping.value;
+                              return isTyping
+                                  ? Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text(
+                                          "${selectedUser.name} is typing..."))
+                                  : Container();
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Spacer(),
+
+                  Divider(
+                    thickness: 2,
+                    height: 40.sh(),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: MessageTextField(
+                        onChanged: (value) {
+                          customSocket.socket.emit(
+                              "typing", {"to": selectedUser.id, "data": value});
+                        },
+                        prefixIcon: InkWell(
+                            onTap: () {
+                              ref.read(chatServiceChangeProvider).add(10);
+                            },
+                            child: Icon(Icons.emoji_emotions)),
+                        suffixIcon: InkWell(
+                            onTap: () {
+                              ref.read(chatServiceChangeProvider).remove(10);
+                            },
+                            child: Icon(Icons.send)),
+                      )),
+                      // Expanded(
+                      //  child: InputTextField(
+                      //     title: 'Message',
+                      //     isVisible: false,
+                      //     onChanged: (p0) {},
+                      //     prefixIcon:
+                      //         InkWell(onTap: () {}, child: Icon(Icons.emoji_emotions)),
+                      //     suffixIcon: InkWell(onTap: () {}, child: Icon(Icons.send)),
+                      //   ),
+                      // ),
+                      GestureDetector(
+                          onTap: () {}, child: Icon(Icons.attach_file)),
+                      SizedBox(
+                        width: 10.sw(),
+                      ),
+                      Icon(Icons.camera_alt_outlined),
+                      SizedBox(
+                        width: 10.sw(),
+                      ),
+                      Icon(Icons.mic)
+                    ],
+                  ),
+                  SizedBox(
+                    height: 40.sh(),
+                  )
+                ],
               ),
-            ),
-            // Spacer(),
-            Divider(
-              thickness: 2,
-              height: 40.sh(),
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: MessageTextField(
-                  prefixIcon: InkWell(
-                      onTap: () {
-                        ref.read(chatServiceChangeProvider).add(10);
-                      },
-                      child: Icon(Icons.emoji_emotions)),
-                  suffixIcon: InkWell(
-                      onTap: () {
-                        ref.read(chatServiceChangeProvider).remove(10);
-                      },
-                      child: Icon(Icons.send)),
-                )),
-                // Expanded(
-                //  child: InputTextField(
-                //     title: 'Message',
-                //     isVisible: false,
-                //     onChanged: (p0) {},
-                //     prefixIcon:
-                //         InkWell(onTap: () {}, child: Icon(Icons.emoji_emotions)),
-                //     suffixIcon: InkWell(onTap: () {}, child: Icon(Icons.send)),
-                //   ),
-                // ),
-                GestureDetector(onTap: () {}, child: Icon(Icons.attach_file)),
-                SizedBox(
-                  width: 10.sw(),
-                ),
-                Icon(Icons.camera_alt_outlined),
-                SizedBox(
-                  width: 10.sw(),
-                ),
-                Icon(Icons.mic)
-              ],
-            ),
-            SizedBox(
-              height: 40.sh(),
-            )
-          ],
-        ),
       ),
     );
   }

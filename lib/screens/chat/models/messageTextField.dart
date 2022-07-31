@@ -4,10 +4,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class MessageTextField extends StatelessWidget {
-  const MessageTextField({Key? key, this.prefixIcon, this.suffixIcon})
+  const MessageTextField(
+      {Key? key, this.prefixIcon, this.suffixIcon, required this.onChanged})
       : super(key: key);
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final Function(String) onChanged;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,7 +17,7 @@ class MessageTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.sr()),
       ),
       child: TextFormField(
-        decoration: InputDecoration( 
+        decoration: InputDecoration(
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
         ),

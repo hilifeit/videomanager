@@ -36,17 +36,29 @@ class ProfileInfoScreen extends StatelessWidget {
           Expanded(
             child: Consumer(
               builder: (_, ref, c) {
-                final users = ref.watch(userChangeProvider).users;
+                final userProvider = ref.watch(userChangeProvider);
+                final users = userProvider.users;
 
                 return ListView.separated(
                     itemBuilder: (_, index) {
+                      if (users[index].id ==
+                          ref.read(userChangeProvider).loggedInUser.value!.id) {
+                        return Container();
+                      }
                       return ProfileAvatar(
                         name: users[index].name,
                         showDetails: true,
                         isActive: users[index].isActive,
+                        onTap: () {
+                          userProvider.selectedChatUser.value = users[index];
+                        },
                       );
                     },
                     separatorBuilder: (_, index) {
+                      if (users[index].id ==
+                          ref.read(userChangeProvider).loggedInUser.value!.id) {
+                        return Container();
+                      }
                       return SizedBox(
                         height: 10.sh(),
                       );

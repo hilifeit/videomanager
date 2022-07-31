@@ -28,37 +28,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return ScreenUtilInit(
-        designSize: checkWidth(constraints),
-        builder: (_, child) {
-          return ProviderScope(
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Demo',
-              themeMode: ThemeMode.light,
-              darkTheme: ThemeData(brightness: Brightness.dark),
-              theme: lightTheme,
-              home: const Loader(),
+    // return LayoutBuilder(builder: (context, constraints) {
 
-              // home: const Scaffold(body: Loader())
-            ),
-          );
-        },
-      );
-    });
-  }
+    return ProviderScope(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Demo',
+        themeMode: ThemeMode.light,
+        darkTheme: ThemeData(brightness: Brightness.dark),
+        theme: lightTheme,
+        home: const Loader(),
 
-  Size checkWidth(BoxConstraints constraints) {
-    if (constraints.maxWidth < 550) {
-      ResponsiveLayout.setMobile();
-      return const Size(414, 896);
-    } else if (constraints.maxWidth < 1100) {
-      ResponsiveLayout.setTablet();
-      return const Size(768, 1024);
-    } else {
-      ResponsiveLayout.setDesktop();
-      return const Size(1920, 1080);
-    }
+        // home: const Scaffold(body: Loader())
+      ),
+    );
+
+    // });
   }
 }
