@@ -48,6 +48,12 @@ class CustomSocket {
                 .read(userChangeProvider)
                 .changeActiveStatus(id: data, isActive: false);
           });
+
+          socket.on("typing", (data) {
+            print(data);
+            CustomKeys().ref!.read(userChangeProvider).changeIsTyping(data);
+          });
+
           socket.on("activeUsers", (data) {
             if (data != null) {
               CustomKeys()

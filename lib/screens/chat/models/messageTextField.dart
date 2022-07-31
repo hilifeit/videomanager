@@ -17,6 +17,9 @@ class MessageTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10.sr()),
       ),
       child: TextFormField(
+        onChanged: (val) {
+          onChanged(val);
+        },
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
