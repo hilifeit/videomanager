@@ -18,6 +18,7 @@ class UserService extends ChangeNotifier {
 
   UserService._() {
     load();
+
     fetchAll();
   }
 
@@ -40,6 +41,9 @@ class UserService extends ChangeNotifier {
     final userJson = storage.read(userStorageKey);
     if (userJson != null) {
       loggedInUser.value = UserModelMini.fromJson(userJson);
+      Future.delayed(Duration(milliseconds: 10), () {
+        customSocket.connect();
+      });
     }
   }
 
@@ -64,6 +68,14 @@ class UserService extends ChangeNotifier {
       }
     } catch (e) {
       throw "$e";
+    }
+  }
+
+  changeActiveStatus({required String id, required bool isActive}) {
+    var userIndex = _users.indexWhere((element) => element.id == id);
+    if (userIndex >= 0) {
+      _users[userIndex].isActive = isActive;
+      notifyListeners();
     }
   }
 

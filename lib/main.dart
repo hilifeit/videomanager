@@ -17,8 +17,8 @@ void main() async {
     window.document.onContextMenu.listen((evt) => evt.preventDefault());
   }
   await GetStorage.init();
-  //storage.erase();
-  customSocket.connect();
+  // storage.erase();
+
   runApp(Phoenix(child: const MyApp()));
 }
 
