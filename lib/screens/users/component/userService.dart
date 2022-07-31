@@ -18,6 +18,7 @@ class UserService extends ChangeNotifier {
 
   UserService._() {
     load();
+
     fetchAll();
   }
 
@@ -40,6 +41,9 @@ class UserService extends ChangeNotifier {
     final userJson = storage.read(userStorageKey);
     if (userJson != null) {
       loggedInUser.value = UserModelMini.fromJson(userJson);
+      Future.delayed(Duration(milliseconds: 10), () {
+        customSocket.connect();
+      });
     }
   }
 

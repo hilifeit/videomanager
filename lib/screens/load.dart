@@ -8,6 +8,7 @@ final loginStateProvider = StateProvider<bool>((ref) {
   var user = storage.read("users");
   if (user != null) {
     ref.read(userChangeProvider);
+
     return false;
   }
   return true;
@@ -22,9 +23,6 @@ class Loader extends ConsumerWidget {
     CustomOverlayEntry().context = context;
     final isLogin = ref.watch(loginStateProvider.state).state;
 
-    if (isLogin) {
-      customSocket.connect();
-    }
     return Stack(
       children: [
         isLogin ? const AuthScreen() : Holder(),
