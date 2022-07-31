@@ -50,7 +50,6 @@ class CustomSocket {
           });
 
           socket.on("typing", (data) {
-            print(data);
             CustomKeys().ref!.read(userChangeProvider).changeIsTyping(data);
           });
 

@@ -95,12 +95,14 @@ class UserService extends ChangeNotifier {
   }
 
   changeIsTyping(String? id) {
-    if (id != null && selectedChatUser.value != null) {
-      if (id == selectedChatUser.value?.id) {
-        isTyping.value = true;
-        Future.delayed(Duration(milliseconds: 150), () {
-          isTyping.value = false;
-        });
+    if (!isTyping.value) {
+      if (id != null && selectedChatUser.value != null) {
+        if (id == selectedChatUser.value?.id) {
+          isTyping.value = true;
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            isTyping.value = false;
+          });
+        }
       }
     }
   }

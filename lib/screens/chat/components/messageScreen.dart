@@ -114,6 +114,10 @@ class MessageScreen extends ConsumerWidget {
                           customSocket.socket.emit(
                               "typing", {"to": selectedUser.id, "data": value});
                         },
+                        onSend: (value) {
+                          customSocket.socket.emit("message",
+                              {"to": selectedUser.id, "data": value});
+                        },
                         prefixIcon: InkWell(
                             onTap: () {
                               ref.read(chatServiceChangeProvider).add(10);
@@ -125,16 +129,6 @@ class MessageScreen extends ConsumerWidget {
                             },
                             child: Icon(Icons.send)),
                       )),
-                      // Expanded(
-                      //  child: InputTextField(
-                      //     title: 'Message',
-                      //     isVisible: false,
-                      //     onChanged: (p0) {},
-                      //     prefixIcon:
-                      //         InkWell(onTap: () {}, child: Icon(Icons.emoji_emotions)),
-                      //     suffixIcon: InkWell(onTap: () {}, child: Icon(Icons.send)),
-                      //   ),
-                      // ),
                       GestureDetector(
                           onTap: () {}, child: Icon(Icons.attach_file)),
                       SizedBox(
