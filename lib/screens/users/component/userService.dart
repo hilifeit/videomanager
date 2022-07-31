@@ -24,6 +24,9 @@ class UserService extends ChangeNotifier {
 
   late final selectedUser = Property<UserModel?>(null, notifyListeners);
 
+  late final selectedChatUser = Property<UserModelMini?>(null, notifyListeners);
+  late final isTyping = Property<bool>(false, notifyListeners);
+
   late final loggedInUser = Property<UserModelMini?>(null, notifyListeners);
 
   late final errorMessage = Property<String>("", notifyListeners);
@@ -79,8 +82,34 @@ class UserService extends ChangeNotifier {
     }
   }
 
+  getActiveUsers(List<String> ids) async {
+    Future.delayed(Duration(milliseconds: 10), () {
+      for (var element in ids) {
+        var userIndex = _users.indexWhere((e) => e.id == element);
+        if (userIndex >= 0) {
+          _users[userIndex].isActive = true;
+        }
+      }
+      notifyListeners();
+    });
+  }
+
+  changeIsTyping(String? id) {
+    if (!isTyping.value) {
+      if (id != null && selectedChatUser.value != null) {
+        if (id == selectedChatUser.value?.id) {
+          isTyping.value = true;
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            isTyping.value = false;
+          });
+        }
+      }
+    }
+  }
+
   fetchAll() async {
     // try {
+
     if (loggedInUser.value != null) {
       var response = await tunnelRequest(() => client
               .get(Uri.parse("${CustomIP.apiBaseUrl}$userEndPoint"), headers: {
@@ -92,6 +121,7 @@ class UserService extends ChangeNotifier {
         var temp = userModelMiniListFromJson(response.body);
         users = temp;
         notifyListeners();
+        print(_users.length);
       } else if (response.statusCode == 403) {
         throw 'token expired';
       } else {

@@ -23,37 +23,43 @@ class Loader extends ConsumerWidget {
     CustomOverlayEntry().context = context;
     final isLogin = ref.watch(loginStateProvider.state).state;
 
-    return Stack(
-      children: [
-        isLogin ? const AuthScreen() : Holder(),
-        // AnimatedCrossFade(
-        //     firstChild: const AuthScreen(),
-        //     secondChild: const Holder(),
-        //     crossFadeState:
-        //         isLogin ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        //     duration: const Duration(milliseconds: 800)),
+    return LayoutBuilder(builder: (context, constraints) {
+      return ScreenUtilInit(
+        designSize: ResponsiveLayout.checkWidth(constraints),
+        builder: (_, child) => child!,
+        child: Stack(
+          children: [
+            isLogin ? const AuthScreen() : Holder(),
+            // AnimatedCrossFade(
+            //     firstChild: const AuthScreen(),
+            //     secondChild: const Holder(),
+            //     crossFadeState:
+            //         isLogin ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            //     duration: const Duration(milliseconds: 800)),
 
-        // if (snackVisible)
+            // if (snackVisible)
 
-        Consumer(builder: (context, ref, c) {
-          final snackVisible = ref.watch(snackVisibleProvider.state).state;
-          return Positioned(
-            top: 120.sh(),
-            right: 10,
-            child: SizedBox(
-              height: 44,
-              //width: 345,
-              width: snackVisible ? 300 : 1,
-              // height: snackVisible ? 55 : 1,
-              child: ScaffoldMessenger(
-                  key: CustomKeys().messengerKey,
-                  child: const Scaffold(
-                    backgroundColor: Colors.transparent,
-                  )),
-            ),
-          );
-        })
-      ],
-    );
+            Consumer(builder: (context, ref, c) {
+              final snackVisible = ref.watch(snackVisibleProvider.state).state;
+              return Positioned(
+                top: 120.sh(),
+                right: 10,
+                child: SizedBox(
+                  height: 44,
+                  //width: 345,
+                  width: snackVisible ? 300 : 1,
+                  // height: snackVisible ? 55 : 1,
+                  child: ScaffoldMessenger(
+                      key: CustomKeys().messengerKey,
+                      child: const Scaffold(
+                        backgroundColor: Colors.transparent,
+                      )),
+                ),
+              );
+            })
+          ],
+        ),
+      );
+    });
   }
 }

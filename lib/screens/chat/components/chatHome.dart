@@ -1,10 +1,12 @@
+import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/chat/models/messageCard.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/viewscreen/components/customSearch.dart';
 
 class ChatHome extends StatelessWidget {
-  const ChatHome({Key? key}) : super(key: key);
-
+  ChatHome({Key? key}) : super(key: key);
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,11 +51,37 @@ class ChatHome extends StatelessWidget {
                   height: 35.sh(),
                 ),
               ),
-              SizedBox(
-                height: 20.sh(),
-              ),
             ],
+            if (!ResponsiveLayout.isDesktop)
+              Expanded(
+                child: Consumer(builder: (context, ref, c) {
+                  final users = ref.watch(userChangeProvider).users;
+                  return Scrollbar(
+                    controller: scrollController,
+                    child: ListView.separated(
+                        controller: scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (_, index) {
+                          return ProfileAvatar(
+                            showDetails: false,
+                            isActive: users[index].isActive,
+                            name: users[index].name,
+                          );
+                        },
+                        separatorBuilder: (_, index) {
+                          return SizedBox(
+                            width: 10.sw(),
+                          );
+                        },
+                        itemCount: users.length),
+                  );
+                }),
+              ),
+            SizedBox(
+              height: 20.sh(),
+            ),
             Expanded(
+              flex: 8,
               child: ListView.separated(
                   itemBuilder: ((context, index) {
                     return UserMessageCard();

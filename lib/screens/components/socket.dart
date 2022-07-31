@@ -34,11 +34,32 @@ class CustomSocket {
                 .read(userChangeProvider)
                 .changeActiveStatus(id: data, isActive: true);
           });
+
+          socket.on("message", (data) {
+            // CustomKeys()
+            //     .ref!
+            //     .read(userChangeProvider)
+            //     .changeActiveStatus(id: data, isActive: true);
+          });
+
           socket.on("inActive", (data) {
             CustomKeys()
                 .ref!
                 .read(userChangeProvider)
                 .changeActiveStatus(id: data, isActive: false);
+          });
+
+          socket.on("typing", (data) {
+            CustomKeys().ref!.read(userChangeProvider).changeIsTyping(data);
+          });
+
+          socket.on("activeUsers", (data) {
+            if (data != null) {
+              CustomKeys()
+                  .ref!
+                  .read(userChangeProvider)
+                  .getActiveUsers(List<String>.from(jsonDecode(data)));
+            }
           });
         }
       } else {

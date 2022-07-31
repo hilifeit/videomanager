@@ -31,12 +31,13 @@ class Holder extends ConsumerWidget {
     CustomKeys().init(ref, context);
     final index = ref.watch(indexProvider.state).state;
 
-    final thisUser = ref.read(userChangeProvider).loggedInUser.value;
-    if (thisUser != null) {
-      if (thisUser.role != Roles.user.index) {
-        ref.read(userChangeProvider).fetchAll();
-      }
-    }
+    final userProvider = ref.watch(userChangeProvider);
+    final thisUser = userProvider.loggedInUser.value;
+    // if (thisUser != null) {
+    //   if (thisUser.role != Roles.user.index && userProvider.users.isEmpty) {
+    //     userProvider.fetchAll();
+    //   }
+    // }
 
     return SafeArea(
       child: Scaffold(

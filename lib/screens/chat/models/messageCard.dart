@@ -44,7 +44,7 @@ class UserMessageCard extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              DateTime.now().toString().substring(0, 16),
+              DateTime.now().toString().substring(0, 4),
               style: kTextStyleIbmRegular.copyWith(
                   fontSize: 14.ssp(), color: lightBlack),
             ),

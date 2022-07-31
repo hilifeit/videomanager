@@ -20,7 +20,7 @@ class ScreenShotScreen extends ConsumerWidget {
               decoration: const BoxDecoration(
                   color: whiteColor,
                   image: DecorationImage(
-                    opacity: 0.5,
+                    opacity: 1,
                     image: AssetImage("assets/images/wallpaper.jpg"),
                     fit: BoxFit.cover,
                   )),

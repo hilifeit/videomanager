@@ -117,9 +117,15 @@ class Login extends ConsumerWidget {
                               username: username,
                               password: password,
                             );
-                            customSocket.connect();
+
                             snack.success("Login Succesful");
                             ref.read(loginStateProvider.state).state = false;
+
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () async {
+                              await userService.fetchAll();
+                              customSocket.connect();
+                            });
                             // ignore: use_build_context_synchronously
                             Navigator.pop(context);
                           } catch (e) {
