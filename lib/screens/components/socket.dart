@@ -40,6 +40,14 @@ class CustomSocket {
                 .read(userChangeProvider)
                 .changeActiveStatus(id: data, isActive: false);
           });
+          socket.on("activeUsers", (data) {
+            if (data != null) {
+              CustomKeys()
+                  .ref!
+                  .read(userChangeProvider)
+                  .getActiveUsers(List<String>.from(jsonDecode(data)));
+            }
+          });
         }
       } else {
         print("no user");

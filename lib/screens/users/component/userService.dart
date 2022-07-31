@@ -79,6 +79,18 @@ class UserService extends ChangeNotifier {
     }
   }
 
+  getActiveUsers(List<String> ids) async {
+    Future.delayed(Duration(milliseconds: 10), () {
+      for (var element in ids) {
+        var userIndex = _users.indexWhere((e) => e.id == element);
+        if (userIndex >= 0) {
+          _users[userIndex].isActive = true;
+        }
+      }
+      notifyListeners();
+    });
+  }
+
   fetchAll() async {
     // try {
     if (loggedInUser.value != null) {
