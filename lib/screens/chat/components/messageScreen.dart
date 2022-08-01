@@ -1,11 +1,9 @@
-import 'package:videomanager/screens/chat/components/messageBox.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/chat/models/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 class MessageScreen extends ConsumerWidget {
   const MessageScreen({Key? key}) : super(key: key);
@@ -54,7 +52,6 @@ class MessageScreen extends ConsumerWidget {
                             child: CustomPopUpMenuItemChild(text: 'Block User'),
                           )
                         ];
-                        ;
                       })
                     ],
                   ),
@@ -89,10 +86,13 @@ class MessageScreen extends ConsumerWidget {
                               final isTyping =
                                   ref.watch(userChangeProvider).isTyping.value;
                               return isTyping
-                                  ? Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                          "${selectedUser.name} is typing..."))
+                                  ? Image.asset('assets/images/typing.webp')
+
+                                  // Align(
+                                  //     alignment: Alignment.bottomLeft,
+                                  //     child: Text(
+                                  //         "${selectedUser.name} is typing..."),
+                                  //   )
                                   : Container();
                             },
                           )
@@ -123,10 +123,8 @@ class MessageScreen extends ConsumerWidget {
                               ref.read(chatServiceChangeProvider).add(10);
                             },
                             child: Icon(Icons.emoji_emotions)),
-                        suffixIcon: InkWell(
-                            onTap: () {
-                            },
-                            child: Icon(Icons.send)),
+                        suffixIcon:
+                            InkWell(onTap: () {}, child: Icon(Icons.send)),
                       )),
                       GestureDetector(
                           onTap: () {}, child: Icon(Icons.attach_file)),
