@@ -82,6 +82,7 @@ class MessageScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
+<<<<<<< HEAD
                           Positioned(
                             child: Consumer(
                               builder: (_, ref, c) {
@@ -106,6 +107,18 @@ class MessageScreen extends ConsumerWidget {
                                     : Container();
                               },
                             ),
+=======
+                          Consumer(
+                            builder: (_, ref, c) {
+                              final isTyping =
+                                  ref.watch(userChangeProvider).isTyping.value;
+                              return isTyping
+                                  ? Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: TypingWidget())
+                                  : Container();
+                            },
+>>>>>>> d4b610d2493acc84d1491bc963b09ea505cfa2ea
                           )
                         ],
                       ),

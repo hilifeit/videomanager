@@ -97,6 +97,8 @@ flutter:
     - assets/sounds/message_delivered.mp3
     - assets/sounds/message_typing.mp3
     - assets/sounds/message_notification.mp3
+    - assets/animation/typing_animation.gif
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
