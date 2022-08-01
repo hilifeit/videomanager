@@ -99,6 +99,7 @@ class UserService extends ChangeNotifier {
       if (id != null && selectedChatUser.value != null) {
         if (id == selectedChatUser.value?.id) {
           isTyping.value = true;
+          CustomAudioPlayer.messageTyping();
           Future.delayed(const Duration(milliseconds: 2000), () {
             isTyping.value = false;
           });
