@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/disk.dart';
+import 'package:videomanager/screens/others/apiHelper.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
@@ -106,21 +107,23 @@ class FileService extends ChangeNotifier {
     var userProvider = ref.read(userChangeProvider);
     if (userProvider.loggedInUser.value != null) {
       try {
-        var response = await client.get(
-          Uri.parse("${CustomIP.apiBaseUrl}area"),
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": userProvider.loggedInUser.value!.accessToken!
-          },
-        );
+        var response = await tunnelRequest(() => client.get(
+              Uri.parse("${CustomIP.apiBaseUrl}area"),
+              headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userProvider.loggedInUser.value!.accessToken!
+              },
+            ));
         if (response.statusCode == 200) {
           areas.clear();
           areas.addAll(areaModelFromJson(response.body));
           notifyListeners();
         } else {
+          CustomOverlayEntry().closeLoader();
           throw response.statusCode;
         }
       } catch (e, s) {
+        CustomOverlayEntry().closeLoader();
         print("$e $s");
         throw e;
       }

@@ -56,6 +56,10 @@ class ChatHome extends StatelessWidget {
               Expanded(
                 child: Consumer(builder: (context, ref, c) {
                   final users = ref.watch(userChangeProvider).users;
+                  users.sort(
+                    (b, a) =>
+                        a.isActive.toString().compareTo(b.isActive.toString()),
+                  );
                   return Scrollbar(
                     controller: scrollController,
                     child: ListView.separated(
