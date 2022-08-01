@@ -35,12 +35,7 @@ class CustomSocket {
                 .changeActiveStatus(id: data, isActive: true);
           });
 
-          socket.on("message", (data) {
-            // CustomKeys()
-            //     .ref!
-            //     .read(userChangeProvider)
-            //     .changeActiveStatus(id: data, isActive: true);
-          });
+          socket.on("message", (data) {});
 
           socket.on("inActive", (data) {
             CustomKeys()

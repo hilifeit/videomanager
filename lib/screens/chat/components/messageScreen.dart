@@ -1,4 +1,5 @@
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
+import 'package:videomanager/screens/chat/components/typingWidget.dart';
 import 'package:videomanager/screens/chat/models/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
@@ -86,7 +87,10 @@ class MessageScreen extends ConsumerWidget {
                               final isTyping =
                                   ref.watch(userChangeProvider).isTyping.value;
                               return isTyping
-                                  ? Image.asset('assets/images/typing.webp')
+                                  ? Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Image.asset(
+                                          'assets/images/typing.webp'))
 
                                   // Align(
                                   //     alignment: Alignment.bottomLeft,
