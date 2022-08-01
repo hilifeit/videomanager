@@ -90,7 +90,7 @@ class MessageScreen extends ConsumerWidget {
                               final isTyping =
                                   ref.watch(userChangeProvider).isTyping.value;
                               return isTyping
-                                  ? const Align(
+                                  ? Align(
                                       alignment: Alignment.bottomLeft,
                                       child: TypingWidget())
                                   : Container();
