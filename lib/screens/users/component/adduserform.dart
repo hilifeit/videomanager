@@ -296,14 +296,7 @@ class AddUser extends ConsumerWidget {
                               height: 32.sh(),
                               outlinedButtonText: 'Cancel',
                               elevatedButtonText: 'Add',
-                              onPressedOutlined: () {
-                                if (edit) {
-                                  ref
-                                      .read(userChangeProvider)
-                                      .selectedUser
-                                      .value = null;
-                                }
-                              },
+                              onPressedOutlined: () {},
                               onPressedElevated: () async {
                                 if (formKey.currentState!.validate()) {
                                   showDialog(

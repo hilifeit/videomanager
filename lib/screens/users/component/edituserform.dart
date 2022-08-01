@@ -383,7 +383,6 @@ class EditUser extends ConsumerWidget {
                                                     .fetchAll();
                                                 snack.success(
                                                     "User Edited Sucessfully");
-                                                Navigator.pop(context);
                                               } catch (e) {
                                                 snack.error(e);
                                               }

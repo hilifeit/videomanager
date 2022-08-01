@@ -140,7 +140,7 @@ class CustomDialog extends StatelessWidget {
                         height: height ?? defaultHeight,
                         onPressedElevated: () {
                           onPressedElevated();
-                          // Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                         elevatedButtonText: elevatedButtonText,
                         elevatedButtonTextStyle: kTextStyleIbmSemiBold.copyWith(
