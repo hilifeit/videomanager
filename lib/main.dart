@@ -17,7 +17,7 @@ void main() async {
     window.document.onContextMenu.listen((evt) => evt.preventDefault());
   }
   await GetStorage.init();
-  //storage.erase();
+  // storage.erase();
 
   runApp(Phoenix(child: const MyApp()));
 }
