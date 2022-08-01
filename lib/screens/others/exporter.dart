@@ -34,7 +34,7 @@ export 'package:videomanager/screens/others/validator.dart';
 export 'package:videomanager/screens/others/widgets.dart';
 export 'package:videomanager/screens/others/enums.dart';
 export 'package:videomanager/videomanager_icons.dart';
-
+export 'package:videomanager/screens/components/audioPlayer.dart';
 //
 
 final client = http.Client();

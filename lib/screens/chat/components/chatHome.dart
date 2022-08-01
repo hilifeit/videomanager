@@ -1,3 +1,4 @@
+import 'package:videomanager/screens/chat/components/messageScreen.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/chat/models/messageCard.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -55,7 +56,8 @@ class ChatHome extends StatelessWidget {
             if (!ResponsiveLayout.isDesktop)
               Expanded(
                 child: Consumer(builder: (context, ref, c) {
-                  final users = ref.watch(userChangeProvider).users;
+                  final userProvider = ref.watch(userChangeProvider);
+                  final users = userProvider.users;
                   users.sort(
                     (b, a) =>
                         a.isActive.toString().compareTo(b.isActive.toString()),
@@ -67,9 +69,16 @@ class ChatHome extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
                           return ProfileAvatar(
-                            showDetails: false,
                             isActive: users[index].isActive,
                             name: users[index].name,
+                            onTap: () {
+                              userProvider.selectedChatUser.value =
+                                  users[index];
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: ((context) {
+                                return MessageScreen();
+                              })));
+                            },
                           );
                         },
                         separatorBuilder: (_, index) {

@@ -125,7 +125,6 @@ class MessageScreen extends ConsumerWidget {
                             child: Icon(Icons.emoji_emotions)),
                         suffixIcon: InkWell(
                             onTap: () {
-                              ref.read(chatServiceChangeProvider).remove(10);
                             },
                             child: Icon(Icons.send)),
                       )),

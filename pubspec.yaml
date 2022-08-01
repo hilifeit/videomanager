@@ -55,6 +55,7 @@ dependencies:
   dart_vlc: ^0.3.0
   universal_platform: ^1.0.0+1
   socket_io_client: ^2.0.0
+  audioplayers: ^1.0.1
 
 
 
@@ -90,6 +91,11 @@ flutter:
     - assets/images/rejected.svg
     - assets/images/award.png
     - assets/images/wallpaper.jpg
+    - assets/sounds/message_sent.mp3
+    - assets/sounds/message_received.mp3
+    - assets/sounds/message_delivered.mp3
+    - assets/sounds/message_typing.mp3
+    - assets/sounds/message_notification.mp3
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

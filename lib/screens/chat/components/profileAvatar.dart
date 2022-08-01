@@ -18,11 +18,9 @@ class ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: showDetails
+      onTap: onTap != null
           ? () {
-              if (onTap != null) {
-                onTap!();
-              }
+              onTap!();
             }
           : null,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center,

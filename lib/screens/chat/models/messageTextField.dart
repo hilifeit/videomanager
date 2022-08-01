@@ -1,6 +1,3 @@
-import 'package:flutter/services.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class MessageTextField extends StatelessWidget {
@@ -27,8 +24,9 @@ class MessageTextField extends StatelessWidget {
         onChanged: (val) {
           onChanged(val);
         },
-        onFieldSubmitted: (val) {
+        onFieldSubmitted: (val) async {
           _controller.clear();
+          CustomAudioPlayer.messageSent();
           if (val.isNotEmpty) onSend(val);
         },
         decoration: InputDecoration(
