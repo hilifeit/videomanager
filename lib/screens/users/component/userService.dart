@@ -231,7 +231,7 @@ class UserService extends ChangeNotifier {
   Future<bool> delete({required String id}) async {
     try {
       var response = await tunnelRequest(() => client.delete(
-            Uri.parse("$CustomIP.apiBaseUrl$userEndPoint/$id"),
+            Uri.parse("${CustomIP.apiBaseUrl}$userEndPoint/$id"),
             headers: {
               "Content-Type": "application/json",
               "x-access-token": loggedInUser.value!.accessToken!

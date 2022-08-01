@@ -397,4 +397,32 @@ class FileService extends ChangeNotifier {
       }
     }
   }
+
+  Future<bool> deleteArea({required String id}) async {
+    var userProvider = ref.read(userChangeProvider);
+    try {
+      var response = await client.delete(
+        Uri.parse("${CustomIP.apiBaseUrl}area/$id"),
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": userProvider.loggedInUser.value!.accessToken!
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
+        notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
 }
