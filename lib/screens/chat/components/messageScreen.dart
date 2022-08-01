@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/chat/components/messageBox.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
+import 'package:videomanager/screens/chat/components/typingWidget.dart';
 import 'package:videomanager/screens/chat/models/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
@@ -89,10 +90,9 @@ class MessageScreen extends ConsumerWidget {
                               final isTyping =
                                   ref.watch(userChangeProvider).isTyping.value;
                               return isTyping
-                                  ? Align(
+                                  ? const Align(
                                       alignment: Alignment.bottomLeft,
-                                      child: Text(
-                                          "${selectedUser.name} is typing..."))
+                                      child: TypingWidget())
                                   : Container();
                             },
                           )
@@ -123,10 +123,8 @@ class MessageScreen extends ConsumerWidget {
                               ref.read(chatServiceChangeProvider).add(10);
                             },
                             child: Icon(Icons.emoji_emotions)),
-                        suffixIcon: InkWell(
-                            onTap: () {
-                            },
-                            child: Icon(Icons.send)),
+                        suffixIcon:
+                            InkWell(onTap: () {}, child: Icon(Icons.send)),
                       )),
                       GestureDetector(
                           onTap: () {}, child: Icon(Icons.attach_file)),
