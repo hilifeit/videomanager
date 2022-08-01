@@ -74,8 +74,8 @@ class AssignedAreaCard extends ConsumerWidget {
           }
 
           bool edit = false;
-          if (selectedPoints.isNotEmpty) {
-            for (var element in thisArea!.location.coordinates) {
+          if (selectedPoints.isNotEmpty && thisArea != null) {
+            for (var element in thisArea.location.coordinates) {
               int index = thisArea.location.coordinates.indexOf(element);
               if (selectedPoints[index].latitude != element.last &&
                   selectedPoints[index].longitude != element.first) {
