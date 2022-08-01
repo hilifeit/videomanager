@@ -82,23 +82,30 @@ class MessageScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-                          Consumer(
-                            builder: (_, ref, c) {
-                              final isTyping =
-                                  ref.watch(userChangeProvider).isTyping.value;
-                              return isTyping
-                                  ? Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Image.asset(
-                                          'assets/images/typing.webp'))
+                          Positioned(
+                            child: Consumer(
+                              builder: (_, ref, c) {
+                                final isTyping = ref
+                                    .watch(userChangeProvider)
+                                    .isTyping
+                                    .value;
+                                return isTyping
+                                    ? Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Image.asset(
+                                          'assets/images/typing.webp',
+                                          width: 20.sw(),
+                                          height: 20.sh(),
+                                        ))
 
-                                  // Align(
-                                  //     alignment: Alignment.bottomLeft,
-                                  //     child: Text(
-                                  //         "${selectedUser.name} is typing..."),
-                                  //   )
-                                  : Container();
-                            },
+                                    // Align(
+                                    //     alignment: Alignment.bottomLeft,
+                                    //     child: Text(
+                                    //         "${selectedUser.name} is typing..."),
+                                    //   )
+                                    : Container();
+                              },
+                            ),
                           )
                         ],
                       ),

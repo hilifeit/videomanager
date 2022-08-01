@@ -5,7 +5,7 @@ import 'package:videomanager/screens/others/apiHelper.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
+
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
@@ -22,8 +22,10 @@ class FileService extends ChangeNotifier {
     var userProvider = reff.read(userChangeProvider);
     ref = reff;
     if (userProvider.loggedInUser.value != null) {
-      if (userProvider.loggedInUser.value!.role == Roles.superAdmin.index) {
+      if (userProvider.loggedInUser.value!.role == Roles.superAdmin.index ||
+          userProvider.loggedInUser.value!.role == Roles.manager.index) {
         load();
+        loadUserData();
       } else {
         userFiles = null;
         loadUserData();

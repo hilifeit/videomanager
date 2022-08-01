@@ -84,7 +84,7 @@ class Holder extends ConsumerWidget {
               MenuBar(
                 indexState: indexProvider,
               ),
-            (thisUser!.role > 0)
+            (thisUser!.role == Roles.superAdmin.index)
                 ? Expanded(
                     child: index != 4
                         ? AnimatedIndexedStack(index: index, children: [
@@ -97,18 +97,32 @@ class Holder extends ConsumerWidget {
                           ])
                         : const SettingsHolder(),
                   )
-                : Expanded(
-                    child: index != 2
-                        ? AnimatedIndexedStack(index: index, children: [
-                            // DashBoard(),
+                : (thisUser.role == Roles.manager.index)
+                    ? Expanded(
+                        child: index != 3
+                            ? AnimatedIndexedStack(index: index, children: [
+                                ScreenshotDashboardHolder(
+                                  thisUser: thisUser,
+                                ),
+                                const Users(),
+                                ChatHolder(),
+                                // futureBuilder
+                                // PlayVideo(videoFile: videoFile, role: role),
+                              ])
+                            : const SettingsHolder(),
+                      )
+                    : Expanded(
+                        child: index != 2
+                            ? AnimatedIndexedStack(index: index, children: [
+                                // DashBoard(),
 
-                            ScreenshotDashboardHolder(
-                              thisUser: thisUser,
-                            ),
-                            ChatHolder()
-                          ])
-                        : const SettingsHolder(),
-                  ),
+                                ScreenshotDashboardHolder(
+                                  thisUser: thisUser,
+                                ),
+                                ChatHolder()
+                              ])
+                            : const SettingsHolder(),
+                      ),
           ],
         ),
         bottomNavigationBar: !ResponsiveLayout.isDesktop

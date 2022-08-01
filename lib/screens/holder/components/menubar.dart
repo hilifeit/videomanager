@@ -6,7 +6,7 @@ import 'package:videomanager/screens/users/component/userService.dart';
 class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
 
-  final List<CustomMenuItem> items = [
+  final List<CustomMenuItem> itemsAdmin = [
     CustomMenuItem(
         title: 'Dashboard',
         icon: Videomanager.dashboard,
@@ -31,6 +31,19 @@ class MenuBar extends ConsumerWidget {
 
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
+
+  final List<CustomMenuItem> itemsManager = [
+    CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
+    CustomMenuItem(
+        title: 'Users',
+        icon: Videomanager.users,
+        id: 1,
+        notify: true,
+        number: 1),
+    CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 2),
+    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 3),
+  ];
+
   final List<CustomMenuItem> itemsUser = [
     CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
     CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 1),
@@ -63,15 +76,22 @@ class MenuBar extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   return MenuItemWidget(
                       indexState: indexState,
-                      item:
-                          thisUser!.role > 0 ? items[index] : itemsUser[index]);
+                      item: thisUser!.role == 2
+                          ? itemsAdmin[index]
+                          : thisUser.role == 1
+                              ? itemsManager[index]
+                              : itemsUser[index]);
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(
                     width: 100.sw(),
                   );
                 },
-                itemCount: thisUser!.role > 0 ? items.length : itemsUser.length,
+                itemCount: thisUser!.role == 2
+                    ? itemsAdmin.length
+                    : thisUser.role == 1
+                        ? itemsManager.length
+                        : itemsUser.length,
               ),
             ),
           ),

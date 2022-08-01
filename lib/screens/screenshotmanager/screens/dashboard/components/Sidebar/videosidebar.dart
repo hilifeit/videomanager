@@ -9,6 +9,7 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class VideoSideBar extends StatelessWidget {
   VideoSideBar({Key? key, required this.size, required this.thisUser})
@@ -64,7 +65,7 @@ class VideoSideBar extends StatelessWidget {
                           // height: size.height - 535.sh(),
                           child: MapScreen(
                             isvisible: false,
-                            draw: false,
+                            draw: true,
                             controller: MapController(location: home),
                           ),
                         ),
@@ -79,25 +80,20 @@ class VideoSideBar extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Consumer(builder: (context, ref, c) {
-                              // final thisUser = ref
-                              //     .watch(userChangeProvider)
-                              //     .loggedInUser
-                              //     .value;
                               final fileService =
                                   ref.watch(fileDetailMiniServiceProvider);
-                              // fileService.filterFile();
+
                               final files = fileService.userFiles;
                               final selectedFilter = ref
                                   .watch(filterModuleServiceProvider)
                                   .selectedItems;
-
-                              // for (int i = 0; i < files.length; i++) {
-                              //   if (selectedFilter
-                              //       .contains(files[i].status.status)) {
-                              //     count++;
-                              //   }
-                              // }
-
+                              final areas = ref
+                                  .watch(fileDetailMiniServiceProvider)
+                                  .areas;
+                              final selectedArea = ref
+                                  .watch(selectedAreaServiceProvider)
+                                  .selectedArea
+                                  .value;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -112,18 +108,19 @@ class VideoSideBar extends StatelessWidget {
                                     SizedBox(
                                       height: 20.sh(),
                                     ),
+                                    // if (areas != [])
                                     Wrap(
                                       children: List.generate(
-                                        areaItems.length,
-                                        (index) => InkWell(
-                                          onTap: () {},
-                                          child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  right: 16.sw()),
-                                              child: AreaCard(
-                                                item: areaItems[index],
-                                              )),
-                                        ),
+                                        areas.length,
+                                        (index) => Padding(
+                                            padding:
+                                                EdgeInsets.only(right: 16.sw()),
+                                            child: AreaCard(
+                                                area: areas[index],
+                                                selected: selectedArea != null
+                                                    ? selectedArea ==
+                                                        areas[index]
+                                                    : false)),
                                       ),
                                     ),
                                     SizedBox(
