@@ -117,6 +117,7 @@ class FileService extends ChangeNotifier {
         if (response.statusCode == 200) {
           areas.clear();
           areas.addAll(areaModelFromJson(response.body));
+
           notifyListeners();
         } else {
           CustomOverlayEntry().closeLoader();
@@ -132,35 +133,41 @@ class FileService extends ChangeNotifier {
 
   fetchAll({bool fromServer = false}) async {
     if (fromServer) {
-      try {
-        var response = await client.get(Uri.parse("${CustomIP.apiBaseUrl}file"),
-            headers: {"Content-Type": "application/json"});
+      var userProvider = ref.read(userChangeProvider);
+      if (userProvider.loggedInUser.value != null) {
+        try {
+          var response = await tunnelRequest(() =>
+              client.get(Uri.parse("${CustomIP.apiBaseUrl}file"), headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userProvider.loggedInUser.value!.accessToken!
+              }));
 
-        if (response.statusCode == 200) {
-          files.clear();
-          files.addAll(fileDetailMiniFromJson(response.body).toList());
+          if (response.statusCode == 200) {
+            files.clear();
+            files.addAll(fileDetailMiniFromJson(response.body).toList());
 
-          List<int> states = [];
-          List<String> district = [];
-          await Future.forEach<FileDetailMini>(files, (element) {
-            element.boundingBox =
-                boundingBoxOffset(element.location.coordinates);
-            // if (!states.contains(element.area.state)) {
-            //   states.add(element.area.state);
-            // }
-            // if (!states.contains(element.area.state)) {
-            //   states.add(element.area.state);
-            // }
-          });
+            List<int> states = [];
+            List<String> district = [];
+            await Future.forEach<FileDetailMini>(files, (element) {
+              element.boundingBox =
+                  boundingBoxOffset(element.location.coordinates);
+              // if (!states.contains(element.area.state)) {
+              //   states.add(element.area.state);
+              // }
+              // if (!states.contains(element.area.state)) {
+              //   states.add(element.area.state);
+              // }
+            });
 
-          // print(
-          //     "${files[0].boundingBox!.left.toString()} ${files[0].boundingBox!.top.toString()}");
-          notifyListeners();
-        } else {
-          throw response.statusCode;
+            // print(
+            //     "${files[0].boundingBox!.left.toString()} ${files[0].boundingBox!.top.toString()}");
+            notifyListeners();
+          } else {
+            throw response.statusCode;
+          }
+        } catch (e, s) {
+          throw "$e $s";
         }
-      } catch (e, s) {
-        throw "$e $s";
       }
     } else {
       var filesJson = await storage.read("files");
