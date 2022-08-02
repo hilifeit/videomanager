@@ -6,15 +6,14 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/filterservice.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/userstatswrap.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/videoassignedcard.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboardHolder.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class VideoSideBar extends StatelessWidget {
-  VideoSideBar({Key? key, required this.size, required this.thisUser})
-      : super(key: key);
-  final Size size;
+  VideoSideBar({Key? key, required this.thisUser}) : super(key: key);
 
   final UserModelMini thisUser;
 
@@ -25,26 +24,29 @@ class VideoSideBar extends StatelessWidget {
       body: Row(
         children: [
           if (ResponsiveLayout.isDesktop)
-            InkWell(
-              onTap: () {
-                if (CustomOverlayEntry().isFilterMenuOpen) {
-                  CustomOverlayEntry().closeFilter();
-                }
-                CustomOverlayEntry().closeVideoBar();
-              },
-              child: Container(
-                  width: 30.sw(),
-                  height: 155.sh(),
-                  color: const Color(0xffE4F5FF),
-                  child: const Icon(
-                    Icons.chevron_right_rounded,
-                    color: Colors.black,
-                  )),
-            ),
+            Consumer(builder: (context, ref, c) {
+              return InkWell(
+                onTap: () {
+                  if (CustomOverlayEntry().isFilterMenuOpen) {
+                    CustomOverlayEntry().closeFilter();
+                  }
+                  // CustomOverlayEntry().closeVideoBar();
+                  ref.read(showVideoBarProvider.state).state = false;
+                },
+                child: Container(
+                    width: 30.sw(),
+                    height: 155.sh(),
+                    color: const Color(0xffE4F5FF),
+                    child: const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Colors.black,
+                    )),
+              );
+            }),
           Expanded(
             child: Container(
               color: Colors.white,
-              height: size.height,
+              height: double.infinity,
               child: Column(
                 children: [
                   thisUser.role == 0

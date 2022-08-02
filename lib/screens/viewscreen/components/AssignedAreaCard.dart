@@ -98,7 +98,7 @@ class AssignedAreaCard extends ConsumerWidget {
                         ..selectArea(area)
                         ..refine();
                     },
-                    textSecond: 'edit this area?',
+                    textSecond: 'discard changes to this Area?',
                   );
                 });
           }

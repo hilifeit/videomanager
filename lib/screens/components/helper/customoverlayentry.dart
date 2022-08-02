@@ -198,7 +198,6 @@ class CustomOverlayEntry {
             },
             child: VideoSideBar(
               thisUser: thisUser,
-              size: size,
             ),
           ));
     });

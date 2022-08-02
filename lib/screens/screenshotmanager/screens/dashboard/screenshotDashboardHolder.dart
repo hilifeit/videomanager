@@ -1,48 +1,62 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/holder/holder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/screenshotDashboard.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
-class ScreenshotDashboardHolder extends StatelessWidget {
+final showVideoBarProvider = StateProvider<bool>((ref) {
+  return false;
+});
+
+class ScreenshotDashboardHolder extends ConsumerWidget {
   const ScreenshotDashboardHolder({Key? key, required this.thisUser})
       : super(key: key);
   final UserModelMini thisUser;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final showVideoBar = ref.watch(showVideoBarProvider.state).state;
+    final fileService = ref.watch(fileDetailMiniServiceProvider);
+    final userFiles = fileService.userFiles;
+    final selectedFile = fileService.selectedUserFile.value;
     return Stack(
       children: [
-        selector(
-          thisUser,
-        ),
-        if (!ResponsiveLayout.isMobile)
-          Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              onTap: () {
-                CustomOverlayEntry().showvideoBar(context, thisUser);
-              },
-              child: Container(
-                width: 30.sw(),
-                height: 155.sh(),
-                color: const Color(0xffE4F5FF),
-                child: const Icon(
-                  Icons.chevron_left_rounded,
-                  color: Colors.black,
+        selector(thisUser, userFiles, selectedFile),
+        if (!ResponsiveLayout.isMobile) ...[
+          !showVideoBar
+              ? Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                      ref.read(showVideoBarProvider.state).state = true;
+                    },
+                    child: Container(
+                      width: 30.sw(),
+                      height: 155.sh(),
+                      color: const Color(0xffE4F5FF),
+                      child: const Icon(
+                        Icons.chevron_left_rounded,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                      width: 560.sw(), child: VideoSideBar(thisUser: thisUser)),
                 ),
-              ),
-            ),
-          ),
+        ]
       ],
     );
   }
 
-  Widget selector(thisUser) {
+  Widget selector(thisUser, userFiles, selectedFile) {
     return Consumer(builder: (context, ref, c) {
-      final fileService = ref.watch(fileDetailMiniServiceProvider);
-      final userFiles = fileService.userFiles;
-      final selectedFile = fileService.selectedUserFile.value;
+      // final fileService = ref.watch(fileDetailMiniServiceProvider);
+      // final userFiles = fileService.userFiles;
+      // final selectedFile = fileService.selectedUserFile.value;
       if (userFiles == null) {
         return const Center(
           child: CircularProgressIndicator(),

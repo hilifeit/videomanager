@@ -95,8 +95,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                     ],
                   ),
                 if (!ResponsiveLayout.isDesktop)
-                  VideoSideBar(
-                      size: const Size.fromHeight(500), thisUser: thisUser),
+                  VideoSideBar(thisUser: thisUser),
               ],
             ),
           ),

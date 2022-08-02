@@ -35,9 +35,6 @@ class MenuItemWidget extends ConsumerWidget {
           ref.read(indexState.state).state = item.id;
           final customOverlay = CustomOverlayEntry();
 
-          if (customOverlay.videoBarOpen) {
-            customOverlay.closeVideoBar();
-          }
           if (customOverlay.videoTimeStampOpen) {
             customOverlay.closeVideoTimeStamp();
           }
