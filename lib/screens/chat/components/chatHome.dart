@@ -68,7 +68,7 @@ class ChatHome extends StatelessWidget {
                         controller: scrollController,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
-                          return ProfileAvatar(
+                          var widget = ProfileAvatar(
                             isActive: users[index].isActive,
                             name: users[index].name,
                             onTap: () {
@@ -80,6 +80,21 @@ class ChatHome extends StatelessWidget {
                               })));
                             },
                           );
+                          if (index == 0)
+                            return Row(
+                              children: [
+                                SizedBox(width: 10.sw()),
+                                widget,
+                              ],
+                            );
+                          if (index == users.length - 1)
+                            return Row(
+                              children: [
+                                widget,
+                                SizedBox(width: 5.sw()),
+                              ],
+                            );
+                          return widget;
                         },
                         separatorBuilder: (_, index) {
                           return SizedBox(
