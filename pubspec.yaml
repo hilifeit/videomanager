@@ -91,6 +91,7 @@ flutter:
     - assets/images/rejected.svg
     - assets/images/award.png
     - assets/images/wallpaper.jpg
+    - assets/images/typing.webp
     - assets/sounds/message_sent.mp3
     - assets/sounds/message_received.mp3
     - assets/sounds/message_delivered.mp3

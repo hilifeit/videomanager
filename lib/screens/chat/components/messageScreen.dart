@@ -147,6 +147,7 @@ class MessageScreen extends ConsumerWidget {
         ),
         const Spacer(),
         PopupMenuButton(
+            tooltip: '',
             offset: Offset(50, 50),
             itemBuilder: (BuildContext context) {
               return [

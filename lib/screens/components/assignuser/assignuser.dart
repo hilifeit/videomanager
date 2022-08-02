@@ -1,11 +1,11 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
-import 'package:videomanager/screens/users/model/usermodelmini.dart';
+
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class AssignManager extends ConsumerWidget {
   AssignManager({
@@ -141,15 +141,15 @@ class AssignManager extends ConsumerWidget {
                     SizedBox(
                       height: 32.sh(),
                     ),
-                    Wrap(
-                        children: List.generate(
-                      areaItems.length,
-                      (index) => Padding(
-                          padding: EdgeInsets.only(right: 16.sw()),
-                          child: AreaCard(
-                            item: areaItems[index],
-                          )),
-                    )),
+                    // Wrap(
+                    //     children: List.generate(
+                    //   areaItems.length,
+                    //   (index) => Padding(
+                    //       padding: EdgeInsets.only(right: 16.sw()),
+                    //       child: AreaCard(
+                    //         item: areaItems[index],
+                    //       )),
+                    // )),
                     SizedBox(
                       height: 58.sh(),
                     ),
@@ -233,31 +233,42 @@ List<AreaCardItem> areaItems = [
   ),
 ];
 
-class AreaCard extends StatelessWidget {
+class AreaCard extends ConsumerWidget {
   AreaCard({
     Key? key,
-    required this.item,
+    required this.area,
+    this.selected = false,
   }) : super(key: key);
-  final AreaCardItem item;
+  final AreaModel area;
+  bool selected;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: item.color,
-        borderRadius: BorderRadius.circular(
-          4.sr(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onTap: () {
+        var selectedAreaService = ref.read(selectedAreaServiceProvider);
+
+        selectedAreaService
+          ..selectArea(area)
+          ..refine();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: darkGrey,
+          borderRadius: BorderRadius.circular(
+            4.sr(),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 2.sh(),
-          horizontal: 10.sw(),
-        ),
-        child: Text(
-          item.text,
-          style: kTextStyleIbmMedium.copyWith(
-              fontSize: 14.ssp(), color: Colors.black),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: 2.sh(),
+            horizontal: 10.sw(),
+          ),
+          child: Text(
+            "${area.name} (${area.files})",
+            style: kTextStyleIbmMedium.copyWith(
+                fontSize: 14.ssp(), color: Colors.black),
+          ),
         ),
       ),
     );

@@ -20,11 +20,34 @@ class CustomSocket {
                 .build());
         if (!socket.connected) {
           socket.connect();
+
           socket.onConnect((data) => print("Connected: $data"));
+          socket.onConnecting((data) => print("connecting"));
           socket.onConnectError((data) => snack.error(data));
           socket.onConnectTimeout((data) => snack.error(data));
-          socket.onError((data) => snack.error(data));
-          socket.onDisconnect((data) => null);
+          socket.onError((data) async {
+            try {
+              var json = jsonEncode(data);
+
+              var dat = jsonDecode(json);
+              var msg = jsonDecode(dat["message"]);
+
+              int code = int.parse(msg["code"].toString());
+              if (code == 403) {
+                await CustomDialogBox.alertMessage(() {
+                  logout();
+                },
+                    title: 'Your Session has Expired!',
+                    message: ' Login to continue');
+              }
+              snack.error(msg["message"]);
+            } catch (e, s) {
+              print("$e $s");
+              snack.error(e);
+            }
+            snack.error(data);
+          });
+          socket.onDisconnect((data) => snack.error("disconnected"));
           socket.on("notification", (data) {
             snack.info(data);
           });

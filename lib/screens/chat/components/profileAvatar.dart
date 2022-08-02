@@ -71,9 +71,13 @@ class ProfileAvatar extends StatelessWidget {
                     SizedBox(
                       height: 5.sh(),
                     ),
-                    Text('Online',
-                        style: kTextStyleIbmRegularBlack.copyWith(
-                            fontSize: 13.ssp())),
+                    isActive
+                        ? Text('Online',
+                            style: kTextStyleIbmRegularBlack.copyWith(
+                                fontSize: 13.ssp()))
+                        : Text('',
+                            style: kTextStyleIbmRegularBlack.copyWith(
+                                fontSize: 13.ssp())),
                   ]
                 ],
               )
