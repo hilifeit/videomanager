@@ -82,32 +82,6 @@ class MessageScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-<<<<<<< HEAD
-                          Positioned(
-                            child: Consumer(
-                              builder: (_, ref, c) {
-                                final isTyping = ref
-                                    .watch(userChangeProvider)
-                                    .isTyping
-                                    .value;
-                                return isTyping
-                                    ? Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Image.asset(
-                                          'assets/images/typing.webp',
-                                          width: 20.sw(),
-                                          height: 20.sh(),
-                                        ))
-
-                                    // Align(
-                                    //     alignment: Alignment.bottomLeft,
-                                    //     child: Text(
-                                    //         "${selectedUser.name} is typing..."),
-                                    //   )
-                                    : Container();
-                              },
-                            ),
-=======
                           Consumer(
                             builder: (_, ref, c) {
                               final isTyping =
@@ -118,7 +92,6 @@ class MessageScreen extends ConsumerWidget {
                                       child: TypingWidget())
                                   : Container();
                             },
->>>>>>> d4b610d2493acc84d1491bc963b09ea505cfa2ea
                           )
                         ],
                       ),
