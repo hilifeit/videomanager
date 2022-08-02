@@ -13,9 +13,10 @@ class ScreenshotDashboardHolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        selector(
-          thisUser,
-        ),
+        if (thisUser.role == Roles.user.index)
+          selector(
+            thisUser,
+          ),
         if (!ResponsiveLayout.isMobile)
           Align(
             alignment: Alignment.centerRight,
