@@ -35,6 +35,7 @@ class FileService extends ChangeNotifier {
   }
   late ChangeNotifierProviderRef<FileService> ref;
   final List<FileDetailMini> files = [];
+  late final List<FileDetailMini> selectedVideos = [];
   late List<FileDetailMini>? userFiles;
 
   final List<AreaModel> areas = [];

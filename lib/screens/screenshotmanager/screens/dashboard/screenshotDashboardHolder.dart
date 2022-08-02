@@ -22,7 +22,8 @@ class ScreenshotDashboardHolder extends ConsumerWidget {
     final selectedFile = fileService.selectedUserFile.value;
     return Stack(
       children: [
-        selector(thisUser, userFiles, selectedFile),
+        if (thisUser.role == Roles.user.index)
+          selector(thisUser, userFiles, selectedFile),
         if (!ResponsiveLayout.isMobile) ...[
           !showVideoBar
               ? Align(
