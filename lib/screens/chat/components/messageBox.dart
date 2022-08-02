@@ -1,20 +1,19 @@
+import 'package:videomanager/screens/chat/models/conversation.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class CustomMessageBox extends StatelessWidget {
-  CustomMessageBox(
-      {Key? key,
-      this.ownMessage = false,
-      required this.message,
-      this.messageTime})
-      : super(key: key);
-
-  final bool ownMessage;
+  CustomMessageBox({Key? key, required this.message}) : super(key: key);
+  final Message message;
+  late bool ownMessage = checkOwnMessage(message);
   late Color color = ownMessage ? primaryColor : Colors.grey;
-  final String message;
-  DateTime? messageTime;
+
+  bool checkOwnMessage(Message message) {
+    if (message.sender=="") return true;
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    messageTime ??= DateTime.now();
     return LayoutBuilder(builder: (context, constraints) {
       return Row(
         children: [
@@ -39,7 +38,7 @@ class CustomMessageBox extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                         horizontal: 20.ssp(), vertical: 15.ssp()),
                     child: SelectableText(
-                      message,
+                      message.message,
                       style: kTextStyleIbmRegular.copyWith(
                           color: Colors.white, fontSize: 18.ssp()),
                     ),
@@ -48,7 +47,7 @@ class CustomMessageBox extends StatelessWidget {
               ),
               SizedBox(height: 6.sh()),
               Text(
-                messageTime.toString().substring(0, 16),
+                message.createdAt.toString().substring(0, 16),
               )
             ],
           ),
