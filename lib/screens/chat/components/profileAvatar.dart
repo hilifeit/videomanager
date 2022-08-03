@@ -23,8 +23,10 @@ class ProfileAvatar extends StatelessWidget {
               onTap!();
             }
           : null,
-      child: Row(crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisAlignment: MainAxisAlignment.spaceAr,
+      child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment:
+              !showDetails ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             Stack(
               clipBehavior: Clip.none,
@@ -33,6 +35,7 @@ class ProfileAvatar extends StatelessWidget {
                   radius: profileradius.sr(),
                   backgroundColor: primaryColor,
                   child: FittedBox(
+                    
                     child: Text(
                       processName(name),
                       style: kTextStyleIbmSemiBold.copyWith(

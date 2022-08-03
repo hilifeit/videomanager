@@ -74,6 +74,23 @@ class UserService extends ChangeNotifier {
     }
   }
 
+  Future<UserModel> fetchOneUser(String id) async {
+    try {
+      var response = await tunnelRequest(() =>
+          client.get(Uri.parse("${CustomIP.apiBaseUrl}user/$id"), headers: {
+            "Content-Type": "application/json",
+            "x-access-token": loggedInUser.value!.accessToken!
+          }));
+      if (response.statusCode == 200) {
+        return userModelFromJson(response.body);
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
   changeActiveStatus({required String id, required bool isActive}) {
     var userIndex = _users.indexWhere((element) => element.id == id);
     if (userIndex >= 0) {
