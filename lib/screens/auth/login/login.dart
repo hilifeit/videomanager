@@ -63,7 +63,9 @@ class Login extends ConsumerWidget {
               height: 93.sh(),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 105.sw(min: 70)),
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      !ResponsiveLayout.isMobile ? 105.sw(min: 70) : 25.sw()),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -156,6 +158,10 @@ class Login extends ConsumerWidget {
                           children: [
                             Consumer(builder: (context, ref, c) {
                               return Checkbox(
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  visualDensity: const VisualDensity(
+                                      horizontal: -4, vertical: -4),
                                   side: BorderSide(
                                     width: 1.sw(),
                                     color: secondaryColorText,

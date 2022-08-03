@@ -40,11 +40,11 @@ class ScreenShotScreen extends ConsumerWidget {
                               pinPosition:
                                   ref.watch(posiionProvider.state).state),
                         ));
-                        // showDialog(
-                        //     context: context,
-                        //     builder: ((context) {
-                        //       return Center(child: AddEditShop());
-                        //     }));
+                        showDialog(
+                            context: context,
+                            builder: ((context) {
+                              return Center(child: AddEditShop());
+                            }));
                       },
                       child: Stack(
                         children: [
