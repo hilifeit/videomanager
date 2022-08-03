@@ -128,36 +128,6 @@ class MessageScreen extends ConsumerWidget {
                             ],
                           ),
 
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: MessageTextField(
-                                onChanged: (value) {
-                                  customSocket.socket.emit("typing",
-                                      {"to": selectedUser.id, "data": value});
-                                },
-                                onSend: (value) {
-                                  customSocket.socket.emit("message",
-                                      {"to": selectedUser.id, "data": value});
-                                },
-                                prefixIcon: InkWell(
-                                    onTap: () {},
-                                    child: Icon(Icons.emoji_emotions)),
-                                suffixIcon: InkWell(
-                                    onTap: () {}, child: Icon(Icons.send)),
-                              )),
-                              // GestureDetector(
-                              //     onTap: () {}, child: Icon(Icons.attach_file)),
-                              // SizedBox(
-                              //   width: 10.sw(),
-                              // ),
-                              // Icon(Icons.camera_alt_outlined),
-                              // SizedBox(
-                              //   width: 10.sw(),
-                              // ),
-                              // Icon(Icons.mic)
-                            ],
-                          ),
                           SizedBox(
                             height:
                                 ResponsiveLayout.isDesktop ? 40.sh() : 20.sh(),
