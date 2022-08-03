@@ -25,7 +25,6 @@ class Login extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12.sr()),
       ),
       child: SingleChildScrollView(

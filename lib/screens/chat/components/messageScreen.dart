@@ -104,9 +104,7 @@ class MessageScreen extends ConsumerWidget {
                                     {"to": selectedUser.id, "data": value});
                               },
                               prefixIcon: InkWell(
-                                  onTap: () {
-                                    ref.read(chatServiceChangeProvider).add(10);
-                                  },
+                                  onTap: () {},
                                   child: Icon(Icons.emoji_emotions)),
                               suffixIcon: InkWell(
                                   onTap: () {}, child: Icon(Icons.send)),

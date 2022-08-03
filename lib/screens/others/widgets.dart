@@ -29,6 +29,9 @@ class CustomOutlinedButton extends StatelessWidget {
           border: Border.all(color: borderColor ?? Colors.black)),
       child: Consumer(builder: (context, ref, c) {
         return TextButton(
+            style: ButtonStyle(
+                padding: MaterialStateProperty.resolveWith(
+                    (states) => EdgeInsets.zero)),
             onPressed: () {
               onPressedOutlined();
             },

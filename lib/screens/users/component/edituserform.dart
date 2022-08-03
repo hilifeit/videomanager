@@ -67,7 +67,7 @@ class EditUser extends ConsumerWidget {
       // dd = managerMenu.firstWhere((element) => element.value == selectedUser.superVisor!.id);
 
     }
-
+    final double padding = !ResponsiveLayout.isMobile ? 59.sw() : 20.sw();
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -76,7 +76,7 @@ class EditUser extends ConsumerWidget {
           color: Theme.of(context).primaryColor.withOpacity(0.15),
           child: Padding(
             padding:
-                EdgeInsets.only(left: 59.sw(), top: 45.sh(), right: 59.sw()),
+                EdgeInsets.only(left: padding, top: 45.sh(), right: padding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

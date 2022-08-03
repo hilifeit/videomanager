@@ -4,9 +4,14 @@ var lightTheme = ThemeData(
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
     primaryColor: primaryColor,
-    colorScheme: ColorScheme.light(primary: primaryColor),
+    scaffoldBackgroundColor: whiteColor,
+    backgroundColor: whiteColor,
+    colorScheme: ColorScheme.light(
+      primary: primaryColor,
+      secondary: primaryColor.withOpacity(0.5),
+    ),
     toggleableActiveColor: primaryColor,
-    textSelectionTheme: TextSelectionThemeData(cursorColor: primaryColor),
+    textSelectionTheme: const TextSelectionThemeData(cursorColor: primaryColor),
     inputDecorationTheme: InputDecorationTheme(
       focusColor: primaryColor,
       enabledBorder: OutlineInputBorder(

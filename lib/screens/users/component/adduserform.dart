@@ -57,7 +57,7 @@ class AddUser extends ConsumerWidget {
     // } else {
     //   edit = false;
     // }
-
+    final double padding = !ResponsiveLayout.isMobile ? 59.sw() : 20.sw();
     return Scrollbar(
       thumbVisibility: true,
       controller: _scrollController,
@@ -67,12 +67,12 @@ class AddUser extends ConsumerWidget {
           color: Theme.of(context).primaryColor.withOpacity(0.15),
           child: Padding(
             padding:
-                EdgeInsets.only(left: 59.sw(), top: 45.sh(), right: 59.sw()),
+                EdgeInsets.only(left: padding, top: 45.sh(), right: padding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  edit ? 'Edit User' : 'Add User',
+                  'Add User',
                   style: kTextStyleIbmRegular.copyWith(
                       fontSize: 32.ssp(), color: Colors.black),
                 ),
