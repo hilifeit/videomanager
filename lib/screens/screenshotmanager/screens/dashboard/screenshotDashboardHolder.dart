@@ -18,7 +18,12 @@ class ScreenshotDashboardHolder extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showVideoBar = ref.watch(showVideoBarProvider.state).state;
     final fileService = ref.watch(fileDetailMiniServiceProvider);
-    final userFiles = fileService.userFiles;
+    final userFiles = [];
+    if (thisUser.role == Roles.user.index) {
+      if (fileService.userFiles != null) {
+        userFiles.addAll(fileService.userFiles!);
+      }
+    }
     final selectedFile = fileService.selectedUserFile.value;
     return Stack(
       children: [

@@ -81,27 +81,8 @@ class MessageScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
-<<<<<<< HEAD
-                          Consumer(
-                            builder: (_, ref, c) {
-                              final isTyping =
-                                  ref.watch(userChangeProvider).isTyping.value;
-                              return isTyping
-                                  ? Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: TypingWidget())
-                                  : Container();
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  // Spacer(),
-=======
                         ),
                         // Spacer(),
->>>>>>> 47c446c0f1d2cba3e3f63339fc40f79248b221e2
 
                         if (ResponsiveLayout.isDesktop)
                           Divider(
