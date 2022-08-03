@@ -77,9 +77,11 @@ class CustomElevatedButton extends StatelessWidget {
                 (states) => elevatedButtonPadding ?? EdgeInsets.zero),
             backgroundColor: MaterialStateColor.resolveWith((states) =>
                 enabled ? color ?? Theme.of(context).primaryColor : darkGrey)),
-        onPressed: () {
-          enabled ? onPressedElevated() : null;
-        },
+        onPressed: enabled
+            ? () {
+                onPressedElevated();
+              }
+            : null,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

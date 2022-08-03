@@ -2,6 +2,7 @@ import 'package:videomanager/screens/chat/components/customMessageBar.dart';
 import 'package:videomanager/screens/chat/components/messageBox.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/chat/components/typingWidget.dart';
+import 'package:videomanager/screens/chat/components/viewProfile.dart';
 import 'package:videomanager/screens/chat/models/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
@@ -22,7 +23,8 @@ class MessageScreen extends ConsumerWidget {
         children: [
           if (ResponsiveLayout.isMobile && selectedUser != null)
             Expanded(
-                flex: 1, child: CustomMessageBar(header: header(selectedUser))),
+                flex: 1,
+                child: CustomMessageBar(header: header(selectedUser, ref))),
           Expanded(
             flex: 10,
             child: Padding(
@@ -38,7 +40,7 @@ class MessageScreen extends ConsumerWidget {
                           SizedBox(
                             height: 60.sh(),
                           ),
-                          header(selectedUser),
+                          header(selectedUser, ref),
                           SizedBox(
                             height: 15.sh(),
                           ),
@@ -134,7 +136,7 @@ class MessageScreen extends ConsumerWidget {
     );
   }
 
-  Widget header(UserModelMini selectedUser) {
+  Widget header(UserModelMini selectedUser, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -152,7 +154,41 @@ class MessageScreen extends ConsumerWidget {
             itemBuilder: (BuildContext context) {
               return [
                 PopupMenuItem(
-                  onTap: () {},
+                  onTap: () async {
+                    var user = await ref
+                        .read(userChangeProvider)
+                        .fetchOneUser(selectedUser.id);
+                    if (ResponsiveLayout.isMobile) {
+                      Future.delayed(const Duration(milliseconds: 5), () async {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ViewProfile(
+                                  isActive: selectedUser.isActive, user: user);
+                            },
+                          ),
+                        );
+                      });
+                    } else {
+                      Future.delayed(const Duration(milliseconds: 5), () async {
+                        return showDialog(
+                            context: context,
+                            builder: ((context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.transparent,
+                                content: SizedBox(
+                                  width: 520.sw(),
+                                  child: ViewProfile(
+                                    user: user,
+                                    isActive: selectedUser.isActive,
+                                  ),
+                                ),
+                              );
+                            }));
+                      });
+                    }
+                  },
                   child: CustomPopUpMenuItemChild(text: 'View Profile'),
                 ),
                 PopupMenuItem(

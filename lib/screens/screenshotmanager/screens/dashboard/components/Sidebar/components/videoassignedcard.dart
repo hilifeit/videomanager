@@ -1,28 +1,12 @@
+import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
-class VideoAssignCardItems {
-  VideoAssignCardItems(
-      {required this.fileName,
-      required this.status,
-      // required this.filedetail,
-      required this.screenShot,
-      required this.shops});
-  // final FileDetailMini filedetail;
-  final String fileName, status;
-  final int screenShot;
-  final int shops;
-}
-
-final videoAssignCheckProvider = StateProvider<bool>((ref) {
-  return false;
-});
-
 class VideoAssignCard extends ConsumerWidget {
-  const VideoAssignCard({
+  VideoAssignCard({
     Key? key,
     required this.thisUser,
     required this.item,
@@ -32,18 +16,18 @@ class VideoAssignCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selected =
-        ref.watch(fileDetailMiniServiceProvider).selectedUserFile.value?.id;
+    final fileService = ref.watch(fileDetailMiniServiceProvider);
+    final selected = fileService.selectedUserFile.value?.id;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (thisUser.role == 1)
           Consumer(builder: (context, ref, c) {
-            final isChecked = ref.watch(videoAssignCheckProvider.state).state;
             return Checkbox(
-              value: isChecked,
+              value: item.isSelected,
               onChanged: (val) {
-                ref.read(videoAssignCheckProvider.state).state = val!;
+                fileService.selectOrDeselectFile([item], val!);
               },
             );
           }),

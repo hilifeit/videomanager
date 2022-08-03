@@ -22,7 +22,8 @@ class FileDetailMini {
       required this.path,
       required this.isUseable,
       required this.status,
-      this.foundPath = ''
+      this.foundPath = '',
+      this.isSelected = false
       // required this.area
       });
 
@@ -33,6 +34,7 @@ class FileDetailMini {
   final Status status;
   final List<OriginalLocation> originalLocation = [];
   bool isUseable;
+  bool isSelected;
   // final Area area;
   Rect? boundingBox;
 

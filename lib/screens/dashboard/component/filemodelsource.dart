@@ -1,9 +1,9 @@
 import 'package:data_table_2/data_table_2.dart';
 
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/users/component/userService.dart';
+
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
-import 'package:videomanager/screens/users/users.dart';
+
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 final editManagerSelectProvider = StateProvider<bool>((ref) {
