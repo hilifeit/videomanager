@@ -26,185 +26,238 @@ class Login extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.sr()),
+        color: whiteColor,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 98.sh(),
-                  ),
-                  Text(
-                    'LOGIN WITH',
-                    style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 25.ssp(),
-                      color: Colors.black,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 17.sh(),
-                  ),
-                  Text(
-                    'EZSALES',
-                    style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 25.ssp(),
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 93.sh(),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal:
-                      !ResponsiveLayout.isMobile ? 105.sw(min: 70) : 25.sw()),
-              child: Form(
-                key: formKey,
+      child: Expanded(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
                 child: Column(
                   children: [
-                    InputTextField(
-                      value: username,
-                      isVisible: true,
-                      title: 'USERNAME',
-                      validator: (val) => validateUserName(val!),
-                      onChanged: (val) {
-                        username = val;
-                      },
-                    ),
                     SizedBox(
-                      height: 25.5.sh(),
+                      height: 98.sh(),
                     ),
-                    InputTextField(
-                      value: password,
-                      isVisible: true,
-                      title: 'PASSWORD',
-                      validator: (val) => validatePassword(val!),
-                      onChanged: (val) {
-                        password = val;
-                      },
-                    ),
-                    SizedBox(
-                      height: 25.5.sh(),
-                    ),
-                    Button(
-                      onPressed: () async {
-                        final userService = ref.read(userChangeProvider);
-
-                        if (formKey.currentState!.validate()) {
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return const Center(
-                                  child: SizedBox(
-                                    // color: Colors.teal,
-                                    height: 50,
-                                    width: 50,
-                                    child: Center(
-                                        child: CircularProgressIndicator()),
-                                  ),
-                                );
-                              });
-                          try {
-                            await userService.login(
-                              remember: checked,
-                              username: username,
-                              password: password,
-                            );
-
-                            snack.success("Login Succesful");
-                            ref.read(loginStateProvider.state).state = false;
-
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () async {
-                              await userService.fetchAll();
-                              customSocket.connect();
-                            });
-                            // ignore: use_build_context_synchronously
-                            Navigator.pop(context);
-                          } catch (e) {
-                            Navigator.pop(context);
-                            snack.error(e);
-                          }
-                        }
-
-                        //populateDirectories(context, ref, single: false);
-                      },
-                      label: 'Login',
-                      kLabelTextStyle: kTextStyleIbmMedium.copyWith(
-                        color: Colors.white,
+                    Text(
+                      'LOGIN WITH',
+                      style: kTextStyleIbmMedium.copyWith(
+                        fontSize: 25.ssp(),
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(
-                      height: 22.sh(),
+                      height: 17.sh(),
                     ),
-                    OverflowBar(
-                      // runAlignment: WrapAlignment.spaceBetween,
-                      alignment: MainAxisAlignment.spaceBetween,
-                      overflowAlignment: OverflowBarAlignment.center,
-                      overflowSpacing: 10.sh(),
-                      children: [
-                        Wrap(
-                          // runAlignment: WrapAlignment.center,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Consumer(builder: (context, ref, c) {
-                              return Checkbox(
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                  visualDensity: const VisualDensity(
-                                      horizontal: -4, vertical: -4),
-                                  side: BorderSide(
-                                    width: 1.sw(),
-                                    color: secondaryColorText,
-                                  ),
-                                  activeColor: primaryColor,
-                                  value: checked,
-                                  onChanged: (value) {
-                                    ref
-                                        .read(checkBoxStateProvider.state)
-                                        .state = value!;
-                                  });
-                            }),
-                            GestureDetector(
-                              onTap: () => ref
-                                  .read(checkBoxStateProvider.state)
-                                  .state = !checked,
-                              child: Text(
-                                'Stay logged in?',
-                                style: kTextStyleIbmMedium,
-                              ),
-                            ),
-                          ],
-                        ),
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Consumer(builder: (context, ref, c) {
-                            return GestureDetector(
-                              onTap: () {
-                                ref.read(authStateProvider.state).state = false;
-                              },
-                              child: Text(
-                                'Forgot Password?',
-                                style: kTextStyleIbmRegular,
-                              ),
-                            );
-                          }),
-                        ),
-                      ],
+                    Text(
+                      'EZSALES',
+                      style: kTextStyleIbmMedium.copyWith(
+                        fontSize: 25.ssp(),
+                        color: Colors.black,
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 93.sh(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal:
+                        !ResponsiveLayout.isMobile ? 105.sw(min: 70) : 25.sw()),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      InputTextField(
+                        value: username,
+                        isVisible: true,
+                        title: 'USERNAME',
+                        validator: (val) => validateUserName(val!),
+                        onChanged: (val) {
+                          username = val;
+                        },
+                      ),
+                      SizedBox(
+                        height: 25.5.sh(),
+                      ),
+                      InputTextField(
+                        value: password,
+                        isVisible: true,
+                        title: 'PASSWORD',
+                        validator: (val) => validatePassword(val!),
+                        onChanged: (val) {
+                          password = val;
+                        },
+                      ),
+                      SizedBox(
+                        height: 25.5.sh(),
+                      ),
+                      CustomElevatedButton(
+                          width: double.infinity,
+                          onPressedElevated: () async {
+                            final userService = ref.read(userChangeProvider);
+
+                            if (formKey.currentState!.validate()) {
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return const Center(
+                                      child: SizedBox(
+                                        // color: Colors.teal,
+                                        height: 50,
+                                        width: 50,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      ),
+                                    );
+                                  });
+                              try {
+                                await userService.login(
+                                  remember: checked,
+                                  username: username,
+                                  password: password,
+                                );
+
+                                snack.success("Login Succesful");
+                                ref.read(loginStateProvider.state).state =
+                                    false;
+
+                                Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                    () async {
+                                  await userService.fetchAll();
+                                  customSocket.connect();
+                                });
+                                // ignore: use_build_context_synchronously
+                                Navigator.pop(context);
+                              } catch (e) {
+                                Navigator.pop(context);
+                                snack.error(e);
+                              }
+                            }
+                          },
+                          elevatedButtonText: 'Login'),
+                      // Button(
+                      //   onPressed: () async {
+                      //     final userService = ref.read(userChangeProvider);
+
+                      //     if (formKey.currentState!.validate()) {
+                      //       showDialog(
+                      //           barrierDismissible: false,
+                      //           context: context,
+                      //           builder: (context) {
+                      //             return const Center(
+                      //               child: SizedBox(
+                      //                 // color: Colors.teal,
+                      //                 height: 50,
+                      //                 width: 50,
+                      //                 child: Center(
+                      //                     child: CircularProgressIndicator()),
+                      //               ),
+                      //             );
+                      //           });
+                      //       try {
+                      //         await userService.login(
+                      //           remember: checked,
+                      //           username: username,
+                      //           password: password,
+                      //         );
+
+                      //         snack.success("Login Succesful");
+                      //         ref.read(loginStateProvider.state).state = false;
+
+                      //         Future.delayed(const Duration(milliseconds: 100),
+                      //             () async {
+                      //           await userService.fetchAll();
+                      //           customSocket.connect();
+                      //         });
+                      //         // ignore: use_build_context_synchronously
+                      //         Navigator.pop(context);
+                      //       } catch (e) {
+                      //         Navigator.pop(context);
+                      //         snack.error(e);
+                      //       }
+                      //     }
+
+                      //     //populateDirectories(context, ref, single: false);
+                      //   },
+                      //   label: 'Login',
+                      //   kLabelTextStyle: kTextStyleIbmMedium.copyWith(
+                      //     color: Colors.white,
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: 22.sh(),
+                      ),
+                      OverflowBar(
+                        // runAlignment: WrapAlignment.spaceBetween,
+                        alignment: MainAxisAlignment.spaceBetween,
+                        overflowAlignment: OverflowBarAlignment.center,
+                        overflowSpacing: 10.sh(),
+                        children: [
+                          Wrap(
+                            // runAlignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Consumer(builder: (context, ref, c) {
+                                return Checkbox(
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    visualDensity: const VisualDensity(
+                                        horizontal: -4, vertical: -4),
+                                    side: BorderSide(
+                                      width: 1.sw(),
+                                      color: secondaryColorText,
+                                    ),
+                                    activeColor: primaryColor,
+                                    value: checked,
+                                    onChanged: (value) {
+                                      ref
+                                          .read(checkBoxStateProvider.state)
+                                          .state = value!;
+                                    });
+                              }),
+                              GestureDetector(
+                                onTap: () => ref
+                                    .read(checkBoxStateProvider.state)
+                                    .state = !checked,
+                                child: Text(
+                                  'Stay logged in?',
+                                  style: kTextStyleIbmMedium,
+                                ),
+                              ),
+                            ],
+                          ),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Consumer(builder: (context, ref, c) {
+                              return GestureDetector(
+                                onTap: () {
+                                  ref.read(authStateProvider.state).state =
+                                      false;
+                                },
+                                child: Text(
+                                  'Forgot Password?',
+                                  style: kTextStyleIbmRegular,
+                                ),
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.sh(),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
