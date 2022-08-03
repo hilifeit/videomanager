@@ -63,10 +63,14 @@ class ChatHome extends StatelessWidget {
                         a.isActive.toString().compareTo(b.isActive.toString()),
                   );
                   return Scrollbar(
-                    thumbVisibility: ResponsiveLayout.isDesktop ? true : false,
-                    controller: scrollController,
+                    // trackVisibility: ResponsiveLayout.isDesktop ? true : false,
+                    // thumbVisibility: ResponsiveLayout.isDesktop ? true : false,
+                    controller:
+                        ResponsiveLayout.isDesktop ? scrollController : null,
                     child: ListView.separated(
-                        controller: scrollController,
+                        controller: ResponsiveLayout.isDesktop
+                            ? scrollController
+                            : null,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
                           var widget = ProfileAvatar(

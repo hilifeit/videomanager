@@ -1,6 +1,7 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
 import 'package:videomanager/screens/chat/components/viewProfile.dart';
+import 'package:videomanager/screens/components/helper/customSafeArea.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/holder/components/profilemenu.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -40,7 +41,7 @@ class Holder extends ConsumerWidget {
     //   }
     // }
 
-    return SafeArea(
+    return CustomSafeArea(
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: secondaryColor,
