@@ -127,6 +127,7 @@ class MessageScreen extends ConsumerWidget {
                               // Icon(Icons.mic)
                             ],
                           ),
+
                           SizedBox(
                             height:
                                 ResponsiveLayout.isDesktop ? 40.sh() : 20.sh(),

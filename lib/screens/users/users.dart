@@ -58,7 +58,10 @@ class Users extends StatelessWidget {
                   }));
                 },
                 backgroundColor: Theme.of(context).primaryColor,
-                child: const Icon(Videomanager.add_user_svgrepo_com_1),
+                child: const Icon(
+                  Videomanager.add_user_svgrepo_com_1,
+                  color: whiteColor,
+                ),
               )
             : null,
         body: Row(
@@ -71,9 +74,9 @@ class Users extends StatelessWidget {
                       flex: 2,
                       child: Container(
                         padding: EdgeInsets.only(
-                          left: ResponsiveLayout.isDesktop ? 36.sw() : 10.sw(),
-                          top: ResponsiveLayout.isDesktop ? 37.sh() : 10.sh(),
-                          right: ResponsiveLayout.isDesktop ? 36.sw() : 10.sw(),
+                          left: ResponsiveLayout.isDesktop ? 36.sw() : 0.sw(),
+                          top: ResponsiveLayout.isDesktop ? 37.sh() : 0.sh(),
+                          right: ResponsiveLayout.isDesktop ? 36.sw() : 0.sw(),
                         ),
                         child: Column(
                           children: [
