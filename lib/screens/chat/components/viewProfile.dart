@@ -19,11 +19,12 @@ class ViewProfile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppBar(
-            backgroundColor: Colors.transparent,
-            foregroundColor: Theme.of(context).primaryColor,
-            elevation: 0,
-          ),
+          if (ResponsiveLayout.isMobile)
+            AppBar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Theme.of(context).primaryColor,
+              elevation: 0,
+            ),
           SizedBox(
             height: 24.sh(),
           ),
