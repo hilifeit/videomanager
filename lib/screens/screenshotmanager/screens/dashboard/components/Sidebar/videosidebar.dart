@@ -9,6 +9,7 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboardHolder.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
@@ -85,7 +86,8 @@ class VideoSideBar extends StatelessWidget {
                               final fileService =
                                   ref.watch(fileDetailMiniServiceProvider);
 
-                              final files = [];
+                              final List<FileDetailMini> files = [],
+                                  selectedVideos = [];
 
                               final selectedFilter = ref
                                   .watch(filterModuleServiceProvider)
@@ -104,6 +106,8 @@ class VideoSideBar extends StatelessWidget {
                                     .read(selectedAreaServiceProvider)
                                     .refinedSelection
                                     .value);
+                                selectedVideos.addAll(files.where(
+                                    (element) => element.isSelected == true));
                               } else if (thisUser.role == Roles.user.index) {
                                 files.clear();
                                 files.addAll(fileService.userFiles!);
@@ -204,6 +208,7 @@ class VideoSideBar extends StatelessWidget {
                                     Align(
                                       alignment: Alignment.bottomRight,
                                       child: CustomElevatedButton(
+                                          enabled: selectedVideos.isNotEmpty,
                                           icon: Videomanager
                                               .add_user_svgrepo_com_1,
                                           onPressedElevated: () {},

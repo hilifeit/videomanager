@@ -35,7 +35,7 @@ class FileService extends ChangeNotifier {
   }
   late ChangeNotifierProviderRef<FileService> ref;
   final List<FileDetailMini> files = [];
-  late final List<FileDetailMini> selectedVideos = [];
+  // final List<FileDetailMini> selectedVideos = [];
   late List<FileDetailMini>? userFiles;
 
   final List<AreaModel> areas = [];
@@ -57,8 +57,30 @@ class FileService extends ChangeNotifier {
 
   selectUserVideoFile(String id) async {
     selectedUserFile.value = await fetchOne(id);
+    // notifyListeners();
+  }
+
+  // addSelectedVideoFile(FileDetailMini selectedVideo) {
+  //   selectedVideos.add(selectedVideo);
+  //   print(selectedVideos.length);
+  //   // notifyListeners();
+  // }
+
+  selectOrDeselectFile(List<FileDetailMini> filesList, bool selected) {
+    for (var element in filesList) {
+      var index = files.indexOf(element);
+      if (index >= 0) {
+        files[index].isSelected = selected;
+      }
+    }
     notifyListeners();
   }
+
+  // removeSelectedVideoFile(FileDetailMini selectedVideo) {
+  //   selectedVideos.remove(selectedVideo);
+  //   print(selectedVideos.length);
+  //   notifyListeners();
+  // }
 
   fetchUserFiles() async {
     var userProvider = ref.read(userChangeProvider);

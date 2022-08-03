@@ -18,7 +18,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         borderRadius: BorderRadius.circular(12.sr()),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 105.sw()),
+        padding: EdgeInsets.symmetric(
+            horizontal: !ResponsiveLayout.isMobile ? 105.sw() : 25.sw()),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,7 +63,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                 ),
                 SizedBox(
-                  height: 63.5.sh(),
+                  height: 25.5.sh(),
                 ),
                 Button(
                   onPressed: () {

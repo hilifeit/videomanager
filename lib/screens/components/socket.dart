@@ -73,10 +73,12 @@ class CustomSocket {
 
           socket.on("activeUsers", (data) {
             if (data != null) {
-              CustomKeys()
-                  .ref!
-                  .read(userChangeProvider)
-                  .getActiveUsers(List<String>.from(jsonDecode(data)));
+              try {
+                CustomKeys()
+                    .ref!
+                    .read(userChangeProvider)
+                    .getActiveUsers(List<String>.from(jsonDecode(data)));
+              } catch (e, s) {}
             }
           });
         }
