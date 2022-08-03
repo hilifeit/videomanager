@@ -17,7 +17,7 @@ class ChatHome extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.all(20.ssp()),
+              padding: EdgeInsets.all(20.sh()),
               child: Row(
                 children: [
                   Text(
@@ -63,12 +63,14 @@ class ChatHome extends StatelessWidget {
                         a.isActive.toString().compareTo(b.isActive.toString()),
                   );
                   return Scrollbar(
+                    thumbVisibility: ResponsiveLayout.isDesktop ? true : false,
                     controller: scrollController,
                     child: ListView.separated(
                         controller: scrollController,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, index) {
                           var widget = ProfileAvatar(
+                            profileradius: 24,
                             isActive: users[index].isActive,
                             name: users[index].name,
                             onTap: () {
