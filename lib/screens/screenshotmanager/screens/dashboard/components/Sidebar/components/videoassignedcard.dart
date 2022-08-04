@@ -65,21 +65,26 @@ class VideoAssignCard extends ConsumerWidget {
                                         ? blackColor
                                         : notExactlyPrimary),
                               ),
-                            if (thisUser.role == 1) ...[
+                            if (thisUser.role == Roles.manager.index) ...[
                               Text(
                                 // TODO: video assigned to whom? "username"
-                                'Not Assigned',
+                                (item.assignDetail!.assignedTo == null)
+                                    ? 'Not Assigned'
+                                    : item.assignDetail!.assignedTo!,
                                 style: kTextStyleIbmMedium.copyWith(
                                     fontSize: 15.ssp(),
                                     color: notExactlyPrimary),
                               ),
 
                               // TODO: if video Assigned available show user's "name"
-                              // Text(
-                              //   'Name',
-                              //   style: kTextStyleIbmMedium.copyWith(
-                              //       fontSize: 15.ssp(), color: cardHeader),
-                              // ),
+
+                              if (item.assignDetail!.assignedTo != null)
+                                Text(
+                                  'Name',
+                                  style: kTextStyleIbmMedium.copyWith(
+                                    fontSize: 15.ssp(),
+                                  ),
+                                ),
                             ]
                           ],
                         ),
