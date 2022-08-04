@@ -23,7 +23,8 @@ class FileDetailMini {
       required this.isUseable,
       required this.status,
       this.foundPath = '',
-      this.isSelected = false
+      this.isSelected = false,
+      this.assignDetail
       // required this.area
       });
 
@@ -35,6 +36,7 @@ class FileDetailMini {
   final List<OriginalLocation> originalLocation = [];
   bool isUseable;
   bool isSelected;
+  final AssignDetail? assignDetail;
   // final Area area;
   Rect? boundingBox;
 
@@ -50,7 +52,8 @@ class FileDetailMini {
           location: location,
           path: path,
           isUseable: isUseable,
-          status: status
+          status: status,
+          assignDetail: assignDetail
           // area: area
           );
 
@@ -60,6 +63,9 @@ class FileDetailMini {
       location: Location.fromJson(json["location"]),
       isUseable: json["useable"],
       path: json["path"],
+      assignDetail: json["assignDetail"] != null
+          ? AssignDetail.fromJson(json["assignDetail"])
+          : null,
       status: Status.fromJson(json["status"] ?? jsonDecode('{"status":0}'))
       // area: Area.fromJson(json["area"])
       );
@@ -151,5 +157,39 @@ class Status {
 
   Map<String, dynamic> toJson() => {
         "status": status,
+      };
+}
+
+class AssignDetail {
+  AssignDetail({
+    this.area,
+    this.assignedTo,
+  });
+
+  String? area;
+  String? assignedTo;
+
+  AssignDetail copyWith({
+    String? area,
+    String? assignedTo,
+  }) =>
+      AssignDetail(
+        area: area ?? this.area,
+        assignedTo: assignedTo ?? this.assignedTo,
+      );
+
+  factory AssignDetail.fromRawJson(String str) =>
+      AssignDetail.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory AssignDetail.fromJson(Map<String, dynamic> json) => AssignDetail(
+        area: json["area"],
+        assignedTo: json["assignedTo"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "area": area,
+        "assignedTo": assignedTo,
       };
 }
