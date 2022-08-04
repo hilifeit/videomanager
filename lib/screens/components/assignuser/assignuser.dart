@@ -1,7 +1,7 @@
-import 'package:videomanager/screens/components/assignuser/assignmanager.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
 class AssignUser extends ConsumerWidget {
@@ -16,10 +16,10 @@ class AssignUser extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userService = ref.watch(userChangeProvider);
-    final allUsers = userService.getByRoles(Roles.user);
-    final userrMenu = allUsers
-        .map((e) => CustomMenuItem(label: e.name, value: e.id))
-        .toList();
+    userService.getMyUser();
+    final myUsers = userService.myUsers;
+    final userrMenu =
+        myUsers.map((e) => CustomMenuItem(label: e.name, value: e.id)).toList();
 
     return Container(
       height: 539.sh(),

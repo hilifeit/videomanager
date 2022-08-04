@@ -38,6 +38,7 @@ class UserService extends ChangeNotifier {
   }
 
   List<UserModelMini> get users => _users;
+  final List<UserModelMini> myUsers = [];
 
 //   }
   load() async {
@@ -53,6 +54,17 @@ class UserService extends ChangeNotifier {
   store() async {
     await storage.write(userStorageKey, loggedInUser.value!.toJson());
     // print(loggedInUser.value!.mobile);
+  }
+
+  getMyUser() {
+    final allUsers = getByRoles(Roles.user);
+    myUsers.clear();
+
+    for (var element in allUsers) {
+      if (element.superVisor!.id == loggedInUser.value!.id) {
+        myUsers.add(element);
+      }
+    }
   }
 
   // Future<UserModel>

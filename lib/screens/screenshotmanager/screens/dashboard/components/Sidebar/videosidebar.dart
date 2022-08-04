@@ -91,7 +91,7 @@ class VideoSideBar extends StatelessWidget {
 
                               final List<FileDetailMini> files = [],
                                   selectedVideos = [];
-
+                              bool all = false;
                               final selectedFilter = ref
                                   .watch(filterModuleServiceProvider)
                                   .selectedItems;
@@ -111,6 +111,15 @@ class VideoSideBar extends StatelessWidget {
                                     .value);
                                 selectedVideos.addAll(files.where(
                                     (element) => element.isSelected == true));
+
+                                for (var element in files) {
+                                  if (element.isSelected == false) {
+                                    all = element.isSelected;
+                                    break;
+                                  } else {
+                                    all = element.isSelected;
+                                  }
+                                }
                               } else if (selectedArea == null &&
                                   thisUser.role == Roles.manager.index) {
                                 if (areas.isNotEmpty) {
@@ -146,18 +155,16 @@ class VideoSideBar extends StatelessWidget {
                                     // if (areas != [])
                                     areas.isNotEmpty
                                         ? Wrap(
+                                            spacing: 10.sw(),
+                                            runSpacing: 10.sh(),
                                             children: List.generate(
                                               areas.length,
-                                              (index) => Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 16.sw()),
-                                                  child: AreaCard(
-                                                      area: areas[index],
-                                                      selected:
-                                                          selectedArea != null
-                                                              ? selectedArea ==
-                                                                  areas[index]
-                                                              : false)),
+                                              (index) => AreaCard(
+                                                  area: areas[index],
+                                                  selected: selectedArea != null
+                                                      ? selectedArea ==
+                                                          areas[index]
+                                                      : false),
                                             ),
                                           )
                                         : const Text("No area assigned."),
@@ -170,12 +177,26 @@ class VideoSideBar extends StatelessWidget {
                                               Roles.manager.index) ||
                                       (thisUser.role == Roles.user.index &&
                                           files.isNotEmpty)) ...[
-                                    Text(
-                                      'Videos',
-                                      style: kTextStyleIbmMedium.copyWith(
-                                        fontSize: 18.ssp(),
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Videos',
+                                          style: kTextStyleIbmMedium.copyWith(
+                                            fontSize: 18.ssp(),
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                        if (thisUser.role ==
+                                            Roles.manager.index)
+                                          Checkbox(
+                                            value: all,
+                                            onChanged: (val) {
+                                              fileService.selectOrDeselectFile(
+                                                  files, val!);
+                                            },
+                                          )
+                                      ],
                                     ),
                                     SizedBox(
                                       height: 10.sh(),
