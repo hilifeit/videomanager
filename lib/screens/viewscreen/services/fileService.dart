@@ -89,7 +89,10 @@ class FileService extends ChangeNotifier {
         var response = await client.get(
             Uri.parse(
                 "${CustomIP.apiBaseUrl}file/assigned/${userProvider.loggedInUser.value?.id}"),
-            headers: {"Content-Type": "application/json"});
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": userProvider.loggedInUser.value!.accessToken!
+            });
 
         if (response.statusCode == 200) {
           // userFiles = [];
@@ -171,8 +174,8 @@ class FileService extends ChangeNotifier {
             files.clear();
             files.addAll(fileDetailMiniFromJson(response.body).toList());
 
-            List<int> states = [];
-            List<String> district = [];
+            // List<int> states = [];
+            // List<String> district = [];
             await Future.forEach<FileDetailMini>(files, (element) {
               element.boundingBox =
                   boundingBoxOffset(element.location.coordinates);
@@ -234,6 +237,29 @@ class FileService extends ChangeNotifier {
           });
       // print(response.body);
       if (response.statusCode == 201) {
+        // areas.add(AreaModel.fromJson(jsonDecode(response.body)));
+        notifyListeners();
+      } else {
+        var error = jsonDecode(response.body);
+        throw error("message");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  assignVideosToUser(Map data) async {
+    var userProvider = ref.read(userChangeProvider);
+    try {
+      var response = await client.put(
+          Uri.parse("${CustomIP.apiBaseUrl}file/assignFiles"),
+          body: jsonEncode(data),
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": userProvider.loggedInUser.value!.accessToken!
+          });
+      // print(response.body);
+      if (response.statusCode == 200) {
         // areas.add(AreaModel.fromJson(jsonDecode(response.body)));
         notifyListeners();
       } else {

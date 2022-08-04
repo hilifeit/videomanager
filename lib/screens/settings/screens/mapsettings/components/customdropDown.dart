@@ -134,7 +134,12 @@ class CustomMenuDropDown extends ConsumerWidget {
   final Function(CustomMenuItem val) onChanged;
   final List<CustomMenuItem> values;
   final String helperText;
-  Icon? icon;
+  final Icon? icon;
+  late var initState = init();
+
+  init() {
+    onChanged(value);
+  }
 
   @override
   Widget build(BuildContext context, ref) {

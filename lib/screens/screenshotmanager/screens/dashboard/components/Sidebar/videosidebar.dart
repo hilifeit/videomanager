@@ -71,6 +71,7 @@ class VideoSideBar extends StatelessWidget {
                           child: MapScreen(
                             isvisible: false,
                             draw: true,
+                            miniMap: false,
                             controller: MapController(location: home),
                           ),
                         ),

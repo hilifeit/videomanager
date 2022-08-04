@@ -402,6 +402,14 @@ class Painter extends CustomPainter {
         // }
         //Main Path
         {
+          if (element.assignDetail != null) {
+            if (element.assignDetail!.assignedTo == null) {
+              paint.color = strokeColor;
+            } else {
+              paint.color = Colors.green;
+            }
+          }
+
           customCanvas.drawPath(path, paint, onTapUp: (details) {
             tap();
           }, onSecondaryTapUp: (detail) {
@@ -420,6 +428,7 @@ class Painter extends CustomPainter {
               customCanvas.drawPath(path, paint, onTapUp: (details) {
                 tap();
               }, onSecondaryTapUp: (detail) {});
+
               paint.color = strokeColor;
               paint.strokeWidth = stroke;
               customCanvas.drawPath(path, paint, onTapUp: (details) {

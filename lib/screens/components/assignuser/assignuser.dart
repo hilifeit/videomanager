@@ -3,6 +3,7 @@ import 'package:videomanager/screens/settings/screens/mapsettings/components/cus
 import 'package:videomanager/screens/users/component/userService.dart';
 
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class AssignUser extends ConsumerWidget {
   AssignUser({
@@ -13,6 +14,7 @@ class AssignUser extends ConsumerWidget {
   final List<FileDetailMini> files;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String selectedId = '';
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userService = ref.watch(userChangeProvider);
@@ -75,32 +77,6 @@ class AssignUser extends ConsumerWidget {
                     SizedBox(
                       height: 30.sh(),
                     ),
-                    // Text(
-                    //   fileDetail == null ? 'Areaname' : fileDetail!.filename,
-                    //   style: kTextStyleIbmRegular.copyWith(
-                    //     fontSize: 16..ssp(),
-                    //     color: danger,
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 29.sh(),
-                    // ),
-                    // InputTextField(
-                    //   fillColor: Colors.white,
-                    //   title: 'Area Name',
-                    //   limit: true,
-                    //   limitNumber: 20,
-                    //   suffixText: '${files.length.toString()} Videos',
-                    //   suffixStyle: kTextStyleIbmMedium.copyWith(
-                    //     fontSize: 13.ssp(),
-                    //     color: primaryColor,
-                    //   ),
-                    //   validator: (val) => validateArea(val!),
-                    //   isVisible: true,
-                    //   onChanged: (val) {
-                    //     // area.name = val;
-                    //   },
-                    // ),
 
                     Text(
                       'User',
@@ -117,7 +93,7 @@ class AssignUser extends ConsumerWidget {
                             child: CustomMenuDropDown(
                                 value: userrMenu.first,
                                 onChanged: (val) {
-                                  // area.assignedTo.id = val.value;
+                                  selectedId = val.value;
                                 },
                                 values: userrMenu,
                                 helperText: ''),
@@ -157,17 +133,14 @@ class AssignUser extends ConsumerWidget {
                       elevatedButtonText: 'Confirm',
                       center: true,
                       onPressedElevated: () {
+                        if (selectedId.isEmpty) {
+                          selectedId = userrMenu.first.value;
+                        }
                         if (_formKey.currentState!.validate()) {
-                          // area.assignedBy.id =
-                          //     userService.loggedInUser.value!.id;
-                          // if (area.assignedTo.id == '' &&
-                          //     userrMenu.isNotEmpty) {
-                          //   area.assignedTo.id = userrMenu.first.value;
-                          // }
-
-                          // var dataMap = area.toJson();
-                          // dataMap.addAll(
-                          //     {"files": files.map((e) => e.id).toList()});
+                          var dataMap = {
+                            "assignedTo": selectedId,
+                            "files": files.map((e) => e.id).toList()
+                          };
 
                           showDialog(
                               context: context,
@@ -176,16 +149,20 @@ class AssignUser extends ConsumerWidget {
                                   textSecond: "assign to this user?",
                                   elevatedButtonText: 'Yes',
                                   onPressedElevated: () async {
-                                    // try {
-                                    //   await ref
-                                    //       .read(fileDetailMiniServiceProvider)
-                                    //       .createAreaAndAssign(dataMap);
-                                    snack.success("Video Assigned Succesfully");
-                                    //   Navigator.pop(context);
-                                    // } catch (e, s) {
-                                    //   print("$e $s");
-                                    //   snack.error(e);
-                                    // }
+                                    try {
+                                      await ref
+                                          .read(fileDetailMiniServiceProvider)
+                                          .assignVideosToUser(dataMap);
+                                      snack
+                                          .success("Area Assigned Succesfully");
+                                      Future.delayed(
+                                          const Duration(milliseconds: 5), () {
+                                        Navigator.pop(context);
+                                      });
+                                    } catch (e, s) {
+                                      print("$e $s");
+                                      snack.error(e);
+                                    }
                                   },
                                 );
                               });

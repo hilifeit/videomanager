@@ -1,7 +1,9 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
+import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
@@ -41,6 +43,7 @@ class VideoAssignCard extends ConsumerWidget {
                 ref
                     .read(fileDetailMiniServiceProvider)
                     .selectUserVideoFile(item.id);
+                ref.read(selectedFileProvider.state).state = item;
               },
               child: Card(
                 color: selected == item.id ? Color(0xffECF0F2) : Colors.white,
@@ -66,21 +69,22 @@ class VideoAssignCard extends ConsumerWidget {
                                         : notExactlyPrimary),
                               ),
                             if (thisUser.role == Roles.manager.index) ...[
-                              Text(
-                                // TODO: video assigned to whom? "username"
-                                (item.assignDetail!.assignedTo == null)
-                                    ? 'Not Assigned'
-                                    : item.assignDetail!.assignedTo!,
-                                style: kTextStyleIbmMedium.copyWith(
-                                    fontSize: 15.ssp(),
-                                    color: notExactlyPrimary),
-                              ),
+                              if (item.assignDetail!.assignedTo == null)
+                                Text(
+                                  // TODO: video assigned to whom? "username"
+
+                                  'Not Assigned',
+                                  style: kTextStyleIbmMedium.copyWith(
+                                      fontSize: 15.ssp(),
+                                      color: notExactlyPrimary),
+                                ),
 
                               // TODO: if video Assigned available show user's "name"
 
                               if (item.assignDetail!.assignedTo != null)
                                 Text(
-                                  'Name',
+                                  getUserName(
+                                      ref, item.assignDetail!.assignedTo!),
                                   style: kTextStyleIbmMedium.copyWith(
                                     fontSize: 15.ssp(),
                                   ),
@@ -169,5 +173,10 @@ class VideoAssignCard extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  getUserName(WidgetRef ref, String id) {
+    var userService = ref.read(userChangeProvider);
+    return userService.users.singleWhere((element) => element.id == id).name;
   }
 }
