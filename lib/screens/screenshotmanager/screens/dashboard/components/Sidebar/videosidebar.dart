@@ -50,6 +50,7 @@ class VideoSideBar extends StatelessWidget {
               color: Colors.white,
               height: double.infinity,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   thisUser.role == 0
                       ? Expanded(
@@ -81,6 +82,7 @@ class VideoSideBar extends StatelessWidget {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Consumer(builder: (context, ref, c) {
@@ -109,6 +111,16 @@ class VideoSideBar extends StatelessWidget {
                                     .value);
                                 selectedVideos.addAll(files.where(
                                     (element) => element.isSelected == true));
+                              } else if (selectedArea == null &&
+                                  thisUser.role == Roles.manager.index) {
+                                if (areas.isNotEmpty) {
+                                  Future.delayed(
+                                      const Duration(milliseconds: 10), () {
+                                    ref.read(selectedAreaServiceProvider)
+                                      ..selectArea(areas[0])
+                                      ..refine();
+                                  });
+                                }
                               } else if (thisUser.role == Roles.user.index) {
                                 files.clear();
                                 files.addAll(fileService.userFiles!);
@@ -118,6 +130,9 @@ class VideoSideBar extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   if (thisUser.role == Roles.manager.index) ...[
+                                    SizedBox(
+                                      height: 12.sh(),
+                                    ),
                                     Text(
                                       'Assigned Area',
                                       style: kTextStyleIbmMedium.copyWith(
@@ -129,111 +144,123 @@ class VideoSideBar extends StatelessWidget {
                                       height: 20.sh(),
                                     ),
                                     // if (areas != [])
-                                    Wrap(
-                                      children: List.generate(
-                                        areas.length,
-                                        (index) => Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 16.sw()),
-                                            child: AreaCard(
-                                                area: areas[index],
-                                                selected: selectedArea != null
-                                                    ? selectedArea ==
-                                                        areas[index]
-                                                    : false)),
+                                    areas.isNotEmpty
+                                        ? Wrap(
+                                            children: List.generate(
+                                              areas.length,
+                                              (index) => Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 16.sw()),
+                                                  child: AreaCard(
+                                                      area: areas[index],
+                                                      selected:
+                                                          selectedArea != null
+                                                              ? selectedArea ==
+                                                                  areas[index]
+                                                              : false)),
+                                            ),
+                                          )
+                                        : const Text("No area assigned."),
+                                    SizedBox(
+                                      height: 30.sh(),
+                                    ),
+                                  ],
+                                  if ((areas.isNotEmpty &&
+                                          thisUser.role ==
+                                              Roles.manager.index) ||
+                                      (thisUser.role == Roles.user.index &&
+                                          files.isNotEmpty)) ...[
+                                    Text(
+                                      'Videos',
+                                      style: kTextStyleIbmMedium.copyWith(
+                                        fontSize: 18.ssp(),
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 44.sh(),
+                                      height: 10.sh(),
                                     ),
-                                  ],
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Videos',
-                                        style: kTextStyleIbmMedium.copyWith(
-                                          fontSize: 18.ssp(),
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10.sh(),
-                                  ),
-                                  FilterIconButton(),
-                                  SizedBox(
-                                    height: 13.sh(),
-                                  ),
-                                  files.isEmpty
-                                      ? Center(
-                                          child: Text("Select Area"),
-                                        )
-                                      : Expanded(
-                                          child: selectedFilter.isNotEmpty
-                                              ? ListView.separated(
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    if (selectedFilter.contains(
-                                                        files[index]
-                                                            .status
-                                                            .status)) {
+                                    FilterIconButton(),
+                                    SizedBox(
+                                      height: 13.sh(),
+                                    ),
+                                    files.isEmpty
+                                        ? Center(
+                                            child: CircularProgressIndicator(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          )
+                                        : Expanded(
+                                            child: selectedFilter.isNotEmpty
+                                                ? ListView.separated(
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      if (selectedFilter
+                                                          .contains(files[index]
+                                                              .status
+                                                              .status)) {
+                                                        return VideoAssignCard(
+                                                          item: files[index],
+                                                          thisUser: thisUser,
+                                                        );
+                                                      } else {
+                                                        return Container();
+                                                      }
+                                                    },
+                                                    separatorBuilder:
+                                                        (context, index) {
+                                                      return SizedBox(
+                                                        height: 8.sh(),
+                                                      );
+                                                    },
+                                                    itemCount: files.length)
+                                                : ListView.separated(
+                                                    itemBuilder:
+                                                        (context, index) {
                                                       return VideoAssignCard(
                                                         item: files[index],
                                                         thisUser: thisUser,
                                                       );
-                                                    } else {
-                                                      return Container();
-                                                    }
-                                                  },
-                                                  separatorBuilder:
-                                                      (context, index) {
-                                                    return SizedBox(
-                                                      height: 8.sh(),
-                                                    );
-                                                  },
-                                                  itemCount: files.length)
-                                              : ListView.separated(
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return VideoAssignCard(
-                                                      item: files[index],
-                                                      thisUser: thisUser,
-                                                    );
-                                                  },
-                                                  separatorBuilder:
-                                                      (context, index) {
-                                                    return SizedBox(
-                                                      height: 8.sh(),
-                                                    );
-                                                  },
-                                                  itemCount: files.length),
+                                                    },
+                                                    separatorBuilder:
+                                                        (context, index) {
+                                                      return SizedBox(
+                                                        height: 8.sh(),
+                                                      );
+                                                    },
+                                                    itemCount: files.length),
+                                          ),
+                                    if (thisUser.role == Roles.manager.index &&
+                                        selectedVideos.isNotEmpty) ...[
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10.sh()),
+                                          child: CustomElevatedButton(
+                                              enabled:
+                                                  selectedVideos.isNotEmpty,
+                                              icon: Videomanager
+                                                  .add_user_svgrepo_com_1,
+                                              onPressedElevated: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        content: AssignUser(
+                                                            files:
+                                                                selectedVideos),
+                                                      );
+                                                    });
+                                              },
+                                              elevatedButtonText: 'Assign'),
                                         ),
-                                  if (thisUser.role == 1) ...[
-                                    Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: CustomElevatedButton(
-                                          enabled: selectedVideos.isNotEmpty,
-                                          icon: Videomanager
-                                              .add_user_svgrepo_com_1,
-                                          onPressedElevated: () {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    content: AssignUser(
-                                                        files: selectedVideos),
-                                                  );
-                                                });
-                                          },
-                                          elevatedButtonText: 'Assign'),
-                                    ),
-                                    SizedBox(
-                                      height: 23.sh(),
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ]
                                 ],
                               );
                             }),

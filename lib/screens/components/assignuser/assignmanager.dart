@@ -240,11 +240,11 @@ class AreaCard extends ConsumerWidget {
     this.selected = false,
   }) : super(key: key);
   final AreaModel area;
-  bool selected;
+  final bool selected;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         var selectedAreaService = ref.read(selectedAreaServiceProvider);
 
@@ -254,20 +254,23 @@ class AreaCard extends ConsumerWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: darkGrey,
+          color: selected ? Theme.of(context).primaryColor : darkGrey,
           borderRadius: BorderRadius.circular(
             4.sr(),
           ),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 2.sh(),
+            vertical: 8.sh(),
             horizontal: 10.sw(),
           ),
           child: Text(
             "${area.name} (${area.files})",
             style: kTextStyleIbmMedium.copyWith(
-                fontSize: 14.ssp(), color: Colors.black),
+                fontSize: 14.ssp(),
+                color: selected
+                    ? Theme.of(context).scaffoldBackgroundColor
+                    : Colors.black),
           ),
         ),
       ),

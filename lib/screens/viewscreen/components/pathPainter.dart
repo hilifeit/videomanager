@@ -10,6 +10,7 @@ import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
@@ -59,7 +60,7 @@ class Painter extends CustomPainter {
     final files = fileservice.files;
     final stroke = settingService.setting.mapSetting.stroke.toDouble();
     final handleDragged = selectedPointsProvider.selectedHandle;
-
+    final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
     rpaint.style = PaintingStyle.fill;
@@ -487,7 +488,10 @@ class Painter extends CustomPainter {
     selectedPointsProvider.currentSelection.value = finalselectedFileList;
 
     selectedPointsProvider.draw(customCanvas);
-    if (debug && files.isNotEmpty && ResponsiveLayout.isDesktop) {
+    if (debug &&
+        files.isNotEmpty &&
+        ResponsiveLayout.isDesktop &&
+        thisUser!.role == Roles.superAdmin.index) {
       canvas.drawRect(
           Rect.fromLTWH(0, 0, size.width, 40),
           paint

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 
@@ -22,7 +23,7 @@ class SelectedArea extends ChangeNotifier {
   late final selectedArea = Property<AreaModel?>(null, notifyListeners);
   late final selectedHandle = Property<int?>(null, notifyListeners);
   late final path = Property<Path>(Path(), () {});
-
+  late bool viewOnly = checkViewOnly();
   int pointLimit = 200;
 
   late final refinedSelection =
@@ -34,11 +35,26 @@ class SelectedArea extends ChangeNotifier {
   late final pathSelected = Property<bool>(false, notifyListeners);
   static late MapTransformer transformer;
 
-  addPoints({required Offset point}) {
-    if (_selectedPoints.length < pointLimit) {
-      _selectedPoints.add(transformer.fromXYCoordsToLatLng(point));
+  bool checkViewOnly() {
+    var user = CustomKeys().ref!.read(userChangeProvider).loggedInUser.value;
+    if (user == null) {
+      return true;
+    } else {
+      if (user.role != Roles.superAdmin.index) {
+        return true;
+      }
 
-      notifyListeners();
+      return false;
+    }
+  }
+
+  addPoints({required Offset point}) {
+    if (!viewOnly) {
+      if (_selectedPoints.length < pointLimit) {
+        _selectedPoints.add(transformer.fromXYCoordsToLatLng(point));
+
+        notifyListeners();
+      }
     }
   }
 
@@ -60,13 +76,15 @@ class SelectedArea extends ChangeNotifier {
   }
 
   moveHandle({required Offset newPosition}) {
-    if (selectedHandle.value != null) {
-      _selectedPoints[selectedHandle.value!] =
-          transformer.fromXYCoordsToLatLng(newPosition);
-      if (currentSelection.value.length != refinedSelection.value.length) {
-        refined.value = false;
+    if (!viewOnly) {
+      if (selectedHandle.value != null) {
+        _selectedPoints[selectedHandle.value!] =
+            transformer.fromXYCoordsToLatLng(newPosition);
+        if (currentSelection.value.length != refinedSelection.value.length) {
+          refined.value = false;
+        }
+        notifyListeners();
       }
-      notifyListeners();
     }
   }
 
@@ -116,13 +134,15 @@ class SelectedArea extends ChangeNotifier {
           //   print("here");
           // },
           onTapUp: ((details) {
-        if (selectedPoints.length > 2 && !pathClosed.value && i == 0) {
-          pathClosed.value = true;
-          pathSelected.value = true;
-          refine();
-        } else {
-          selectedHandle.value = i;
-          pathSelected.value = true;
+        if (!viewOnly) {
+          if (selectedPoints.length > 2 && !pathClosed.value && i == 0) {
+            pathClosed.value = true;
+            pathSelected.value = true;
+            refine();
+          } else {
+            selectedHandle.value = i;
+            pathSelected.value = true;
+          }
         }
       }), onSecondaryTapUp: (details) {
         // pathSelected.value = false;
@@ -145,7 +165,6 @@ class SelectedArea extends ChangeNotifier {
         selectedPointPainter
           ..color = Colors.blue.withOpacity(0.025)
           ..style = PaintingStyle.fill, onTapUp: (detail) {
-      print("here");
       pathSelected.value = true;
 
       // notifyListeners();
