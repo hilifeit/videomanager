@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
-import 'package:videomanager/screens/components/assignuser/assignuser.dart';
+import 'package:videomanager/screens/components/assignuser/assignmanager.dart';
 import 'package:videomanager/screens/components/clippedholder.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -291,8 +291,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                  
-
                                     showDialog(
                                         context: context,
                                         builder: (_) {
@@ -303,8 +301,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                             contentPadding: EdgeInsets.zero,
                                             content: AssignManager(
                                               files: selectedAreaService
-                                .refinedSelection.value,
-                                points: selectedPoints,
+                                                  .refinedSelection.value,
+                                              points: selectedPoints,
                                             ),
                                           );
                                         });

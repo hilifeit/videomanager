@@ -390,7 +390,9 @@ class AddEditShop extends ConsumerWidget {
                                 },
                               ),
                               SizedBox(
-                                width: 53.sw(),
+                                width: !ResponsiveLayout.isMobile
+                                    ? 53.sw()
+                                    : 15.sw(),
                               ),
                               if (roadFace2Show)
                                 DropDownWithText(
@@ -406,7 +408,9 @@ class AddEditShop extends ConsumerWidget {
                                   },
                                 ),
                               SizedBox(
-                                width: 53.sw(),
+                                width: !ResponsiveLayout.isMobile
+                                    ? 53.sw()
+                                    : 15.sw(),
                               ),
                               if (roadFace3Show)
                                 DropDownWithText(

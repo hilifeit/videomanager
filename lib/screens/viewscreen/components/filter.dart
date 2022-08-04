@@ -1,5 +1,5 @@
 import 'package:map/map.dart';
-import 'package:videomanager/screens/components/assignuser/assignuser.dart';
+import 'package:videomanager/screens/components/assignuser/assignmanager.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 import 'package:videomanager/screens/viewscreen/components/AssignedAreaCard.dart';

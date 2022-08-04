@@ -1,4 +1,5 @@
 import 'package:map/map.dart';
+import 'package:videomanager/screens/components/assignuser/assignmanager.dart';
 import 'package:videomanager/screens/components/assignuser/assignuser.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -146,12 +147,16 @@ class VideoSideBar extends StatelessWidget {
                                       height: 44.sh(),
                                     ),
                                   ],
-                                  Text(
-                                    'Videos',
-                                    style: kTextStyleIbmMedium.copyWith(
-                                      fontSize: 18.ssp(),
-                                      color: Theme.of(context).primaryColor,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Videos',
+                                        style: kTextStyleIbmMedium.copyWith(
+                                          fontSize: 18.ssp(),
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 10.sh(),
@@ -211,7 +216,18 @@ class VideoSideBar extends StatelessWidget {
                                           enabled: selectedVideos.isNotEmpty,
                                           icon: Videomanager
                                               .add_user_svgrepo_com_1,
-                                          onPressedElevated: () {},
+                                          onPressedElevated: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    content: AssignUser(
+                                                        files: selectedVideos),
+                                                  );
+                                                });
+                                          },
                                           elevatedButtonText: 'Assign'),
                                     ),
                                     SizedBox(

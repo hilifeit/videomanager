@@ -29,7 +29,7 @@ class AuthScreen extends ConsumerWidget {
                           ),
                         )),
                   )
-                : Center(
+                : Expanded(
                     child: formState ? Login() : const ForgotPassword(),
                   ),
           ],
