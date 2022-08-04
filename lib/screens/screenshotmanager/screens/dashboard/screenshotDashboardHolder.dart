@@ -48,7 +48,7 @@ class ScreenshotDashboardHolder extends StatelessWidget {
               );
             }
           } else {
-            return Container();
+            return VideoSideBar(thisUser: thisUser);
           }
         }),
       ],
