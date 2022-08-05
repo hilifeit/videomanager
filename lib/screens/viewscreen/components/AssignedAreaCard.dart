@@ -123,26 +123,30 @@ class AssignedAreaCard extends ConsumerWidget {
               SizedBox(
                 width: 10.sw(),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    area.name,
-                    style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 15.ssp(),
-                      color: notExactlyPrimary,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      area.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: kTextStyleIbmMedium.copyWith(
+                        fontSize: 15.ssp(),
+                        color: notExactlyPrimary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    area.assignedTo.name,
-                    style: kTextStyleIbmMedium.copyWith(
-                      fontSize: 13.ssp(),
-                      color: greyish,
+                    Text(
+                      area.assignedTo.name,
+                      style: kTextStyleIbmMedium.copyWith(
+                        fontSize: 13.ssp(),
+                        color: greyish,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Spacer(),
+              // Spacer(),
               StatusCard(
                 status: area.status.toString(),
               ),

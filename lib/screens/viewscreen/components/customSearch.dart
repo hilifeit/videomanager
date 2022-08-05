@@ -89,7 +89,7 @@ class _CustomSearchState extends State<CustomSearch> {
             borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
           ),
           hintText: 'Search',
-          hintStyle: kTextStyleInterMedium,
+          hintStyle: kTextStyleInterMedium.copyWith(fontSize: 14.ssp()),
         ),
       ),
     );

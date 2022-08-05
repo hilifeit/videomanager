@@ -208,12 +208,14 @@ class UserListMobile extends ConsumerWidget {
                 subtitle: users[index].superVisor != null
                     ? Text(
                         users[index].superVisor!.name,
-                        style: kTextStyleIbmMedium,
+                        style: kTextStyleIbmMedium.copyWith(fontSize: 16.ssp()),
                       )
                     : null,
                 trailing: Text(
                   DateFormat("yyyy-MM-dd").format(users[index].createdAt),
-                  style: kTextStyleIbmMedium,
+                  style: kTextStyleIbmMedium.copyWith(
+                    fontSize: 16.ssp(),
+                  ),
                 )
                 // IconButton(
                 //   icon: const Icon(Icons.more_vert),
