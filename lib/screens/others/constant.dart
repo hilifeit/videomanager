@@ -17,6 +17,7 @@ const notExactlyPrimary = Color(0xff697A8D);
 const greyish = Color(0xffa1acbb);
 const blackColor = Colors.black;
 const whiteColor = Colors.white;
+final holderColor = const Color(0x40667d0d).withOpacity(0.05);
 
 var kTextStyleIbmSemiBold = TextStyle(
   fontFamily: 'Ibm',
@@ -74,11 +75,11 @@ var kTextStyleTableName = TextStyle(
   fontFamily: 'PublicSans',
   fontSize: 15.ssp(),
   fontWeight: FontWeight.w600,
-  color: Color(0xff697A8D),
+  color: const Color(0xff697A8D),
 );
 var kTextStyleTableSubtitle = TextStyle(
   fontFamily: 'PublicSans',
   fontSize: 13.ssp(),
   fontWeight: FontWeight.w400,
-  color: Color(0xffA1ACB8),
+  color: const Color(0xffA1ACB8),
 );

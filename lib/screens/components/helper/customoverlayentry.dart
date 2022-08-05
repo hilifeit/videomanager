@@ -112,7 +112,9 @@ class CustomOverlayEntry {
     var size = renderBox.size;
 
     videotime = OverlayEntry(builder: ((context) {
-      return Timeline(size: size);
+      return Timeline(
+        size: Size(1920.sw(), 500),
+      );
     }));
   }
 

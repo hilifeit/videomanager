@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/timeline.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
@@ -74,9 +75,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
-      // CustomOverlayEntry().showVideoTimeStamp();
-    }
+    var size = MediaQuery.of(context).size;
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -91,8 +90,9 @@ class ScreenshotDashboard extends HookConsumerWidget {
                     children: [
                       Expanded(
                         child: CustomVideoPlayer(
-                            player: player == null ? null : player!.player,
-                            controller: controller),
+                          player: player == null ? null : player!.player,
+                          controller: controller,
+                        ),
                       ),
                       Container(
                         color: Colors.black,
@@ -100,6 +100,9 @@ class ScreenshotDashboard extends HookConsumerWidget {
                       )
                     ],
                   ),
+                if (ResponsiveLayout.isDesktop &&
+                    thisUser.role < Roles.superAdmin.index)
+                  Timeline(size: size),
                 if (!ResponsiveLayout.isDesktop)
                   VideoSideBar(thisUser: thisUser),
               ],

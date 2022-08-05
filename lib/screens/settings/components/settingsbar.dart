@@ -15,7 +15,7 @@ class SettingsBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: const Color(0x40667d0d).withOpacity(0.05),
+      color: holderColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

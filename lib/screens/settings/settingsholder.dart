@@ -26,7 +26,8 @@ class SettingsHolder extends ConsumerWidget {
               child: SettingsBar(
             settingsIndexState: settingIndexProvider,
           )),
-          if (ResponsiveLayout.isDesktop)
+          if (ResponsiveLayout.isDesktop) 
+          
             Expanded(
                 flex: 5,
                 child: (() {
@@ -55,7 +56,8 @@ class SettingsHolder extends ConsumerWidget {
                     color: Colors.amber,
                   );
                 }())),
-        ],
+          ],
+        
       ),
     );
   }

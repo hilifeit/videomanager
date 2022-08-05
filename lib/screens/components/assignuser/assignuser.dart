@@ -160,7 +160,6 @@ class AssignUser extends ConsumerWidget {
                                         Navigator.pop(context);
                                       });
                                     } catch (e, s) {
-                                      print("$e $s");
                                       snack.error(e);
                                     }
                                   },
