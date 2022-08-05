@@ -56,6 +56,8 @@ dependencies:
   universal_platform: ^1.0.0+1
   socket_io_client: ^2.0.0
   audioplayers: ^1.0.1
+  timer_builder: ^2.0.0
+  get_time_ago: ^1.1.5
 
 
 

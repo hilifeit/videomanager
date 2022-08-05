@@ -28,6 +28,8 @@ class CustomSocket {
           socket.onConnect((data) {
             print("Connected: $data");
             ref.read(status.state).state = true;
+
+            socket.emit('join', "");
           });
           socket.onConnecting((data) => print("connecting"));
           socket.onConnectError((data) {

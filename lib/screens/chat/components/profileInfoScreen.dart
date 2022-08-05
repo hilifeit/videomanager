@@ -46,9 +46,7 @@ class ProfileInfoScreen extends StatelessWidget {
                     itemBuilder: (_, index) {
                       if (users[index].id ==
                           ref.read(userChangeProvider).loggedInUser.value!.id) {
-                        return Container(
-                          
-                        );
+                        return Container();
                       }
                       return ProfileAvatar(
                         name: users[index].name,
@@ -57,6 +55,7 @@ class ProfileInfoScreen extends StatelessWidget {
                         onTap: () {
                           userProvider.selectedChatUser.value = users[index];
                         },
+                        lastActive: users[index].lastActive,
                       );
                     },
                     separatorBuilder: (_, index) {

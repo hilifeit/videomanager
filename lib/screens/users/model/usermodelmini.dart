@@ -19,6 +19,7 @@ class UserModelMini {
       required this.name,
       required this.role,
       required this.createdAt,
+      this.lastActive,
       this.superVisor,
       this.accessToken,
       this.refreshToken,
@@ -28,6 +29,7 @@ class UserModelMini {
   String name;
   int role;
   DateTime createdAt;
+  DateTime? lastActive;
   SuperVisor? superVisor;
   String? accessToken;
   String? refreshToken;
@@ -62,6 +64,9 @@ class UserModelMini {
           ? null
           : SuperVisor.fromJson(json["superVisor"]),
       accessToken: json["accessToken"],
+      lastActive: json["lastActive"] != null
+          ? DateTime.parse(json["lastActive"])
+          : null,
       refreshToken: json["refreshToken"],
     );
   }
