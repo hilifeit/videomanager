@@ -6,48 +6,50 @@ import 'package:videomanager/screens/users/component/userService.dart';
 class MenuBar extends ConsumerWidget {
   MenuBar({Key? key, required this.indexState}) : super(key: key);
 
-  final List<CustomMenuItem> itemsAdmin = [
-    CustomMenuItem(
-        title: 'Dashboard',
-        icon: Videomanager.dashboard,
-        id: 0,
+  late final CustomMenuItem chat = CustomMenuItem(
+          title: 'Chat', icon: Icons.chat, id: 3, notify: true, number: 0),
+      dashboard = CustomMenuItem(
+          title: 'Dashboard',
+          icon: Videomanager.dashboard,
+          id: 0,
+          notify: true,
+          number: 50),
+      users = CustomMenuItem(
+          title: 'Users',
+          icon: Videomanager.users,
+          id: 1,
+          notify: true,
+          number: 1),
+      outlet = CustomMenuItem(
+        title: 'Outlets',
+        icon: Videomanager.outlets,
+        id: 2,
         notify: true,
-        number: 50),
-    CustomMenuItem(
-        title: 'Users',
-        icon: Videomanager.users,
-        id: 1,
-        notify: true,
-        number: 1),
-    CustomMenuItem(
-      title: 'Outlets',
-      icon: Videomanager.outlets,
-      id: 2,
-      notify: true,
-      number: 60000,
-    ),
-    CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 3),
-    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 4),
+        number: 60000,
+      ),
+      settings =
+          CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 4);
+  late final List<CustomMenuItem> itemsAdmin = [
+    dashboard,
+    users,
+    outlet,
+    chat,
+    settings
 
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
 
-  final List<CustomMenuItem> itemsManager = [
-    CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
-    CustomMenuItem(
-        title: 'Users',
-        icon: Videomanager.users,
-        id: 1,
-        notify: true,
-        number: 1),
-    CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 2),
-    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 3),
+  late final List<CustomMenuItem> itemsManager = [
+    dashboard,
+    users,
+    chat,
+    settings,
   ];
 
-  final List<CustomMenuItem> itemsUser = [
-    CustomMenuItem(title: 'Dashboard', icon: Videomanager.dashboard, id: 0),
-    CustomMenuItem(title: 'Chat', icon: Icons.chat, id: 1),
-    CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 2),
+  late final List<CustomMenuItem> itemsUser = [
+    dashboard,
+    chat,
+    settings,
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
 
@@ -57,7 +59,7 @@ class MenuBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final index = ref.watch(indexState.state).state;
     final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
-
+    final connected = ref.watch(CustomSocket.status.state).state;
     //onPressed
     final height = 101.sh();
     return Container(
@@ -74,13 +76,21 @@ class MenuBar extends ConsumerWidget {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
+                  final currentItem = thisUser!.role == 2
+                      ? itemsAdmin[index]
+                      : thisUser.role == 1
+                          ? itemsManager[index]
+                          : itemsUser[index];
+                  currentItem.id = index;
+                  if (currentItem.title.toLowerCase() == "chat") {
+                    if (connected) {
+                      currentItem.number = 0;
+                    } else {
+                      currentItem.number = null;
+                    }
+                  }
                   return MenuItemWidget(
-                      indexState: indexState,
-                      item: thisUser!.role == 2
-                          ? itemsAdmin[index]
-                          : thisUser.role == 1
-                              ? itemsManager[index]
-                              : itemsUser[index]);
+                      indexState: indexState, item: currentItem);
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(

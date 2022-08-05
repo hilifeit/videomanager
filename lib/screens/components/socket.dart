@@ -7,9 +7,13 @@ final customSocket = CustomSocket._();
 class CustomSocket {
   CustomSocket._();
   late Socket socket;
+  static final StateProvider<bool> status = StateProvider<bool>((ref) {
+    return false;
+  });
   connect() {
     try {
-      var user = CustomKeys().ref!.read(userChangeProvider).loggedInUser.value;
+      var ref = CustomKeys().ref!;
+      var user = ref.read(userChangeProvider).loggedInUser.value;
       if (user != null) {
         socket = io(
             CustomIP.socketBaseUrl,
@@ -21,12 +25,22 @@ class CustomSocket {
         if (!socket.connected) {
           socket.connect();
 
-          socket.onConnect((data) => print("Connected: $data"));
+          socket.onConnect((data) {
+            print("Connected: $data");
+            ref.read(status.state).state = true;
+          });
           socket.onConnecting((data) => print("connecting"));
-          socket.onConnectError((data) => snack.error(data));
-          socket.onConnectTimeout((data) => snack.error(data));
+          socket.onConnectError((data) {
+            snack.error(data);
+            ref.read(status.state).state = false;
+          });
+          socket.onConnectTimeout((data) {
+            snack.error(data);
+            ref.read(status.state).state = false;
+          });
           socket.onError((data) async {
             try {
+              ref.read(status.state).state = false;
               var json = jsonEncode(data);
 
               var dat = jsonDecode(json);
@@ -46,13 +60,15 @@ class CustomSocket {
             }
             snack.error(data);
           });
-          socket.onDisconnect((data) => snack.error("disconnected"));
+          socket.onDisconnect((data) {
+            ref.read(status.state).state = false;
+            snack.error("disconnected");
+          });
           socket.on("notification", (data) {
             snack.info(data);
           });
           socket.on("active", (data) {
-            CustomKeys()
-                .ref!
+            ref
                 .read(userChangeProvider)
                 .changeActiveStatus(id: data, isActive: true);
           });
@@ -60,21 +76,19 @@ class CustomSocket {
           socket.on("message", (data) {});
 
           socket.on("inActive", (data) {
-            CustomKeys()
-                .ref!
+            ref
                 .read(userChangeProvider)
                 .changeActiveStatus(id: data, isActive: false);
           });
 
           socket.on("typing", (data) {
-            CustomKeys().ref!.read(userChangeProvider).changeIsTyping(data);
+            ref.read(userChangeProvider).changeIsTyping(data);
           });
 
           socket.on("activeUsers", (data) {
             if (data != null) {
               try {
-                CustomKeys()
-                    .ref!
+                ref
                     .read(userChangeProvider)
                     .getActiveUsers(List<String>.from(jsonDecode(data)));
               } catch (e) {}

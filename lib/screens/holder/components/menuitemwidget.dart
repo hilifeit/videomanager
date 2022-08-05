@@ -63,35 +63,8 @@ class MenuItemWidget extends ConsumerWidget {
                     ),
                   ),
                   if (item.notify && item.number != null)
-                    Positioned(
-                      right: -5,
-                      top: -8,
-                      child: CircleAvatar(
-                        radius: (19 / 2).sr(),
-                        backgroundColor: primaryColor,
-                        child: Container(
-                          padding: EdgeInsets.all(2.sr()),
-                          decoration: const BoxDecoration(
-                              color: Color(0xffFFD0D5), shape: BoxShape.circle
-                              // borderRadius: BorderRadius.circular(8.565.sr()),
-                              ),
-                          constraints: BoxConstraints(
-                            minWidth: 17.13.sr(),
-                            minHeight: 17.13.sr(),
-                          ),
-                          child: FittedBox(
-                            child: Text(
-                              item.number! < 10 ? item.number.toString() : '9+',
-                              style: kTextStyleIbmSemiBold.copyWith(
-                                fontSize: 10.ssp(),
-                                color: primaryColor,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
+                    if (item.number != 0) notify(context),
+                  if (item.notify && item.number == null) notify(context)
                 ],
               ),
               SizedBox(
@@ -105,6 +78,43 @@ class MenuItemWidget extends ConsumerWidget {
                 ),
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned notify(BuildContext context) {
+    return Positioned(
+      right: -5,
+      top: -8,
+      child: CircleAvatar(
+        radius: (19 / 2).sr(),
+        backgroundColor: primaryColor,
+        child: Container(
+          padding: EdgeInsets.all(2.sr()),
+          decoration: const BoxDecoration(
+              color: Color(0xffFFD0D5), shape: BoxShape.circle
+              // borderRadius: BorderRadius.circular(8.565.sr()),
+              ),
+          constraints: BoxConstraints(
+            minWidth: 17.13.sr(),
+            minHeight: 17.13.sr(),
+          ),
+          child: FittedBox(
+            child: item.number != null
+                ? Text(
+                    item.number! < 10 ? item.number.toString() : '9+',
+                    style: kTextStyleIbmSemiBold.copyWith(
+                      fontSize: 10.ssp(),
+                      color: primaryColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                : Icon(
+                    Icons.portable_wifi_off,
+                    color: Theme.of(context).primaryColor,
+                  ),
           ),
         ),
       ),
