@@ -107,6 +107,7 @@ class UserService extends ChangeNotifier {
     var userIndex = _users.indexWhere((element) => element.id == id);
     if (userIndex >= 0) {
       _users[userIndex].isActive = isActive;
+      _users[userIndex].lastActive = DateTime.now();
       notifyListeners();
     }
   }
