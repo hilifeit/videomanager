@@ -21,7 +21,7 @@ class ScreenshotDashboardHolder extends StatelessWidget {
         if (thisUser.role == Roles.user.index) selector(),
         Consumer(builder: (context, ref, c) {
           final showVideoBar = ref.watch(showVideoBarProvider.state).state;
-          if (!ResponsiveLayout.isMobile) {
+          if (ResponsiveLayout.isDesktop) {
             if (!showVideoBar) {
               return Align(
                 alignment: Alignment.centerRight,

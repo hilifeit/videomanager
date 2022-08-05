@@ -12,7 +12,7 @@ class ChatHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         // padding: EdgeInsets.all(20.sw()),
-        // color: secondaryColor,
+        color: holderColor,
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

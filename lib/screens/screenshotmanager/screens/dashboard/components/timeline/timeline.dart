@@ -15,7 +15,7 @@ class Timeline extends ConsumerWidget {
     final double minHeight = 58.sh();
     return Positioned(
       left: 0,
-      bottom: 73.sh(),
+      bottom: 0,
       width: size.width,
       height: customHeight,
       child: Stack(

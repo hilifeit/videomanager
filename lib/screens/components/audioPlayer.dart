@@ -15,6 +15,7 @@ class CustomAudioPlayer {
 
   static messageTyping() {
     player.play(AssetSource('sounds/message_typing.mp3'));
+    player.setVolume(20);
   }
 
   static messageDelivered() {

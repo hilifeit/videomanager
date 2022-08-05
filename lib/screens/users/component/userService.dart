@@ -107,6 +107,7 @@ class UserService extends ChangeNotifier {
     var userIndex = _users.indexWhere((element) => element.id == id);
     if (userIndex >= 0) {
       _users[userIndex].isActive = isActive;
+      _users[userIndex].lastActive = DateTime.now();
       notifyListeners();
     }
   }
@@ -151,7 +152,6 @@ class UserService extends ChangeNotifier {
         var temp = userModelMiniListFromJson(response.body);
         users = temp;
         notifyListeners();
-        print(_users.length);
       } else if (response.statusCode == 403) {
         throw 'token expired';
       } else {
@@ -277,7 +277,7 @@ class UserService extends ChangeNotifier {
         return true;
       } else {
         var error = jsonDecode(response.body);
-        print(error);
+
         throw error['message'];
       }
     } catch (e) {
