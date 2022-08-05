@@ -83,6 +83,14 @@ class ProfileAvatar extends StatelessWidget {
                         : lastActive != null
                             ? TimerBuilder.periodic(Duration(minutes: 1),
                                 builder: ((context) {
+                                var difference =
+                                    DateTime.now().difference(lastActive!);
+                                if (difference.inSeconds < 60) {
+                                  return Text('just now',
+                                      style: kTextStyleIbmRegularBlack.copyWith(
+                                          fontSize: 13.ssp()));
+                                }
+
                                 return Text(
                                   GetTimeAgo.parse(lastActive!),
                                   style: kTextStyleIbmRegularBlack.copyWith(
