@@ -27,7 +27,8 @@ class Filter extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Filter',
-                  style: kTextStyleIbmSemiBold.copyWith(color: primaryColor)),
+                  style: kTextStyleIbmSemiBold.copyWith(
+                      color: primaryColor, fontSize: 18.ssp())),
               SizedBox(
                 height: 26.sh(),
               ),
