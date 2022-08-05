@@ -41,8 +41,7 @@ class CustomSocket {
                     message: ' Login to continue');
               }
               snack.error(msg["message"]);
-            } catch (e, s) {
-              print("$e $s");
+            } catch (e) {
               snack.error(e);
             }
             snack.error(data);
@@ -78,13 +77,11 @@ class CustomSocket {
                     .ref!
                     .read(userChangeProvider)
                     .getActiveUsers(List<String>.from(jsonDecode(data)));
-              } catch (e, s) {}
+              } catch (e) {}
             }
           });
         }
-      } else {
-        print("no user");
-      }
+      } else {}
     } catch (e) {
       print('$e');
     }

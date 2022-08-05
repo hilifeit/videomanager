@@ -184,8 +184,7 @@ class AssignManager extends ConsumerWidget {
                                       snack
                                           .success("Area Assigned Succesfully");
                                       Navigator.pop(context);
-                                    } catch (e, s) {
-                                      print("$e $s");
+                                    } catch (e) {
                                       snack.error(e);
                                     }
                                   },

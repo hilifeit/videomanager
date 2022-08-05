@@ -1,6 +1,7 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/timeline.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
@@ -94,6 +95,9 @@ class ScreenshotDashboard extends HookConsumerWidget {
                       )
                     ],
                   ),
+                if (ResponsiveLayout.isDesktop &&
+                    thisUser.role < Roles.superAdmin.index)
+                  Timeline(size: Size(1920.sw(), 500)),
                 if (!ResponsiveLayout.isDesktop)
                   VideoSideBar(thisUser: thisUser),
               ],

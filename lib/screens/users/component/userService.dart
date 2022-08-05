@@ -151,7 +151,6 @@ class UserService extends ChangeNotifier {
         var temp = userModelMiniListFromJson(response.body);
         users = temp;
         notifyListeners();
-        print(_users.length);
       } else if (response.statusCode == 403) {
         throw 'token expired';
       } else {
@@ -277,7 +276,7 @@ class UserService extends ChangeNotifier {
         return true;
       } else {
         var error = jsonDecode(response.body);
-        print(error);
+
         throw error['message'];
       }
     } catch (e) {
