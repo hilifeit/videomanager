@@ -63,9 +63,6 @@ class UserStats extends StatelessWidget {
             fontSize: 21.ssp(),
           ),
         ),
-        SizedBox(
-          height: 60.sh(),
-        ),
         Expanded(
           child: Scrollbar(
             thumbVisibility: true,

@@ -8,20 +8,29 @@ class ChatHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: ChatHome(),
-        ),
-        if (!ResponsiveLayout.isMobile)
+    return Scaffold(
+      body: Row(
+        children: [
           Expanded(
-            flex: ResponsiveLayout.isTablet ? 2 : 4,
-            child: MessageScreen(),
+            flex: 1,
+            child: ChatHome(),
           ),
-        if (ResponsiveLayout.isDesktop)
-          Expanded(flex: 1, child: ProfileInfoScreen())
-      ],
+          if (!ResponsiveLayout.isMobile) ...[
+            const VerticalDivider(
+              width: 0,
+            ),
+            Expanded(
+              flex: ResponsiveLayout.isTablet ? 2 : 4,
+              child: MessageScreen(),
+            ),
+            const VerticalDivider(
+              width: 0,
+            ),
+          ],
+          if (ResponsiveLayout.isDesktop)
+            Expanded(flex: 1, child: ProfileInfoScreen())
+        ],
+      ),
     );
   }
 }
