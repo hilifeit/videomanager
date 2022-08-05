@@ -1,3 +1,9 @@
+
+import 'dart:html'
+    if (dart.library.io) "package:videomanager/screens/others/fakeClasses.dart"
+    show VideoElement, window;
+import 'dart:io';
+
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
@@ -132,6 +138,17 @@ class ScreenshotDashboard extends HookConsumerWidget {
                             if (CustomOverlayEntry().videoTimeStampOpen) {
                               CustomOverlayEntry().closeVideoTimeStamp();
                             }
+                            if(UniversalPlatform.isWeb)
+                            {
+    //  var video = window.document.getElementsByTagName('video');
+    
+    //  video.captureStream();
+
+
+
+                            }
+                       
+
                             showDialog(
                                 context: context,
                                 builder: (context) {
