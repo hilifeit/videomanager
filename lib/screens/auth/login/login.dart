@@ -224,7 +224,8 @@ class Login extends ConsumerWidget {
                                   .state = !checked,
                               child: Text(
                                 'Stay logged in?',
-                                style: kTextStyleIbmMedium,
+                                style: kTextStyleIbmMedium.copyWith(
+                                    fontSize: 16.ssp()),
                               ),
                             ),
                           ],
@@ -238,7 +239,8 @@ class Login extends ConsumerWidget {
                               },
                               child: Text(
                                 'Forgot Password?',
-                                style: kTextStyleIbmRegular,
+                                style: kTextStyleIbmRegular.copyWith(
+                                    fontSize: 16.ssp()),
                               ),
                             );
                           }),

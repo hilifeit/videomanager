@@ -274,7 +274,8 @@ class InputTextField extends StatelessWidget {
           visible: isVisible,
           child: Column(
             children: [
-              Text(title, style: kTextStyleIbmSemiBold),
+              Text(title,
+                  style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp())),
               SizedBox(
                 height: 9.5.sh(),
               ),

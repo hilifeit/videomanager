@@ -14,7 +14,7 @@ class ProfileInfoScreen extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(18.ssp()),
-      color: Colors.white,
+      color: holderColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
