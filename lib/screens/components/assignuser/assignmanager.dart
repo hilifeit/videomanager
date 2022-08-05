@@ -158,39 +158,63 @@ class AssignManager extends ConsumerWidget {
                       elevatedButtonText: 'Confirm',
                       center: true,
                       onPressedElevated: () {
-                        if (_formKey.currentState!.validate()) {
-                          area.assignedBy.id =
-                              userService.loggedInUser.value!.id;
-                          if (area.assignedTo.id == '' &&
-                              managerMenu.isNotEmpty) {
-                            area.assignedTo.id = managerMenu.first.value;
+                        bool canAssign = true;
+                        var selectedFiles = ref
+                            .read(selectedAreaServiceProvider)
+                            .refinedSelection
+                            .value;
+
+                        for (var element in selectedFiles) {
+                          if (element.assignDetail!.area != null) {
+                            canAssign = false;
+
+                            break;
+                          } else {
+                            canAssign = true;
                           }
-
-                          var dataMap = area.toJson();
-                          dataMap.addAll(
-                              {"files": files.map((e) => e.id).toList()});
-
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return CustomDialog(
-                                  textSecond: "assign this area?",
-                                  elevatedButtonText: 'Yes',
-                                  onPressedElevated: () async {
-                                    try {
-                                      await ref
-                                          .read(fileDetailMiniServiceProvider)
-                                          .createAreaAndAssign(dataMap);
-                                      snack
-                                          .success("Area Assigned Succesfully");
-                                      Navigator.pop(context);
-                                    } catch (e) {
-                                      snack.error(e);
-                                    }
-                                  },
-                                );
-                              });
                         }
+
+                        Future.delayed(const Duration(milliseconds: 10), () {
+                          if (_formKey.currentState!.validate()) {
+                            if (canAssign) {
+                              area.assignedBy.id =
+                                  userService.loggedInUser.value!.id;
+                              if (area.assignedTo.id == '' &&
+                                  managerMenu.isNotEmpty) {
+                                area.assignedTo.id = managerMenu.first.value;
+                              }
+
+                              var dataMap = area.toJson();
+                              dataMap.addAll(
+                                  {"files": files.map((e) => e.id).toList()});
+
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CustomDialog(
+                                      textSecond: "assign this area?",
+                                      elevatedButtonText: 'Yes',
+                                      onPressedElevated: () async {
+                                        try {
+                                          await ref
+                                              .read(
+                                                  fileDetailMiniServiceProvider)
+                                              .createAreaAndAssign(dataMap);
+                                          snack.success(
+                                              "Area Assigned Succesfully");
+                                          Navigator.pop(context);
+                                        } catch (e) {
+                                          snack.error(e);
+                                        }
+                                      },
+                                    );
+                                  });
+                            } else {
+                              snack.error(
+                                  "This area contains already assigned video");
+                            }
+                          }
+                        });
                       },
                       onPressedOutlined: () {
                         // Navigator.of(context).overlay!.mounted;
@@ -220,7 +244,7 @@ class AreaCardItem {
 List<AreaCardItem> areaItems = [
   AreaCardItem(
     text: 'Kalimati Area',
-    color: Color(0xffFFDDDD),
+    color: const Color(0xffFFDDDD),
   ),
   AreaCardItem(
     text: 'Sukedhara Area',

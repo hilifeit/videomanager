@@ -69,9 +69,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (ResponsiveLayout.isDesktop && thisUser.role < Roles.superAdmin.index) {
-      // CustomOverlayEntry().showVideoTimeStamp();
-    }
+    var size = MediaQuery.of(context).size;
 
     return Align(
       alignment: Alignment.centerLeft,
@@ -86,8 +84,9 @@ class ScreenshotDashboard extends HookConsumerWidget {
                     children: [
                       Expanded(
                         child: CustomVideoPlayer(
-                            player: player == null ? null : player!.player,
-                            controller: controller),
+                          player: player == null ? null : player!.player,
+                          controller: controller,
+                        ),
                       ),
                       Container(
                         color: Colors.black,
@@ -97,7 +96,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                   ),
                 if (ResponsiveLayout.isDesktop &&
                     thisUser.role < Roles.superAdmin.index)
-                  Timeline(size: Size(1920.sw(), 500)),
+                  Timeline(size: size),
                 if (!ResponsiveLayout.isDesktop)
                   VideoSideBar(thisUser: thisUser),
               ],
