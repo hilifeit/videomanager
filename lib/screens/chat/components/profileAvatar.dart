@@ -1,3 +1,5 @@
+import 'package:get_time_ago/get_time_ago.dart';
+import 'package:timer_builder/timer_builder.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class ProfileAvatar extends StatelessWidget {
@@ -8,13 +10,14 @@ class ProfileAvatar extends StatelessWidget {
       this.nameFontSize = 14,
       this.isActive = false,
       this.name = 'Full Name',
-      this.onTap})
+      this.onTap,
+      this.lastActive})
       : super(key: key);
   double profileradius, nameFontSize;
   final bool showDetails, isActive;
   final String name;
   final Function? onTap;
-
+  final DateTime? lastActive;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -35,7 +38,6 @@ class ProfileAvatar extends StatelessWidget {
                   radius: profileradius.sr(),
                   backgroundColor: primaryColor,
                   child: FittedBox(
-                    
                     child: Text(
                       processName(name),
                       style: kTextStyleIbmSemiBold.copyWith(
@@ -78,9 +80,18 @@ class ProfileAvatar extends StatelessWidget {
                         ? Text('Online',
                             style: kTextStyleIbmRegularBlack.copyWith(
                                 fontSize: 13.ssp()))
-                        : Text('',
-                            style: kTextStyleIbmRegularBlack.copyWith(
-                                fontSize: 13.ssp())),
+                        : lastActive != null
+                            ? TimerBuilder.periodic(Duration(minutes: 1),
+                                builder: ((context) {
+                                return Text(
+                                  GetTimeAgo.parse(lastActive!),
+                                  style: kTextStyleIbmRegularBlack.copyWith(
+                                      fontSize: 13.ssp()),
+                                );
+                              }))
+                            : Text('',
+                                style: kTextStyleIbmRegularBlack.copyWith(
+                                    fontSize: 13.ssp())),
                   ]
                 ],
               )
