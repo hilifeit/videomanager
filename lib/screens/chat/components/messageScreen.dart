@@ -157,6 +157,7 @@ class MessageScreen extends ConsumerWidget {
           nameFontSize: 20.ssp(),
           name: selectedUser.name,
           isActive: selectedUser.isActive,
+          lastActive: selectedUser.lastActive,
         ),
         const Spacer(),
         PopupMenuButton(
