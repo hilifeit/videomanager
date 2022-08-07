@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/disk.dart';
 import 'package:videomanager/screens/others/apiHelper.dart';
@@ -287,7 +289,27 @@ class FileService extends ChangeNotifier {
       rethrow;
     }
   }
+  Future<Uint8List> getFrameFromUrl({required String url,int positionInMs=0})async{
 
+      try{
+
+        var response=await client.get(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs"));
+//       final ByteData imageData = await NetworkAssetBundle(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs")).load("");
+// final Uint8List bytes = imageData.buffer.asUint8List();
+if(response.statusCode==200) {
+    // debugPrint(response.body);
+  return response.bodyBytes;
+} else {
+  throw "Error";
+}
+      }
+      catch(e,s)
+      {
+          print("$e $s");
+           
+           rethrow ;
+      }
+  }
   Future<bool> fileExists(String id) async {
     try {
       var response =

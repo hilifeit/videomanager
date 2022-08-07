@@ -21,16 +21,17 @@ class ChatHolder extends StatelessWidget {
             ),
             Expanded(
               flex: ResponsiveLayout.isTablet ? 2 : 4,
-              child: MessageScreen(),
+              child: const MessageScreen(),
             ),
             const VerticalDivider(
               width: 0,
             ),
           ],
           if (ResponsiveLayout.isDesktop)
-            Expanded(flex: 1, child: ProfileInfoScreen())
+            const Expanded(flex: 1, child: ProfileInfoScreen())
         ],
       ),
     );
   }
 }
+

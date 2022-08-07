@@ -12,11 +12,12 @@ final checkBoxStateProvider = StateProvider<bool>((ref) {
   return true;
 });
 
+// ignore: must_be_immutable
 class Login extends ConsumerWidget {
   Login({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  String username = '', password = '';
+ String username = '', password = '';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

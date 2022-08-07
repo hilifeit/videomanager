@@ -3,6 +3,7 @@ import 'dart:html'
     if (dart.library.io) "package:videomanager/screens/others/fakeClasses.dart"
     show VideoElement, window;
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -16,6 +17,7 @@ import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class ScreenshotDashboard extends HookConsumerWidget {
   ScreenshotDashboard(
@@ -137,26 +139,34 @@ class ScreenshotDashboard extends HookConsumerWidget {
                           width: 43.sw(),
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: ()async {
                             if (CustomOverlayEntry().videoTimeStampOpen) {
                               CustomOverlayEntry().closeVideoTimeStamp();
                             }
-                            if(UniversalPlatform.isWeb)
-                            {
-    //  var video = window.document.getElementsByTagName('video');
-    
-    //  video.captureStream();
-
-
-
-                            }
-                       
-
+                           
+                          try{
+                            CustomOverlayEntry().showLoader();
+                            var ms=controller!.value.position.inMicroseconds;
+                            print(ms);
+ Uint8List image=await  ref.read(fileDetailMiniServiceProvider).getFrameFromUrl(url: getVideoUrl(videoFile.id),positionInMs: ms);
+                                 CustomOverlayEntry().closeLoader();
                             showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return ScreenShotScreen();
+                                  return ScreenShotScreen(imageData: image,);
                                 });
+                          
+                          }
+                          catch(e,s)
+                          {
+                            print("$e $context");
+                                 CustomOverlayEntry().closeLoader();
+                            snack.error(e);
+                          }
+                          
+                       
+
+                          
                           },
                           child: Container(
                             width: 50.sr(),

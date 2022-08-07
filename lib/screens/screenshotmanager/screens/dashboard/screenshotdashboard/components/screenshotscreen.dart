@@ -1,11 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 
 class ScreenShotScreen extends ConsumerWidget {
-  ScreenShotScreen({
+   ScreenShotScreen({
     Key? key,
+    required this.imageData
   }) : super(key: key);
-
+final Uint8List imageData;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final posiionProvider = StateProvider<Offset>((ref) {
@@ -17,12 +20,12 @@ class ScreenShotScreen extends ConsumerWidget {
         child: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                   color: whiteColor,
                   image: DecorationImage(
                     opacity: 1,
-                    image: AssetImage("assets/images/wallpaper.jpg"),
-                    fit: BoxFit.cover,
+                    image:MemoryImage(imageData),
+                    fit: BoxFit.contain,
                   )),
               child: ClipPath(
                   clipper: ScreenShotClipper(),
@@ -48,9 +51,9 @@ class ScreenShotScreen extends ConsumerWidget {
                       },
                       child: Stack(
                         children: [
-                          Image.asset(
-                            "assets/images/wallpaper.jpg",
-                          ),
+                          // Image.asset(
+                          //   "assets/images/wallpaper.jpg",
+                          // ),
                           for (int i = 0; i < item.length; i++) item[i],
                         ],
                       ),
