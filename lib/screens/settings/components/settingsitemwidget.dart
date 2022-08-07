@@ -1,4 +1,10 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/screens/locationsettings/locationsettings.dart';
+import 'package:videomanager/screens/settings/screens/mapsettings/mapsettings.dart';
+import 'package:videomanager/screens/settings/screens/usersettings/usersettings.dart';
+import 'package:videomanager/screens/settings/screens/videosettings/models/videosetting.dart';
+import 'package:videomanager/screens/settings/screens/videosettings/videosettings.dart';
+import 'package:videomanager/screens/settings/service/settingService.dart';
 
 class SettingItem {
   SettingItem({required this.title, required this.icon, required this.id});
@@ -28,6 +34,35 @@ class SettingsItemWidget extends ConsumerWidget {
         child: InkWell(
             onTap: () {
               ref.read(settingsIndexState.state).state = item.id;
+              if (ref.watch(settingsIndexState.state).state == 0 &&
+                  !ResponsiveLayout.isDesktop) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return MapSettings(
+                    mapSetting: setting.mapSetting,
+                  );
+                }));
+              }
+              if (ref.watch(settingsIndexState.state).state == 1 &&
+                  !ResponsiveLayout.isDesktop) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return VideoSettings(
+                    videoSetting: setting.videoSetting,
+                  );
+                }));
+              }
+              if (ref.watch(settingsIndexState.state).state == 2 &&
+                  !ResponsiveLayout.isDesktop) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return UserSettings(userSetting: setting.userSetting);
+                }));
+              }
+              if (ref.watch(settingsIndexState.state).state == 3 &&
+                  !ResponsiveLayout.isDesktop) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return LocationSettings(
+                      locationSetting: setting.locationSetting);
+                }));
+              }
             },
             child: Transform.scale(
               scale: ResponsiveLayout.isDesktop

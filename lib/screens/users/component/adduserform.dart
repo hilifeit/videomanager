@@ -58,13 +58,14 @@ class AddUser extends ConsumerWidget {
     //   edit = false;
     // }
     final double padding = !ResponsiveLayout.isMobile ? 59.sw() : 20.sw();
-    return Scrollbar(
-      thumbVisibility: true,
-      controller: _scrollController,
-      child: SingleChildScrollView(
+    return Container(
+      height: double.infinity,
+      color: Theme.of(context).primaryColor.withOpacity(0.15),
+      child: Scrollbar(
+        thumbVisibility: true,
         controller: _scrollController,
-        child: Container(
-          color: Theme.of(context).primaryColor.withOpacity(0.15),
+        child: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding:
                 EdgeInsets.only(left: padding, top: 45.sh(), right: padding),
@@ -353,68 +354,8 @@ class AddUser extends ConsumerWidget {
                                       });
                                 }
                               },
-                            )
-
-                            // OutlineAndElevatedButton(
-                            //   textSecond: 'add this user?',
-                            //   edit: edit,
-                            //   onReset: () {},
-                            //   center: true,
-                            //   text: edit ? 'Edit' : 'Add',
-                            //   onApply: () {
-                            //     if (formKey.currentState!.validate()) return true;
-                            //     return false;
-                            //   },
-                            //   onSucess: () async {
-                            //     if (edit) {
-                            //       var addNewUserToJson = addNewUser.toJson();
-                            //       var selectedUserToJson = selectedUser!.toJson();
-                            //       Map<String, dynamic> test = {};
-
-                            //       for (var element in addNewUserToJson.entries) {
-                            //         if (selectedUserToJson[element.key] !=
-                            //             element.value) {
-                            //           if (element.key != "password") {
-                            //             test.addAll(
-                            //                 {element.key: element.value});
-                            //           }
-                            //         }
-                            //       }
-
-                            //       if (test.isEmpty) {
-                            //         snack.info('No change');
-                            //       } else {
-                            //         try {
-                            //           var user = ref.read(userChangeProvider);
-
-                            //           await user.edit(
-                            //               map: test, id: addNewUser.id);
-
-                            //           formKey.currentState!.reset();
-                            //           ref
-                            //               .read(userChangeProvider)
-                            //               .selectUser(null);
-                            //           ref.read(userChangeProvider).fetchAll();
-                            //           snack.success("User Edited Sucessfully");
-                            //         } catch (e) {
-                            //           snack.error(e);
-                            //         }
-                            //       }
-                            //     } else {
-                            //       try {
-                            //         var user = ref.read(userChangeProvider);
-                            //         await user.add(addUser: addNewUser);
-                            //         snack.success("User Added Sucessfully");
-                            //         formKey.currentState!.reset();
-                            //         ref.read(userChangeProvider).fetchAll();
-                            //       } catch (e) {
-                            //         snack.error(e);
-                            //       }
-                            //     }
-                            //   },
-                            // ),
-                            ),
-                        SizedBox(height: 20.sh()),
+                            )),
+                        SizedBox(height: 100.sh()),
                       ],
                     )),
               ],

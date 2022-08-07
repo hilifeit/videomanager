@@ -133,7 +133,15 @@ class Users extends StatelessWidget {
                     ),
                     if (ResponsiveLayout.isDesktop)
                       Expanded(
-                        child: UserStats(),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: ResponsiveLayout.isDesktop ? 36.sw() : 0.sw(),
+                            top: ResponsiveLayout.isDesktop ? 37.sh() : 0.sh(),
+                            right:
+                                ResponsiveLayout.isDesktop ? 36.sw() : 0.sw(),
+                          ),
+                          child: UserStats(),
+                        ),
                       )
                   ],
                 )),

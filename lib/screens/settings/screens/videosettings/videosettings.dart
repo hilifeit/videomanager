@@ -21,11 +21,15 @@ class VideoSettings extends ConsumerWidget {
     final fullScreen = ref.watch(fullSValueProvider.state).state;
     final defaultSetting = ref.watch(defaultSettingProvider.state).state;
     return Scaffold(
+      appBar: ResponsiveLayout.isMobile ? AppBar() : null,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
+          padding: EdgeInsets.only(
+            top: 43.sh(),
+            left: ResponsiveLayout.isDesktop ? 73.sw() : 20.sw(),
+            right: ResponsiveLayout.isDesktop ? 73.sw() : 20.sw(),
+          ),
           child: SizedBox(
-            // width: MediaQuery.of(context).size.width * .35,
             width: 816.sw(),
             child: Form(
               key: _formKey,
@@ -38,16 +42,18 @@ class VideoSettings extends ConsumerWidget {
                           fontSize: 21.ssp(), color: primaryColor),
                     ),
                     SizedBox(
-                      height: 12.sh(),
+                      height: 43.sh(),
                     ),
-                    Row(
+                    OverflowBar(
+                      overflowSpacing: 10.sh(),
+                      alignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Video Server Url',
                           style: kTextStyleInterRegular.copyWith(
                               fontSize: 16.ssp()),
                         ),
-                        const Spacer(),
+
                         // Text(
                         //   'http://  ',
                         //   style: kTextStyleIbmSemiBold.copyWith(
@@ -75,7 +81,9 @@ class VideoSettings extends ConsumerWidget {
                     SizedBox(
                       height: 39.sh(),
                     ),
-                    Row(
+                    OverflowBar(
+                      overflowSpacing: 10.sh(),
+                      alignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Stream Quality',
@@ -117,8 +125,8 @@ class VideoSettings extends ConsumerWidget {
                     SizedBox(
                       height: 55.sh(),
                     ),
-
                     OutlinedElevatedButtonCombo(
+                        center: ResponsiveLayout.isMobile ? true : false,
                         outlinedButtonText: 'Reset',
                         elevatedButtonText: 'Apply',
                         onPressedOutlined: () {

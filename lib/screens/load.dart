@@ -42,7 +42,8 @@ class Loader extends ConsumerWidget {
             Consumer(builder: (context, ref, c) {
               final snackVisible = ref.watch(snackVisibleProvider.state).state;
               return Positioned(
-                top: 120.sh(),
+                top: ResponsiveLayout.isDesktop ? 120.sh() : null,
+                bottom: ResponsiveLayout.isDesktop ? null : 60.sh(),
                 right: 10,
                 child: SizedBox(
                   height: 44,

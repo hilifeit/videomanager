@@ -13,9 +13,13 @@ class UserSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final defaultSetting = ref.watch(defaultSettingProvider.state).state;
     return Scaffold(
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 43.sh(), left: 73.sw()),
+          padding: EdgeInsets.only(
+            top: 43.sh(),
+            left: ResponsiveLayout.isDesktop ? 73.sw() : 20.sw(),
+          ),
           child: SizedBox(
             width: 816.sw(),
             child: Column(
@@ -42,6 +46,7 @@ class UserSettings extends ConsumerWidget {
                 ),
 
                 OutlinedElevatedButtonCombo(
+                    center: ResponsiveLayout.isMobile ? true : false,
                     outlinedButtonText: 'Reset',
                     elevatedButtonText: 'Apply',
                     onPressedOutlined: () {

@@ -9,8 +9,6 @@ final editManagerSelectProvider = StateProvider<bool>((ref) {
   return false;
 });
 
-
-
 String getRole(int value) {
   var role = Roles.values.elementAt(value);
   return role.name.replaceFirst(
@@ -39,7 +37,6 @@ class UserModelSource extends DataTableSource {
 
     return DataRow2.byIndex(index: index, cells: [
       DataCell(SizedBox(
-        height: 41.sh(),
         child: TableUserCard(user: user),
       )),
       DataCell(Text(
@@ -196,6 +193,7 @@ class TableUserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           user.name,

@@ -92,8 +92,8 @@ class Holder extends ConsumerWidget {
                         ? AnimatedIndexedStack(index: index, children: [
                             ViewScreen(),
                             const Users(),
-                            AddEditShop(),
-                            ChatHolder(),
+                            Container(),
+                            const ChatHolder(),
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])
@@ -107,7 +107,7 @@ class Holder extends ConsumerWidget {
                                   thisUser: thisUser,
                                 ),
                                 const Users(),
-                                ChatHolder(),
+                                const ChatHolder(),
                                 // futureBuilder
                                 // PlayVideo(videoFile: videoFile, role: role),
                               ])
@@ -121,7 +121,7 @@ class Holder extends ConsumerWidget {
                                 ScreenshotDashboardHolder(
                                   thisUser: thisUser,
                                 ),
-                                ChatHolder()
+                                const ChatHolder()
                               ])
                             : const SettingsHolder(),
                       ),
@@ -175,8 +175,8 @@ class NoTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Take a break! You have no tasks.'),
+    return const Center(
+      child: const Text('Take a break! You have no tasks.'),
     );
   }
 }

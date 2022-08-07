@@ -68,12 +68,13 @@ class EditUser extends ConsumerWidget {
 
     }
     final double padding = !ResponsiveLayout.isMobile ? 59.sw() : 20.sw();
-    return Scrollbar(
-      controller: _scrollController,
-      child: SingleChildScrollView(
+    return Container(
+      height: double.infinity,
+      color: Theme.of(context).primaryColor.withOpacity(0.15),
+      child: Scrollbar(
         controller: _scrollController,
-        child: Container(
-          color: Theme.of(context).primaryColor.withOpacity(0.15),
+        child: SingleChildScrollView(
+          controller: _scrollController,
           child: Padding(
             padding:
                 EdgeInsets.only(left: padding, top: 45.sh(), right: padding),
@@ -98,7 +99,7 @@ class EditUser extends ConsumerWidget {
                         ),
                         InputTextField(
                           value: addNewUser.username,
-                          title: 'username',
+                          title: 'Username',
                           isVisible: true,
                           fillColor: Colors.white,
                           style: kTextStyleIbmSemiBold.copyWith(
@@ -111,140 +112,149 @@ class EditUser extends ConsumerWidget {
                         SizedBox(
                           height: 14.sh(),
                         ),
-                        Text('User Role', style: kTextStyleIbmSemiBold),
+                        Text(
+                          'User Role',
+                          style: kTextStyleIbmSemiBold.copyWith(
+                            fontSize: 16.ssp(),
+                          ),
+                        ),
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        if (thisUser!.id == selectedUser!.id)
-                          SinglERoleText(text: getRole(selectedUser.role)),
-                        if (thisUser.role < 2 && thisUser.id != selectedUser.id)
-                          Container(
-                            height: 65.sh(),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                4.sr(),
-                              ),
-                              border: Border.all(
-                                color: lightGrey,
-                              ),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                              child: Text(
-                                getRole(selectedUser.role),
-                                style: kTextStyleIbmSemiBold.copyWith(
-                                    fontSize: 16.ssp(), color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        if (thisUser.role >= 2 && selectedUser.role == 0)
-                          Container(
-                            height: 55.sh(),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                4.sr(),
-                              ),
-                              border: Border.all(
-                                color: lightGrey,
-                              ),
-                              color: Colors.white,
-                            ),
-                            child: CustomMenuDropDown(
-                                value: menus[addNewUser.role],
-                                onChanged: (val) {
-                                  addNewUser.role = int.parse(val.value);
-                                  if (addNewUser.role == 1) {
-                                    ref
-                                        .read(editManagerSelectProvider.state)
-                                        .state = false;
-                                  } else if (addNewUser.role == 0) {
-                                    ref
-                                        .read(editManagerSelectProvider.state)
-                                        .state = true;
-                                  }
-                                },
-                                values: menus,
-                                helperText: ''),
-                          ),
-                        if (thisUser.role >= 2 && selectedUser.role == 1)
-                          Container(
-                            height: 65.sh(),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                4.sr(),
-                              ),
-                              border: Border.all(
-                                color: lightGrey,
-                              ),
-                              color: Colors.white,
-                            ),
-                            child: CustomMenuDropDown(
-                                value: menus[addNewUser.role],
-                                onChanged: (val) {
-                                  addNewUser.role = int.parse(val.value);
-                                  if (addNewUser.role == 1) {
-                                    ref
-                                        .read(editManagerSelectProvider.state)
-                                        .state = false;
-                                  } else if (addNewUser.role == 0) {
-                                    ref
-                                        .read(editManagerSelectProvider.state)
-                                        .state = true;
-                                  }
-                                },
-                                values: menus,
-                                helperText: ''),
-                          ),
+                        // if (thisUser!.id == selectedUser!.id)
+                        SinglERoleText(text: getRole(selectedUser!.role)),
+                        // if (thisUser.role < 2 && thisUser.id != selectedUser.id)
+                        //   Container(
+                        //     height: 65.sh(),
+                        //     width: double.infinity,
+                        //     decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(
+                        //         4.sr(),
+                        //       ),
+                        //       border: Border.all(
+                        //         color: lightGrey,
+                        //       ),
+                        //       color: Colors.white,
+                        //     ),
+                        //     child: Padding(
+                        //       padding: EdgeInsets.only(
+                        //           left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
+                        //       child: Text(
+                        //         getRole(selectedUser.role),
+                        //         style: kTextStyleIbmSemiBold.copyWith(
+                        //             fontSize: 16.ssp(), color: Colors.black),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // if (thisUser.role >= 2 && selectedUser.role == 0)
+                        //   Container(
+                        //     height: 55.sh(),
+                        //     width: double.infinity,
+                        //     decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(
+                        //         4.sr(),
+                        //       ),
+                        //       border: Border.all(
+                        //         color: lightGrey,
+                        //       ),
+                        //       color: Colors.white,
+                        //     ),
+                        //     child: CustomMenuDropDown(
+                        //         value: menus[addNewUser.role],
+                        //         onChanged: (val) {
+                        //           addNewUser.role = int.parse(val.value);
+                        //           if (addNewUser.role == 1) {
+                        //             ref
+                        //                 .read(editManagerSelectProvider.state)
+                        //                 .state = false;
+                        //           } else if (addNewUser.role == 0) {
+                        //             ref
+                        //                 .read(editManagerSelectProvider.state)
+                        //                 .state = true;
+                        //           }
+                        //         },
+                        //         values: menus,
+                        //         helperText: ''),
+                        //   ),
+                        // if (thisUser.role >= 2 && selectedUser.role == 1)
+                        //   Container(
+                        //     height: 65.sh(),
+                        //     width: double.infinity,
+                        //     decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(
+                        //         4.sr(),
+                        //       ),
+                        //       border: Border.all(
+                        //         color: lightGrey,
+                        //       ),
+                        //       color: Colors.white,
+                        //     ),
+                        //     child: CustomMenuDropDown(
+                        //         value: menus[addNewUser.role],
+                        //         onChanged: (val) {
+                        //           addNewUser.role = int.parse(val.value);
+                        //           if (addNewUser.role == 1) {
+                        //             ref
+                        //                 .read(editManagerSelectProvider.state)
+                        //                 .state = false;
+                        //           } else if (addNewUser.role == 0) {
+                        //             ref
+                        //                 .read(editManagerSelectProvider.state)
+                        //                 .state = true;
+                        //           }
+                        //         },
+                        //         values: menus,
+                        //         helperText: ''),
+                        //   ),
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        if (editSelectManager &&
-                            thisUser.id != selectedUser.id &&
-                            selectedUser.role == 0 &&
-                            thisUser.role == 2) ...[
-                          Text('Supervisor', style: kTextStyleIbmSemiBold),
-                          SizedBox(
-                            height: 14.sh(),
+                        if (selectedUser.role != Roles.superAdmin.index) ...[
+                          Text(
+                            'Supervisor',
+                            style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 16.ssp(),
+                            ),
                           ),
-                          CustomMenuDropDown(
-                              value: dd,
-                              onChanged: (val) {
-                                addNewUser.superVisor.id = val.value;
-                              },
-                              values: managerMenu,
-                              helperText: '')
-                        ],
-                        if (editSelectManager &&
-                            thisUser.id != selectedUser.id &&
-                            selectedUser.role == 0 &&
-                            thisUser.role == 1) ...[
-                          Text('Supervisor', style: kTextStyleIbmSemiBold),
                           SizedBox(
                             height: 14.sh(),
                           ),
                           SinglERoleText(text: selectedUser.superVisor!.name)
                         ],
-                        if (editSelectManager &&
-                            thisUser.id != selectedUser.id &&
-                            selectedUser.role == 1) ...[
-                          Text('Supervisor', style: kTextStyleIbmSemiBold),
-                          SizedBox(
-                            height: 14.sh(),
-                          ),
-                          if (thisUser.role >= 2)
-                            CustomMenuDropDown(
-                                value: managerMenu.first,
-                                onChanged: (val) {
-                                  addNewUser.superVisor.id = val.value;
-                                },
-                                values: managerMenu,
-                                helperText: '')
-                        ],
+                        //   CustomMenuDropDown(
+                        //       value: dd,
+                        //       onChanged: (val) {
+                        //         addNewUser.superVisor.id = val.value;
+                        //       },
+                        //       values: managerMenu,
+                        //       helperText: '')
+                        // ],
+                        // if (editSelectManager &&
+                        //     thisUser!.id != selectedUser.id &&
+                        //     selectedUser.role == 0 &&
+                        //     thisUser.role == 1) ...[
+                        //   Text('Supervisor', style: kTextStyleIbmSemiBold),
+                        //   SizedBox(
+                        //     height: 14.sh(),
+                        //   ),
+                        //   SinglERoleText(text: selectedUser.superVisor!.name)
+                        // ],
+                        // if (editSelectManager &&
+                        //     thisUser!.id != selectedUser.id &&
+                        //     selectedUser.role == 1) ...[
+                        //   Text('Supervisor', style: kTextStyleIbmSemiBold),
+                        //   SizedBox(
+                        //     height: 14.sh(),
+                        //   ),
+                        //   if (thisUser.role >= 2)
+                        //     CustomMenuDropDown(
+                        //         value: managerMenu.first,
+                        //         onChanged: (val) {
+                        //           addNewUser.superVisor.id = val.value;
+                        //         },
+                        //         values: managerMenu,
+                        //         helperText: '')
+                        // ],
                         SizedBox(
                           height: 6.sh(),
                         ),
@@ -326,7 +336,7 @@ class EditUser extends ConsumerWidget {
 
                                             for (var element
                                                 in addNewUserToJson.entries) {
-                                              if (thisUser.role == 2) {
+                                              if (thisUser!.role == 2) {
                                                 if (selectedUserToJson[
                                                         element.key] !=
                                                     element.value) {

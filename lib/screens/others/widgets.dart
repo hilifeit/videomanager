@@ -274,8 +274,12 @@ class InputTextField extends StatelessWidget {
           visible: isVisible,
           child: Column(
             children: [
-              Text(title,
-                  style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp())),
+              Text(
+                title,
+                style: kTextStyleIbmSemiBold.copyWith(
+                  fontSize: 16.ssp(),
+                ),
+              ),
               SizedBox(
                 height: 9.5.sh(),
               ),
@@ -291,7 +295,9 @@ class InputTextField extends StatelessWidget {
                 ? FilteringTextInputFormatter.digitsOnly
                 : FilteringTextInputFormatter.singleLineFormatter
           ],
-          style: style ?? kTextStyleIbmMedium.copyWith(color: Colors.black),
+          style: style ??
+              kTextStyleIbmMedium.copyWith(
+                  color: Colors.black, fontSize: 16.ssp()),
           onTap: onTap,
           //controller: TextEditingController(text: ''),
           validator: validator,

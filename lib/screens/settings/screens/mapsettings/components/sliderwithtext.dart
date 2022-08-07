@@ -120,7 +120,8 @@ class CustomSliderRectThumb extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return OverflowBar(
+      alignment: MainAxisAlignment.spaceBetween,
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -133,9 +134,8 @@ class CustomSliderRectThumb extends StatelessWidget {
         //     return Text(" (${currentValue.toInt().toString()})");
         //   },
         // ),
-        const Spacer(),
+        // const Spacer(),
         SizedBox(
-          height: 16.sh(),
           width: 546.63.sw(),
           child: Padding(
             padding: EdgeInsets.only(right: 32.37.sw()),

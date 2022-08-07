@@ -85,6 +85,7 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: WillPopScope(
@@ -98,13 +99,15 @@ class CustomDialog extends StatelessWidget {
         child: Center(
           child: Container(
             height: 148.sh(),
-            width: 434.sw(),
+            width: ResponsiveLayout.isDesktop
+                ? 434.sw()
+                : size.width.sw() - 20.sw(),
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: 86.sw(),
+                horizontal: 60.sw(),
                 vertical: 27.sh(),
               ),
               child: Column(

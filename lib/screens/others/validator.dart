@@ -117,7 +117,7 @@ String? validatePhone(String value) {
   }
 }
 
-String? validateUserName(String value, {String label = "username"}) {
+String? validateUserName(String value, {String label = "Username"}) {
   Pattern pattern = r"\s";
   RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {

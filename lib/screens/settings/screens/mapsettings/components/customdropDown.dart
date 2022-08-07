@@ -84,10 +84,12 @@ class DropDown<T> extends ConsumerWidget {
                 .map((e) => Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: 15.sw(), vertical: 12.sh()),
-                      child: Text(
-                        "$e $helperText",
-                        style: kTextStyleIbmRegular.copyWith(
-                            fontSize: 18.ssp(), color: Colors.black),
+                      child: FittedBox(
+                        child: Text(
+                          "$e $helperText",
+                          style: kTextStyleIbmRegular.copyWith(
+                              fontSize: 18.ssp(), color: Colors.black),
+                        ),
                       ),
                     ))
                 .toList();
@@ -146,7 +148,7 @@ class CustomMenuDropDown extends ConsumerWidget {
     final selectedValue = ref.watch(valueProvider.state).state;
 
     return Container(
-      height: 65.sh(),
+      height: 55.sh(),
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
@@ -165,7 +167,7 @@ class CustomMenuDropDown extends ConsumerWidget {
                     horizontal: 15.sw(), vertical: 12.sh()),
                 child: Text(
                   "${e.label} $helperText",
-                  style: kTextStyleIbmSemiBold.copyWith(
+                  style: kTextStyleIbmMedium.copyWith(
                       fontSize: 16.ssp(), color: Colors.black),
                 ),
               );
