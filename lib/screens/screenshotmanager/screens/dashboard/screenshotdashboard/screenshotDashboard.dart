@@ -146,7 +146,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                            
                           try{
                             CustomOverlayEntry().showLoader();
-                            var ms=controller!.value.position.inMicroseconds;
+                            var ms=controller!.value.position.inMilliseconds;
                             print(ms);
  Uint8List image=await  ref.read(fileDetailMiniServiceProvider).getFrameFromUrl(url: getVideoUrl(videoFile.id),positionInMs: ms);
                                  CustomOverlayEntry().closeLoader();
