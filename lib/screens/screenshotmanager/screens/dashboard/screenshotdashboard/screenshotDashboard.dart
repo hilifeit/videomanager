@@ -11,8 +11,8 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
@@ -151,20 +151,38 @@ class ScreenshotDashboard extends HookConsumerWidget {
                               } else {
                                 ms = controller!.value.position.inMilliseconds;
                               }
-                              print(ms);
-                              Uint8List image = await ref
-                                  .read(fileDetailMiniServiceProvider)
-                                  .getFrameFromUrl(
-                                      url: getVideoUrl(videoFile.id),
-                                      positionInMs: ms);
-                              CustomOverlayEntry().closeLoader();
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return ScreenShotScreen(
-                                      imageData: image,
-                                    );
-                                  });
+                              var videoDataService =
+                                  ref.read(videoDataDetailServiceProvider);
+                              try {
+                                if (!videoDataService.checkAndAddSnap(ms)) {
+                                  snack.info("Screenshot already taken!");
+                                  CustomOverlayEntry().closeLoader();
+                                } else {
+                                  Uint8List image = await ref
+                                      .read(fileDetailMiniServiceProvider)
+                                      .getFrameFromUrl(
+                                          url: getVideoUrl(videoFile.id),
+                                          positionInMs: ms);
+
+                                  videoDataService.selectedSnap.value?.image =
+                                      image;
+                                  CustomOverlayEntry().closeLoader();
+
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return ScreenShotScreen();
+                                  }));
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (context) {
+                                  //       return ScreenShotScreen();
+                                  //     });
+                                }
+                              } catch (e) {
+                                videoDataService.cancelNewSnap();
+                                CustomOverlayEntry().closeLoader();
+                                snack.error(e);
+                              }
                             } catch (e, s) {
                               print("$e $context");
                               CustomOverlayEntry().closeLoader();

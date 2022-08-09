@@ -9,57 +9,66 @@ import 'package:videomanager/screens/others/exporter.dart';
 List<Shop> shopFromJson(String str) =>
     List<Shop>.from(json.decode(str).map((x) => Shop.fromJson(x)));
 
-Shop userModelMiniFromJson(String str) => Shop.fromJson(json.decode(str));
+Shop shopModelMiniFromJson(String str) => Shop.fromJson(json.decode(str));
 
-String userModelMiniToJson(Shop data) => json.encode(data.toJson());
+String shopModelMiniToJson(Shop data) => json.encode(data.toJson());
 
 class Shop {
-  Shop({
-    this.shopName,
-    this.category,
-    this.shopSize,
-    this.phone,
-    this.roadFaceNum,
-    this.roadFace,
-    this.color,
-  });
+  Shop(
+      {required this.shopName,
+      required this.category,
+      required this.shopSize,
+      this.phone,
+      required this.roadFaceNum,
+      required this.roadFace,
+      required this.color,
+      required this.position});
 
-  String? shopName;
-  String? category;
-  int? shopSize;
+  String shopName;
+  String category;
+  int shopSize;
   int? phone;
-  int? roadFaceNum;
-  RoadFace? roadFace;
-  Color? color;
+  int roadFaceNum;
+  RoadFace roadFace;
+  Color color;
+  Offset position;
 
   Shop copyWith({
-    String? shopName,
-    String? category,
-    int? shopSize,
-    int? phone,
-    int? roadFaceNum,
-    RoadFace? roadFace,
-    Color? color,
+    required String shopName,
+    required String category,
+    required int shopSize,
+    required int phone,
+    required int roadFaceNum,
+    required RoadFace roadFace,
+    required Color color,
   }) =>
       Shop(
-        shopName: shopName,
-        category: category,
-        shopSize: shopSize,
-        phone: phone,
-        roadFaceNum: roadFaceNum,
-        roadFace: roadFace,
-        color: color,
-      );
+          shopName: shopName,
+          category: category,
+          shopSize: shopSize,
+          phone: phone,
+          roadFaceNum: roadFaceNum,
+          roadFace: roadFace,
+          color: color,
+          position: position);
+  static empty() => Shop(
+      shopName: '',
+      category: '',
+      shopSize: 0,
+      roadFaceNum: 1,
+      roadFace: RoadFace(roadFace1: 1),
+      color: primaryColor,
+      position: const Offset(0, 0));
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
-        shopName: json["shopName"],
-        category: json["category"],
-        shopSize: json["shopSize"],
-        phone: json["phone"],
-        roadFaceNum: json["roadFaceNum"],
-        roadFace: RoadFace.fromJson(json["superVisor"]),
-        color: json["color"],
-      );
+      shopName: json["shopName"],
+      category: json["category"],
+      shopSize: json["shopSize"],
+      phone: json["phone"],
+      roadFaceNum: json["roadFaceNum"],
+      roadFace: RoadFace.fromJson(json["roadFace"]),
+      color: json["color"],
+      position: json["position"]);
 
   Map<String, dynamic> toJson() => {
         "shopName": shopName,
@@ -67,8 +76,9 @@ class Shop {
         "shopSize": shopSize,
         "phone": phone,
         "roadFaceNum": roadFaceNum,
-        "roadFace": roadFace != null ? roadFace!.toJson() : null,
+        "roadFace": roadFace,
         "color": color,
+        "position": position
       };
 }
 

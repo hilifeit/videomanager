@@ -253,28 +253,28 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            SizedBox(
-              height: 54.sr(),
-              width: 54.sr(),
-              child: CustomFloatingActionButton(
-                  icon: Videomanager.filter,
-                  onPressed: () async {
-                    CustomOverlayEntry().showLoader();
-                    var fileService = ref.read(fileDetailMiniServiceProvider);
-                    var files = fileService.files.reversed;
-                    await Future.forEach<FileDetailMini>(files,
-                        (element) async {
-                      var done = await fileService.fileExists(element.id);
-                      print("${element.id} $done");
-                    });
-                    CustomOverlayEntry().closeLoader();
-                  },
-                  roundShape: true,
-                  tooltip: 'Fix'),
-            ),
-            SizedBox(
-              height: 32.sh(),
-            ),
+            // SizedBox(
+            //   height: 54.sr(),
+            //   width: 54.sr(),
+            //   child: CustomFloatingActionButton(
+            //       icon: Videomanager.filter,
+            //       onPressed: () async {
+            //         CustomOverlayEntry().showLoader();
+            //         var fileService = ref.read(fileDetailMiniServiceProvider);
+            //         var files = fileService.files.reversed;
+            //         await Future.forEach<FileDetailMini>(files,
+            //             (element) async {
+            //           var done = await fileService.fileExists(element.id);
+            //           print("${element.id} $done");
+            //         });
+            //         CustomOverlayEntry().closeLoader();
+            //       },
+            //       roundShape: true,
+            //       tooltip: 'Fix'),
+            // ),
+            // SizedBox(
+            //   height: 32.sh(),
+            // ),
             SizedBox(
               height: 54.sr(),
               width: 54.sr(),
