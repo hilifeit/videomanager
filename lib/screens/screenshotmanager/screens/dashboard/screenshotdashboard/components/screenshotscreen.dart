@@ -4,11 +4,8 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 
 class ScreenShotScreen extends ConsumerWidget {
-   ScreenShotScreen({
-    Key? key,
-    required this.imageData
-  }) : super(key: key);
-final Uint8List imageData;
+  ScreenShotScreen({Key? key, required this.imageData}) : super(key: key);
+  final Uint8List imageData;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final posiionProvider = StateProvider<Offset>((ref) {
@@ -20,11 +17,11 @@ final Uint8List imageData;
         child: Stack(
           children: [
             Container(
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                   color: whiteColor,
                   image: DecorationImage(
                     opacity: 1,
-                    image:MemoryImage(imageData),
+                    image: MemoryImage(imageData),
                     fit: BoxFit.contain,
                   )),
               child: ClipPath(
@@ -136,10 +133,12 @@ class ScreenShotClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path()
-      ..addRect(Rect.fromCenter(
-          center: Offset(size.width / 2 - 50.sw(), size.height / 2 - 50.sh()),
-          width: size.width * 0.788,
-          height: size.height * 0.68));
+      ..addRect(
+        Rect.fromCenter(
+            center: Offset(size.width / 2 - 50.sw(), size.height / 2 - 50.sh()),
+            width: size.width * 0.788,
+            height: size.height * 0.68),
+      );
 
     return path;
   }

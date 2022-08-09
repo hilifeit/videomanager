@@ -13,7 +13,7 @@ class UserSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final defaultSetting = ref.watch(defaultSettingProvider.state).state;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: !ResponsiveLayout.isDesktop ? AppBar() : null,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(

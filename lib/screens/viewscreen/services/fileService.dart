@@ -289,27 +289,28 @@ class FileService extends ChangeNotifier {
       rethrow;
     }
   }
-  Future<Uint8List> getFrameFromUrl({required String url,int positionInMs=0})async{
 
-      try{
-
-        var response=await client.get(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs"));
+  Future<Uint8List> getFrameFromUrl(
+      {required String url, int positionInMs = 0}) async {
+    try {
+      var response = await client.get(Uri.parse(
+          "${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs"));
 //       final ByteData imageData = await NetworkAssetBundle(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs")).load("");
 // final Uint8List bytes = imageData.buffer.asUint8List();
-if(response.statusCode==200) {
-    // debugPrint(response.body);
-  return response.bodyBytes;
-} else {
-  throw "Error";
-}
+      if (response.statusCode == 200) {
+        // debugPrint(response.body);
+        return response.bodyBytes;
+      } else {
+        var error = jsonDecode(response.body);
+        throw error("message");
       }
-      catch(e,s)
-      {
-          print("$e $s");
-           
-           rethrow ;
-      }
+    } catch (e, s) {
+      print("$e $s");
+
+      rethrow;
+    }
   }
+
   Future<bool> fileExists(String id) async {
     try {
       var response =
