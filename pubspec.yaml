@@ -58,6 +58,8 @@ dependencies:
   audioplayers: ^1.0.1
   timer_builder: ^2.0.0
   get_time_ago: ^1.1.5
+  pixel_color_picker: ^1.0.0
+  random_color: ^1.0.6-nullsafety
 
 
 

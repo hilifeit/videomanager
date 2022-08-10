@@ -1,10 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:touchable/touchable.dart';
+import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/snapModel.dart';
+
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 
 class ScreenShotScreen extends ConsumerWidget {
@@ -19,64 +20,73 @@ class ScreenShotScreen extends ConsumerWidget {
     return LayoutBuilder(builder: (context, constraint) {
       // print('$constraint ${MediaQuery.of(context).size}');
       return snap != null
-          ? Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  color: whiteColor,
-                  image: DecorationImage(
-                    opacity: 1,
-                    image: MemoryImage(snap.image!),
-                    fit: BoxFit.fill,
-                  )),
-              child: Stack(
-                children: [
-                  CanvasTouchDetector(
-                    gesturesToOverride: const [
-                      GestureType.onTapUp,
-                      GestureType.onTapDown,
-                      GestureType.onSecondaryTapUp
-                    ],
-                    builder: (context) {
-                      return CustomPaint(
-                        size: Size(constraint.maxWidth, constraint.maxHeight),
-                        painter: ShopPinPainter(ref: ref, context: context),
-                      );
-                    },
-                  ),
-                  Positioned(
-                    bottom: 46.sh(),
-                    right: 54.sw(),
-                    child: Row(
-                      children: [
-                        CustomOutlinedButton(
-                            borderColor: whiteColor,
-                            onPressedOutlined: () {
-                              snapService.clearShop();
-                            },
-                            outlinedButtonText: 'Clear All'),
-                        SizedBox(
-                          width: 25.sw(),
-                        ),
-                        CustomOutlinedButton(
-                            borderColor: whiteColor,
-                            onPressedOutlined: () {
-                              Navigator.pop(context);
-                              snapService.cancelNewSnap();
-                            },
-                            outlinedButtonText: 'Cancel'),
-                        SizedBox(
-                          width: 25.sw(),
-                        ),
-                        CustomElevatedButton(
-                            enabled: false,
-                            onPressedElevated: () {},
-                            elevatedButtonText: 'Confirm(5)')
+          ? Stack(
+              children: [
+                InteractiveViewer(
+                  maxScale: 4,
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                        color: whiteColor,
+                        image: DecorationImage(
+                          opacity: 1,
+                          image: MemoryImage(snap.image!),
+                          fit: BoxFit.fill,
+                        )),
+                    child: CanvasTouchDetector(
+                      gesturesToOverride: const [
+                        GestureType.onTapUp,
+                        GestureType.onTapDown,
+                        GestureType.onSecondaryTapUp
                       ],
+                      builder: (context) {
+                        return CustomPaint(
+                          size: Size(constraint.maxWidth, constraint.maxHeight),
+                          painter: ShopPinPainter(
+                              ref: ref,
+                              context: context,
+                              imageData: snap.image!),
+                        );
+                      },
                     ),
                   ),
-                ],
-              ),
+                ),
+                Positioned(
+                  bottom: 46.sh(),
+                  right: 54.sw(),
+                  child: Row(
+                    children: [
+                      CustomOutlinedButton(
+                          borderColor: whiteColor,
+                          onPressedOutlined: snap.shops.isEmpty
+                              ? null
+                              : () {
+                                  snapService.clearShop();
+                                },
+                          outlinedButtonText: 'Clear All'),
+                      SizedBox(
+                        width: 25.sw(),
+                      ),
+                      CustomOutlinedButton(
+                          borderColor: whiteColor,
+                          onPressedOutlined: () {
+                            Navigator.pop(context);
+                            snapService.cancelNewSnap();
+                          },
+                          outlinedButtonText: 'Cancel'),
+                      SizedBox(
+                        width: 25.sw(),
+                      ),
+                      CustomElevatedButton(
+                          onPressedElevated:
+                              snap.shops.isNotEmpty ? () {} : null,
+                          elevatedButtonText:
+                              'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
+                    ],
+                  ),
+                ),
+              ],
             )
           : Container();
     });
@@ -84,9 +94,11 @@ class ScreenShotScreen extends ConsumerWidget {
 }
 
 class ShopPinPainter extends CustomPainter {
-  ShopPinPainter({required this.ref, required this.context});
+  ShopPinPainter(
+      {required this.ref, required this.context, required this.imageData});
   final WidgetRef ref;
   final BuildContext context;
+  final Uint8List imageData;
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
@@ -106,15 +118,24 @@ class ShopPinPainter extends CustomPainter {
 
     newCanvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), boxPaint,
         hitTestBehavior: HitTestBehavior.translucent, onTapUp: (details) async {
-      var shop = await showDialog(
+      var color = await getColorFromImagePixel(
+          imageData: imageData, pixelPosition: details.localPosition);
+      var data = await showDialog(
           context: context,
           builder: (context) {
             return Center(
-              child: AddEditShop(),
+              child: AddEditShop(
+                shop: Shop.empty()..color = color,
+              ),
             );
           });
-
-      snapService.addShop(shop..position = details.localPosition);
+      if (data != null) {
+        Shop shop = data as Shop;
+        shop
+          ..position = details.localPosition
+          ..color = color;
+        snapService.addShop(shop);
+      }
     });
 
     for (var element in shops) {
@@ -126,8 +147,9 @@ class ShopPinPainter extends CustomPainter {
                   element.position.dx, element.position.dy - iconSize * .4),
               width: iconSize * .6,
               height: iconSize * .9),
-          boxPaint, onTapUp: (details) async {
-        var shop = await showDialog(
+          boxPaint, onTapUp: (details) {
+        //Left Click Action
+        var data = showDialog(
             context: context,
             builder: (context) {
               return Center(
@@ -137,7 +159,11 @@ class ShopPinPainter extends CustomPainter {
                 ),
               );
             });
+        Shop shop = data as Shop;
+        shop.position = details.localPosition;
+        snapService.removeShop(element);
         snapService.addShop(shop);
+        //Right Click Action
       }, onSecondaryTapUp: (details) {
         snapService.removeShop(element);
       });

@@ -49,30 +49,31 @@ final List<CustomMenuItem> roadFace = [
 final List<CustomMenuItem> roadFaceSide = [
   CustomMenuItem(
     label: "0.5",
-    value: 1.toString(),
+    value: 0.toString(),
   ),
   CustomMenuItem(
     label: "1",
-    value: 2.toString(),
+    value: 1.toString(),
   ),
   CustomMenuItem(
     label: "1.5",
-    value: 3.toString(),
+    value: 2.toString(),
   ),
   CustomMenuItem(
     label: "2",
-    value: 4.toString(),
+    value: 3.toString(),
   ),
   CustomMenuItem(
     label: "2.5",
-    value: 5.toString(),
+    value: 4.toString(),
   ),
 ];
 
 class MarkerColor {
-  MarkerColor({required this.color, required this.onselect});
+  MarkerColor({
+    required this.color,
+  });
   Color color;
-  Function onselect;
 }
 
 class AddEditShop extends ConsumerWidget {
@@ -89,97 +90,56 @@ class AddEditShop extends ConsumerWidget {
   late CustomMenuItem editRoadFace1;
   late CustomMenuItem editRoadFace2;
   late CustomMenuItem editRoadFace3;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final markercolorProvider = StateProvider<Color>((ref) {
-    return primaryColor;
-  });
-  final shopProvider = StateProvider<Shop>((ref) {
-    return Shop(
-        shopName: "",
-        category: 1,
-        shopSize: 1,
-        roadFaceNum: 1,
-        roadFace: RoadFace(roadFace1: 1),
-        color: primaryColor,
-        position: Offset(0, 0));
-  });
+  // final shopProvider = StateProvider<Shop>((ref) {
+  //   return Shop.empty();
+  // });
   final roadFace2Provider = StateProvider<bool>((ref) {
     return false;
   });
   final roadFace3Provider = StateProvider<bool>((ref) {
     return false;
   });
-
+  final markercolorProvider = StateProvider<int>((ref) {
+    return 0;
+  });
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final markerColor = ref.watch(markercolorProvider.state).state;
-    final addNewShop = ref.watch(shopProvider.state).state;
     final roadFace2Show = ref.watch(roadFace2Provider.state).state;
     final roadFace3Show = ref.watch(roadFace3Provider.state).state;
-    if (edit) {
-      addNewShop
-        ..shopName = shop!.shopName
-        ..category = shop!.category
-        ..shopSize = shop!.shopSize
-        ..phone = shop!.phone
-        ..roadFaceNum = shop!.roadFaceNum
-        ..roadFace = shop!.roadFace
-        ..color = shop!.color;
-    }
 
-    int colorIndex = 0;
-    List<MarkerColor> colors = [
+    final List<MarkerColor> colors = [
       MarkerColor(
-          color: primaryColor,
-          onselect: () {
-            ref.read(markercolorProvider.state).state = primaryColor;
-          }),
+        color: primaryColor,
+      ),
       MarkerColor(
-          color: Colors.red,
-          onselect: () {
-            ref.read(markercolorProvider.state).state = Colors.red;
-          }),
+        color: Colors.red,
+      ),
       MarkerColor(
-          color: Colors.amber,
-          onselect: () {
-            ref.read(markercolorProvider.state).state = Colors.amber;
-          }),
+        color: Colors.amber,
+      ),
       MarkerColor(
-          color: Colors.blue,
-          onselect: () {
-            ref.read(markercolorProvider.state).state = Colors.blue;
-          }),
+        color: Colors.blue,
+      ),
       MarkerColor(
-          color: Color(0xffB5FFF6),
-          onselect: () {
-            ref.read(markercolorProvider.state).state = Color(0xffB5FFF6);
-          }),
+        color: Color(0xffB5FFF6),
+      ),
     ];
+    colors.insert(
+      0,
+      MarkerColor(
+        color: shop!.color,
+      ),
+    );
+
     // dd = category.firstWhere((element) => element.label == shop!.category);
     if (edit) {
-      // if (shop!.roadFaceNum == 2) {
-      //   ref.read(roadFace2Provider.state).state = true;
-      //   ref.read(roadFace3Provider.state).state = false;
-      //   addNewShop.roadFace.roadFace2 = 1;
-      // } else if (shop!.roadFaceNum == 3) {
-      //   ref.read(roadFace2Provider.state).state = true;
-      //   ref.read(roadFace3Provider.state).state = true;
-      //   addNewShop.roadFace.roadFace2 = 1;
-      //   addNewShop.roadFace.roadFace3 = 1;
-      //   // print(roadFaceShow);
-
-      // } else {
-      //   // for (int i = 0; i < roadFaceShow.length; i++) {
-      //   ref.read(roadFace2Provider.state).state = false;
-      //   ref.read(roadFace3Provider.state).state = false;
-
-      //   // }
-      // }
-
       for (var element in category) {
-        if (element.label == shop!.category) {
+        if (element.value == shop!.category.toString()) {
           editCategory = category[category.indexOf(element)];
           break;
         }
@@ -197,14 +157,14 @@ class AddEditShop extends ConsumerWidget {
         }
       }
       for (var element in roadFaceSide) {
-        if (element.label == shop!.roadFace.roadFace1.toString()) {
+        if (element.value == shop!.roadFace.roadFace1.toString()) {
           editRoadFace1 = roadFaceSide[roadFaceSide.indexOf(element)];
           break;
         }
       }
       for (var element in roadFaceSide) {
         if (shop!.roadFace.roadFace2 != null) {
-          if (element.label == shop!.roadFace.roadFace2.toString()) {
+          if (element.value == shop!.roadFace.roadFace2.toString()) {
             editRoadFace2 = roadFaceSide[roadFaceSide.indexOf(element)];
             break;
           }
@@ -214,7 +174,7 @@ class AddEditShop extends ConsumerWidget {
       }
       for (var element in roadFaceSide) {
         if (shop!.roadFace.roadFace3 != null) {
-          if (element.label == shop!.roadFace.roadFace3.toString()) {
+          if (element.value == shop!.roadFace.roadFace3.toString()) {
             editRoadFace3 = roadFaceSide[roadFaceSide.indexOf(element)];
             break;
           }
@@ -223,15 +183,15 @@ class AddEditShop extends ConsumerWidget {
         }
       }
 
-      ref.read(markercolorProvider.state).state = shop!.color;
+      // ref.read(markercolorProvider.state).state = shop!.color;
     }
 
-    for (var element in colors) {
-      if (element.color == markerColor) {
-        colorIndex = colors.indexOf(element);
-        break;
-      }
-    }
+    // for (var element in colors) {
+    //   if (element.color == shop!.color) {
+    //     ref.read(markercolorProvider.state).state = colors.indexOf(element);
+    //     break;
+    //   }
+    // }
 
     return Material(
       color: Colors.transparent,
@@ -296,13 +256,13 @@ class AddEditShop extends ConsumerWidget {
                             height: 5.sh(),
                           ),
                           InputTextField(
-                            value: edit ? shop!.shopName : '',
+                            value: shop!.shopName,
                             fillColor: Colors.white,
                             title: 'Shop Name',
                             isVisible: true,
                             validator: (val) => validateShop(val!),
                             onChanged: (val) {
-                              addNewShop.shopName = val;
+                              shop!.shopName = val;
                             },
                           ),
                           SizedBox(
@@ -330,7 +290,7 @@ class AddEditShop extends ConsumerWidget {
                                 ),
                                 value: edit ? editCategory : category.first,
                                 onChanged: (val) {
-                                  addNewShop.category = int.parse(val.label);
+                                  shop!.category = int.parse(val.value);
                                 },
                                 values: category,
                                 helperText: ""),
@@ -360,7 +320,7 @@ class AddEditShop extends ConsumerWidget {
                                 ),
                                 value: edit ? editShopSize : shopSize.first,
                                 onChanged: (val) {
-                                  addNewShop.shopSize = int.parse(val.label);
+                                  shop!.shopSize = int.parse(val.label);
                                 },
                                 values: shopSize,
                                 helperText: "shutter"),
@@ -369,13 +329,16 @@ class AddEditShop extends ConsumerWidget {
                             height: 19.sh(),
                           ),
                           InputTextField(
+                              value: shop!.phone == null
+                                  ? ""
+                                  : shop!.phone.toString(),
                               isdigits: true,
                               limit: true,
                               fillColor: Colors.white,
                               title: 'Contact Number',
                               isVisible: true,
                               onChanged: (val) {
-                                addNewShop.phone = int.parse(val);
+                                shop!.phone = int.parse(val);
                               }),
                           SizedBox(
                             height: 19.sh(),
@@ -402,23 +365,23 @@ class AddEditShop extends ConsumerWidget {
                                 ),
                                 value: edit
                                     ? editRoadFaceNum
-                                    : roadFace[addNewShop.roadFaceNum - 1],
+                                    : roadFace[shop!.roadFaceNum - 1],
                                 onChanged: (val) {
-                                  addNewShop.roadFaceNum = int.parse(val.value);
+                                  shop!.roadFaceNum = int.parse(val.value);
 
                                   if (int.parse(val.value) == 2) {
                                     ref.read(roadFace2Provider.state).state =
                                         true;
                                     ref.read(roadFace3Provider.state).state =
                                         false;
-                                    addNewShop.roadFace.roadFace2 = 1;
+                                    shop!.roadFace.roadFace2 = 1;
                                   } else if (int.parse(val.value) == 3) {
                                     ref.read(roadFace2Provider.state).state =
                                         true;
                                     ref.read(roadFace3Provider.state).state =
                                         true;
-                                    addNewShop.roadFace.roadFace2 = 1;
-                                    addNewShop.roadFace.roadFace3 = 1;
+                                    shop!.roadFace.roadFace2 = 1;
+                                    shop!.roadFace.roadFace3 = 1;
                                     // print(roadFaceShow);
 
                                   } else {
@@ -443,11 +406,10 @@ class AddEditShop extends ConsumerWidget {
                                 text: 'Road Face 1',
                                 value: edit
                                     ? editRoadFace1
-                                    : roadFaceSide[
-                                        addNewShop.roadFace.roadFace1],
+                                    : roadFaceSide[shop!.roadFace.roadFace1],
                                 values: roadFaceSide,
                                 onChanged: (val) {
-                                  addNewShop.roadFace.roadFace1 =
+                                  shop!.roadFace.roadFace1 =
                                       int.parse(val.value);
                                 },
                               ),
@@ -456,16 +418,17 @@ class AddEditShop extends ConsumerWidget {
                                     ? 53.sw()
                                     : 15.sw(),
                               ),
-                              if (roadFace2Show)
+                              if (
+                              // roadFace2Show ||
+                              shop!.roadFaceNum == 2 || shop!.roadFaceNum == 3)
                                 DropDownWithText(
                                   text: 'Road Face 2',
                                   value: edit
                                       ? editRoadFace2
-                                      : roadFaceSide[
-                                          addNewShop.roadFace.roadFace2!],
+                                      : roadFaceSide[shop!.roadFace.roadFace2!],
                                   values: roadFaceSide,
                                   onChanged: (val) {
-                                    addNewShop.roadFace.roadFace2 =
+                                    shop!.roadFace.roadFace2 =
                                         int.parse(val.value);
                                   },
                                 ),
@@ -474,16 +437,17 @@ class AddEditShop extends ConsumerWidget {
                                     ? 53.sw()
                                     : 15.sw(),
                               ),
-                              if (roadFace3Show)
+                              if (
+                              // roadFace3Show ||
+                              shop!.roadFaceNum == 3)
                                 DropDownWithText(
                                   text: 'Road Face 3',
                                   value: edit
                                       ? editRoadFace3
-                                      : roadFaceSide[
-                                          addNewShop.roadFace.roadFace3!],
+                                      : roadFaceSide[shop!.roadFace.roadFace3!],
                                   values: roadFaceSide,
                                   onChanged: (val) {
-                                    addNewShop.roadFace.roadFace3 =
+                                    shop!.roadFace.roadFace3 =
                                         int.parse(val.value);
                                   },
                                 ),
@@ -503,7 +467,7 @@ class AddEditShop extends ConsumerWidget {
                           Wrap(
                               children: List.generate(
                             colors.length,
-                            (index) => colorIndex == index
+                            (index) => markerColor == index
                                 ? Padding(
                                     padding: EdgeInsets.only(right: 16.sw()),
                                     child: Container(
@@ -523,9 +487,14 @@ class AddEditShop extends ConsumerWidget {
                                     ))
                                 : Padding(
                                     padding: EdgeInsets.only(right: 16.sw()),
-                                    child: SelectMarkerColor(
-                                      radius: 15.sr(),
-                                      item: colors[index],
+                                    child: InkWell(
+                                      onTap: () {
+                                        ref
+                                            .read(markercolorProvider.state)
+                                            .state = index;
+                                      },
+                                      child: selectMarkerColor(
+                                          colors[index], 15.sr(), ref),
                                     ),
                                   ),
                           )),
@@ -543,7 +512,8 @@ class AddEditShop extends ConsumerWidget {
                                         color: Colors.white),
                                 onPressedElevated: () {
                                   if (formKey.currentState!.validate()) {
-                                    Navigator.pop(context, addNewShop);
+                                    print(shop!.category);
+                                    Navigator.pop(context, shop!);
                                   }
                                   // shop!.color = markerColor;
                                 },
@@ -562,6 +532,13 @@ class AddEditShop extends ConsumerWidget {
           ),
         ]),
       ),
+    );
+  }
+
+  Widget selectMarkerColor(MarkerColor item, double radius, WidgetRef ref) {
+    return CircleAvatar(
+      backgroundColor: item.color,
+      radius: radius,
     );
   }
 }
@@ -613,29 +590,6 @@ class DropDownWithText extends StatelessWidget {
               helperText: ""),
         ),
       ],
-    );
-  }
-}
-
-class SelectMarkerColor extends StatelessWidget {
-  SelectMarkerColor({
-    Key? key,
-    required this.item,
-    required this.radius,
-  }) : super(key: key);
-  final MarkerColor item;
-  final double radius;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        item.onselect();
-      },
-      child: CircleAvatar(
-        backgroundColor: item.color,
-        radius: radius,
-      ),
     );
   }
 }

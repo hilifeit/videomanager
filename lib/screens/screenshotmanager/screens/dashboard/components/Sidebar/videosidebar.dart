@@ -261,23 +261,25 @@ class VideoSideBar extends StatelessWidget {
                                           padding: EdgeInsets.symmetric(
                                               vertical: 10.sh()),
                                           child: CustomElevatedButton(
-                                              enabled:
-                                                  selectedVideos.isNotEmpty,
                                               icon: Videomanager
                                                   .add_user_svgrepo_com_1,
-                                              onPressedElevated: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        content: AssignUser(
-                                                            files:
-                                                                selectedVideos),
-                                                      );
-                                                    });
-                                              },
+                                              onPressedElevated: selectedVideos
+                                                      .isNotEmpty
+                                                  ? () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              content: AssignUser(
+                                                                  files:
+                                                                      selectedVideos),
+                                                            );
+                                                          });
+                                                    }
+                                                  : null,
                                               elevatedButtonText: 'Assign'),
                                         ),
                                       ),

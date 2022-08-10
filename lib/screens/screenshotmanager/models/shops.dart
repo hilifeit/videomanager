@@ -53,7 +53,7 @@ class Shop {
           position: position);
   static empty() => Shop(
       shopName: '',
-      category: 1,
+      category: 0,
       shopSize: 1,
       roadFaceNum: 1,
       roadFace: RoadFace(roadFace1: 1),
