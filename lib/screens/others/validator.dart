@@ -157,11 +157,21 @@ String? validateArea(String value, {String label = "Area"}) {
   }
 }
 
-String? validateLastName(String value) {
+String? validateName(String value) {
   // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
   // RegExp regExp = RegExp(pattern as String);
   if (value.isEmpty) {
-    return 'Please enter name';
+    return 'Please enter  name';
+  } else {
+    return null;
+  }
+}
+
+String? validateShop(String value) {
+  // Pattern pattern = r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$';
+  // RegExp regExp = RegExp(pattern as String);
+  if (value.isEmpty) {
+    return 'Please enter shop name';
   } else {
     return null;
   }

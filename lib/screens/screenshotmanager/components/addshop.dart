@@ -1,6 +1,7 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
+import 'package:videomanager/screens/users/component/adduserform.dart';
 
 final List<CustomMenuItem> category = [
   CustomMenuItem(
@@ -74,21 +75,6 @@ class MarkerColor {
   Function onselect;
 }
 
-final markercolorProvider = StateProvider<Color>((ref) {
-  return primaryColor;
-});
-
-final shopProvider = StateProvider<Shop>((ref) {
-  return Shop.empty();
-});
-
-final roadFace2Provider = StateProvider<bool>((ref) {
-  return false;
-});
-final roadFace3Provider = StateProvider<bool>((ref) {
-  return false;
-});
-
 class AddEditShop extends ConsumerWidget {
   AddEditShop({
     this.shop,
@@ -99,7 +85,31 @@ class AddEditShop extends ConsumerWidget {
   bool edit;
   late CustomMenuItem editCategory;
   late CustomMenuItem editShopSize;
-  late CustomMenuItem editRoadFace;
+  late CustomMenuItem editRoadFaceNum;
+  late CustomMenuItem editRoadFace1;
+  late CustomMenuItem editRoadFace2;
+  late CustomMenuItem editRoadFace3;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final markercolorProvider = StateProvider<Color>((ref) {
+    return primaryColor;
+  });
+  final shopProvider = StateProvider<Shop>((ref) {
+    return Shop(
+        shopName: "",
+        category: 1,
+        shopSize: 1,
+        roadFaceNum: 1,
+        roadFace: RoadFace(roadFace1: 1),
+        color: primaryColor,
+        position: Offset(0, 0));
+  });
+  final roadFace2Provider = StateProvider<bool>((ref) {
+    return false;
+  });
+  final roadFace3Provider = StateProvider<bool>((ref) {
+    return false;
+  });
 
   final ScrollController _scrollController = ScrollController();
   @override
@@ -149,6 +159,25 @@ class AddEditShop extends ConsumerWidget {
     ];
     // dd = category.firstWhere((element) => element.label == shop!.category);
     if (edit) {
+      // if (shop!.roadFaceNum == 2) {
+      //   ref.read(roadFace2Provider.state).state = true;
+      //   ref.read(roadFace3Provider.state).state = false;
+      //   addNewShop.roadFace.roadFace2 = 1;
+      // } else if (shop!.roadFaceNum == 3) {
+      //   ref.read(roadFace2Provider.state).state = true;
+      //   ref.read(roadFace3Provider.state).state = true;
+      //   addNewShop.roadFace.roadFace2 = 1;
+      //   addNewShop.roadFace.roadFace3 = 1;
+      //   // print(roadFaceShow);
+
+      // } else {
+      //   // for (int i = 0; i < roadFaceShow.length; i++) {
+      //   ref.read(roadFace2Provider.state).state = false;
+      //   ref.read(roadFace3Provider.state).state = false;
+
+      //   // }
+      // }
+
       for (var element in category) {
         if (element.label == shop!.category) {
           editCategory = category[category.indexOf(element)];
@@ -161,6 +190,39 @@ class AddEditShop extends ConsumerWidget {
           break;
         }
       }
+      for (var element in roadFace) {
+        if (element.label == shop!.roadFaceNum.toString()) {
+          editRoadFaceNum = roadFace[roadFace.indexOf(element)];
+          break;
+        }
+      }
+      for (var element in roadFaceSide) {
+        if (element.label == shop!.roadFace.roadFace1.toString()) {
+          editRoadFace1 = roadFaceSide[roadFaceSide.indexOf(element)];
+          break;
+        }
+      }
+      for (var element in roadFaceSide) {
+        if (shop!.roadFace.roadFace2 != null) {
+          if (element.label == shop!.roadFace.roadFace2.toString()) {
+            editRoadFace2 = roadFaceSide[roadFaceSide.indexOf(element)];
+            break;
+          }
+        } else {
+          editRoadFace2 = roadFaceSide.first;
+        }
+      }
+      for (var element in roadFaceSide) {
+        if (shop!.roadFace.roadFace3 != null) {
+          if (element.label == shop!.roadFace.roadFace3.toString()) {
+            editRoadFace3 = roadFaceSide[roadFaceSide.indexOf(element)];
+            break;
+          }
+        } else {
+          editRoadFace3 = roadFaceSide.first;
+        }
+      }
+
       ref.read(markercolorProvider.state).state = shop!.color;
     }
 
@@ -226,6 +288,7 @@ class AddEditShop extends ConsumerWidget {
                     padding: EdgeInsets.symmetric(
                         horizontal: 20.5.sw(), vertical: 5.sh()),
                     child: Form(
+                      key: formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -237,6 +300,7 @@ class AddEditShop extends ConsumerWidget {
                             fillColor: Colors.white,
                             title: 'Shop Name',
                             isVisible: true,
+                            validator: (val) => validateShop(val!),
                             onChanged: (val) {
                               addNewShop.shopName = val;
                             },
@@ -266,7 +330,7 @@ class AddEditShop extends ConsumerWidget {
                                 ),
                                 value: edit ? editCategory : category.first,
                                 onChanged: (val) {
-                                  addNewShop.category = val.label;
+                                  addNewShop.category = int.parse(val.label);
                                 },
                                 values: category,
                                 helperText: ""),
@@ -337,7 +401,7 @@ class AddEditShop extends ConsumerWidget {
                                   color: darkGrey,
                                 ),
                                 value: edit
-                                    ? editRoadFace
+                                    ? editRoadFaceNum
                                     : roadFace[addNewShop.roadFaceNum - 1],
                                 onChanged: (val) {
                                   addNewShop.roadFaceNum = int.parse(val.value);
@@ -347,12 +411,14 @@ class AddEditShop extends ConsumerWidget {
                                         true;
                                     ref.read(roadFace3Provider.state).state =
                                         false;
-                                    addNewShop.roadFace.roadFace3 != 1;
+                                    addNewShop.roadFace.roadFace2 = 1;
                                   } else if (int.parse(val.value) == 3) {
                                     ref.read(roadFace2Provider.state).state =
                                         true;
                                     ref.read(roadFace3Provider.state).state =
                                         true;
+                                    addNewShop.roadFace.roadFace2 = 1;
+                                    addNewShop.roadFace.roadFace3 = 1;
                                     // print(roadFaceShow);
 
                                   } else {
@@ -361,8 +427,7 @@ class AddEditShop extends ConsumerWidget {
                                         false;
                                     ref.read(roadFace3Provider.state).state =
                                         false;
-                                    addNewShop.roadFace.roadFace2 != 1;
-                                    addNewShop.roadFace.roadFace3 != 1;
+
                                     // }
                                   }
                                 },
@@ -377,7 +442,7 @@ class AddEditShop extends ConsumerWidget {
                               DropDownWithText(
                                 text: 'Road Face 1',
                                 value: edit
-                                    ? editRoadFace
+                                    ? editRoadFace1
                                     : roadFaceSide[
                                         addNewShop.roadFace.roadFace1],
                                 values: roadFaceSide,
@@ -395,7 +460,7 @@ class AddEditShop extends ConsumerWidget {
                                 DropDownWithText(
                                   text: 'Road Face 2',
                                   value: edit
-                                      ? editRoadFace
+                                      ? editRoadFace2
                                       : roadFaceSide[
                                           addNewShop.roadFace.roadFace2!],
                                   values: roadFaceSide,
@@ -412,8 +477,10 @@ class AddEditShop extends ConsumerWidget {
                               if (roadFace3Show)
                                 DropDownWithText(
                                   text: 'Road Face 3',
-                                  value:
-                                      edit ? editRoadFace : roadFaceSide.first,
+                                  value: edit
+                                      ? editRoadFace3
+                                      : roadFaceSide[
+                                          addNewShop.roadFace.roadFace3!],
                                   values: roadFaceSide,
                                   onChanged: (val) {
                                     addNewShop.roadFace.roadFace3 =
@@ -475,10 +542,10 @@ class AddEditShop extends ConsumerWidget {
                                         fontSize: 20.ssp(),
                                         color: Colors.white),
                                 onPressedElevated: () {
-                                  Navigator.pop(context, addNewShop);
+                                  if (formKey.currentState!.validate()) {
+                                    Navigator.pop(context, addNewShop);
+                                  }
                                   // shop!.color = markerColor;
-
-                                  // TODO : save
                                 },
                                 elevatedButtonText: 'Save'),
                           ),

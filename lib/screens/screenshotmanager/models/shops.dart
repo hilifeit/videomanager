@@ -25,7 +25,7 @@ class Shop {
       required this.position});
 
   String shopName;
-  String category;
+  int category;
   int shopSize;
   int? phone;
   int roadFaceNum;
@@ -35,7 +35,7 @@ class Shop {
 
   Shop copyWith({
     required String shopName,
-    required String category,
+    required int category,
     required int shopSize,
     required int phone,
     required int roadFaceNum,
@@ -53,8 +53,8 @@ class Shop {
           position: position);
   static empty() => Shop(
       shopName: '',
-      category: '',
-      shopSize: 0,
+      category: 1,
+      shopSize: 1,
       roadFaceNum: 1,
       roadFace: RoadFace(roadFace1: 1),
       color: primaryColor,

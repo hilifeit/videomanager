@@ -238,7 +238,7 @@ class AddUser extends ConsumerWidget {
                           fillColor: Colors.white,
                           style: kTextStyleIbmSemiBold.copyWith(
                               fontSize: 16.ssp(), color: Colors.black),
-                          validator: (val) => validateLastName(val!),
+                          validator: (val) => validateName(val!),
                           onChanged: (val) {
                             addNewUser.name = val;
                           },

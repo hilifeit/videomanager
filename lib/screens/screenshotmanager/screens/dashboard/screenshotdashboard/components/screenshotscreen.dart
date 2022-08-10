@@ -126,8 +126,8 @@ class ShopPinPainter extends CustomPainter {
                   element.position.dx, element.position.dy - iconSize * .4),
               width: iconSize * .6,
               height: iconSize * .9),
-          boxPaint, onTapUp: (details) {
-        showDialog(
+          boxPaint, onTapUp: (details) async {
+        var shop = await showDialog(
             context: context,
             builder: (context) {
               return Center(
@@ -137,6 +137,7 @@ class ShopPinPainter extends CustomPainter {
                 ),
               );
             });
+        snapService.addShop(shop);
       }, onSecondaryTapUp: (details) {
         snapService.removeShop(element);
       });
