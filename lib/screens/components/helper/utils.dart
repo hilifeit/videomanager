@@ -1,4 +1,9 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
+
+import 'package:random_color/random_color.dart';
+import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/pixelColorPicker.dart';
 
 int map(int x, int inMin, int inMax, int outMin, int outMax) {
   var calc =
@@ -60,4 +65,22 @@ formatBytes(bytes, {int decimals = 2}) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
   var i = (math.log(bytes) / math.log(k)).floor();
   return '${((bytes) / math.pow(k, i)).toStringAsFixed(dm)} ${sizes[i]}';
+}
+
+Future<Color> getColorFromImagePixel(
+    {required Uint8List imageData, required Offset pixelPosition}) async {
+  ColorPicker colorPicker = ColorPicker(bytes: imageData);
+  Color color = await colorPicker.getColor(
+    pixelPosition: pixelPosition,
+  );
+  if (color.computeLuminance() > 0.5) {
+    color = RandomColor().randomColor(
+        colorSaturation: ColorSaturation.highSaturation,
+        colorBrightness: ColorBrightness.dark);
+  } else {
+    color = RandomColor().randomColor(
+        colorSaturation: ColorSaturation.highSaturation,
+        colorBrightness: ColorBrightness.light);
+  }
+  return color;
 }

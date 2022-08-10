@@ -7,20 +7,21 @@ const double buttonHeight = 55;
 class CustomOutlinedButton extends StatelessWidget {
   CustomOutlinedButton({
     Key? key,
-    required this.onPressedOutlined,
+    this.onPressedOutlined,
     required this.outlinedButtonText,
     this.width,
     this.height,
     this.borderColor,
   }) : super(key: key);
 
-  final Function onPressedOutlined;
+  final Function? onPressedOutlined;
   final String outlinedButtonText;
   double? width, height;
   Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onPressedOutlined == null ? false : true;
     return Container(
       width: width ?? 126.sw(),
       height: height ?? 46.sh(),
@@ -32,9 +33,11 @@ class CustomOutlinedButton extends StatelessWidget {
             style: ButtonStyle(
                 padding: MaterialStateProperty.resolveWith(
                     (states) => EdgeInsets.zero)),
-            onPressed: () {
-              onPressedOutlined();
-            },
+            onPressed: enabled
+                ? () {
+                    onPressedOutlined!();
+                  }
+                : null,
             child: Text(
               outlinedButtonText,
               style: kTextStyleIbmRegular.copyWith(
@@ -58,19 +61,20 @@ class CustomElevatedButton extends StatelessWidget {
     this.elevatedButtonPadding,
     this.color,
     this.icon,
-    this.enabled = true,
   }) : super(key: key);
 
-  final Function onPressedElevated;
+  final Function? onPressedElevated;
   final String elevatedButtonText;
   double? width, height;
   TextStyle? elevatedButtonTextStyle;
   EdgeInsetsGeometry? elevatedButtonPadding;
   Color? color;
   IconData? icon;
-  bool enabled;
+
   @override
   Widget build(BuildContext context) {
+    final enabled = onPressedElevated == null ? false : true;
+
     return SizedBox(
       width: width ?? 126.sw(),
       height: height ?? 46.sh(),
@@ -82,7 +86,7 @@ class CustomElevatedButton extends StatelessWidget {
                 enabled ? color ?? Theme.of(context).primaryColor : darkGrey)),
         onPressed: enabled
             ? () {
-                onPressedElevated();
+                onPressedElevated!();
               }
             : null,
         child: Row(
