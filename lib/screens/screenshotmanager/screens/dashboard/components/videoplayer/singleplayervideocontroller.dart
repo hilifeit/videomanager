@@ -1,5 +1,7 @@
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/playback.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/playbackMenu.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
@@ -41,7 +43,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           ),
         ),
         SizedBox(
-          width: 33.sw(),
+          width: 30.5.sw(),
         ),
         IconButton(
           onPressed: () {
@@ -69,6 +71,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           },
           icon: AnimatedIcon(
             icon: AnimatedIcons.play_pause,
+            size: 30.ssp(),
             color: Colors.white,
             progress: controller,
           ),
@@ -112,7 +115,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
               : Icon(
                   Videomanager.volume,
                   color: Colors.white,
-                  size: 24.ssp(),
+                  size: 22.ssp(),
                 ),
         ),
         SizedBox(
@@ -138,12 +141,33 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
               }
             }),
         SizedBox(
+          width: 10.sw(),
+        ),
+        PlayBackMenu(
+          onchanged: (p0) {
+            print(p0);
+          },
+        ),
+        // IconButton(
+        //     onPressed: () {
+        //       showDialog(
+        //           context: context,
+        //           builder: (context) {
+        //             return Playback(onChanged: (context) {});
+        //           });
+        //     },
+        //     icon: Icon(
+        //       Videomanager.settings,
+        //       color: Colors.white,
+        //       size: 21.75.ssp(),
+        //     )),
+        SizedBox(
           width: 24.sw(),
         ),
-        VideoTime(
-          web: web,
-          desktop: desktop,
-        ),
+        // VideoTime(
+        //   web: web,
+        //   desktop: desktop,
+        // ),
       ],
     );
   }
