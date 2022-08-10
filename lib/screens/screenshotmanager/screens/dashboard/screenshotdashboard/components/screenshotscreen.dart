@@ -38,7 +38,9 @@ class ScreenShotScreen extends ConsumerWidget {
                       gesturesToOverride: const [
                         GestureType.onTapUp,
                         GestureType.onTapDown,
-                        GestureType.onSecondaryTapUp
+                        GestureType.onSecondaryTapUp,
+                        GestureType.onPanUpdate,
+                        GestureType.onPanStart,
                       ],
                       builder: (context) {
                         return CustomPaint(
@@ -120,12 +122,13 @@ class ShopPinPainter extends CustomPainter {
         hitTestBehavior: HitTestBehavior.translucent, onTapUp: (details) async {
       var color = await getColorFromImagePixel(
           imageData: imageData, pixelPosition: details.localPosition);
+      Shop newShop = Shop.empty()..color = color;
       var data = await showDialog(
           context: context,
           builder: (context) {
             return Center(
               child: AddEditShop(
-                shop: Shop.empty()..color = color,
+                shop: newShop,
               ),
             );
           });
@@ -147,26 +150,35 @@ class ShopPinPainter extends CustomPainter {
                   element.position.dx, element.position.dy - iconSize * .4),
               width: iconSize * .6,
               height: iconSize * .9),
-          boxPaint, onTapUp: (details) {
-        //Left Click Action
-        var data = showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: AddEditShop(
-                  edit: true,
-                  shop: element,
-                ),
-              );
-            });
-        Shop shop = data as Shop;
-        shop.position = details.localPosition;
-        snapService.removeShop(element);
-        snapService.addShop(shop);
-        //Right Click Action
-      }, onSecondaryTapUp: (details) {
-        snapService.removeShop(element);
-      });
+          boxPaint,
+          onTapUp: (details) async {
+            //Left Click Action
+            var data = await showDialog(
+                context: context,
+                builder: (context) {
+                  return Center(
+                    child: AddEditShop(
+                      edit: true,
+                      shop: element,
+                    ),
+                  );
+                });
+            if (data != null) {
+              // Shop shop = data as Shop;
+              // shop.position = details.localPosition;
+              // snapService.removeShop(element);
+              // snapService.addShop(shop);
+            }
+
+            //Right Click Action
+          },
+          onSecondaryTapUp: (details) {
+            snapService.removeShop(element);
+          },
+          onPanStart: (details) {},
+          onPanUpdate: (details) {
+            print(details.localPosition);
+          });
       //Single Marker Touchy End
     }
   }
