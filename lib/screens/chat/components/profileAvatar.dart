@@ -97,9 +97,10 @@ class ProfileAvatar extends StatelessWidget {
                                       fontSize: 13.ssp()),
                                 );
                               }))
-                            : Text('',
-                                style: kTextStyleIbmRegularBlack.copyWith(
-                                    fontSize: 13.ssp())),
+                            : Container(),
+                    // Text('',
+                    //     style: kTextStyleIbmRegularBlack.copyWith(
+                    //         fontSize: 0)),
                   ]
                 ],
               )

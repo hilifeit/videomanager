@@ -3,6 +3,7 @@ import 'package:videomanager/screens/chat/components/messageBox.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/chat/components/typingWidget.dart';
 import 'package:videomanager/screens/chat/components/viewProfile.dart';
+import 'package:videomanager/screens/chat/models/conversation.dart';
 import 'package:videomanager/screens/chat/models/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
@@ -19,7 +20,7 @@ class MessageScreen extends ConsumerWidget {
     final userProvider = ref.read(userChangeProvider);
     final selectedUser = ref.watch(userChangeProvider).selectedChatUser.value;
 
-    return CustomSafeArea( 
+    return CustomSafeArea(
       child: Scaffold(
         body: Column(
           children: [
@@ -114,7 +115,15 @@ class MessageScreen extends ConsumerWidget {
                                     },
                                     child: Icon(Icons.emoji_emotions)),
                                 suffixIcon: InkWell(
-                                    onTap: () {}, child: Icon(Icons.send)),
+                                    onTap: () {},
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          CustomAudioPlayer.messageSent();
+                                        
+                                        },
+                                        child: Container(
+                                            color: Colors.transparent,
+                                            child: Icon(Icons.send)))),
                               )),
                               // GestureDetector(
                               //     onTap: () {}, child: Icon(Icons.attach_file)),
