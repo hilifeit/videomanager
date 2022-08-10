@@ -82,6 +82,27 @@ class UserModelMini {
       };
   static UserModelMini empty() =>
       UserModelMini(id: '', name: '', role: 0, createdAt: DateTime.now());
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is UserModelMini &&
+        other.id == id &&
+        other.name == name &&
+        other.role == role &&
+        other.superVisor == superVisor &&
+        other.createdAt == createdAt &&
+        other.accessToken == accessToken &&
+        other.refreshToken == refreshToken;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class SuperVisor {
@@ -117,4 +138,21 @@ class SuperVisor {
         "name": name,
         "role": role,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is SuperVisor &&
+        other.id == id &&
+        other.name == name &&
+        other.role == role;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

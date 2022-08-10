@@ -103,4 +103,29 @@ class UserModel {
         "accessToken": accessToken,
         "refreshToken": refreshToken,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is UserModel &&
+        other.id == id &&
+        other.username == username &&
+        other.name == name &&
+        other.role == role &&
+        other.email == email &&
+        other.mobile == mobile &&
+        other.superVisor == superVisor &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.v == v &&
+        other.accessToken == accessToken &&
+        other.refreshToken == refreshToken;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

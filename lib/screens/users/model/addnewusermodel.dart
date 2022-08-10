@@ -74,4 +74,26 @@ class AddNewUser {
         "mobile": mobile,
         "superVisor": superVisor.toJson(),
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is AddNewUser &&
+        other.id == id &&
+        other.username == username &&
+        other.name == name &&
+        other.role == role &&
+        other.email == email &&
+        other.password == password &&
+        other.mobile == mobile &&
+        other.superVisor == superVisor;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

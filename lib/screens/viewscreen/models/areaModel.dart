@@ -106,4 +106,29 @@ class AreaModel {
         v: 0,
         files: 0);
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is AreaModel &&
+        other.id == id &&
+        other.name == name &&
+        other.assignedTo == assignedTo &&
+        other.assignedBy == assignedBy &&
+        other.location == location &&
+        other.status == status &&
+        other.enabled == enabled &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.v == v &&
+        other.files == files;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

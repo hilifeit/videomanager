@@ -60,6 +60,25 @@ class MapSetting {
         "defaultLocation": defaultLocation.toJson(),
         "filterCount": filterCount,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is MapSetting &&
+        other.zoom == zoom &&
+        other.stroke == stroke &&
+        other.scroll == scroll &&
+        other.sample == sample &&
+        other.defaultLocation == defaultLocation &&
+        other.filterCount == filterCount;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class DefaultLocation {
@@ -96,6 +115,23 @@ class DefaultLocation {
         "lat": lat,
         "lng": lng,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is DefaultLocation &&
+        other.enabled == enabled &&
+        other.lat == lat &&
+        other.lng == lng;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class Sample {
@@ -131,4 +167,20 @@ class Sample {
         "view": view,
         "miniMap": miniMap,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Sample &&
+        other.original == original &&
+        other.view == view &&
+        other.miniMap == miniMap;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
