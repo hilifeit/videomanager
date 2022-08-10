@@ -79,10 +79,7 @@ final markercolorProvider = StateProvider<Color>((ref) {
 });
 
 final shopProvider = StateProvider<Shop>((ref) {
-  return Shop(
-    roadFaceNum: 1,
-    roadFace: RoadFace(roadFace1: 1, roadFace2: 1, roadFace3: 1),
-  );
+  return Shop.empty();
 });
 
 final roadFace2Provider = StateProvider<bool>((ref) {
@@ -164,7 +161,7 @@ class AddEditShop extends ConsumerWidget {
           break;
         }
       }
-      ref.read(markercolorProvider.state).state = shop!.color!;
+      ref.read(markercolorProvider.state).state = shop!.color;
     }
 
     for (var element in colors) {
@@ -236,7 +233,7 @@ class AddEditShop extends ConsumerWidget {
                             height: 5.sh(),
                           ),
                           InputTextField(
-                            value: edit ? shop!.shopName! : '',
+                            value: edit ? shop!.shopName : '',
                             fillColor: Colors.white,
                             title: 'Shop Name',
                             isVisible: true,
@@ -341,7 +338,7 @@ class AddEditShop extends ConsumerWidget {
                                 ),
                                 value: edit
                                     ? editRoadFace
-                                    : roadFace[addNewShop.roadFaceNum! - 1],
+                                    : roadFace[addNewShop.roadFaceNum - 1],
                                 onChanged: (val) {
                                   addNewShop.roadFaceNum = int.parse(val.value);
 
@@ -350,7 +347,7 @@ class AddEditShop extends ConsumerWidget {
                                         true;
                                     ref.read(roadFace3Provider.state).state =
                                         false;
-                                    addNewShop.roadFace!.roadFace3 != 1;
+                                    addNewShop.roadFace.roadFace3 != 1;
                                   } else if (int.parse(val.value) == 3) {
                                     ref.read(roadFace2Provider.state).state =
                                         true;
@@ -364,8 +361,8 @@ class AddEditShop extends ConsumerWidget {
                                         false;
                                     ref.read(roadFace3Provider.state).state =
                                         false;
-                                    addNewShop.roadFace!.roadFace2 != 1;
-                                    addNewShop.roadFace!.roadFace3 != 1;
+                                    addNewShop.roadFace.roadFace2 != 1;
+                                    addNewShop.roadFace.roadFace3 != 1;
                                     // }
                                   }
                                 },
@@ -382,10 +379,10 @@ class AddEditShop extends ConsumerWidget {
                                 value: edit
                                     ? editRoadFace
                                     : roadFaceSide[
-                                        addNewShop.roadFace!.roadFace1],
+                                        addNewShop.roadFace.roadFace1],
                                 values: roadFaceSide,
                                 onChanged: (val) {
-                                  addNewShop.roadFace!.roadFace1 =
+                                  addNewShop.roadFace.roadFace1 =
                                       int.parse(val.value);
                                 },
                               ),
@@ -400,10 +397,10 @@ class AddEditShop extends ConsumerWidget {
                                   value: edit
                                       ? editRoadFace
                                       : roadFaceSide[
-                                          addNewShop.roadFace!.roadFace2!],
+                                          addNewShop.roadFace.roadFace2!],
                                   values: roadFaceSide,
                                   onChanged: (val) {
-                                    addNewShop.roadFace!.roadFace2 =
+                                    addNewShop.roadFace.roadFace2 =
                                         int.parse(val.value);
                                   },
                                 ),
@@ -419,7 +416,7 @@ class AddEditShop extends ConsumerWidget {
                                       edit ? editRoadFace : roadFaceSide.first,
                                   values: roadFaceSide,
                                   onChanged: (val) {
-                                    addNewShop.roadFace!.roadFace3 =
+                                    addNewShop.roadFace.roadFace3 =
                                         int.parse(val.value);
                                   },
                                 ),
@@ -478,6 +475,7 @@ class AddEditShop extends ConsumerWidget {
                                         fontSize: 20.ssp(),
                                         color: Colors.white),
                                 onPressedElevated: () {
+                                  Navigator.pop(context, addNewShop);
                                   // shop!.color = markerColor;
 
                                   // TODO : save

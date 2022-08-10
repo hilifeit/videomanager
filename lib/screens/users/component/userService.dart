@@ -218,9 +218,8 @@ class UserService extends ChangeNotifier {
 
         throw error['message'];
       }
-    } catch (e, s) {
-      print("$e $s");
-      throw "$e $s";
+    } catch (e) {
+      rethrow;
     }
   }
 

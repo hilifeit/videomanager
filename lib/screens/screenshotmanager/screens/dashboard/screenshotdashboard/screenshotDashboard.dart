@@ -1,4 +1,3 @@
-
 import 'dart:html'
     if (dart.library.io) "package:videomanager/screens/others/fakeClasses.dart"
     show VideoElement, window;
@@ -12,8 +11,8 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
@@ -68,9 +67,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
       getVideoUrl(videoFile.id),
     )..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-      }).catchError((e) {
-        print(" $e");
-      });
+      }).catchError((e) {});
 
     return controller;
   }
@@ -139,34 +136,58 @@ class ScreenshotDashboard extends HookConsumerWidget {
                           width: 43.sw(),
                         ),
                         InkWell(
-                          onTap: ()async {
+                          onTap: () async {
                             if (CustomOverlayEntry().videoTimeStampOpen) {
                               CustomOverlayEntry().closeVideoTimeStamp();
                             }
-                           
-                          try{
-                            CustomOverlayEntry().showLoader();
-                            var ms=controller!.value.position.inMicroseconds;
-                            print(ms);
- Uint8List image=await  ref.read(fileDetailMiniServiceProvider).getFrameFromUrl(url: getVideoUrl(videoFile.id),positionInMs: ms);
-                                 CustomOverlayEntry().closeLoader();
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return ScreenShotScreen(imageData: image,);
-                                });
-                          
-                          }
-                          catch(e,s)
-                          {
-                            print("$e $context");
-                                 CustomOverlayEntry().closeLoader();
-                            snack.error(e);
-                          }
-                          
-                       
 
-                          
+                            try {
+                              CustomOverlayEntry().showLoader();
+
+                              var ms = 0;
+                              if (UniversalPlatform.isDesktop) {
+                                ms = player!
+                                    .player.position.position!.inMilliseconds;
+                              } else {
+                                ms = controller!.value.position.inMilliseconds;
+                              }
+                              var videoDataService =
+                                  ref.read(videoDataDetailServiceProvider);
+                              try {
+                                if (!videoDataService.checkAndAddSnap(ms)) {
+                                  snack.info("Screenshot already taken!");
+                                  CustomOverlayEntry().closeLoader();
+                                } else {
+                                  Uint8List image = await ref
+                                      .read(fileDetailMiniServiceProvider)
+                                      .getFrameFromUrl(
+                                          url: getVideoUrl(videoFile.id),
+                                          positionInMs: ms);
+
+                                  videoDataService.selectedSnap.value?.image =
+                                      image;
+                                  CustomOverlayEntry().closeLoader();
+
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) {
+                                    return ScreenShotScreen();
+                                  }));
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (context) {
+                                  //       return ScreenShotScreen();
+                                  //     });
+                                }
+                              } catch (e) {
+                                videoDataService.cancelNewSnap();
+                                CustomOverlayEntry().closeLoader();
+                                snack.error(e);
+                              }
+                            } catch (e, s) {
+                              print("$e $context");
+                              CustomOverlayEntry().closeLoader();
+                              snack.error(e);
+                            }
                           },
                           child: Container(
                             width: 50.sr(),
