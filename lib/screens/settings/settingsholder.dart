@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/settingsbar.dart';
 import 'package:videomanager/screens/settings/screens/locationsettings/locationsettings.dart';
@@ -59,6 +61,13 @@ class SettingsHolder extends ConsumerWidget {
                   );
                 }())),
           ],
+          // Expanded(
+          //   child: Playback(
+          //     onChanged: (playbackspeed) {
+          //       print(playbackspeed);
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );
