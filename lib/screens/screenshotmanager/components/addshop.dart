@@ -232,7 +232,9 @@ class AddEditShop extends ConsumerWidget {
                     ),
                   ),
                   CloseButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     color: Colors.white,
                   ),
                   // InkWell(
@@ -515,24 +517,26 @@ class AddEditShop extends ConsumerWidget {
                             SizedBox(
                               height: 20.sh(),
                             ),
-                            // Align(
-                            //   alignment: Alignment.bottomRight,
-                            //   child: CustomElevatedButton(
-                            //       width: 120.sw(),
-                            //       height: 49.sh(),
-                            //       elevatedButtonTextStyle:
-                            //           kTextStyleInterMedium.copyWith(
-                            //               fontSize: 20.ssp(),
-                            //               color: Colors.white),
-                            //       onPressedElevated: () {
-
-                            //         // shop!.color = markerColor;
-                            //       },
-                            //       elevatedButtonText: 'Save'),
-                            // ),
-                            // SizedBox(
-                            //   height: 10.sh(),
-                            // ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: CustomElevatedButton(
+                                  width: 120.sw(),
+                                  height: 49.sh(),
+                                  elevatedButtonTextStyle:
+                                      kTextStyleInterMedium.copyWith(
+                                          fontSize: 20.ssp(),
+                                          color: Colors.white),
+                                  onPressedElevated: () {
+                                    if (formKey.currentState!.validate()) {
+                                      Navigator.pop(context, shop);
+                                    }
+                                    // shop!.color = markerColor;
+                                  },
+                                  elevatedButtonText: 'Save'),
+                            ),
+                            SizedBox(
+                              height: 10.sh(),
+                            ),
                           ],
                         ),
                       ),
