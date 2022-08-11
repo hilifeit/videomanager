@@ -17,8 +17,9 @@ class MessageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProvider = ref.read(userChangeProvider);
-    final selectedUser = ref.watch(userChangeProvider).selectedChatUser.value;
+    final userProvider = ref.watch(userChangeProvider);
+
+    final selectedUser = userProvider.selectedChatUser.value;
 
     return CustomSafeArea(
       child: Scaffold(
@@ -119,7 +120,6 @@ class MessageScreen extends ConsumerWidget {
                                     child: GestureDetector(
                                         onTap: () {
                                           CustomAudioPlayer.messageSent();
-                                        
                                         },
                                         child: Container(
                                             color: Colors.transparent,

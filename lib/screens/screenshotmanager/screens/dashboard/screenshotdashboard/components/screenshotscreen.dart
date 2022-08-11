@@ -81,8 +81,11 @@ class ScreenShotScreen extends ConsumerWidget {
                         width: 25.sw(),
                       ),
                       CustomElevatedButton(
-                          onPressedElevated:
-                              snap.shops.isNotEmpty ? () {} : null,
+                          onPressedElevated: snap.shops.isNotEmpty
+                              ? () {
+                                  Navigator.pop(context);
+                                }
+                              : null,
                           elevatedButtonText:
                               'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
                     ],
@@ -123,6 +126,7 @@ class ShopPinPainter extends CustomPainter {
       var color = await getColorFromImagePixel(
           imageData: imageData, pixelPosition: details.localPosition);
       Shop newShop = Shop.empty()..color = color;
+
       var data = await showDialog(
           context: context,
           builder: (context) {
@@ -134,9 +138,7 @@ class ShopPinPainter extends CustomPainter {
           });
       if (data != null) {
         Shop shop = data as Shop;
-        shop
-          ..position = details.localPosition
-          ..color = color;
+        shop.position = details.localPosition;
         snapService.addShop(shop);
       }
     });

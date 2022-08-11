@@ -168,10 +168,14 @@ class ScreenshotDashboard extends HookConsumerWidget {
                                       image;
                                   CustomOverlayEntry().closeLoader();
 
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return ScreenShotScreen();
-                                  }));
+                                  Future.delayed(
+                                      const Duration(milliseconds: 15), () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return ScreenShotScreen();
+                                    }));
+                                  });
+
                                   // showDialog(
                                   //     context: context,
                                   //     builder: (context) {

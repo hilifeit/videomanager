@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/components/settingsitemwidget.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 class SettingsBar extends ConsumerWidget {
   SettingsBar({required this.settingsIndexState, Key? key}) : super(key: key);
@@ -34,17 +35,31 @@ class SettingsBar extends ConsumerWidget {
             child: ListView.separated(
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  return SettingsItemWidget(
-                    settingsIndexState: settingsIndexState,
-                    item: items[index],
-                  );
+                  return ref
+                              .watch(userChangeProvider)
+                              .loggedInUser
+                              .value!
+                              .role !=
+                          Roles.user.index
+                      ? SettingsItemWidget(
+                          settingsIndexState: settingsIndexState,
+                          item: items[index],
+                        )
+                      : SettingsItemWidget(
+                          settingsIndexState: settingsIndexState,
+                          item: items[1],
+                        );
                 },
                 separatorBuilder: (_, index) {
                   return SizedBox(
                     height: 0.sh(),
                   );
                 },
-                itemCount: items.length),
+                itemCount:
+                    ref.watch(userChangeProvider).loggedInUser.value!.role !=
+                            Roles.user.index
+                        ? items.length
+                        : 1),
           ),
         ],
       ),

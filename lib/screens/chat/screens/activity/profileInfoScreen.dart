@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/users/users.dart';
 
 class ProfileInfoScreen extends StatelessWidget {
@@ -37,7 +38,10 @@ class ProfileInfoScreen extends StatelessWidget {
             child: Consumer(
               builder: (_, ref, c) {
                 final userProvider = ref.watch(userChangeProvider);
+                // final thisUser = userProvider.loggedInUser.value;
+
                 final users = userProvider.users;
+
                 users.sort(
                   (b, a) =>
                       a.isActive.toString().compareTo(b.isActive.toString()),
