@@ -77,6 +77,27 @@ class FileDetailMini {
         "useable": isUseable,
         "location": location.toJson(),
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is FileDetailMini &&
+        other.id == id &&
+        other.path == path &&
+        other.filename == filename &&
+        other.isUseable == isUseable &&
+        other.assignDetail == assignDetail &&
+        other.location == location &&
+        other.status == status;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class Location {
@@ -109,6 +130,22 @@ class Location {
             coordinates.map((x) => List<dynamic>.from(x.map((x) => x)))),
       };
   static Location empty() => Location(type: 'LineString', coordinates: []);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Location &&
+        other.type == type &&
+        other.coordinates == coordinates;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class Area {
@@ -138,6 +175,22 @@ class Area {
         "city": city,
         "state": state,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Area &&
+        other.area == area &&
+        other.city == city &&
+        other.state == state;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class Status {
@@ -192,4 +245,19 @@ class AssignDetail {
         "area": area,
         "assignedTo": assignedTo,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is AssignDetail &&
+        other.area == area &&
+        other.assignedTo == assignedTo;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }

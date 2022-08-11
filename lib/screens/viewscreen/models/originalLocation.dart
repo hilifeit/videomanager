@@ -47,4 +47,21 @@ class OriginalLocation {
         "timeStamp": timeStamp.toIso8601String(),
         "duplicate": duplicate,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is OriginalLocation &&
+        other.lat == lat &&
+        other.lng == lng &&
+        other.timeStamp == timeStamp &&
+        other.duplicate == duplicate;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
