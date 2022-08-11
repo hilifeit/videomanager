@@ -22,6 +22,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
     return Row(
       children: [
         IconButton(
+          tooltip: 'Rewind',
           onPressed: () async {
             if (UniversalPlatform.isDesktop) {
               desktop!.player.seek(((desktop!.player.position.position!)) -
@@ -45,6 +46,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           width: 30.5.sw(),
         ),
         IconButton(
+          tooltip: 'Play/Pause',
           onPressed: () {
             if (UniversalPlatform.isDesktop) {
               // desktop!.player.open(Media.network(
@@ -79,6 +81,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           width: 30.5.sw(),
         ),
         IconButton(
+          tooltip: 'Mute/Unmute',
           onPressed: () {
             if (volume != 0 && mute) {
               if (UniversalPlatform.isDesktop) {

@@ -25,13 +25,14 @@ class _PlayBackMenuState extends State<PlayBackMenu> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<double>(
+        tooltip: 'Playback speed',
         // initialValue: selectedValue,
         constraints: BoxConstraints(maxHeight: 300.sh(), maxWidth: 200.sw()),
         padding: EdgeInsets.zero,
         icon: Icon(
           Videomanager.settings,
           color: Colors.white,
-          size: 21.75.ssp(),
+          size: 18.ssp(),
         ),
         onSelected: (value) {
           setState(() {
