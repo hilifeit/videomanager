@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
+
 SearchItem searchItemFromJson(String str) =>
     SearchItem.fromJson(json.decode(str));
 
@@ -98,47 +100,6 @@ class Result {
       };
 }
 
-class Area {
-  Area({
-    required this.state,
-    required this.city,
-    required this.area,
-    required this.id,
-  });
-
-  final int state;
-  final String city;
-  final String area;
-  final String id;
-
-  Area copyWith({
-    required int state,
-    required String city,
-    required String area,
-    required String id,
-  }) =>
-      Area(
-        state: state,
-        city: city,
-        area: area,
-        id: id,
-      );
-
-  factory Area.fromJson(Map<String, dynamic> json) => Area(
-        state: json["state"],
-        city: json["city"],
-        area: json["area"],
-        id: json["_id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "state": state,
-        "city": city,
-        "area": area,
-        "_id": id,
-      };
-}
-
 class Coordinate {
   Coordinate({
     required this.lat,
@@ -166,4 +127,18 @@ class Coordinate {
         "lat": lat,
         "lng": lng,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Coordinate && other.lat == lat && other.lng == lng;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
