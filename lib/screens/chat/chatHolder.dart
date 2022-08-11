@@ -1,6 +1,6 @@
-import 'package:videomanager/screens/chat/components/chatHome.dart';
-import 'package:videomanager/screens/chat/components/messageScreen.dart';
-import 'package:videomanager/screens/chat/components/profileInfoScreen.dart';
+import 'package:videomanager/screens/chat/screens/conversation/Conversation.dart';
+import 'package:videomanager/screens/chat/screens/message/messageScreen.dart';
+import 'package:videomanager/screens/chat/screens/activity/profileInfoScreen.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class ChatHolder extends StatelessWidget {

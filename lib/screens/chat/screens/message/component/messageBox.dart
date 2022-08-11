@@ -1,4 +1,5 @@
-import 'package:videomanager/screens/chat/models/conversation.dart';
+import 'package:videomanager/screens/chat/screens/conversation/model/conversationModel.dart';
+import 'package:videomanager/screens/chat/screens/message/models/messageModel.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
 class CustomMessageBox extends StatelessWidget {

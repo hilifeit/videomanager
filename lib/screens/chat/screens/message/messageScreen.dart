@@ -1,10 +1,10 @@
-import 'package:videomanager/screens/chat/components/customMessageBar.dart';
-import 'package:videomanager/screens/chat/components/messageBox.dart';
+import 'package:videomanager/screens/chat/screens/message/component/customMessageAppBar.dart';
+import 'package:videomanager/screens/chat/screens/message/component/messageBox.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
-import 'package:videomanager/screens/chat/components/typingWidget.dart';
-import 'package:videomanager/screens/chat/components/viewProfile.dart';
-import 'package:videomanager/screens/chat/models/conversation.dart';
-import 'package:videomanager/screens/chat/models/messageTextField.dart';
+import 'package:videomanager/screens/chat/screens/message/component/typingWidget.dart';
+import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
+import 'package:videomanager/screens/chat/screens/conversation/model/conversationModel.dart';
+import 'package:videomanager/screens/chat/screens/message/component/messageTextField.dart';
 import 'package:videomanager/screens/chat/services/chatService.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
 import 'package:videomanager/screens/dashboard/component/filemodelsource.dart';
