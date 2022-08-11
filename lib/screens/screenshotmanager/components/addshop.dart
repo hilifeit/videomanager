@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/adduserform.dart';
 
@@ -111,31 +112,31 @@ class AddEditShop extends ConsumerWidget {
     final markerColor = ref.watch(markercolorProvider.state).state;
     final roadFace2Show = ref.watch(roadFace2Provider.state).state;
     final roadFace3Show = ref.watch(roadFace3Provider.state).state;
+    int colorIndex = markerColor;
 
-    final List<MarkerColor> colors = [
-      MarkerColor(
-        color: primaryColor,
-      ),
-      MarkerColor(
-        color: Colors.red,
-      ),
-      MarkerColor(
-        color: Colors.amber,
-      ),
-      MarkerColor(
-        color: Colors.blue,
-      ),
-      MarkerColor(
-        color: Color(0xffB5FFF6),
-      ),
+    final List<Color> colors = [
+      primaryColor,
+      Colors.red,
+      Colors.amber,
+      Colors.blue,
+      Color(0xffB5FFF6),
     ];
-    colors.insert(
-      0,
-      MarkerColor(
-        color: shop!.color,
-      ),
-    );
 
+    bool t = colors.contains(shop!.color);
+
+    if (!t) {
+      colors.insert(
+        0,
+        shop!.color,
+      );
+    } else {
+      for (var element in colors) {
+        if (element == shop!.color) {
+          colorIndex = colors.indexOf(element);
+          break;
+        }
+      }
+    }
     // dd = category.firstWhere((element) => element.label == shop!.category);
     if (edit) {
       for (var element in category) {
@@ -232,7 +233,9 @@ class AddEditShop extends ConsumerWidget {
                     ),
                   ),
                   CloseButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     color: Colors.white,
                   ),
                   // InkWell(
@@ -392,8 +395,6 @@ class AddEditShop extends ConsumerWidget {
                                           true;
                                       shop!.roadFace.roadFace2 = 1;
                                       shop!.roadFace.roadFace3 = 1;
-                                      // print(roadFaceShow);
-
                                     } else {
                                       // for (int i = 0; i < roadFaceShow.length; i++) {
                                       ref.read(roadFace2Provider.state).state =
@@ -480,7 +481,7 @@ class AddEditShop extends ConsumerWidget {
                             Wrap(
                                 children: List.generate(
                               colors.length,
-                              (index) => markerColor == index
+                              (index) => colorIndex == index
                                   ? Padding(
                                       padding: EdgeInsets.only(right: 16.sw()),
                                       child: Container(
@@ -490,12 +491,12 @@ class AddEditShop extends ConsumerWidget {
                                             borderRadius:
                                                 BorderRadius.circular(15.sr()),
                                             border: Border.all(
-                                              color: colors[index].color,
+                                              color: colors[index],
                                             )),
                                         child: Icon(
                                           Videomanager.brush,
                                           size: 16.15.ssp(),
-                                          color: colors[index].color,
+                                          color: colors[index],
                                         ),
                                       ))
                                   : Padding(
@@ -505,7 +506,11 @@ class AddEditShop extends ConsumerWidget {
                                           ref
                                               .read(markercolorProvider.state)
                                               .state = index;
-                                          // shop!.color = colors[index].color;
+                                          shop!.color = colors[index];
+                                          ref
+                                              .watch(
+                                                  videoDataDetailServiceProvider)
+                                              .notify();
                                         },
                                         child: selectMarkerColor(
                                             colors[index], 15.sr(), ref),
@@ -515,24 +520,27 @@ class AddEditShop extends ConsumerWidget {
                             SizedBox(
                               height: 20.sh(),
                             ),
-                            // Align(
-                            //   alignment: Alignment.bottomRight,
-                            //   child: CustomElevatedButton(
-                            //       width: 120.sw(),
-                            //       height: 49.sh(),
-                            //       elevatedButtonTextStyle:
-                            //           kTextStyleInterMedium.copyWith(
-                            //               fontSize: 20.ssp(),
-                            //               color: Colors.white),
-                            //       onPressedElevated: () {
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: CustomElevatedButton(
+                                  width: 120.sw(),
+                                  height: 49.sh(),
+                                  elevatedButtonTextStyle:
+                                      kTextStyleInterMedium.copyWith(
+                                          fontSize: 20.ssp(),
+                                          color: Colors.white),
+                                  onPressedElevated: () {
+                                    if (formKey.currentState!.validate()) {
+                                      Navigator.pop(context, shop);
+                                    }
 
-                            //         // shop!.color = markerColor;
-                            //       },
-                            //       elevatedButtonText: 'Save'),
-                            // ),
-                            // SizedBox(
-                            //   height: 10.sh(),
-                            // ),
+                                    // shop!.color = markerColor;
+                                  },
+                                  elevatedButtonText: 'Save'),
+                            ),
+                            SizedBox(
+                              height: 10.sh(),
+                            ),
                           ],
                         ),
                       ),
@@ -547,9 +555,9 @@ class AddEditShop extends ConsumerWidget {
     );
   }
 
-  Widget selectMarkerColor(MarkerColor item, double radius, WidgetRef ref) {
+  Widget selectMarkerColor(Color item, double radius, WidgetRef ref) {
     return CircleAvatar(
-      backgroundColor: item.color,
+      backgroundColor: item,
       radius: radius,
     );
   }

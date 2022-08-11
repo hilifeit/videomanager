@@ -124,6 +124,7 @@ class ShopPinPainter extends CustomPainter {
       var color = await getColorFromImagePixel(
           imageData: imageData, pixelPosition: details.localPosition);
       Shop newShop = Shop.empty()..color = color;
+
       var data = await showDialog(
           context: context,
           builder: (context) {
@@ -135,9 +136,7 @@ class ShopPinPainter extends CustomPainter {
           });
       if (data != null) {
         Shop shop = data as Shop;
-        shop
-          ..position = details.localPosition
-          ..color = color;
+        shop.position = details.localPosition;
         snapService.addShop(shop);
       }
     });

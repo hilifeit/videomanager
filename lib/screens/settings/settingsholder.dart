@@ -8,6 +8,7 @@ import 'package:videomanager/screens/settings/screens/mapsettings/models/mapsett
 import 'package:videomanager/screens/settings/screens/usersettings/usersettings.dart';
 import 'package:videomanager/screens/settings/screens/videosettings/videosettings.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 final settingIndexProvider = StateProvider<int>((ref) {
   return 0;
@@ -20,6 +21,7 @@ class SettingsHolder extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settingsindex = ref.watch(settingIndexProvider.state).state;
     final setting = ref.watch(settingChangeNotifierProvider).setting;
+    final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
 
     return Scaffold(
       body: Row(
@@ -33,8 +35,9 @@ class SettingsHolder extends ConsumerWidget {
               width: 0,
             ),
             Expanded(
-                flex: 5,
-                child: (() {
+              flex: 5,
+              child: (() {
+                if (thisUser!.role != Roles.user.index) {
                   if (settingsindex == 0) {
                     return MapSettings(
                       mapSetting: setting.mapSetting,
@@ -55,11 +58,18 @@ class SettingsHolder extends ConsumerWidget {
                       locationSetting: setting.locationSetting,
                     );
                   }
-
-                  return Container(
-                    color: Colors.amber,
+                }
+                if (thisUser.role == Roles.user.index) {
+                  return VideoSettings(
+                    videoSetting: setting.videoSetting,
                   );
-                }())),
+                }
+
+                return Container(
+                  color: Colors.amber,
+                );
+              }()),
+            ),
           ],
           // Expanded(
           //   child: Playback(

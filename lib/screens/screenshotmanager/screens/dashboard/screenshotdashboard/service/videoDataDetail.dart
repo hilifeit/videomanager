@@ -38,6 +38,10 @@ class VideoDataDetail extends ChangeNotifier {
     return false;
   }
 
+  notify() {
+    notifyListeners();
+  }
+
   addShop(Shop shop) {
     if (selectedSnap.value != null) {
       selectedSnap.value!.shops.add(shop);

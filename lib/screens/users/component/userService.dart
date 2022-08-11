@@ -18,7 +18,6 @@ class UserService extends ChangeNotifier {
 
   UserService._() {
     load();
-
     fetchAll();
   }
 
@@ -40,7 +39,6 @@ class UserService extends ChangeNotifier {
   List<UserModelMini> get users => _users;
   final List<UserModelMini> myUsers = [];
 
-//   }
   load() async {
     final userJson = storage.read(userStorageKey);
     if (userJson != null) {
@@ -142,26 +140,38 @@ class UserService extends ChangeNotifier {
     // try {
 
     if (loggedInUser.value != null) {
-      var response = await tunnelRequest(() => client
-              .get(Uri.parse("${CustomIP.apiBaseUrl}$userEndPoint"), headers: {
-            "Content-Type": "application/json",
-            "x-access-token": loggedInUser.value!.accessToken!
-          }));
+      if (loggedInUser.value!.role != Roles.user.index) {
+        var response = await tunnelRequest(() => client.get(
+                Uri.parse("${CustomIP.apiBaseUrl}$userEndPoint"),
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-access-token": loggedInUser.value!.accessToken!
+                }));
 
-      if (response.statusCode == 200) {
-        var temp = userModelMiniListFromJson(response.body);
-        users = temp;
-        notifyListeners();
-      } else if (response.statusCode == 403) {
-        throw 'token expired';
+        if (response.statusCode == 200) {
+          var temp = userModelMiniListFromJson(response.body);
+          users = temp;
+          notifyListeners();
+        } else if (response.statusCode == 403) {
+          throw 'token expired';
+        } else {
+          var error = jsonDecode(response.body);
+          // print(error);
+          users = [];
+          errorMessage.value = error['message'];
+          notifyListeners();
+
+          // throw errorMessage;
+        }
       } else {
-        var error = jsonDecode(response.body);
-        // print(error);
-        users = [];
-        errorMessage.value = error['message'];
+        UserModelMini user = UserModelMini.empty();
+        user
+          ..id = loggedInUser.value!.superVisor!.id!
+          ..name = loggedInUser.value!.superVisor!.name
+          ..role = loggedInUser.value!.superVisor!.role!
+          ..isActive = false;
+        users = [user];
         notifyListeners();
-
-        // throw errorMessage;
       }
     }
   }

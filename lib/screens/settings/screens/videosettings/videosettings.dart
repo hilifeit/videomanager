@@ -59,23 +59,21 @@ class VideoSettings extends ConsumerWidget {
                         //   style: kTextStyleIbmSemiBold.copyWith(
                         //       fontSize: 18.ssp(), color: secondaryColorText),
                         // ),
-                        Expanded(
-                            flex: 2,
-                            child: InputTextField(
-                                validator: (val) {
-                                  if (Uri.parse(val!).host.isEmpty) {
-                                    return 'Enter a valid URL';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (val) {
-                                  temp.videourl = val;
-                                },
-                                value: videoSetting.videourl,
-                                style: kTextStyleIbmSemiBold.copyWith(
-                                    fontSize: 18.ssp(), color: Colors.black),
-                                title: 'title',
-                                isVisible: false)),
+                        InputTextField(
+                            validator: (val) {
+                              if (Uri.parse(val!).host.isEmpty) {
+                                return 'Enter a valid URL';
+                              }
+                              return null;
+                            },
+                            onChanged: (val) {
+                              temp.videourl = val;
+                            },
+                            value: videoSetting.videourl,
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 18.ssp(), color: Colors.black),
+                            title: 'title',
+                            isVisible: false),
                       ],
                     ),
                     SizedBox(
@@ -90,7 +88,6 @@ class VideoSettings extends ConsumerWidget {
                           style: kTextStyleInterRegular.copyWith(
                               fontSize: 16.ssp()),
                         ),
-                        const Spacer(),
                         VideoQualitySelect(
                           value: videoSetting.videoQuality,
                           onChanged: (val) {
