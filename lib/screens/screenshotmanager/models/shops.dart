@@ -25,7 +25,7 @@ class Shop {
       required this.position});
 
   String shopName;
-  String category;
+  int category;
   int shopSize;
   int? phone;
   int roadFaceNum;
@@ -35,7 +35,7 @@ class Shop {
 
   Shop copyWith({
     required String shopName,
-    required String category,
+    required int category,
     required int shopSize,
     required int phone,
     required int roadFaceNum,
@@ -53,8 +53,8 @@ class Shop {
           position: position);
   static empty() => Shop(
       shopName: '',
-      category: '',
-      shopSize: 0,
+      category: 0,
+      shopSize: 1,
       roadFaceNum: 1,
       roadFace: RoadFace(roadFace1: 1),
       color: primaryColor,
@@ -80,6 +80,28 @@ class Shop {
         "color": color,
         "position": position
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Shop &&
+        other.shopName == shopName &&
+        other.category == category &&
+        other.color == color &&
+        other.shopSize == shopSize &&
+        other.roadFaceNum == roadFaceNum &&
+        other.position == position &&
+        other.phone == phone &&
+        other.roadFace == roadFace;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class RoadFace {
@@ -115,4 +137,22 @@ class RoadFace {
         "roadFace2": roadFace2,
         "roadFace3": roadFace3,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is RoadFace &&
+        other.roadFace1 == roadFace1 &&
+        other.roadFace2 == roadFace2 &&
+        other.roadFace3 == roadFace3;
+  }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
 }

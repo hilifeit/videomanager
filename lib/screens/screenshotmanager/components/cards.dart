@@ -33,7 +33,7 @@ class ShopCard extends StatelessWidget {
                     width: 15.sw(),
                   ),
                   Text(
-                    shop.shopName!,
+                    shop.shopName,
                     style: kTextStyleInterMedium.copyWith(
                       fontSize: 15.ssp(),
                       color: primaryColor,
@@ -47,7 +47,7 @@ class ShopCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    shop.category!,
+                    shop.category.toString(),
                     style: kTextStyleInterMedium.copyWith(
                         fontSize: 12.ssp(), color: lightBlack),
                   ),

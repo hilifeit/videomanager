@@ -91,6 +91,29 @@ class FileDetail {
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is FileDetail &&
+        other.id == id &&
+        other.path == path &&
+        other.useable == useable &&
+        other.info == info &&
+        other.area == area &&
+        other.location == location &&
+        other.enabled == enabled &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.v == v;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class Area {
@@ -132,6 +155,23 @@ class Area {
         "area": area,
         "_id": id,
       };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Area &&
+        other.id == id &&
+        other.area == area &&
+        other.city == city &&
+        other.state == state;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
 
 class Info {
@@ -215,4 +255,29 @@ class Info {
         "hasProcessed": hasProcessed,
         "_id": id,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is Info &&
+        other.id == id &&
+        other.md5 == md5 &&
+        other.rider == rider &&
+        other.filename == filename &&
+        other.size == size &&
+        other.startTime == startTime &&
+        other.endTime == endTime &&
+        other.duration == duration &&
+        other.modifiedDate == modifiedDate &&
+        other.isLeft == isLeft &&
+        other.hasProcessed == hasProcessed;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
 }
