@@ -1,4 +1,4 @@
-import 'package:videomanager/screens/chat/components/messageScreen.dart';
+import 'package:videomanager/screens/chat/screens/message/messageScreen.dart';
 import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 

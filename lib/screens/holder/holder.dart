@@ -1,6 +1,6 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
-import 'package:videomanager/screens/chat/components/viewProfile.dart';
+import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/holder/components/profilemenu.dart';
