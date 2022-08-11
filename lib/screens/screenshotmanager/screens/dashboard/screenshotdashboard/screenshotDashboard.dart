@@ -101,7 +101,10 @@ class ScreenshotDashboard extends HookConsumerWidget {
                   ),
                 if (ResponsiveLayout.isDesktop &&
                     thisUser.role < Roles.superAdmin.index)
-                  Timeline(size: size),
+                  Timeline(
+                    size: size,
+                    duration: getDuration(),
+                  ),
                 if (!ResponsiveLayout.isDesktop)
                   VideoSideBar(thisUser: thisUser),
               ],
@@ -164,14 +167,17 @@ class ScreenshotDashboard extends HookConsumerWidget {
                                           url: getVideoUrl(videoFile.id),
                                           positionInMs: ms);
 
-                                  videoDataService.selectedSnap.value?.image =
-                                      image;
+                                  await videoDataService.selectedSnap.value
+                                      ?.decodeImage(image);
                                   CustomOverlayEntry().closeLoader();
 
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (_) {
-                                    return ScreenShotScreen();
-                                  }));
+                                  Future.delayed(Duration(milliseconds: 10),
+                                      () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (_) {
+                                      return ScreenShotScreen();
+                                    }));
+                                  });
                                   // showDialog(
                                   //     context: context,
                                   //     builder: (context) {
@@ -181,7 +187,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                               } catch (e) {
                                 videoDataService.cancelNewSnap();
                                 CustomOverlayEntry().closeLoader();
-                                snack.error(e);
+                                snack.info("Try again");
                               }
                             } catch (e, s) {
                               print("$e $context");
@@ -241,5 +247,16 @@ class ScreenshotDashboard extends HookConsumerWidget {
         ],
       ),
     );
+  }
+
+  Duration getDuration() {
+    late Duration duration;
+    if (UniversalPlatform.isDesktop) {
+      duration = player!.duration;
+    } else {
+      duration = controller!.value.duration;
+    }
+
+    return duration;
   }
 }

@@ -7,7 +7,9 @@ final leftValueProvider = StateProvider<double>((ref) {
 });
 
 class TimeLineTop extends StatelessWidget {
-  TimeLineTop({Key? key}) : super(key: key);
+  TimeLineTop({Key? key, required this.duration}) : super(key: key);
+
+  final Duration duration;
   final GlobalKey _timlineKey = GlobalKey();
   final double height = 58.sh();
   final double timelineThumbWidth = 14;
@@ -25,9 +27,7 @@ class TimeLineTop extends StatelessWidget {
           ),
           CustomPaint(
             size: Size(double.infinity, 50.sh()),
-            painter: TimeRulerPainter(
-                duration: const Duration(minutes: 11, seconds: 47),
-                height: 40.sh()),
+            painter: TimeRulerPainter(duration: duration, height: 40.sh()),
           ),
           Consumer(builder: (context, ref, c) {
             final left = ref.watch(leftValueProvider.state).state;

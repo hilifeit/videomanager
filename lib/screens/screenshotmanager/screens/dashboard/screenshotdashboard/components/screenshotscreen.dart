@@ -9,10 +9,8 @@ import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 
 class ScreenShotScreen extends ConsumerWidget {
-  ScreenShotScreen({
-    Key? key,
-  }) : super(key: key);
-
+  ScreenShotScreen({Key? key, this.edit = false}) : super(key: key);
+  final bool edit;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final snapService = ref.watch(videoDataDetailServiceProvider);
@@ -81,8 +79,11 @@ class ScreenShotScreen extends ConsumerWidget {
                         width: 25.sw(),
                       ),
                       CustomElevatedButton(
-                          onPressedElevated:
-                              snap.shops.isNotEmpty ? () {} : null,
+                          onPressedElevated: snap.shops.isNotEmpty
+                              ? () {
+                                  Navigator.pop(context);
+                                }
+                              : null,
                           elevatedButtonText:
                               'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
                     ],

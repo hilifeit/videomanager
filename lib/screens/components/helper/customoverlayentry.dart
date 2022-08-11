@@ -60,16 +60,16 @@ class CustomOverlayEntry {
     });
   }
 
-  showVideoTimeStamp() {
-    if (!videoTimeStampOpen) {
-      Future.delayed(const Duration(milliseconds: 10), () {
-        OverlayState timeState = Overlay.of(context)!;
-        videoTimeStamp(context);
-        timeState.insert(videotime);
-        videoTimeStampOpen = !videoTimeStampOpen;
-      });
-    }
-  }
+  // showVideoTimeStamp() {
+  //   if (!videoTimeStampOpen) {
+  //     Future.delayed(const Duration(milliseconds: 10), () {
+  //       OverlayState timeState = Overlay.of(context)!;
+  //       videoTimeStamp(context);
+  //       timeState.insert(videotime);
+  //       videoTimeStampOpen = !videoTimeStampOpen;
+  //     });
+  //   }
+  // }
 
   closeVideoTimeStamp() {
     videotime.remove();
@@ -107,16 +107,16 @@ class CustomOverlayEntry {
     }));
   }
 
-  videoTimeStamp(BuildContext context) {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    var size = renderBox.size;
+  // videoTimeStamp(BuildContext context) {
+  //   RenderBox renderBox = context.findRenderObject() as RenderBox;
+  //   var size = renderBox.size;
 
-    videotime = OverlayEntry(builder: ((context) {
-      return Timeline(
-        size: Size(1920.sw(), 500),
-      );
-    }));
-  }
+  //   videotime = OverlayEntry(builder: ((context) {
+  //     return Timeline(
+  //       size: Size(1920.sw(), 500),
+  //     );
+  //   }));
+  // }
 
   filterOverlay(BuildContext context) {
     RenderBox renderBox = context.findRenderObject() as RenderBox;

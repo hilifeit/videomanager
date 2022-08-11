@@ -3,11 +3,13 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinetop.dart';
 
 class Timeline extends ConsumerWidget {
-  Timeline({Key? key, required this.size}) : super(key: key);
+  Timeline({Key? key, required this.size, required this.duration})
+      : super(key: key);
   final heightChangeProvider = StateProvider<double>((ref) {
     return 203.sh();
   });
   final Size size;
+  final Duration duration;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final customHeight = ref.watch(heightChangeProvider.state).state;
@@ -30,7 +32,7 @@ class Timeline extends ConsumerWidget {
                 const SizedBox(
                   height: double.infinity,
                 ),
-                const TimeLineCanvas(),
+                TimeLineCanvas(duration: duration),
                 GestureDetector(
                     onDoubleTap: () {
                       if (customHeight == defaultHeight) {
@@ -49,7 +51,9 @@ class Timeline extends ConsumerWidget {
                         }
                       }
                     },
-                    child: TimeLineTop()),
+                    child: TimeLineTop(
+                      duration: duration,
+                    )),
               ],
             ),
           ),
