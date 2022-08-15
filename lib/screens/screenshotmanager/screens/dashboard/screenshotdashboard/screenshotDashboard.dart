@@ -164,7 +164,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
                                   Uint8List image = await ref
                                       .read(fileDetailMiniServiceProvider)
                                       .getFrameFromUrl(
-                                          url: getVideoUrl(videoFile.id),
+                                          url: "http://192.168.1.74:5000/v1/video/${videoFile.id}",
                                           positionInMs: ms);
 
                                   await videoDataService.selectedSnap.value

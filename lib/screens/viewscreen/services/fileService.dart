@@ -293,6 +293,9 @@ class FileService extends ChangeNotifier {
   Future<Uint8List> getFrameFromUrl(
       {required String url, int positionInMs = 0}) async {
     try {
+      //   var url='http://192.168.1.74/';
+      // if(!CustomIP.baseUrl.contains('103.'))
+      // url=CustomIP.apiBaseUrl;
       var response = await client.get(Uri.parse(
           "${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs"));
 //       final ByteData imageData = await NetworkAssetBundle(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs")).load("");
