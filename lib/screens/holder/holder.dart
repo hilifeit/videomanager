@@ -35,10 +35,14 @@ class Holder extends ConsumerWidget {
 
     final userProvider = ref.watch(userChangeProvider);
     final thisUser = userProvider.loggedInUser.value;
+
     // if (thisUser != null) {
     //   if (thisUser.role != Roles.user.index && userProvider.users.isEmpty) {
     //     userProvider.fetchAll();
     //   }
+    // }
+    // if (thisUser!.role == Roles.user.index) {
+    //   ref.read(settingIndexProvider.state).state = 1;
     // }
 
     return CustomSafeArea(

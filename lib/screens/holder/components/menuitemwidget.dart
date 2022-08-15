@@ -1,5 +1,7 @@
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/settings/settingsholder.dart';
+import 'package:videomanager/screens/users/component/userService.dart';
 
 class CustomMenuItem {
   CustomMenuItem(
@@ -27,11 +29,15 @@ class MenuItemWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final index = ref.watch(indexState.state).state;
+    final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: (() {
+          if (thisUser!.role == Roles.user.index) {
+            ref.read(settingIndexProvider.state).state = 1;
+          }
           ref.read(indexState.state).state = item.id;
           final customOverlay = CustomOverlayEntry();
 
