@@ -262,19 +262,61 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             //         CustomOverlayEntry().showLoader();
             //         var fileService = ref.read(fileDetailMiniServiceProvider);
             //         var files = fileService.files.reversed;
-            //         await Future.forEach<FileDetailMini>(files,
+            //         List<FileDetailMini> errors =
+            //             fileDetailMiniFromJson(storage.read('errors')).toList();
+
+            //         print(errors.length);
+            //         var duration = 0;
+            //         await Future.forEach<FileDetailMini>(errors,
             //             (element) async {
-            //           var done = await fileService.fileExists(element.id);
-            //           print("${element.id} $done");
+            //           try {
+            //             var oneFile = await fileService.fetchOne(element.id);
+
+            //             var singleDuration = Duration(
+            //                     hours: oneFile.info.duration.hour,
+            //                     minutes: oneFile.info.duration.minute,
+            //                     seconds: oneFile.info.duration.second,
+            //                     milliseconds: oneFile.info.duration.millisecond)
+            //                 .inMinutes;
+            //             print(" single :$singleDuration");
+            //             duration += singleDuration;
+            //             print("total :$duration");
+            //           } catch (e) {
+            //             print(e);
+            //           }
+            //           print("index :${errors.indexOf(element)}");
             //         });
+
+            //         // await Future.forEach<FileDetailMini>(files,
+            //         //     (element) async {
+            //         //   try {
+            //         //     var done = await fileService.fileExists(element.id);
+            //         //     if (!done) {
+            //         //       errors.add(element);
+            //         //       print(false);
+            //         //     }
+            //         //   } catch (e, s) {
+            //         //     errors.add(element);
+            //         //     print(false);
+            //         //   }
+            //         //   print(fileService.files.indexOf(element).toString() +
+            //         //       " " +
+            //         //       errors.length.toString());
+            //         // });
+            //         // try {
+            //         //   storage.write('errors', fileDetailMiniToJson(errors));
+            //         // } catch (e, s) {
+            //         //   print("$e $s");
+            //         // }
+
             //         CustomOverlayEntry().closeLoader();
             //       },
             //       roundShape: true,
             //       tooltip: 'Fix'),
             // ),
-            // SizedBox(
-            //   height: 32.sh(),
-            // ),
+            SizedBox(
+              height: 32.sh(),
+            ),
             SizedBox(
               height: 54.sr(),
               width: 54.sr(),
@@ -314,27 +356,31 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) {
-                                          // debugPrint(selectedPoints.length.toString());
-                                          return AlertDialog(
-                                            backgroundColor: Colors.transparent,
-                                            titlePadding: EdgeInsets.zero,
-                                            contentPadding: EdgeInsets.zero,
-                                            content: AssignManager(
-                                              files: selectedAreaService
-                                                  .refinedSelection.value,
-                                              points: selectedPoints,
-                                            ),
-                                          );
-                                        });
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (_) {
+                                    //       // debugPrint(selectedPoints.length.toString());
+                                    //       return AlertDialog(
+                                    //         backgroundColor: Colors.transparent,
+                                    //         titlePadding: EdgeInsets.zero,
+                                    //         contentPadding: EdgeInsets.zero,
+                                    //         content: AssignManager(
+                                    //           files: selectedAreaService
+                                    //               .refinedSelection.value,
+                                    //           points: selectedPoints,
+                                    //         ),
+                                    //       );
+                                    //     });
                                     // var fileService =
                                     //     ref.read(fileDetailMiniServiceProvider);
+                                    // var listOfFilesToFix = selectedAreaService
+                                    //     .refinedSelection.value;
 
-                                    // await fileService.fixLocationData(
-                                    //     selectedAreaService
-                                    //         .refinedSelection.value);
+                                    // await fileService
+                                    //     .fixLocationData(listOfFilesToFix);
+                                    // await fileService
+                                    //     .updateLocationDataInServer(
+                                    //         listOfFilesToFix);
 
                                     // await fileService
                                     //     .updateLocationDataInServer(

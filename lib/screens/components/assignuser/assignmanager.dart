@@ -165,7 +165,8 @@ class AssignManager extends ConsumerWidget {
                             .value;
 
                         for (var element in selectedFiles) {
-                          if (element.assignDetail!.area != null) {
+                          if (element.assignDetail != null) {
+                            //check area null
                             canAssign = false;
 
                             break;
@@ -203,7 +204,7 @@ class AssignManager extends ConsumerWidget {
                                           snack.success(
                                               "Area Assigned Succesfully");
                                           Navigator.pop(context);
-                                        } catch (e) {
+                                        } catch (e, s) {
                                           snack.error(e);
                                         }
                                       },

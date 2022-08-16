@@ -400,9 +400,10 @@ class FileService extends ChangeNotifier {
               urlFound = url;
             }
           } else {
-            // print(response.statusCode);
+            print(response.body);
           }
-        } catch (e) {
+        } catch (e, s) {
+          print("$e $s");
           // snack.error(e.toString());
         }
       }
@@ -415,7 +416,9 @@ class FileService extends ChangeNotifier {
     var list = selectedFiles ?? files;
     for (var element in list) {
       var index = files.indexOf(element);
-      if (element.isUseable && index > 6425) {
+
+      //&& index > 6425
+      if (element.isUseable) {
         FileDetailMini temp = FileDetailMini(
             id: element.id,
             filename: element.filename,
@@ -424,35 +427,30 @@ class FileService extends ChangeNotifier {
             isUseable: element.isUseable,
             status: element.status);
 
-        var url = await getUrlFromFile(temp);
-        if (url.isNotEmpty) {
-          try {
-            var originalData = await fetchOriginalLocation(url);
-            if (originalData.isNotEmpty) {
-              LatLng first =
-                  LatLng(originalData.first.lat, originalData.first.lng);
-              LatLng last =
-                  LatLng(originalData.last.lat, originalData.last.lng);
-              element.location.coordinates.clear();
-              // element.location.coordinates.add([first.longitude,first.latitude]);
-              int divider = originalData.length ~/ 50;
-              for (int i = 0; i < originalData.length; i = i + divider) {
-                element.location.coordinates
-                    .add([originalData[i].lng, originalData[i].lat]);
-              }
-              if (element.location.coordinates.last.first != last.longitude &&
-                  element.location.coordinates.last.last != last.latitude) {
-                element.location.coordinates
-                    .add([last.longitude, last.latitude]);
-              }
-              print(files.indexOf(element));
+        try {
+          var originalData = await fetchOriginalLocation(element.id);
+          if (originalData.isNotEmpty) {
+            LatLng first =
+                LatLng(originalData.first.lat, originalData.first.lng);
+            LatLng last = LatLng(originalData.last.lat, originalData.last.lng);
+            element.location.coordinates.clear();
+            // element.location.coordinates.add([first.longitude,first.latitude]);
+            int divider = originalData.length ~/ 50;
+            for (int i = 0; i < originalData.length; i = i + divider) {
+              element.location.coordinates
+                  .add([originalData[i].lng, originalData[i].lat]);
             }
-          } catch (e) {
-            print(e.toString() + element.id);
+            if (element.location.coordinates.last.first != last.longitude &&
+                element.location.coordinates.last.last != last.latitude) {
+              element.location.coordinates.add([last.longitude, last.latitude]);
+            }
+            print(files.indexOf(element));
           }
-        } else {
-          print("empty${files.indexOf(element)}");
+        } catch (e) {
+          print(e.toString() + element.id);
         }
+      } else {
+        print("not useable");
       }
     }
   }
