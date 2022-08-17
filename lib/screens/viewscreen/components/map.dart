@@ -356,21 +356,21 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (_) {
-                                    //       // debugPrint(selectedPoints.length.toString());
-                                    //       return AlertDialog(
-                                    //         backgroundColor: Colors.transparent,
-                                    //         titlePadding: EdgeInsets.zero,
-                                    //         contentPadding: EdgeInsets.zero,
-                                    //         content: AssignManager(
-                                    //           files: selectedAreaService
-                                    //               .refinedSelection.value,
-                                    //           points: selectedPoints,
-                                    //         ),
-                                    //       );
-                                    //     });
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          // debugPrint(selectedPoints.length.toString());
+                                          return AlertDialog(
+                                            backgroundColor: Colors.transparent,
+                                            titlePadding: EdgeInsets.zero,
+                                            contentPadding: EdgeInsets.zero,
+                                            content: AssignManager(
+                                              files: selectedAreaService
+                                                  .refinedSelection.value,
+                                              points: selectedPoints,
+                                            ),
+                                          );
+                                        });
                                     // var fileService =
                                     //     ref.read(fileDetailMiniServiceProvider);
                                     // var listOfFilesToFix = selectedAreaService
