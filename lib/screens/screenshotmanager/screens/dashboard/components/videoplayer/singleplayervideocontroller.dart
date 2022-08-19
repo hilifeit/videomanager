@@ -166,10 +166,10 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 24.sw(),
         ),
-        // VideoTime(
-        //   web: web,
-        //   desktop: desktop,
-        // ),
+        VideoTime(
+          web: web,
+          desktop: desktop,
+        ),
       ],
     );
   }
@@ -179,27 +179,32 @@ class VideoTime extends ConsumerWidget {
   VideoTime({Key? key, this.web, this.desktop}) : super(key: key);
   final VideoPlayerController? web;
   final PlayerController? desktop;
-  double maxSliderValue = 100;
-  double progress = 0;
-  late Duration length;
+
+  late final Duration length;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final current = ref.watch(timeProvider.state).state;
     if (UniversalPlatform.isDesktop) {
       length = desktop!.duration;
-      ref.read(timeProvider.state).state = desktop!.player.position.position!;
-      desktop!.player.positionStream.listen((event) {
-        ref.read(timeProvider.state).state = event.position!;
-      });
+      // ref.read(timeProvider.state).state = desktop!.player.position.position!;
+
+      return StreamBuilder<PositionState>(
+          initialData: PositionState(),
+          stream: desktop!.player.positionStream,
+          builder: (context, snapshot) {
+            return videoTime(snapshot.data!.position!, length);
+          });
     } else {
       length = web!.value.duration;
-      ref.read(timeProvider.state).state = web!.value.position;
-      web!.addListener(() {
-        ref.read(timeProvider.state).state = web!.value.position;
-      });
+      return ValueListenableBuilder<VideoPlayerValue>(
+          valueListenable: web!,
+          builder: (context, value, child) {
+            return videoTime(value.position, length);
+          });
     }
+  }
 
+  Widget videoTime(Duration current, Duration length) {
     return Text(
       '${intToTime(current.inSeconds)} / ${intToTime(length.inSeconds)}',
       style: kTextStyleInterMedium.copyWith(

@@ -1,15 +1,23 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinecanvas.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinetop.dart';
+import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 class Timeline extends ConsumerWidget {
-  Timeline({Key? key, required this.size, required this.duration})
+  Timeline(
+      {Key? key,
+      required this.size,
+      required this.duration,
+      this.desktop,
+      this.web})
       : super(key: key);
   final heightChangeProvider = StateProvider<double>((ref) {
     return 203.sh();
   });
   final Size size;
   final Duration duration;
+  final PlayerController? desktop;
+  final VideoPlayerController? web;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final customHeight = ref.watch(heightChangeProvider.state).state;

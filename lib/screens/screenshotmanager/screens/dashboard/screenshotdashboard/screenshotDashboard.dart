@@ -36,7 +36,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
 
   late Media media;
 
-  VideoDimensions dimension = const VideoDimensions(1920, 1080);
+  final VideoDimensions dimension = const VideoDimensions(1920, 1080);
   late PlayerController? player = getDesktopPlayerController();
 
   late VideoPlayerController? controller = getWebPlayerController();
@@ -104,6 +104,8 @@ class ScreenshotDashboard extends HookConsumerWidget {
                   Timeline(
                     size: size,
                     duration: getDuration(),
+                    desktop: player,
+                    web: controller,
                   ),
                 if (!ResponsiveLayout.isDesktop)
                   VideoSideBar(thisUser: thisUser),
@@ -140,9 +142,9 @@ class ScreenshotDashboard extends HookConsumerWidget {
                         ),
                         InkWell(
                           onTap: () async {
-                            if (CustomOverlayEntry().videoTimeStampOpen) {
-                              CustomOverlayEntry().closeVideoTimeStamp();
-                            }
+                            // if (CustomOverlayEntry().videoTimeStampOpen) {
+                            //   CustomOverlayEntry().closeVideoTimeStamp();
+                            // }
 
                             try {
                               CustomOverlayEntry().showLoader();

@@ -1,19 +1,22 @@
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinehead.dart';
+import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 final leftValueProvider = StateProvider<double>((ref) {
   return 0;
 });
 
 class TimeLineTop extends StatelessWidget {
-  TimeLineTop({Key? key, required this.duration}) : super(key: key);
+  TimeLineTop({Key? key, required this.duration, this.desktop, this.web})
+      : super(key: key);
 
   final Duration duration;
   final GlobalKey _timlineKey = GlobalKey();
   final double height = 58.sh();
   final double timelineThumbWidth = 14;
-
+  final PlayerController? desktop;
+  final VideoPlayerController? web;
   @override
   Widget build(BuildContext context) {
     final centerOfWidth = ((timelineThumbWidth.sw() / 2) + 10.sw() / 2);
