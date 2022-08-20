@@ -60,6 +60,8 @@ class Timeline extends ConsumerWidget {
                       }
                     },
                     child: TimeLineTop(
+                      desktop: desktop,
+                      web: web,
                       duration: duration,
                     )),
               ],

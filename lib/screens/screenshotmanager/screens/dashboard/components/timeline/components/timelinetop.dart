@@ -30,49 +30,101 @@ class TimeLineTop extends StatelessWidget {
           ),
           CustomPaint(
             size: Size(double.infinity, 50.sh()),
-            painter: TimeRulerPainter(duration: duration, height: 40.sh()),
+            painter: TimeRulerPainter(
+                duration: duration, height: 40.sh(), subDivisor: 10),
           ),
           Consumer(builder: (context, ref, c) {
-            final left = ref.watch(leftValueProvider.state).state;
+            // final left = ref.watch(leftValueProvider.state).state;
 
-            return Positioned(
-                left: centerOfWidth + left,
-                top: height / 1.8,
-                child: GestureDetector(
-                  onHorizontalDragUpdate: ((details) {
-                    ref.read(leftValueProvider.state).state = mapDouble(
-                        x: details.globalPosition.dx - centerOfWidth,
-                        in_min: 0,
-                        in_max: constraints.maxWidth,
-                        out_min: 0,
-                        // timelineThumbWidth.sw() / 2 + 10.sw() / 2,
-                        out_max: constraints.maxWidth -
-                            centerOfWidth -
-                            timelineThumbWidth);
-                  }),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      TimelineHeadWidget(
-                        width: timelineThumbWidth,
-                        height: constraints.maxHeight - height / 1.8,
-                        key: _timlineKey,
-                      ),
-                      // Positioned(
-                      //     left: timelineThumbWidth / 2.2,
-                      //     top: 0,
-                      //     child: Container(
-                      //       color: Colors.grey,
-                      //       width: 1.5,
+            if (UniversalPlatform.isDesktop) {
+              int length = desktop!.duration.inMilliseconds;
 
-                      //     ))
-                    ],
-                  ),
-                ));
+              return StreamBuilder<PositionState>(
+                  initialData: PositionState(),
+                  stream: desktop!.player.positionStream,
+                  builder: (context, snapshot) {
+                    int position = snapshot.data!.position!.inMilliseconds;
+                    var currentPosition = getCurrentPosition(
+                        position, length, constraints, centerOfWidth);
+                    return timelineHead(
+                        centerOfWidth, currentPosition, ref, constraints);
+                  });
+            } else {
+              int length = web!.value.duration.inMilliseconds;
+
+              return ValueListenableBuilder<VideoPlayerValue>(
+                  valueListenable: web!,
+                  builder: (context, value, child) {
+                    int position = value.position.inMilliseconds;
+                    var currentPosition = getCurrentPosition(
+                        position, length, constraints, centerOfWidth);
+                    return timelineHead(
+                        centerOfWidth, currentPosition, ref, constraints);
+                  });
+            }
           })
         ],
       );
     });
+  }
+
+  double getCurrentPosition(
+      int position, int length, BoxConstraints constraints, centerOfWidth) {
+    double result = 0;
+    try {
+      print("$position $length ${constraints.maxWidth} $centerOfWidth");
+      result = map(
+              position,
+              0,
+              length,
+              // -(timelineThumbWidth + centerOfWidth).toInt()
+              0,
+              (constraints.maxWidth - centerOfWidth - timelineThumbWidth)
+                  .toInt())
+          .toDouble();
+    } catch (e, s) {
+      // print("$e $s");
+    }
+    return result;
+  }
+
+  AnimatedPositioned timelineHead(
+      centerOfWidth, double left, WidgetRef ref, BoxConstraints constraints) {
+    return AnimatedPositioned(
+        duration: const Duration(milliseconds: 500),
+        left: centerOfWidth + left,
+        top: height / 1.8,
+        child: GestureDetector(
+          onHorizontalDragUpdate: ((details) {
+            // ref.read(leftValueProvider.state).state = mapDouble(
+            //     x: details.globalPosition.dx - centerOfWidth,
+            //     in_min: 0,
+            //     in_max: constraints.maxWidth,
+            //     out_min: 0,
+            //     // timelineThumbWidth.sw() / 2 + 10.sw() / 2,
+            //     out_max: constraints.maxWidth -
+            //         centerOfWidth -
+            //         timelineThumbWidth);
+          }),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              TimelineHeadWidget(
+                width: timelineThumbWidth,
+                height: constraints.maxHeight - height / 1.8,
+                key: _timlineKey,
+              ),
+              // Positioned(
+              //     left: timelineThumbWidth / 2.2,
+              //     top: 0,
+              //     child: Container(
+              //       color: Colors.grey,
+              //       width: 1.5,
+
+              //     ))
+            ],
+          ),
+        ));
   }
 }
 
