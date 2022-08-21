@@ -1,4 +1,5 @@
 import 'package:map/map.dart';
+import 'package:videomanager/screens/Bug/bug.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
 import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
@@ -96,7 +97,7 @@ class Holder extends ConsumerWidget {
                         ? AnimatedIndexedStack(index: index, children: [
                             ViewScreen(),
                             const Users(),
-                            Container(),
+                         Bug(),
                             const ChatHolder(),
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
