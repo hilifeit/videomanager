@@ -146,8 +146,12 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           width: 10.sw(),
         ),
         PlayBackMenu(
-          onchanged: (p0) {
-            print(p0);
+          onchanged: (value) {
+            if (UniversalPlatform.isDesktop) {
+              desktop!.player.setRate(value);
+            } else {
+              web!.setPlaybackSpeed(value);
+            }
           },
         ),
         // IconButton(
