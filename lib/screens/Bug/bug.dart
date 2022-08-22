@@ -72,7 +72,9 @@ class Bug extends StatelessWidget {
                       return null;
                     },
                     maxLines: 2,
-                    decoration: InputDecoration( errorStyle: const TextStyle(color: danger, fontSize: 12),
+                    decoration: InputDecoration(
+                        errorStyle:
+                            TextStyle(color: danger, fontSize: 10.ssp()),
                         hintText:
                             'Explain what happened and what should we do to reproduce the problem',
                         hintStyle:

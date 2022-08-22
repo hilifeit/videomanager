@@ -66,10 +66,10 @@ class MultiSelectWidget<T> extends FormField<List<T>> {
                               .toList())
                       : Container(),
                   if (state.hasError) ...[
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 16.h),
                     Text(
                       state.errorText.toString(),
-                      style: const TextStyle(color: danger, fontSize: 12),
+                      style: TextStyle(color: danger, fontSize: 10.ssp()),
                       // style: kTextStyleIbmMedium.copyWith(color: danger)
                     ),
                   ]
