@@ -126,10 +126,10 @@ class Bug extends StatelessWidget {
                 ImagePicker(
                   onChanged: (val) {},
                   validator: (value) {
-                    // if (value!.isEmpty) {
-                    //   return 'Please choose atleast one problem';
-                    // }
-                    // return null;
+                    if (value!.files.isEmpty) {
+                      return 'Please upload atleast one file.';
+                    }
+                    return null;
                   },
                 ),
                 SizedBox(
