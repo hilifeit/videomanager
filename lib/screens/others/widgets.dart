@@ -311,6 +311,7 @@ class InputTextField extends StatelessWidget {
           },
 
           decoration: InputDecoration(
+            errorStyle: TextStyle(fontSize: 10.ssp(), color: danger),
             prefixIcon: prefixIcon,
             suffixText: suffixText,
             suffixIcon: suffixIcon,

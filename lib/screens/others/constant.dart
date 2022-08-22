@@ -83,3 +83,7 @@ var kTextStyleTableSubtitle = TextStyle(
   fontWeight: FontWeight.w400,
   color: const Color(0xffA1ACB8),
 );
+var kTextStyleErrorStyle = TextStyle(
+  fontSize: 10.ssp(),
+  color: danger,
+);
