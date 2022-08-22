@@ -35,6 +35,7 @@ class Player {
   pause() {}
   play() {}
   setVolume(vol) {}
+  setRate(double value) {}
   PositionState get position => PositionState();
 }
 
