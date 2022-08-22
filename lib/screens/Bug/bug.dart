@@ -1,29 +1,13 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:videomanager/screens/Bug/component/wrapProblems.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
-class Bug extends StatefulWidget {
+class Bug extends StatelessWidget {
   Bug({Key? key}) : super(key: key);
 
-  @override
-  State<Bug> createState() => _BugState();
-}
-
-class _BugState extends State<Bug> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  List<String> problems = [
-    'UI',
-    'Video',
-    'Screenshot',
-    'Hardware',
-    'UI1',
-    'Video1',
-    'Screenshot1',
-    'Hardware1'
-  ];
-  List<String> selectedProblems = [];
-
+  final List<String> problems = [];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -80,69 +64,46 @@ class _BugState extends State<Bug> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(15.r)),
                   child: TextFormField(
-                    // validator: ,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
                     maxLines: 2,
                     decoration: InputDecoration(
-                      hintText:
-                          'Explain what happened and what should we do to reproduce the problem',
-                      hintStyle:
-                          kTextStyleIbmRegular.copyWith(fontSize: 16.ssp()),
-                    ),
+                        hintText:
+                            'Explain what happened and what should we do to reproduce the problem',
+                        hintStyle:
+                            kTextStyleIbmRegular.copyWith(fontSize: 16.ssp()),
+                        labelStyle: kTextStyleIbmRegularBlack.copyWith(
+                            fontSize: 16.ssp())),
                   ),
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
                 Text(
-                  'What is te problem related to?',
+                  'What is the problem related to?',
                   style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
-                Wrap(
-                    spacing: 20.0.w,
-                    runSpacing: 20.0.w,
-                    children: problems
-                        .asMap()
-                        .entries
-                        .map(
-                          (e) => GestureDetector(
-                            onTap: () {
-                              if (selectedProblems.contains(e.value)) {
-                                setState(() {
-                                  selectedProblems.remove(e.value);
-                                });
-                              } else {
-                                setState(() {
-                                  selectedProblems.add(e.value);
-                                });
-                              }
-
-                              // setState(() {
-                              //   selectedProblems.add(e.value);
-                              // });
-                              print(selectedProblems);
-                            },
-                            child: Container(
-                                padding: EdgeInsets.all(10.h),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6.r),
-                                    color: selectedProblems.contains(e.value)
-                                        ? primaryColor
-                                        : darkGrey),
-                                child: Text(
-                                  e.value,
-                                  style: selectedProblems.contains(e.value)
-                                      ? kTextStyleIbmRegular.copyWith(
-                                          fontSize: 16.ssp(),
-                                          color: Colors.white)
-                                      : kTextStyleIbmRegularBlack.copyWith(
-                                          fontSize: 16.ssp()),
-                                )),
-                          ),
-                        )
-                        .toList()),
+                MultiSelectWidget(
+                  problems: [],
+                  // onChanged: (p0) {
+                  //   print(p0);
+                  //   problems.clear();
+                  //   problems.addAll(p0);
+                  // },
+                  validate: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please choose atleast one problem';
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -162,7 +123,12 @@ class _BugState extends State<Bug> {
                   elevatedButtonText: 'Send',
                   center: true,
                   onPressedOutlined: () {},
-                  onPressedElevated: () {},
+                  onPressedElevated: () {
+                    if (_formKey.currentState!.validate() &&
+                        problems.isNotEmpty) {
+                      snack.info('Processing data');
+                    }
+                  },
                 )
               ],
             ),
