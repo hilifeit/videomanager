@@ -48,6 +48,7 @@ class Bug extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 45.w, vertical: 20.h),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -91,13 +92,16 @@ class Bug extends StatelessWidget {
                   height: 20.h,
                 ),
                 MultiSelectWidget(
-                  problems: [],
+                  problems: const ["UI", "TEST", "SCREENSHOT"],
                   // onChanged: (p0) {
                   //   print(p0);
                   //   problems.clear();
                   //   problems.addAll(p0);
                   // },
-                  validate: (value) {
+                  onChanged: (val) {
+                    print(val);
+                  },
+                  validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please choose atleast one problem';
                     }
@@ -124,8 +128,8 @@ class Bug extends StatelessWidget {
                   center: true,
                   onPressedOutlined: () {},
                   onPressedElevated: () {
-                    if (_formKey.currentState!.validate() &&
-                        problems.isNotEmpty) {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.reset();
                       snack.info('Processing data');
                     }
                   },

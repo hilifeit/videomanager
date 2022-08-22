@@ -1,80 +1,76 @@
 import 'package:videomanager/screens/others/exporter.dart';
 
-class MultiSelectWidget extends FormField<List<String>> {
-  final List<String> problems;
+class MultiSelectWidget<T> extends FormField<List<T>> {
+  final List<T> problems;
 
-  MultiSelectWidget({Key? key, required validate, required this.problems})
+  final Function(List<T>) onChanged;
+  MultiSelectWidget(
+      {Key? key,
+      required this.onChanged,
+      required this.problems,
+      required FormFieldValidator validator,
+      bool autovalidate = false})
       : super(
             key: key,
+            validator: validator,
+            autovalidateMode: autovalidate
+                ? AutovalidateMode.always
+                : AutovalidateMode.onUserInteraction,
             builder: (state) {
-              late List<String> selectedProblems = [];
-              return Wrap(
-                  spacing: 20.0.w,
-                  runSpacing: 20.0.w,
-                  children: problems
-                      .asMap()
-                      .entries
-                      .map(
-                        (e) => GestureDetector(
-                          onTap: () {
-                            if (selectedProblems.contains(e.value)) {
-                              // setState(() {
-                              //   selectedProblems.remove(e.value);
-                              // });
-
-                              state.setValue([]);
-                            } else {
-                              // setState(() {
-                              //   selectedProblems.add(e.value);
-                              // });
-                              // onChanged(selectedProblems);
-                              // validator(selectedProblems);
-                            }
-
-                            // setState(() {
-                            //   selectedProblems.add(e.value);
-                            // });
-                            print(selectedProblems);
-                          },
-                          child: Container(
-                              padding: EdgeInsets.all(10.h),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6.r),
-                                  color: selectedProblems.contains(e.value)
-                                      ? primaryColor
-                                      : darkGrey),
-                              child: Text(
-                                e.value,
-                                style: selectedProblems.contains(e.value)
-                                    ? kTextStyleIbmRegular.copyWith(
-                                        fontSize: 16.ssp(), color: Colors.white)
-                                    : kTextStyleIbmRegularBlack.copyWith(
-                                        fontSize: 16.ssp()),
-                              )),
-                        ),
-                      )
-                      .toList());
+              if (state.value == null) {
+                Future.delayed(const Duration(milliseconds: 20), () {
+                  state.didChange([]);
+                });
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  state.value != null
+                      ? Wrap(
+                          spacing: 20.0.w,
+                          runSpacing: 20.0.w,
+                          children: problems
+                              .map(
+                                (e) => GestureDetector(
+                                  onTap: () {
+                                    if (state.value!.contains(e)) {
+                                      var value = state.value;
+                                      value!.remove(e);
+                                      state.didChange(value);
+                                    } else {
+                                      var value = state.value;
+                                      value!.add(e);
+                                      state.didChange(value);
+                                    }
+                                    onChanged(state.value!);
+                                  },
+                                  child: Container(
+                                      padding: EdgeInsets.all(10.h),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(6.r),
+                                          color: state.value!.contains(e)
+                                              ? primaryColor
+                                              : darkGrey),
+                                      child: Text(
+                                        e.toString(),
+                                        style: state.value!.contains(e)
+                                            ? kTextStyleIbmRegular.copyWith(
+                                                fontSize: 16.ssp(),
+                                                color: Colors.white)
+                                            : kTextStyleIbmRegularBlack
+                                                .copyWith(fontSize: 16.ssp()),
+                                      )),
+                                ),
+                              )
+                              .toList())
+                      : Container(),
+                  if (state.hasError) ...[
+                    SizedBox(height: 20.h),
+                    Text(state.errorText.toString(),
+                        style: kTextStyleIbmMedium.copyWith(color: danger)),
+                  ]
+                ],
+              );
             });
 }
-
-// class WrapProblems extends StatefulWidget {
-//   WrapProblems({Key? key, required this.onChanged, required this.validator})
-//       : super(key: key);
-
-//   final Function(List<String>) onChanged;
-//   final FormFieldValidator<List<String>> validator;
-//   @override
-//   State<WrapProblems> createState() => _WrapProblemsState();
-// }
-
-// class _WrapProblemsState extends State<WrapProblems> {
- 
- 
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-        
-    
-//   }
-// }
