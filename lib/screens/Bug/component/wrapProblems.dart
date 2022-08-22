@@ -13,9 +13,9 @@ class MultiSelectWidget<T> extends FormField<List<T>> {
       : super(
             key: key,
             validator: validator,
-            autovalidateMode: autovalidate
-                ? AutovalidateMode.always
-                : AutovalidateMode.onUserInteraction,
+            // autovalidateMode: autovalidate
+            //     ? AutovalidateMode.onUserInteraction
+            //     : AutovalidateMode.onUserInteraction,
             builder: (state) {
               if (state.value == null) {
                 Future.delayed(const Duration(milliseconds: 20), () {
@@ -67,8 +67,11 @@ class MultiSelectWidget<T> extends FormField<List<T>> {
                       : Container(),
                   if (state.hasError) ...[
                     SizedBox(height: 20.h),
-                    Text(state.errorText.toString(),
-                        style: kTextStyleIbmMedium.copyWith(color: danger)),
+                    Text(
+                      state.errorText.toString(),
+                      style: const TextStyle(color: danger, fontSize: 12),
+                      // style: kTextStyleIbmMedium.copyWith(color: danger)
+                    ),
                   ]
                 ],
               );

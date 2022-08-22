@@ -48,7 +48,7 @@ class Bug extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 45.w, vertical: 20.h),
           child: Form(
             key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,7 +72,7 @@ class Bug extends StatelessWidget {
                       return null;
                     },
                     maxLines: 2,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration( errorStyle: const TextStyle(color: danger, fontSize: 12),
                         hintText:
                             'Explain what happened and what should we do to reproduce the problem',
                         hintStyle:
@@ -92,7 +92,7 @@ class Bug extends StatelessWidget {
                   height: 20.h,
                 ),
                 MultiSelectWidget(
-                  problems: const ["UI", "TEST", "SCREENSHOT"],
+                  problems: const [true, false],
                   // onChanged: (p0) {
                   //   print(p0);
                   //   problems.clear();
