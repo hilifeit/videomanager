@@ -1,4 +1,3 @@
-import 'package:videomanager/screens/chat/screens/conversation/model/conversationModel.dart';
 import 'package:videomanager/screens/chat/screens/message/models/messageModel.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 
@@ -9,7 +8,7 @@ class CustomMessageBox extends StatelessWidget {
   late Color color = ownMessage ? primaryColor : Colors.grey;
 
   bool checkOwnMessage(Message message) {
-    if (message.sender=="") return true;
+    if (message.sender == "") return true;
     return false;
   }
 
