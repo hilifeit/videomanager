@@ -39,14 +39,14 @@ class MenuItemWidget extends ConsumerWidget {
             ref.read(settingIndexProvider.state).state = 1;
           }
           ref.read(indexState.state).state = item.id;
-          final customOverlay = CustomOverlayEntry();
+          // final customOverlay = CustomOverlayEntry();
 
-          if (customOverlay.videoTimeStampOpen) {
-            customOverlay.closeVideoTimeStamp();
-          }
-          if (customOverlay.isFilterMenuOpen) {
-            customOverlay.closeFilter();
-          }
+          // if (customOverlay.videoTimeStampOpen) {
+          //   customOverlay.closeVideoTimeStamp();
+          // }
+          // if (customOverlay.isFilterMenuOpen) {
+          //   customOverlay.closeFilter();
+          // }
           // if (item.id == 3 && !customOverlay.videoTimeStampOpen) {
           //   customOverlay.showVideoTimeStamp();
           // }

@@ -72,7 +72,7 @@ class TimeLineTop extends StatelessWidget {
       int position, int length, BoxConstraints constraints, centerOfWidth) {
     double result = 0;
     try {
-      print("$position $length ${constraints.maxWidth} $centerOfWidth");
+      // print("$position $length ${constraints.maxWidth} $centerOfWidth");
       result = map(
               position,
               0,

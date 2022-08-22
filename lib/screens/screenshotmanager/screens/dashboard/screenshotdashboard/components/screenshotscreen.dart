@@ -25,13 +25,17 @@ class ScreenShotScreen extends ConsumerWidget {
                   child: Container(
                     width: double.infinity,
                     height: double.infinity,
-                    decoration: BoxDecoration(
-                        color: whiteColor,
-                        image: DecorationImage(
-                          opacity: 1,
-                          image: MemoryImage(snap.image!),
-                          fit: BoxFit.fill,
-                        )),
+                    decoration: snap.image != null
+                        ? BoxDecoration(
+                            color: whiteColor,
+                            image: DecorationImage(
+                              opacity: 1,
+                              image: MemoryImage(snap.image!),
+                              fit: BoxFit.fill,
+                            ))
+                        : const BoxDecoration(
+                            color: whiteColor,
+                          ),
                     child: CanvasTouchDetector(
                       gesturesToOverride: const [
                         GestureType.onTapUp,
