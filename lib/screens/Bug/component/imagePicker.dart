@@ -4,8 +4,10 @@ import 'package:videomanager/screens/others/exporter.dart';
 
 class ImagePicker<T> extends FormField<FilePickerResult> {
   final Function(FilePickerResult) onChanged;
+  final BuildContext context;
   ImagePicker(
-      {Key? key,
+      {required this.context,
+      Key? key,
       required this.onChanged,
       required FormFieldValidator validator,
       bool autovalidate = false})
@@ -30,8 +32,8 @@ class ImagePicker<T> extends FormField<FilePickerResult> {
                               File file = File(e.path!);
 
                               return SizedBox(
-                                height: 60.sh(),
-                                width: 60.sw(),
+                                height: 80.sh(),
+                                width: 80.sw(),
                                 child: Stack(
                                   children: [
                                     Positioned(
@@ -41,8 +43,8 @@ class ImagePicker<T> extends FormField<FilePickerResult> {
                                           child: Image.memory(
                                         file.readAsBytesSync(),
                                         fit: BoxFit.fill,
-                                        height: 50.sh(),
-                                        width: 50.sw(),
+                                        height: 70.sh(),
+                                        width: 70.sw(),
                                       )),
                                     ),
                                     Positioned(
@@ -86,13 +88,37 @@ class ImagePicker<T> extends FormField<FilePickerResult> {
                             var singleResult =
                                 await FilePicker.platform.pickFiles(
                               type: FileType.custom,
+                              allowCompression: true,
                               allowedExtensions: ['jpg', 'png'],
                             );
-                            List<PlatformFile> fileList = [];
-                            fileList.addAll(state.value!.files);
-                            fileList.add(singleResult!.files.first);
-                            var value = FilePickerResult(fileList);
-                            state.didChange(value);
+                            double fileSize = (singleResult!.files.first.size) /
+                                (1024 * 1024);
+                            print(fileSize);
+                            if (fileSize < 5) {
+                              List<PlatformFile> fileList = [];
+                              fileList.addAll(state.value!.files);
+                              fileList.add(singleResult.files.first);
+                              var value = FilePickerResult(fileList);
+                              state.didChange(value);
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Invalid File'),
+                                      content: Text(
+                                          'File size is too large. File must be smaller than 5MB.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Okay'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            }
                           },
                           child: Icon(
                             Icons.add,

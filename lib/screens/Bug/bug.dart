@@ -124,6 +124,7 @@ class Bug extends StatelessWidget {
                   height: 20.sh(),
                 ),
                 ImagePicker(
+                  context: context,
                   onChanged: (val) {},
                   validator: (value) {
                     if (value!.files.isEmpty) {
@@ -136,6 +137,8 @@ class Bug extends StatelessWidget {
                   height: 20.sh(),
                 ),
                 OutlinedElevatedButtonCombo(
+                  height: ResponsiveLayout.isMobile ? 30.sh() : 46.sh(),
+                  width: ResponsiveLayout.isMobile ? 100.sh() : 126.sh(),
                   outlinedButtonText: 'Cancel',
                   elevatedButtonText: 'Send',
                   center: true,
