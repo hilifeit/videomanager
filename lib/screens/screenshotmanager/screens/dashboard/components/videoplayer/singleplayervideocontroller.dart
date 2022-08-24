@@ -179,7 +179,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
   }
 }
 
-class VideoTime extends ConsumerWidget {
+class VideoTime extends StatelessWidget {
   VideoTime({Key? key, this.web, this.desktop}) : super(key: key);
   final VideoPlayerController? web;
   final PlayerController? desktop;
@@ -187,7 +187,7 @@ class VideoTime extends ConsumerWidget {
   late final Duration length;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     if (UniversalPlatform.isDesktop) {
       length = desktop!.duration;
       // ref.read(timeProvider.state).state = desktop!.player.position.position!;
