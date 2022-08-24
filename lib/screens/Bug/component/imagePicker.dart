@@ -106,7 +106,7 @@ class ImagePicker<T> extends FormField<FilePickerResult> {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: const Text('Invalid File'),
-                                      content: Text(
+                                      content: const Text(
                                           'File size is too large. File must be smaller than 5MB.'),
                                       actions: <Widget>[
                                         TextButton(
