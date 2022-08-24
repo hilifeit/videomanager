@@ -15,7 +15,7 @@ final Setting setting = Setting(
       filterCount: 1),
   userSetting: UserSetting(videoPerUser: 120),
   videoSetting: VideoSetting(
-      videoQuality: 0,
+      videoQuality: 1,
       allowMinMapFScreen: true,
       videoFScreen: true,
       videourl: 'http://192.168.16.106:8000'),
