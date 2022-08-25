@@ -46,7 +46,8 @@ final storage = GetStorage();
 final snackVisibleProvider = StateProvider<bool>((ref) {
   return false;
 });
-String getVideoUrl(String id) => "${CustomIP.apiBaseUrl}video/$id";
+String getVideoUrl(String id, {VideoQuality quality = VideoQuality.q480p}) =>
+    "${CustomIP.apiBaseUrl}video/$id?q=${quality.name.replaceAll("q", "").replaceAll("p", "")}";
 final CustomSnackBar snack = CustomSnackBar();
 // final CustomShowMessage message = CustomShowMessage();
 

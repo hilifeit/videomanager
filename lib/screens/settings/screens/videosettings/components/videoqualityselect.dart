@@ -1,5 +1,4 @@
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/settings/screens/videosettings/models/videoquality.dart';
 
 class VideoQualitySelect extends ConsumerStatefulWidget {
   const VideoQualitySelect({
@@ -29,35 +28,41 @@ class _VideoQualitySelectState extends ConsumerState<VideoQualitySelect> {
     return Wrap(
       runSpacing: 29.sr(),
       spacing: 29.sr(),
-      children: items.map((e) => selectableItem(context, ref, e)).toList(),
+      children: VideoQuality.values
+          .map((e) => selectableItem(context, ref, e))
+          .toList(),
     );
   }
 
-  InkWell selectableItem(context, ref, VideoQualityItem item) {
-    return InkWell(
-        onTap: () {
-          setState(() {
-            value = item.id;
-          });
-          widget.onChanged(item.id);
-        },
-        child: Container(
-          width: 106.sw(),
-          height: 49.sh(),
-          decoration: BoxDecoration(
-              color: value == item.id
-                  ? Theme.of(context).primaryColor.withOpacity(0.15)
-                  : lightGrey.withOpacity(0.22),
-              borderRadius: BorderRadius.circular(4.sr())),
-          child: Center(
-            child: Text(
-              item.text,
-              style: value == item.id
-                  ? kTextStyleInterRegular.copyWith(
-                      fontSize: 18.ssp(), color: Theme.of(context).primaryColor)
-                  : kTextStyleInterRegular.copyWith(fontSize: 18.ssp()),
+  Widget selectableItem(context, ref, VideoQuality item) {
+    return AbsorbPointer(
+      absorbing: item.index.isEven,
+      child: InkWell(
+          onTap: () {
+            setState(() {
+              value = item.index;
+            });
+            widget.onChanged(item.index);
+          },
+          child: Container(
+            width: 106.sw(),
+            height: 49.sh(),
+            decoration: BoxDecoration(
+                color: value == item.index
+                    ? Theme.of(context).primaryColor.withOpacity(0.15)
+                    : lightGrey.withOpacity(0.22),
+                borderRadius: BorderRadius.circular(4.sr())),
+            child: Center(
+              child: Text(
+                item.name.replaceAll("q", ''),
+                style: value == item.index
+                    ? kTextStyleInterRegular.copyWith(
+                        fontSize: 18.ssp(),
+                        color: Theme.of(context).primaryColor)
+                    : kTextStyleInterRegular.copyWith(fontSize: 18.ssp()),
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
