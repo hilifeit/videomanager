@@ -166,20 +166,7 @@ class Bug extends StatelessWidget {
                     },
                   ),
                 ),
-                OutlinedElevatedButtonCombo(
-                  height: ResponsiveLayout.isMobile ? 30.sh() : 46.sh(),
-                  width: ResponsiveLayout.isMobile ? 100.sh() : 126.sh(),
-                  outlinedButtonText: 'Cancel',
-                  elevatedButtonText: 'Send',
-                  center: true,
-                  onPressedOutlined: () {},
-                  onPressedElevated: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.reset();
-                      snack.info('Processing data');
-                    }
-                  },
-                )
+              
               ],
             ),
           ),
