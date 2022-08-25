@@ -1,11 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/Bug/component/imagePicker.dart';
 import 'package:videomanager/screens/Bug/component/wrapProblems.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
 
 class Bug extends StatelessWidget {
   Bug({Key? key}) : super(key: key);
@@ -16,6 +11,7 @@ class Bug extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           padding: EdgeInsets.only(left: 80.sw(), top: 9.sh(), right: 40.w),
@@ -36,12 +32,12 @@ class Bug extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.close,
                   color: Colors.white,
                 ),
@@ -99,7 +95,7 @@ class Bug extends StatelessWidget {
                   height: 20.h,
                 ),
                 MultiSelectWidget(
-                  problems: const [true, false],
+                  problems: const ['UI', 'Video', 'Screenshot', 'System Crash'],
                   // onChanged: (p0) {
                   //   print(p0);
                   //   problems.clear();
@@ -136,20 +132,43 @@ class Bug extends StatelessWidget {
                 SizedBox(
                   height: 20.sh(),
                 ),
-                OutlinedElevatedButtonCombo(
-                  height: ResponsiveLayout.isMobile ? 30.sh() : 46.sh(),
-                  width: ResponsiveLayout.isMobile ? 100.sh() : 126.sh(),
-                  outlinedButtonText: 'Cancel',
-                  elevatedButtonText: 'Send',
-                  center: true,
-                  onPressedOutlined: () {},
-                  onPressedElevated: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.reset();
-                      snack.info('Processing data');
-                    }
-                  },
-                )
+                Transform.scale(
+                  scale: 0.9,
+                  child: OutlinedElevatedButtonCombo(
+                    outlinedButtonText: 'Cancel',
+                    elevatedButtonText: 'Send',
+                    center: true,
+                    spacing: ResponsiveLayout.isMobile ? 20.sw() : 60.sw(),
+                    onPressedOutlined: () {},
+                    onPressedElevated: () {
+                      if (_formKey.currentState!.validate()) {
+                        // _formKey.currentState!.reset();
+                        snack.success('Your report is submitted');
+                      }
+
+
+
+
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return AlertDialog(
+                      //         content: Bug(),
+                      //         contentPadding: EdgeInsets.zero,
+                      //         shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.only(
+                      //                 topLeft: Radius.circular(15.sr()),
+                      //                 topRight: Radius.circular(15.sr()))),
+                      //       );
+                      //     });
+                  
+                  
+                  
+                  
+                    },
+                  ),
+                ),
+              
               ],
             ),
           ),

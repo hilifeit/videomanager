@@ -1,5 +1,5 @@
 import 'package:map/map.dart';
-import 'package:videomanager/screens/Bug/bug.dart';
+import 'package:videomanager/screens/Bug/component/bug.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
 import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
@@ -93,12 +93,15 @@ class Holder extends ConsumerWidget {
               ),
             (thisUser!.role == Roles.superAdmin.index)
                 ? Expanded(
-                    child: index != 4
+                    child: index != 5
                         ? AnimatedIndexedStack(index: index, children: [
                             ViewScreen(),
                             const Users(),
-                         Bug(),
+                            Bug(),
                             const ChatHolder(),
+                            Container(
+                              color: Colors.amber,
+                            )
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])
@@ -154,9 +157,15 @@ class Holder extends ConsumerWidget {
                             label: 'Outlets', icon: Icon(Videomanager.outlets)),
                         const BottomNavigationBarItem(
                             label: 'Chat', icon: Icon(Icons.chat)),
+                        BottomNavigationBarItem(
+                            label: "Bugs",
+                            icon: Icon(
+                              Icons.bug_report,
+                              size: 28.ssp(),
+                            )),
                         const BottomNavigationBarItem(
                             label: "Settings",
-                            icon: Icon(Videomanager.settings))
+                            icon: Icon(Videomanager.settings)),
                       ]
                     : [
                         const BottomNavigationBarItem(

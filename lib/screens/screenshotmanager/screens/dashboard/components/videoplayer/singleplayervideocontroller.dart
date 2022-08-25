@@ -1,16 +1,26 @@
+import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
+import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/playbackMenu.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class SingleVideoPlayerControls extends HookConsumerWidget {
-  SingleVideoPlayerControls({this.web, this.desktop, Key? key})
+  SingleVideoPlayerControls(
+      {required this.videoFile, this.web, this.desktop, Key? key})
       : super(key: key);
 
   final VideoPlayerController? web;
   final PlayerController? desktop;
+  final FileDetail videoFile;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,36 +55,62 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 30.5.sw(),
         ),
-        IconButton(
-          tooltip: 'Play/Pause',
-          onPressed: () {
-            if (UniversalPlatform.isDesktop) {
-              // desktop!.player.open(Media.network(
-              //   getVideoUrl("62931b515e4df91e44463cea"),
-              // ));
-              if (desktop!.player.playback.isPlaying) {
-                desktop!.player.pause();
-                controller.reverse();
-              } else {
-                desktop!.player.play();
+        RawKeyboardListener(
+          focusNode: FocusNode(),
+          autofocus: true,
+          onKey: (event) {
+            if (event.isKeyPressed(LogicalKeyboardKey.space)) {
+              if (UniversalPlatform.isDesktop) {
+                if (desktop!.player.playback.isPlaying) {
+                  desktop!.player.pause();
+                  controller.reverse();
+                } else {
+                  desktop!.player.play();
 
-                controller.forward();
-              }
-            } else {
-              if (web!.value.isPlaying) {
-                web!.pause();
-                controller.reverse();
+                  controller.forward();
+                }
               } else {
-                web!.play();
-                controller.forward();
+                if (web!.value.isPlaying) {
+                  web!.pause();
+                  controller.reverse();
+                } else {
+                  web!.play();
+                  controller.forward();
+                }
               }
             }
           },
-          icon: AnimatedIcon(
-            icon: AnimatedIcons.play_pause,
-            size: 30.ssp(),
-            color: Colors.white,
-            progress: controller,
+          child: IconButton(
+            tooltip: 'Play/Pause',
+            onPressed: () {
+              if (UniversalPlatform.isDesktop) {
+                // desktop!.player.open(Media.network(
+                //   getVideoUrl("62931b515e4df91e44463cea"),
+                // ));
+                if (desktop!.player.playback.isPlaying) {
+                  desktop!.player.pause();
+                  controller.reverse();
+                } else {
+                  desktop!.player.play();
+
+                  controller.forward();
+                }
+              } else {
+                if (web!.value.isPlaying) {
+                  web!.pause();
+                  controller.reverse();
+                } else {
+                  web!.play();
+                  controller.forward();
+                }
+              }
+            },
+            icon: AnimatedIcon(
+              icon: AnimatedIcons.play_pause,
+              size: 30.ssp(),
+              color: Colors.white,
+              progress: controller,
+            ),
           ),
         ),
         SizedBox(
@@ -154,6 +190,116 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
             }
           },
         ),
+        VideoTime(
+          web: web,
+          desktop: desktop,
+        ),
+        const Spacer(),
+        Text(
+          videoFile.info.filename,
+          style: kTextStyleInterMedium.copyWith(
+            fontSize: 18.ssp(),
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(
+          width: 43.sw(),
+        ),
+        InkWell(
+          onTap: () async {
+            if (UniversalPlatform.isDesktop) {
+              if (desktop!.player.playback.isPlaying) {
+                desktop!.player.pause();
+                controller.reverse();
+              }
+            } else {
+              if (web!.value.isPlaying) {
+                web!.pause();
+                controller.reverse();
+              }
+            }
+            try {
+              CustomOverlayEntry().showLoader();
+
+              var ms = 0;
+              if (UniversalPlatform.isDesktop) {
+                ms = desktop!.player.position.position!.inMilliseconds;
+              } else {
+                ms = web!.value.position.inMilliseconds;
+              }
+              var videoDataService = ref.read(videoDataDetailServiceProvider);
+              try {
+                if (!videoDataService.checkAndAddSnap(ms)) {
+                  snack.info("Screenshot already taken!");
+                  CustomOverlayEntry().closeLoader();
+                } else {
+                  Uint8List image = await ref
+                      .read(fileDetailMiniServiceProvider)
+                      .getFrameFromUrl(
+                          url:
+                              "http://192.168.1.74:5000/v1/video/${videoFile.id}",
+                          positionInMs: ms);
+
+                  await videoDataService.selectedSnap.value?.decodeImage(image);
+                  CustomOverlayEntry().closeLoader();
+
+                  Future.delayed(Duration(milliseconds: 10), () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return ScreenShotScreen();
+                    }));
+                  });
+
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return ScreenShotScreen();
+                  //     });
+                }
+              } catch (e) {
+                videoDataService.cancelNewSnap();
+                CustomOverlayEntry().closeLoader();
+                snack.info("Try again");
+              }
+            } catch (e, s) {
+              print("$e $context");
+              CustomOverlayEntry().closeLoader();
+              snack.error(e);
+            }
+          },
+          child: Container(
+            width: 50.sr(),
+            height: 50.sr(),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            alignment: Alignment.center,
+            padding: EdgeInsets.only(right: 3.sw(), bottom: 3.sh()),
+            child: Icon(
+              Videomanager.camera,
+              color: Theme.of(context).primaryColor,
+              size: 24.ssp(),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 32.sw(),
+        ),
+        CustomElevatedButton(
+          width: 120.sw(),
+          height: 40.sw(),
+          color: Colors.white,
+          onPressedElevated: () {},
+          elevatedButtonText: "Submit",
+          elevatedButtonTextStyle: kTextStyleInterMedium.copyWith(
+            fontSize: 20.ssp(),
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        SizedBox(
+          width: 47.sw(),
+        ),
+
         // IconButton(
         //     onPressed: () {
         //       showDialog(
@@ -169,10 +315,6 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         //     )),
         SizedBox(
           width: 24.sw(),
-        ),
-        VideoTime(
-          web: web,
-          desktop: desktop,
         ),
       ],
     );

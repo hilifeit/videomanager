@@ -291,6 +291,7 @@ class InputTextField extends StatelessWidget {
           ),
         ),
         TextFormField(
+          onEditingComplete: () {},
           maxLines: title == 'Remarks' ? 3 : 1,
           controller: TextEditingController(text: value),
           inputFormatters: [
