@@ -27,14 +27,17 @@ class MenuBar extends ConsumerWidget {
         notify: true,
         number: 60000,
       ),
+      bugs = CustomMenuItem(title: 'Bugs', icon: Icons.bug_report, id: 4),
       settings =
-          CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 4);
+          CustomMenuItem(title: 'Settings', icon: Videomanager.settings, id: 5);
+
   late final List<CustomMenuItem> itemsAdmin = [
     dashboard,
     users,
     outlet,
     chat,
-    settings
+    bugs,
+    settings,
 
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
@@ -43,12 +46,13 @@ class MenuBar extends ConsumerWidget {
     dashboard,
     users,
     chat,
+    bugs,
     settings,
   ];
 
   late final List<CustomMenuItem> itemsUser = [
     dashboard,
-    chat,
+    chat, bugs,
     settings,
     //  CustomMenuItem(title: 'Text', icon: Videomanager.settings, id: 4),
   ];
