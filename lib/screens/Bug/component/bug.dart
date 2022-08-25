@@ -100,7 +100,7 @@ class Bug extends StatelessWidget {
                   height: 20.h,
                 ),
                 MultiSelectWidget(
-                  problems: const [true, false],
+                  problems: const ['UI', 'Video', 'Screenshot', 'System Crash'],
                   // onChanged: (p0) {
                   //   print(p0);
                   //   problems.clear();
@@ -151,18 +151,25 @@ class Bug extends StatelessWidget {
                         snack.success('Your report is submitted');
                       }
 
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: Bug(),
-                              contentPadding: EdgeInsets.zero,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15.sr()),
-                                      topRight: Radius.circular(15.sr()))),
-                            );
-                          });
+
+
+
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return AlertDialog(
+                      //         content: Bug(),
+                      //         contentPadding: EdgeInsets.zero,
+                      //         shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.only(
+                      //                 topLeft: Radius.circular(15.sr()),
+                      //                 topRight: Radius.circular(15.sr()))),
+                      //       );
+                      //     });
+                  
+                  
+                  
+                  
                     },
                   ),
                 ),
