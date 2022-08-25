@@ -11,6 +11,7 @@ class Bug extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           padding: EdgeInsets.only(left: 80.sw(), top: 9.sh(), right: 40.w),
@@ -124,18 +125,38 @@ class Bug extends StatelessWidget {
                   Icons.attach_file,
                   size: 22.sp,
                 ),
-                OutlinedElevatedButtonCombo(
-                  outlinedButtonText: 'Cancel',
-                  elevatedButtonText: 'Send',
-                  center: true,
-                  onPressedOutlined: () {},
-                  onPressedElevated: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.reset();
-                      snack.info('Processing data');
-                    }
-                  },
-                )
+                SizedBox(
+                  height: 20.sh(),
+                ),
+                Transform.scale(
+                  scale: 0.9,
+                  child: OutlinedElevatedButtonCombo(
+                    outlinedButtonText: 'Cancel',
+                    elevatedButtonText: 'Send',
+                    center: true,
+                    spacing: ResponsiveLayout.isMobile ? 20.sw() : 60.sw(),
+                    onPressedOutlined: () {},
+                    onPressedElevated: () {
+                      if (_formKey.currentState!.validate()) {
+                        // _formKey.currentState!.reset();
+                        snack.success('Your report is submitted');
+                      }
+
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Bug(),
+                              contentPadding: EdgeInsets.zero,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15.sr()),
+                                      topRight: Radius.circular(15.sr()))),
+                            );
+                          });
+                    },
+                  ),
+                ),
               ],
             ),
           ),
