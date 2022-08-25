@@ -1,11 +1,6 @@
-import 'dart:io';
-
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/Bug/component/imagePicker.dart';
 import 'package:videomanager/screens/Bug/component/wrapProblems.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
 
 class Bug extends StatelessWidget {
   Bug({Key? key}) : super(key: key);
@@ -36,12 +31,12 @@ class Bug extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.close,
                   color: Colors.white,
                 ),

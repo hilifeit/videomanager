@@ -122,7 +122,10 @@ class EditUser extends ConsumerWidget {
                           height: 6.sh(),
                         ),
                         // if (thisUser!.id == selectedUser!.id)
-                        SinglERoleText(text: getRole(selectedUser!.role)),
+                        SinglERoleText(
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 16.ssp()),
+                            text: getRole(selectedUser!.role)),
                         // if (thisUser.role < 2 && thisUser.id != selectedUser.id)
                         //   Container(
                         //     height: 65.sh(),
@@ -219,7 +222,10 @@ class EditUser extends ConsumerWidget {
                           SizedBox(
                             height: 14.sh(),
                           ),
-                          SinglERoleText(text: selectedUser.superVisor!.name)
+                          SinglERoleText(
+                              style: kTextStyleIbmSemiBold.copyWith(
+                                  fontSize: 16.ssp()),
+                              text: selectedUser.superVisor!.name)
                         ],
                         //   CustomMenuDropDown(
                         //       value: dd,

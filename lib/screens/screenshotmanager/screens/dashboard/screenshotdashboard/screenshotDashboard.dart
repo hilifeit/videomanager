@@ -1,22 +1,16 @@
 import 'dart:html'
     if (dart.library.io) "package:videomanager/screens/others/fakeClasses.dart"
     show VideoElement, window;
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/videosidebar.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/timeline.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
-import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class ScreenshotDashboard extends HookConsumerWidget {
   ScreenshotDashboard(
@@ -136,119 +130,12 @@ class ScreenshotDashboard extends HookConsumerWidget {
                                 SizedBox(
                                   width: 51.sw(),
                                 ),
-                                SingleVideoPlayerControls(
-                                  desktop: player,
-                                  web: controller,
-                                ),
-                                const Spacer(),
-                                Text(
-                                  'FileName',
-                                  style: kTextStyleInterMedium.copyWith(
-                                    fontSize: 18.ssp(),
-                                    color: Colors.white,
+                                Expanded(
+                                  child: SingleVideoPlayerControls(
+                                    videoFile: videoFile,
+                                    desktop: player,
+                                    web: controller,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 43.sw(),
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    // if (CustomOverlayEntry().videoTimeStampOpen) {
-                                    //   CustomOverlayEntry().closeVideoTimeStamp();
-                                    // }
-
-                                    try {
-                                      CustomOverlayEntry().showLoader();
-
-                                      var ms = 0;
-                                      if (UniversalPlatform.isDesktop) {
-                                        ms = player!.player.position.position!
-                                            .inMilliseconds;
-                                      } else {
-                                        ms = controller!
-                                            .value.position.inMilliseconds;
-                                      }
-                                      var videoDataService = ref
-                                          .read(videoDataDetailServiceProvider);
-                                      try {
-                                        if (!videoDataService
-                                            .checkAndAddSnap(ms)) {
-                                          snack.info(
-                                              "Screenshot already taken!");
-                                          CustomOverlayEntry().closeLoader();
-                                        } else {
-                                          Uint8List image = await ref
-                                              .read(
-                                                  fileDetailMiniServiceProvider)
-                                              .getFrameFromUrl(
-                                                  url:
-                                                      "http://192.168.1.74:5000/v1/video/${videoFile.id}",
-                                                  positionInMs: ms);
-
-                                          await videoDataService
-                                              .selectedSnap.value
-                                              ?.decodeImage(image);
-                                          CustomOverlayEntry().closeLoader();
-
-                                          Future.delayed(
-                                              Duration(milliseconds: 10), () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(builder: (_) {
-                                              return ScreenShotScreen();
-                                            }));
-                                          });
-
-                                          // showDialog(
-                                          //     context: context,
-                                          //     builder: (context) {
-                                          //       return ScreenShotScreen();
-                                          //     });
-                                        }
-                                      } catch (e) {
-                                        videoDataService.cancelNewSnap();
-                                        CustomOverlayEntry().closeLoader();
-                                        snack.info("Try again");
-                                      }
-                                    } catch (e, s) {
-                                      print("$e $context");
-                                      CustomOverlayEntry().closeLoader();
-                                      snack.error(e);
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 50.sr(),
-                                    height: 50.sr(),
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.only(
-                                        right: 3.sw(), bottom: 3.sh()),
-                                    child: Icon(
-                                      Videomanager.camera,
-                                      color: Theme.of(context).primaryColor,
-                                      size: 24.ssp(),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 32.sw(),
-                                ),
-                                CustomElevatedButton(
-                                  width: 120.sw(),
-                                  height: 40.sw(),
-                                  color: Colors.white,
-                                  onPressedElevated: () {},
-                                  elevatedButtonText: "Submit",
-                                  elevatedButtonTextStyle:
-                                      kTextStyleInterMedium.copyWith(
-                                    fontSize: 20.ssp(),
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 47.sw(),
                                 ),
                               ],
                             ),

@@ -85,39 +85,6 @@ class AddUser extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // SizedBox(
-                        //   width: 88.sw(),
-                        //   height: 80.sh(),
-                        //   child: Stack(
-                        //     children: [
-                        //       CircleAvatar(
-                        //         backgroundColor: Colors.teal,
-                        //         radius: 40.sr(),
-                        //       ),
-                        //       Positioned(
-                        //         bottom: 0,
-                        //         right: 0,
-                        //         child: CircleAvatar(
-                        //           backgroundColor: Colors.white,
-                        //           radius: 14.sr(),
-                        //           child: CircleAvatar(
-                        //             radius: 13.sr(),
-                        //             backgroundColor:
-                        //                 Theme.of(context).primaryColor,
-                        //             child: Icon(
-                        //               Videomanager.edit_1,
-                        //               color: Colors.white,
-                        //               size: 11.04.ssp(),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       SizedBox(
-                        //         height: 35.sh(),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         SizedBox(
                           height: 35.sh(),
                         ),
@@ -137,46 +104,19 @@ class AddUser extends ConsumerWidget {
                         SizedBox(
                           height: 14.sh(),
                         ),
-                        Text('User Role', style: kTextStyleIbmSemiBold),
+                        Text('User Role',
+                            style: kTextStyleIbmSemiBold.copyWith(
+                              fontSize: 16.ssp(),
+                            )),
                         SizedBox(
                           height: 6.sh(),
                         ),
-                        // if (edit  && thisUser.id == selectedUser!.id)
-                        //   Container(
-                        //     height: 55.sh(),
-                        //     width: double.infinity,
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(
-                        //         4.sr(),
-                        //       ),
-                        //       color: Colors.white,
-                        //     ),
-                        //     child: Padding(
-                        //       padding: EdgeInsets.only(
-                        //           left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                        //       child: Text(getRole(selectedUser.role)),
-                        //     ),
-                        //   ),
-                        // if (edit &&
-                        //     thisUser.role < 2 &&
-                        //     thisUser.id != selectedUser!.id)
-                        //   Container(
-                        //     height: 55.sh(),
-                        //     width: double.infinity,
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(
-                        //         4.sr(),
-                        //       ),
-                        //       color: Colors.white,
-                        //     ),
-                        //     child: Padding(
-                        //       padding: EdgeInsets.only(
-                        //           left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-                        //       child: Text(getRole(selectedUser.role)),
-                        //     ),
-                        //   ),
+
                         if (!edit && thisUser!.role == 1)
-                          SinglERoleText(text: 'User'),
+                          SinglERoleText(
+                              style: kTextStyleIbmSemiBold.copyWith(
+                                  fontSize: 16.ssp(), color: Colors.black),
+                              text: 'User'),
                         // if (edit)
                         //   if (thisUser.role >= 2 &&
                         //       thisUser.id != selectedUser!.id)
@@ -208,6 +148,8 @@ class AddUser extends ConsumerWidget {
                                 helperText: ''),
                         if (managerMenu.isEmpty)
                           SinglERoleText(
+                            style: kTextStyleIbmSemiBold.copyWith(
+                                fontSize: 16.ssp(), color: Colors.black),
                             text: 'Manager',
                           ),
                         SizedBox(
@@ -215,7 +157,9 @@ class AddUser extends ConsumerWidget {
                         ),
                         if (managerMenu.isNotEmpty)
                           if (selectManager && thisUser!.role >= 2) ...[
-                            Text('Supervisor', style: kTextStyleIbmSemiBold),
+                            Text('Supervisor',
+                                style: kTextStyleIbmSemiBold.copyWith(
+                                    fontSize: 16.ssp())),
                             SizedBox(
                               height: 14.sh(),
                             ),
@@ -371,8 +315,10 @@ class SinglERoleText extends StatelessWidget {
   SinglERoleText({
     Key? key,
     required this.text,
+    required this.style,
   }) : super(key: key);
   final String text;
+  final TextStyle style;
 
   @override
   Widget build(BuildContext context) {
@@ -392,11 +338,7 @@ class SinglERoleText extends StatelessWidget {
         padding: EdgeInsets.only(left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            text,
-            style: kTextStyleIbmSemiBold.copyWith(
-                fontSize: 16.ssp(), color: Colors.black),
-          ),
+          child: Text(text, style: style),
         ),
       ),
     );

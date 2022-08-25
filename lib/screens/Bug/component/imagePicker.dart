@@ -101,23 +101,24 @@ class ImagePicker<T> extends FormField<FilePickerResult> {
                               var value = FilePickerResult(fileList);
                               state.didChange(value);
                             } else {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('Invalid File'),
-                                      content: const Text(
-                                          'File size is too large. File must be smaller than 5MB.'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: const Text('Okay'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  });
+                              snack.error("File size must not be over 5MB.");
+                              // showDialog(
+                              //     context: context,
+                              //     builder: (context) {
+                              //       return AlertDialog(
+                              //         title: const Text('Invalid File'),
+                              //         content: const Text(
+                              //             'File size is too large. File must be smaller than 5MB.'),
+                              //         actions: <Widget>[
+                              //           TextButton(
+                              //             child: const Text('Okay'),
+                              //             onPressed: () {
+                              //               Navigator.of(context).pop();
+                              //             },
+                              //           ),
+                              //         ],
+                              //       );
+                              //     });
                             }
                           },
                           child: Icon(
