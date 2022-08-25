@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:videomanager/screens/Bug/component/imagePicker.dart';
 import 'package:videomanager/screens/Bug/component/wrapProblems.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
 
 class Bug extends StatelessWidget {
   Bug({Key? key}) : super(key: key);
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<String> problems = [];
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -101,9 +106,7 @@ class Bug extends StatelessWidget {
                   //   problems.clear();
                   //   problems.addAll(p0);
                   // },
-                  onChanged: (val) {
-                    print(val);
-                  },
+                  onChanged: (val) {},
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please choose atleast one problem';
@@ -119,11 +122,17 @@ class Bug extends StatelessWidget {
                   style: kTextStyleIbmSemiBold.copyWith(fontSize: 16.ssp()),
                 ),
                 SizedBox(
-                  height: 20.h,
+                  height: 20.sh(),
                 ),
-                Icon(
-                  Icons.attach_file,
-                  size: 22.sp,
+                ImagePicker(
+                  context: context,
+                  onChanged: (val) {},
+                  validator: (value) {
+                    if (value!.files.isEmpty) {
+                      return 'Please upload atleast one file.';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(
                   height: 20.sh(),
@@ -157,6 +166,20 @@ class Bug extends StatelessWidget {
                     },
                   ),
                 ),
+                OutlinedElevatedButtonCombo(
+                  height: ResponsiveLayout.isMobile ? 30.sh() : 46.sh(),
+                  width: ResponsiveLayout.isMobile ? 100.sh() : 126.sh(),
+                  outlinedButtonText: 'Cancel',
+                  elevatedButtonText: 'Send',
+                  center: true,
+                  onPressedOutlined: () {},
+                  onPressedElevated: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.reset();
+                      snack.info('Processing data');
+                    }
+                  },
+                )
               ],
             ),
           ),
