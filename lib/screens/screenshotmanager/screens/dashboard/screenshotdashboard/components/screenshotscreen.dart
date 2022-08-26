@@ -19,7 +19,7 @@ class ScreenShotScreen extends ConsumerWidget {
       focusNode: FocusNode(),
       autofocus: true,
       child: LayoutBuilder(builder: (context, constraint) {
-        // print('$constraint ${MediaQuery.of(context).size}');
+        print('$constraint ${MediaQuery.of(context).size}');
         return snap != null
             ? Stack(
                 children: [
@@ -145,18 +145,24 @@ class ShopPinPainter extends CustomPainter {
           });
       if (data != null) {
         Shop shop = data as Shop;
-        shop.position = details.localPosition;
+        Offset ratio = Offset(size.width / details.localPosition.dx,
+            size.height / details.localPosition.dy);
+        shop.position = ratio;
         snapService.addShop(shop);
       }
     });
 
     for (var element in shops) {
-      drawIcon(canvas, element.color, element.position);
+      drawIcon(canvas, element.color, element.position, size);
+      // TODO Delete the
+      print(element.position);
+      Offset position = Offset(
+          size.width / element.position.dx, size.height / element.position.dy);
+
       //Single Marker Touchy Start
       newCanvas.drawRect(
           Rect.fromCenter(
-              center: Offset(
-                  element.position.dx, element.position.dy - iconSize * .4),
+              center: Offset(position.dx, position.dy - iconSize * .4),
               width: iconSize * .6,
               height: iconSize * .9),
           boxPaint,
@@ -198,7 +204,9 @@ class ShopPinPainter extends CustomPainter {
     return true;
   }
 
-  drawIcon(Canvas canvas, Color color, Offset pinPosition) {
+  drawIcon(Canvas canvas, Color color, Offset pinPosition, Size size) {
+    Offset position =
+        Offset(size.width / pinPosition.dx, size.height / pinPosition.dy);
     double iconSize = 40.ssp();
     const icon = Icons.location_on;
     TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);
@@ -208,7 +216,7 @@ class ShopPinPainter extends CustomPainter {
             fontSize: iconSize, fontFamily: icon.fontFamily, color: color));
     textPainter.layout();
     Offset fixedPosition =
-        Offset(pinPosition.dx - iconSize / 2, pinPosition.dy - iconSize * 0.9);
+        Offset(position.dx - iconSize / 2, position.dy - iconSize * 0.9);
     textPainter.paint(canvas, fixedPosition);
   }
 }
