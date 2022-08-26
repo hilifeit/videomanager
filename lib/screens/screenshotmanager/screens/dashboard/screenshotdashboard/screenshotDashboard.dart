@@ -76,7 +76,7 @@ class ScreenshotDashboard extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var size = MediaQuery.of(context).size;
-
+    ScreenshotIntentFunctions().focus.requestFocus();
     return FocusableActionDetector(
       focusNode: ScreenshotIntentFunctions().focus,
       autofocus: true,

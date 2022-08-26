@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -27,12 +26,15 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller =
         useAnimationController(duration: const Duration(milliseconds: 15));
-    ScreenshotIntentFunctions().focus.requestFocus();
+
     ScreenshotIntentFunctions().onSpace = () {
       videoPlayPause(controller);
     };
     ScreenshotIntentFunctions().onSKey = () async {
-      await takeScreenShot(context, ref);
+      await takeScreenShot(context, ref, controller);
+    };
+    ScreenshotIntentFunctions().onArrowLeft = () async {
+      await rewind(controller);
     };
     final double volume = ref.watch(volumeProvider.state).state;
     final bool mute = ref.watch(mutedProvider.state).state;
@@ -42,17 +44,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         IconButton(
           tooltip: 'Rewind',
           onPressed: () async {
-            if (UniversalPlatform.isDesktop) {
-              desktop!.player.seek(((desktop!.player.position.position!)) -
-                  const Duration(seconds: 10));
-              if (!desktop!.player.playback.isPlaying) {
-                desktop!.player.play();
-                controller.forward();
-              }
-            } else {
-              web!.seekTo(
-                  (await (web!.position))! - const Duration(seconds: 10));
-            }
+            rewind(controller);
           },
           icon: Icon(
             Videomanager.rewind,
@@ -169,18 +161,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         ),
         InkWell(
           onTap: () async {
-            if (UniversalPlatform.isDesktop) {
-              if (desktop!.player.playback.isPlaying) {
-                desktop!.player.pause();
-                controller.reverse();
-              }
-            } else {
-              if (web!.value.isPlaying) {
-                web!.pause();
-                controller.reverse();
-              }
-            }
-            await takeScreenShot(context, ref);
+            await takeScreenShot(context, ref, controller);
           },
           child: Container(
             width: 50.sr(),
@@ -236,7 +217,32 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
     );
   }
 
-  takeScreenShot(BuildContext context, WidgetRef ref) async {
+  rewind(AnimationController controller) async {
+    if (UniversalPlatform.isDesktop) {
+      desktop!.player.seek(
+          ((desktop!.player.position.position!)) - const Duration(seconds: 10));
+      if (!desktop!.player.playback.isPlaying) {
+        desktop!.player.play();
+        controller.forward();
+      }
+    } else {
+      web!.seekTo((await (web!.position))! - const Duration(seconds: 10));
+    }
+  }
+
+  takeScreenShot(BuildContext context, WidgetRef ref,
+      AnimationController controller) async {
+    if (UniversalPlatform.isDesktop) {
+      if (desktop!.player.playback.isPlaying) {
+        desktop!.player.pause();
+        controller.reverse();
+      }
+    } else {
+      if (web!.value.isPlaying) {
+        web!.pause();
+        controller.reverse();
+      }
+    }
     try {
       CustomOverlayEntry().showLoader();
 

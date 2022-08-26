@@ -28,7 +28,9 @@ class Holder extends ConsumerWidget {
   final controller = MapController(
     location: home,
   );
-
+  final scaleProvider = StateProvider<double>((ref) {
+    return 1.0;
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomKeys().init(ref, context);
@@ -97,11 +99,12 @@ class Holder extends ConsumerWidget {
                         ? AnimatedIndexedStack(index: index, children: [
                             ViewScreen(),
                             const Users(),
-                            Bug(),
+                            // Container(
+                            //   color: Colors.red,
+                            // ),
+                            Container(),
                             const ChatHolder(),
-                            Container(
-                              color: Colors.amber,
-                            )
+                            Bug()
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])

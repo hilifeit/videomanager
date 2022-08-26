@@ -6,6 +6,8 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screens
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
+import 'screenshotdashboard/model/videoplayerIntent.dart';
+
 final showVideoBarProvider = StateProvider<bool>((ref) {
   return false;
 });
@@ -16,6 +18,7 @@ class ScreenshotDashboardHolder extends StatelessWidget {
   final UserModelMini thisUser;
   @override
   Widget build(BuildContext context) {
+    ScreenshotIntentFunctions().focus.requestFocus();
     return Stack(
       children: [
         if (thisUser.role == Roles.user.index) selector(),
@@ -27,6 +30,7 @@ class ScreenshotDashboardHolder extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   onTap: () {
+                    ScreenshotIntentFunctions().focus.requestFocus();
                     ref.read(showVideoBarProvider.state).state = true;
                   },
                   child: Container(
