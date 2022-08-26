@@ -15,88 +15,93 @@ class ScreenShotScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final snapService = ref.watch(videoDataDetailServiceProvider);
     final snap = snapService.selectedSnap.value;
-    return LayoutBuilder(builder: (context, constraint) {
-      // print('$constraint ${MediaQuery.of(context).size}');
-      return snap != null
-          ? Stack(
-              children: [
-                InteractiveViewer(
-                  maxScale: 4,
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: snap.image != null
-                        ? BoxDecoration(
-                            color: whiteColor,
-                            image: DecorationImage(
-                              opacity: 1,
-                              image: MemoryImage(snap.image!),
-                              fit: BoxFit.fill,
-                            ))
-                        : const BoxDecoration(
-                            color: whiteColor,
-                          ),
-                    child: CanvasTouchDetector(
-                      gesturesToOverride: const [
-                        GestureType.onTapUp,
-                        GestureType.onTapDown,
-                        GestureType.onSecondaryTapUp,
-                        GestureType.onPanUpdate,
-                        GestureType.onPanStart,
-                      ],
-                      builder: (context) {
-                        return CustomPaint(
-                          size: Size(constraint.maxWidth, constraint.maxHeight),
-                          painter: ShopPinPainter(
-                              ref: ref,
-                              context: context,
-                              imageData: snap.image!),
-                        );
-                      },
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      autofocus: true,
+      child: LayoutBuilder(builder: (context, constraint) {
+        // print('$constraint ${MediaQuery.of(context).size}');
+        return snap != null
+            ? Stack(
+                children: [
+                  InteractiveViewer(
+                    maxScale: 4,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: snap.image != null
+                          ? BoxDecoration(
+                              color: whiteColor,
+                              image: DecorationImage(
+                                opacity: 1,
+                                image: MemoryImage(snap.image!),
+                                fit: BoxFit.fill,
+                              ))
+                          : const BoxDecoration(
+                              color: whiteColor,
+                            ),
+                      child: CanvasTouchDetector(
+                        gesturesToOverride: const [
+                          GestureType.onTapUp,
+                          GestureType.onTapDown,
+                          GestureType.onSecondaryTapUp,
+                          GestureType.onPanUpdate,
+                          GestureType.onPanStart,
+                        ],
+                        builder: (context) {
+                          return CustomPaint(
+                            size:
+                                Size(constraint.maxWidth, constraint.maxHeight),
+                            painter: ShopPinPainter(
+                                ref: ref,
+                                context: context,
+                                imageData: snap.image!),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 46.sh(),
-                  right: 54.sw(),
-                  child: Row(
-                    children: [
-                      CustomOutlinedButton(
-                          borderColor: whiteColor,
-                          onPressedOutlined: snap.shops.isEmpty
-                              ? null
-                              : () {
-                                  snapService.clearShop();
-                                },
-                          outlinedButtonText: 'Clear All'),
-                      SizedBox(
-                        width: 25.sw(),
-                      ),
-                      CustomOutlinedButton(
-                          borderColor: whiteColor,
-                          onPressedOutlined: () {
-                            Navigator.pop(context);
-                            snapService.cancelNewSnap();
-                          },
-                          outlinedButtonText: 'Cancel'),
-                      SizedBox(
-                        width: 25.sw(),
-                      ),
-                      CustomElevatedButton(
-                          onPressedElevated: snap.shops.isNotEmpty
-                              ? () {
-                                  Navigator.pop(context);
-                                }
-                              : null,
-                          elevatedButtonText:
-                              'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
-                    ],
+                  Positioned(
+                    bottom: 46.sh(),
+                    right: 54.sw(),
+                    child: Row(
+                      children: [
+                        CustomOutlinedButton(
+                            borderColor: whiteColor,
+                            onPressedOutlined: snap.shops.isEmpty
+                                ? null
+                                : () {
+                                    snapService.clearShop();
+                                  },
+                            outlinedButtonText: 'Clear All'),
+                        SizedBox(
+                          width: 25.sw(),
+                        ),
+                        CustomOutlinedButton(
+                            borderColor: whiteColor,
+                            onPressedOutlined: () {
+                              Navigator.pop(context);
+                              snapService.cancelNewSnap();
+                            },
+                            outlinedButtonText: 'Cancel'),
+                        SizedBox(
+                          width: 25.sw(),
+                        ),
+                        CustomElevatedButton(
+                            onPressedElevated: snap.shops.isNotEmpty
+                                ? () {
+                                    Navigator.pop(context);
+                                  }
+                                : null,
+                            elevatedButtonText:
+                                'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )
-          : Container();
-    });
+                ],
+              )
+            : Container();
+      }),
+    );
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/timeline.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/videoplayerIntent.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
@@ -76,87 +77,125 @@ class ScreenshotDashboard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var size = MediaQuery.of(context).size;
 
-    return FutureBuilder(
-        future: controllerFuture(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData || snapshot.data == null) {
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 14,
-                    child: Stack(
-                      children: [
-                        if (ResponsiveLayout.isDesktop)
-                          Column(
-                            children: [
-                              Expanded(
-                                child: CustomVideoPlayer(
-                                  player:
-                                      player == null ? null : player!.player,
-                                  controller: controller,
-                                ),
-                              ),
-                              Container(
-                                color: Colors.black,
-                                height: 58.sh(),
-                              )
-                            ],
-                          ),
-                        if (ResponsiveLayout.isDesktop &&
-                            thisUser.role < Roles.superAdmin.index)
-                          Timeline(
-                            size: size,
-                            duration: getDuration(),
-                            desktop: player,
-                            web: controller,
-                          ),
-                        if (!ResponsiveLayout.isDesktop)
-                          VideoSideBar(thisUser: thisUser),
-                      ],
-                    ),
-                  ),
-                  if (ResponsiveLayout.isDesktop)
-                    Container(
-                      height: 73.sh(),
-                      color: primaryColor,
+    return FocusableActionDetector(
+      focusNode: ScreenshotIntentFunctions().focus,
+      autofocus: true,
+      shortcuts: {
+        spaceBarKeySet: SpaceIntent(),
+        arrowLeftKeySet: ArrowLeftIntent(),
+        controlTabKeySet: ControlTabIntent(),
+        sKeySet: SKeyIntent(),
+        controlAKeySet: ControlAIntent()
+      },
+      actions: {
+        SpaceIntent: CallbackAction(
+          onInvoke: (intent) {
+            if (ScreenshotIntentFunctions().isSpaceActive) {
+              return ScreenshotIntentFunctions().onSpace();
+            }
+          },
+        ),
+        ArrowLeftIntent: CallbackAction(onInvoke: (intent) {
+          return ScreenshotIntentFunctions().onArrowLeft();
+        }),
+        ControlTabIntent: CallbackAction(onInvoke: (intent) {
+          return ScreenshotIntentFunctions().onControlTab();
+        }),
+        SKeyIntent: CallbackAction(onInvoke: (intent) {
+          return ScreenshotIntentFunctions().onSKey();
+        }),
+        ControlAIntent: CallbackAction(
+          onInvoke: (intent) {
+            return ScreenshotIntentFunctions().onControlAKey();
+          },
+        )
+      },
+      child: FutureBuilder(
+          future: controllerFuture(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData || snapshot.data == null) {
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 14,
                       child: Stack(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
+                          if (ResponsiveLayout.isDesktop)
+                            Column(
                               children: [
-                                SizedBox(
-                                  width: 51.sw(),
-                                ),
                                 Expanded(
-                                  child: SingleVideoPlayerControls(
-                                    videoFile: videoFile,
-                                    desktop: player,
-                                    web: controller,
+                                  child: InteractiveViewer(
+                                    panEnabled: false,
+                                    child: CustomVideoPlayer(
+                                      player: player == null
+                                          ? null
+                                          : player!.player,
+                                      controller: controller,
+                                    ),
                                   ),
                                 ),
+                                Container(
+                                  color: Colors.black,
+                                  height: 58.sh(),
+                                )
                               ],
                             ),
-                          ),
-                          Positioned(
-                            child: LinearProgressIndicator(
-                              value: 0.3,
-                              backgroundColor: Colors.transparent,
-                              color: successColor,
-                              minHeight: 4.sh(),
+                          if (ResponsiveLayout.isDesktop &&
+                              thisUser.role < Roles.superAdmin.index)
+                            Timeline(
+                              size: size,
+                              duration: getDuration(),
+                              desktop: player,
+                              web: controller,
                             ),
-                          ),
+                          if (!ResponsiveLayout.isDesktop)
+                            VideoSideBar(thisUser: thisUser),
                         ],
                       ),
                     ),
-                ],
-              ),
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
+                    if (ResponsiveLayout.isDesktop)
+                      Container(
+                        height: 73.sh(),
+                        color: primaryColor,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 51.sw(),
+                                  ),
+                                  Expanded(
+                                    child: SingleVideoPlayerControls(
+                                      videoFile: videoFile,
+                                      desktop: player,
+                                      web: controller,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              child: LinearProgressIndicator(
+                                value: 0.3,
+                                backgroundColor: Colors.transparent,
+                                color: successColor,
+                                minHeight: 4.sh(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          }),
+    );
   }
 
   Duration getDuration() {
