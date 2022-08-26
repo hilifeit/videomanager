@@ -85,7 +85,8 @@ class ScreenshotDashboard extends HookConsumerWidget {
         arrowLeftKeySet: ArrowLeftIntent(),
         controlTabKeySet: ControlTabIntent(),
         sKeySet: SKeyIntent(),
-        controlAKeySet: ControlAIntent()
+        controlAKeySet: ControlAIntent(),
+        escKeySet: EscKeyIntent()
       },
       actions: {
         SpaceIntent: CallbackAction(
@@ -107,6 +108,11 @@ class ScreenshotDashboard extends HookConsumerWidget {
         ControlAIntent: CallbackAction(
           onInvoke: (intent) {
             return ScreenshotIntentFunctions().onControlAKey();
+          },
+        ),
+        EscKeyIntent: CallbackAction(
+          onInvoke: (intent) {
+            return ScreenshotIntentFunctions().onEscKey();
           },
         )
       },

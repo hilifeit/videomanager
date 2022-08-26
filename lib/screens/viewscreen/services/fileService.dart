@@ -291,13 +291,16 @@ class FileService extends ChangeNotifier {
   }
 
   Future<Uint8List> getFrameFromUrl(
-      {required String url, int positionInMs = 0}) async {
+      {required String url, Duration duration = Duration.zero}) async {
+    // duration - Duration(milliseconds: 200);
+    print(duration);
     try {
+      //00:00:00.000
       //   var url='http://192.168.1.74/';
       // if(!CustomIP.baseUrl.contains('103.'))
       // url=CustomIP.apiBaseUrl;
       var response = await client.get(Uri.parse(
-          "${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs"));
+          "${CustomIP.apiBaseUrl}video/image?url=$url&ms=${duration.toString().substring(0, 11)}"));
 //       final ByteData imageData = await NetworkAssetBundle(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs")).load("");
 // final Uint8List bytes = imageData.buffer.asUint8List();
       if (response.statusCode == 200) {

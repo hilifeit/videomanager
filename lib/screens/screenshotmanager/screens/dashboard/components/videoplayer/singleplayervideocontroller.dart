@@ -246,15 +246,15 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
     try {
       CustomOverlayEntry().showLoader();
 
-      var ms = 0;
+      Duration duration;
       if (UniversalPlatform.isDesktop) {
-        ms = desktop!.player.position.position!.inMilliseconds;
+        duration = desktop!.player.position.position!;
       } else {
-        ms = web!.value.position.inMilliseconds;
+        duration = web!.value.position;
       }
       var videoDataService = ref.read(videoDataDetailServiceProvider);
       try {
-        if (!videoDataService.checkAndAddSnap(ms)) {
+        if (!videoDataService.checkAndAddSnap(duration)) {
           snack.info("Screenshot already taken!");
           CustomOverlayEntry().closeLoader();
         } else {
@@ -262,7 +262,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
               .read(fileDetailMiniServiceProvider)
               .getFrameFromUrl(
                   url: "http://192.168.1.74:5000/v1/video/${videoFile.id}",
-                  positionInMs: ms);
+                  duration: duration);
 
           await videoDataService.selectedSnap.value?.decodeImage(image);
           CustomOverlayEntry().closeLoader();

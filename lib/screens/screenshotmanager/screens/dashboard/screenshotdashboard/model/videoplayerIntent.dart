@@ -53,7 +53,8 @@ class ScreenshotIntentFunctions {
           onArrowLeft: () {},
           onControlTab: () {},
           onSKey: () {},
-          onControlAKey: () {});
+          onControlAKey: () {},
+          onEscKey: () {});
 
   factory ScreenshotIntentFunctions() => _instance;
   FocusNode focus = FocusNode();
@@ -64,7 +65,8 @@ class ScreenshotIntentFunctions {
     required this.onControlTab,
     required this.onSKey,
     required this.onControlAKey,
+    required this.onEscKey,
   });
 
-  Function onSpace, onArrowLeft, onControlTab, onSKey, onControlAKey;
+  Function onSpace, onArrowLeft, onControlTab, onSKey, onControlAKey, onEscKey;
 }
