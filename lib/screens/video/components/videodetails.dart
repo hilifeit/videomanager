@@ -103,6 +103,7 @@ class VideoDetails extends StatelessWidget {
                     MapScreen(
                       draw: false,
                       controller: MapController(location: home),
+                      originalData: detailedFile!.originalLocation,
                       isvisible: false,
                       miniMap: false,
                     ),
@@ -124,6 +125,8 @@ class VideoDetails extends StatelessWidget {
                                                 .8,
                                             child: MapScreen(
                                               miniMap: true,
+                                              originalData: detailedFile!
+                                                  .originalLocation,
                                               controller:
                                                   MapController(location: home),
                                             )),

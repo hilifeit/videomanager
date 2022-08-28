@@ -3,42 +3,41 @@ import 'package:videomanager/screens/video/components/models/playerController.da
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/video/components/videoplayercontrols.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
+import 'package:videomanager/screens/viewscreen/services/dualvideo.dart';
 
-class StartEndTime {
-  late Duration leftStart, leftEnd, rightStart, rightEnd;
-}
-
-class CustomVideo extends StatefulWidget {
+class CustomVideo extends StatefulHookConsumerWidget {
   const CustomVideo({Key? key, required this.leftFile, required this.rightFile})
       : super(key: key);
 
   final FileDetail leftFile, rightFile;
   @override
-  _VideoState createState() => _VideoState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CustomVideoState();
 }
 
-class _VideoState extends State<CustomVideo> {
-  VideoPlayerController? _controller1, _controller2;
-  PlayerController? player1, player2;
-
+class _CustomVideoState extends ConsumerState<CustomVideo> {
   @override
   void initState() {
     super.initState();
-    var timeData = calculateStartTime(widget.leftFile, widget.rightFile);
+    var dualVideoService = ref.read(dualVideoServiceProvider);
+
+    var timeData =
+        dualVideoService.calculateStartTime(widget.leftFile, widget.rightFile);
     if (UniversalPlatform.isDesktop) {
       VideoDimensions dimension = const VideoDimensions(1920, 1080);
 
       Media mediaLeft = Media.network(
           widget.leftFile.foundPath.replaceAll(" ", "%20"),
           startTime: Duration.zero + timeData.leftStart,
-          stopTime: getTimeinDuration(widget.leftFile.info.duration) +
+          stopTime: dualVideoService
+                  .getTimeinDuration(widget.leftFile.info.duration) +
               timeData.leftEnd,
           parse: true);
 
       Media mediaRight = Media.network(
           widget.rightFile.foundPath.replaceAll(" ", "%20"),
           startTime: Duration.zero + timeData.rightStart,
-          stopTime: getTimeinDuration(widget.rightFile.info.duration) +
+          stopTime: dualVideoService
+                  .getTimeinDuration(widget.rightFile.info.duration) +
               timeData.rightEnd,
           parse: true);
 
@@ -47,21 +46,25 @@ class _VideoState extends State<CustomVideo> {
 
       // print('${mediaRight.startTime}${mediaRight.stopTime}');
       Duration finalDuration = mediaLeft.stopTime - mediaLeft.startTime;
-      player1 = PlayerController(
+      dualVideoService.desktop1.value = PlayerController(
           player: Player(
-              id: widget.leftFile.foundPath.length, videoDimensions: dimension),
-          duration: finalDuration);
-
-      player2 = PlayerController(
-          player: Player(
-              id: widget.rightFile.foundPath.length,
+              // id: widget.leftFile.foundPath.length,
+              id: 100,
               videoDimensions: dimension),
           duration: finalDuration);
 
-      player1!.player.open(mediaLeft, autoStart: false);
-      player2!.player.open(mediaRight, autoStart: false);
+      dualVideoService.desktop2.value = PlayerController(
+          player: Player(
+              // id: widget.rightFile.foundPath.length,
+              id: 200,
+              videoDimensions: dimension),
+          duration: finalDuration);
+
+      dualVideoService.desktop1.value!.player.open(mediaLeft, autoStart: false);
+      dualVideoService.desktop2.value!.player
+          .open(mediaRight, autoStart: false);
     } else {
-      _controller1 = VideoPlayerController.network(
+      dualVideoService.web1.value = VideoPlayerController.network(
         widget.leftFile.foundPath,
       )..initialize().then((_) {
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
@@ -69,13 +72,14 @@ class _VideoState extends State<CustomVideo> {
         }).catchError((e) {
           print(e);
         });
-      _controller2 = VideoPlayerController.network(widget.rightFile.foundPath)
-        ..initialize().then((_) {
-          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-          setState(() {});
-        }).catchError((e) {
-          print(e);
-        });
+      dualVideoService.web2.value =
+          VideoPlayerController.network(widget.rightFile.foundPath)
+            ..initialize().then((_) {
+              // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+              setState(() {});
+            }).catchError((e) {
+              print(e);
+            });
     }
 
     //   _controller.addListener(() {
@@ -85,6 +89,11 @@ class _VideoState extends State<CustomVideo> {
 
   @override
   Widget build(BuildContext context) {
+    final dualVideoService = ref.watch(dualVideoServiceProvider);
+    final _controller1 = dualVideoService.web1.value;
+    final _controller2 = dualVideoService.web2.value;
+    final player1 = dualVideoService.desktop1.value;
+    final player2 = dualVideoService.desktop2.value;
     return Scaffold(
       body: Column(
         children: [
@@ -195,48 +204,6 @@ class _VideoState extends State<CustomVideo> {
     );
   }
 
-  StartEndTime calculateStartTime(FileDetail left, FileDetail right) {
-    StartEndTime data = StartEndTime();
-    var leftEndinDuration = getTimeinDuration(left.info.modifiedDate);
-    var rightEndinDuration = getTimeinDuration(right.info.modifiedDate);
-
-    var leftStartinDuration = getTimeinDuration(
-        left.info.modifiedDate.subtract(getTimeinDuration(left.info.duration)));
-    var rightStartinDuration = getTimeinDuration(right.info.modifiedDate
-        .subtract(getTimeinDuration(right.info.duration)));
-
-    if (leftStartinDuration > rightStartinDuration) {
-      data.leftStart = Duration.zero;
-      data.rightStart = leftStartinDuration - rightStartinDuration;
-    } else if (leftStartinDuration == rightStartinDuration) {
-      data.leftStart = Duration.zero;
-      data.rightStart = Duration.zero;
-    } else {
-      data.leftStart = rightStartinDuration - leftStartinDuration;
-      data.rightStart = Duration.zero;
-    }
-
-    if (leftEndinDuration < rightEndinDuration) {
-      data.leftEnd = Duration.zero;
-      data.rightEnd = leftEndinDuration - rightEndinDuration;
-    } else if (leftEndinDuration == rightEndinDuration) {
-      data.leftEnd = Duration.zero;
-      data.rightEnd = Duration.zero;
-    } else {
-      data.leftEnd = rightEndinDuration - leftEndinDuration;
-      data.rightEnd = Duration.zero;
-    }
-    return data;
-  }
-
-  Duration getTimeinDuration(DateTime date) {
-    return Duration(
-        hours: date.hour,
-        minutes: date.minute,
-        seconds: date.second,
-        milliseconds: date.millisecond);
-  }
-
   Builder CustomVideoPlayer(
       {VideoPlayerController? controller, Player? player}) {
     return Builder(builder: (context) {
@@ -272,13 +239,14 @@ class _VideoState extends State<CustomVideo> {
 
   @override
   void dispose() {
-    if (UniversalPlatform.isDesktop) {
-      player1!.player.dispose();
-      player2!.player.dispose();
-    } else {
-      _controller1!.dispose();
-      _controller2!.dispose();
-    }
+    ref.read(dualVideoServiceProvider).dispose();
+    // if (UniversalPlatform.isDesktop) {
+    //   player1!.player.dispose();
+    //   player2!.player.dispose();
+    // } else {
+    //   _controller1!.dispose();
+    //   _controller2!.dispose();
+    // }
     super.dispose();
   }
 }

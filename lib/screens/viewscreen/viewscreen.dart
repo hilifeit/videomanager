@@ -29,6 +29,7 @@ class ViewScreen extends StatelessWidget {
                 draw: true,
                 controller: controller,
                 isvisible: true,
+                originalData: [],
               ),
             )
           ],

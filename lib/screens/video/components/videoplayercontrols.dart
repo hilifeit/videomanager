@@ -152,6 +152,7 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                                         .seek(seekedPosition);
                                   } else {
                                     widget.leftWeb!.seekTo(seekedPosition);
+                                    widget.rightWeb!.seekTo(seekedPosition);
                                   }
 
                                   setState(() {

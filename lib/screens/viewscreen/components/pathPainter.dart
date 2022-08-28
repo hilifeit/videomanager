@@ -244,6 +244,15 @@ class Painter extends CustomPainter {
                             var rightFile =
                                 await fileservice.fetchOne(secondVideo.id);
                             rightFile.foundPath = getVideoUrl(secondVideo.id);
+                            if (element.originalLocation.isNotEmpty) {
+                              leftFile.originalLocation
+                                  .addAll(element.originalLocation);
+                            }
+
+                            var secondVideoOriginalData = await fileservice
+                                .fetchOriginalLocation(secondVideo.id);
+                            rightFile.originalLocation
+                                .addAll(secondVideoOriginalData);
                             CustomOverlayEntry().closeLoader();
 
                             Future.delayed(const Duration(milliseconds: 100),

@@ -104,7 +104,7 @@ class Holder extends ConsumerWidget {
                             // ),
                             Container(),
                             const ChatHolder(),
-                            Bug()
+                            Container() // Bug()
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])
