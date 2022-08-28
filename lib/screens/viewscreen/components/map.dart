@@ -39,7 +39,7 @@ class MapScreen extends ConsumerStatefulWidget {
 class _MapScreenState extends ConsumerState<MapScreen> {
   final List<Offset> selectedArea = [];
   void _gotoDefault() {
-    widget.controller.center = LatLng(27.7251933, 85.3411312);
+    // widget.controller.center = widget.controller;
     setState(() {});
   }
 

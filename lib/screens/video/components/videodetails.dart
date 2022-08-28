@@ -127,8 +127,16 @@ class VideoDetails extends StatelessWidget {
                                               miniMap: true,
                                               originalData: detailedFile!
                                                   .originalLocation,
-                                              controller:
-                                                  MapController(location: home),
+                                              controller: MapController(
+                                                  location: LatLng(
+                                                      detailedFile!
+                                                          .originalLocation
+                                                          .first
+                                                          .lat,
+                                                      detailedFile!
+                                                          .originalLocation
+                                                          .first
+                                                          .lng)),
                                             )),
                                       );
                                     });
