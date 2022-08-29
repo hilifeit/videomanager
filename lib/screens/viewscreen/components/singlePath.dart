@@ -21,21 +21,13 @@ class SinglePath extends StatefulWidget {
 
 class _SinglePathState extends State<SinglePath> {
   Duration currentPosition = Duration.zero;
+
+  final List<Paths> paths = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.transformer.controller.center =
-        LatLng(widget.data.first.lat, widget.data.first.lng);
-
-    var countTrue = 0, countFalse = 0;
-    for (var element in widget.data) {
-      if (element.duplicate)
-        countFalse++;
-      else
-        countTrue++;
-    }
-    if (widget.isFirst) print("$countTrue $countFalse ${widget.data.length}");
+    // paths.addAll(getPathsFromOriginalData(widget.data, widget.transformer));
   }
 
   @override
@@ -46,7 +38,9 @@ class _SinglePathState extends State<SinglePath> {
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: SinglePathPainter(
-                transformer: widget.transformer, data: widget.data),
+                transformer: widget.transformer,
+                data: widget.data,
+                paths: paths),
           ),
         ),
         Consumer(builder: (context, ref, c) {
@@ -110,8 +104,69 @@ class _SinglePathState extends State<SinglePath> {
     );
   }
 
+  List<Paths> getPathsFromOriginalData(
+      List<OriginalLocation> data, MapTransformer transformer) {
+    List<Offset> noDuplicatePath = [];
+
+    List<Offset> duplicatePath = [];
+
+    Path path = Path();
+
+    List<Paths> paths = [];
+
+    for (var element in data) {
+      if (!element.duplicate) {
+        var index = data.indexOf(element);
+
+        if (index != 0) {
+          if (data[index - 1].duplicate) {
+            path.addPolygon(duplicatePath, true);
+            paths.add(Paths(paths: path, duplicate: true));
+            // count += duplicatePath.length;
+            duplicatePath.clear();
+            path.reset();
+          }
+        }
+
+        var offset =
+            transformer.fromLatLngToXYCoords(LatLng(element.lat, element.lng));
+        noDuplicatePath.add(offset);
+      } else {
+        var index = data.indexOf(element);
+
+        if (index != 0) {
+          if (!data[index - 1].duplicate) {
+            path.addPolygon(noDuplicatePath, false);
+            paths.add(Paths(paths: path, duplicate: false));
+            // count += noDuplicatePath.length;
+            noDuplicatePath.clear();
+            path.reset();
+          }
+        }
+
+        var offset =
+            transformer.fromLatLngToXYCoords(LatLng(element.lat, element.lng));
+        duplicatePath.add(offset);
+      }
+    }
+    if (noDuplicatePath.isNotEmpty) {
+      path.addPolygon(noDuplicatePath, false);
+      paths.add(Paths(paths: path, duplicate: false));
+      // count += noDuplicatePath.length;
+    }
+    if (duplicatePath.isNotEmpty) {
+      path.addPolygon(duplicatePath, true);
+      paths.add(Paths(paths: path, duplicate: true));
+      // count += duplicatePath.length;
+    }
+
+    noDuplicatePath.clear();
+    duplicatePath.clear();
+    return paths;
+  }
+
   Widget markerWidget(Offset offset) {
-    final size = 8.sr();
+    final size = 10.sr();
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 500),
       left: offset.dx - (size / 2),
@@ -121,6 +176,11 @@ class _SinglePathState extends State<SinglePath> {
             color: Colors.blue, borderRadius: BorderRadius.circular(12)),
         height: size,
         width: size,
+        child: Container(
+          margin: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+        ),
       ),
     );
   }
