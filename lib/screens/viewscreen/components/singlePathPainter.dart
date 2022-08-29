@@ -23,7 +23,7 @@ class SinglePathPainter extends CustomPainter {
 
     List<Path> paths = [];
     for (int i = 0; i < data.length; i++) {
-      print(data[i].duplicate);
+      // print(data[i].duplicate);
 
       // if (i < data.length - 1) {
       //   if (!data[i].duplicate) {
@@ -37,11 +37,11 @@ class SinglePathPainter extends CustomPainter {
       // }
     }
 
-    //   var offsets = data
-    //       .map((e) => transformer.fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
-    //       .toList();
-    // path.addPolygon(offsets, false);
-    // canvas.drawPath(path, paint);
+    var offsets = data
+        .map((e) => transformer.fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
+        .toList();
+    path.addPolygon(offsets, false);
+    canvas.drawPath(path, paint);
   }
 
   @override
