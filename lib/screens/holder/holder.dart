@@ -1,5 +1,6 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/Bug/component/bug.dart';
+import 'package:videomanager/screens/Bug/screen/bugscreen.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
 import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
@@ -99,9 +100,7 @@ class Holder extends ConsumerWidget {
                             const Users(),
                             Bug(),
                             const ChatHolder(),
-                            Container(
-                              color: Colors.amber,
-                            )
+                            BugScreen(),
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])
