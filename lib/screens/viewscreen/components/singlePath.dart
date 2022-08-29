@@ -76,8 +76,7 @@ class _SinglePathState extends State<SinglePath> {
                       return Container();
                     })
                 : Container();
-          }
-          {
+          } else {
             final videoService = widget.isFirst
                 ? ref.watch(dualVideoServiceProvider).web1.value
                 : ref.watch(dualVideoServiceProvider).web2.value;
@@ -85,12 +84,24 @@ class _SinglePathState extends State<SinglePath> {
                 ? ValueListenableBuilder<VideoPlayerValue>(
                     valueListenable: videoService,
                     builder: (context, value, child) {
-                      final index = map(value.position.inMilliseconds, 0,
-                          value.duration.inMilliseconds, 0, widget.data.length);
+                      var index;
+                      try {
+                        index = map(
+                            value.position.inMilliseconds,
+                            0,
+                            value.duration.inMilliseconds,
+                            0,
+                            widget.data.length);
+                      } catch (e) {
+                        index = 0;
+                      }
+
                       final offset = widget.transformer.fromLatLngToXYCoords(
                           LatLng(
                               widget.data[index].lat, widget.data[index].lng));
                       return markerWidget(offset);
+
+                      // return Container();
                     })
                 : Container();
           }
