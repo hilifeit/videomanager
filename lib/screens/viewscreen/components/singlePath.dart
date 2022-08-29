@@ -27,6 +27,15 @@ class _SinglePathState extends State<SinglePath> {
     super.initState();
     widget.transformer.controller.center =
         LatLng(widget.data.first.lat, widget.data.first.lng);
+
+    var countTrue = 0, countFalse = 0;
+    for (var element in widget.data) {
+      if (element.duplicate)
+        countFalse++;
+      else
+        countTrue++;
+    }
+    if (widget.isFirst) print("$countTrue $countFalse ${widget.data.length}");
   }
 
   @override
@@ -85,19 +94,6 @@ class _SinglePathState extends State<SinglePath> {
                     })
                 : Container();
           }
-
-//           else
-//           {
-//             length=currentPosition=ref.watch(dualVideoServiceProvider).web1.value!.value.duration;
-// if(widget.isFirst)
-//          {
-//             currentPosition=ref.watch(dualVideoServiceProvider).
-//          }else
-//          {
-
-//          }
-//           }
-//
         })
       ],
     );
