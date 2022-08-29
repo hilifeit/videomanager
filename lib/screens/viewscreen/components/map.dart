@@ -25,12 +25,14 @@ class MapScreen extends ConsumerStatefulWidget {
   final bool isvisible, draw, miniMap;
   final MapController controller;
   final List<OriginalLocation> originalData;
+  final bool isFirst;
   const MapScreen(
       {this.isvisible = true,
       required this.controller,
       this.draw = false,
       this.miniMap = true,
-      required this.originalData});
+      required this.originalData,
+      this.isFirst = true});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MapScreenState();
@@ -91,9 +93,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             controller: widget.controller,
             builder: (context, transformer) {
               SelectedArea.transformer = transformer;
-              transformer.controller.addListener(() {
-                setState(() {});
-              });
+              try {
+                transformer.controller.addListener(() {
+                  setState(() {});
+                });
+              } catch (e) {
+                // print(e);
+              }
 
               // transformer.controller.center = LatLng(
               //     fileService.files[10].location.coordinates[0][1],
@@ -101,6 +107,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
               // transformer.controller.zoom = 20;
               Widget markerWidgets = Container();
+              transformer.controller.addListener(() {
+                setState(() {});
+              });
 
               if (widget.originalData.isEmpty) {
                 markerWidgets = ClipRRect(
@@ -205,6 +214,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                         SinglePath(
                           transformer: transformer,
                           data: widget.originalData,
+                          isFirst: widget.isFirst,
                         ),
                       if (widget.miniMap)
                         if (selectedFile != null)

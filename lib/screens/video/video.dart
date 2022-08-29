@@ -177,6 +177,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
                       ),
                       Expanded(
                         child: VideoDetails(
+                          isFirst: false,
                           isDetailed: true,
                           detailedFile: widget.rightFile,
                         ),
