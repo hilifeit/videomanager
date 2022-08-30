@@ -1,4 +1,8 @@
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/viewscreen/components/map.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
+import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class CustomSearch extends StatefulWidget {
   const CustomSearch({Key? key}) : super(key: key);
@@ -69,29 +73,40 @@ class _CustomSearchState extends State<CustomSearch> {
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
       link: _layerLink,
-      child: TextFormField(
-        style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
-        textAlignVertical: TextAlignVertical.center,
-        focusNode: foucusNode,
-        decoration: InputDecoration(
-          prefixIcon:
-              Icon(Videomanager.search, color: Colors.black, size: 14.ssp()),
-          fillColor: secondaryColor,
-          filled: true,
-          contentPadding:
-              EdgeInsets.only(left: 10.5.sw(), top: 9.sh(), bottom: 11.sh()),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.sr()),
-            borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
+      child: Consumer(builder: (context, ref, c) {
+        return TextFormField(
+          style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+          textAlignVertical: TextAlignVertical.center,
+          focusNode: foucusNode,
+          onFieldSubmitted: (val) {
+            var fileservice = ref.read(fileDetailMiniServiceProvider);
+
+            var found = fileservice.files.where((element) => element.id == val);
+
+            if (found.isNotEmpty) {
+              ref.read(selectedFileProvider.state).state = found.first;
+            }
+          },
+          decoration: InputDecoration(
+            prefixIcon:
+                Icon(Videomanager.search, color: Colors.black, size: 14.ssp()),
+            fillColor: secondaryColor,
+            filled: true,
+            contentPadding:
+                EdgeInsets.only(left: 10.5.sw(), top: 9.sh(), bottom: 11.sh()),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5.sr()),
+              borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
+            ),
+            hintText: 'Search',
+            hintStyle: kTextStyleInterMedium.copyWith(fontSize: 14.ssp()),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.sr()),
-            borderSide: const BorderSide(color: Color(0xffD1D1D1), width: 1),
-          ),
-          hintText: 'Search',
-          hintStyle: kTextStyleInterMedium.copyWith(fontSize: 14.ssp()),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

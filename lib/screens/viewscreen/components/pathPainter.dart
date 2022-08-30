@@ -18,12 +18,6 @@ import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
-class FileWithDistance {
-  FileWithDistance({required this.file, required this.distance});
-  final FileDetailMini file;
-  final double distance;
-}
-
 class Painter extends CustomPainter {
   Painter(
     this.context,
@@ -114,7 +108,7 @@ class Painter extends CustomPainter {
     selectedPointsProvider.draw(customCanvas);
 
     for (var element in files) {
-      Rect item = getRect(element.boundingBox!);
+      Rect item = fileservice.getRect(element.boundingBox!, transformer);
 
       if (item.overlaps(visibleScreen)) {
         visibleFilesList.add(element);
@@ -171,7 +165,7 @@ class Painter extends CustomPainter {
       if (filterService.onlyNotUsable == !element.isUseable) {
         visibleFiles++;
         Path path = Path();
-        Rect item = getRect(element.boundingBox!);
+        Rect item = fileservice.getRect(element.boundingBox!, transformer);
 
         Function tap, tapSecondary;
         tap = () async {
@@ -183,6 +177,7 @@ class Painter extends CustomPainter {
               isUseable: element.isUseable,
               id: element.id,
               status: element.status,
+              isLeft: element.isLeft,
               path: element.path.replaceAll('.MP4', '_processed.json'));
 
           if (element.originalLocation.isEmpty) {
@@ -231,10 +226,11 @@ class Painter extends CustomPainter {
                       var firstVideoExists =
                           await fileservice.fileExists(element.id);
                       if (firstVideoExists) {
-                        FileDetailMini? secondVideo = findFile(
-                            visibleFilesList: visibleFilesList,
-                            file: element,
-                            fileRect: item);
+                        FileDetailMini? secondVideo =
+                            await fileservice.findFile(
+                                visibleFilesList: visibleFilesList,
+                                file: element,
+                                fileRect: item);
                         var leftFile = await fileservice.fetchOne(element.id);
                         leftFile.foundPath = getVideoUrl(element.id);
                         if (secondVideo != null) {
@@ -526,50 +522,6 @@ class Painter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
-  }
-
-  FileDetailMini? findFile(
-      {required List<FileDetailMini> visibleFilesList,
-      required FileDetailMini file,
-      required Rect fileRect,
-      double minimumDistance = 200}) {
-    List<FileWithDistance> distances = [];
-    for (var e in visibleFilesList) {
-      Rect testElement = getRect(e.boundingBox!);
-      double distance = (testElement.center - fileRect.center).distance.abs();
-      if (SelectedArea.transformer.controller.zoom < 19) {
-        if (distance < minimumDistance) {
-          if (e != file) {
-            distances.add(FileWithDistance(file: e, distance: distance));
-          }
-        }
-      } else {
-        if (e != file) {
-          distances.add(FileWithDistance(file: e, distance: distance));
-        }
-      }
-    }
-    distances.sort((a, b) => a.distance.compareTo(b.distance));
-
-    return distances.isNotEmpty ? distances.first.file : null;
-  }
-
-  Rect getRect(Rect boundingBox) {
-    Offset topLeft = transformer.fromLatLngToXYCoords(
-        LatLng(boundingBox.topLeft.dx, boundingBox.topLeft.dy));
-    Offset topRight = transformer.fromLatLngToXYCoords(
-        LatLng(boundingBox.topRight.dx, boundingBox.topRight.dy));
-    Offset bottomLeft = transformer.fromLatLngToXYCoords(
-        LatLng(boundingBox.bottomLeft.dx, boundingBox.bottomLeft.dy));
-
-    var height = (topLeft - topRight).distance;
-    var width = (topLeft - bottomLeft).distance;
-
-    return Rect.fromCenter(
-        center: transformer.fromLatLngToXYCoords(
-            LatLng(boundingBox.center.dx, boundingBox.center.dy)),
-        width: width,
-        height: height);
   }
 
   double indicativeAngle(List<Offset> points) {

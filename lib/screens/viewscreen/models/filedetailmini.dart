@@ -24,7 +24,8 @@ class FileDetailMini {
       required this.status,
       this.foundPath = '',
       this.isSelected = false,
-      this.assignDetail
+      this.assignDetail,
+      required this.isLeft
       // required this.area
       });
 
@@ -34,6 +35,7 @@ class FileDetailMini {
   final Location location;
   final Status status;
   final List<OriginalLocation> originalLocation = [];
+  final bool isLeft;
   bool isUseable;
   bool isSelected;
   final AssignDetail? assignDetail;
@@ -53,7 +55,8 @@ class FileDetailMini {
           path: path,
           isUseable: isUseable,
           status: status,
-          assignDetail: assignDetail
+          assignDetail: assignDetail,
+          isLeft: isLeft
           // area: area
           );
 
@@ -63,6 +66,7 @@ class FileDetailMini {
       location: Location.fromJson(json["location"]),
       isUseable: json["useable"],
       path: json["path"],
+      isLeft: json["isLeft"],
       assignDetail: json["assignDetail"] != null
           ? AssignDetail.fromJson(json["assignDetail"])
           : null,
@@ -260,4 +264,10 @@ class AssignDetail {
 
   @override
   int get hashCode => super.hashCode;
+}
+
+class FileWithDistance {
+  FileWithDistance({required this.file, required this.distance});
+  final FileDetailMini file;
+  final double distance;
 }

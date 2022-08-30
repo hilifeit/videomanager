@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:map/map.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/disk.dart';
+import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/apiHelper.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
@@ -228,7 +230,7 @@ class FileService extends ChangeNotifier {
     notifyListeners();
   }
 
-  createAreaAndAssign(Map data) async {
+  createAreaAndAssign(data) async {
     var userProvider = ref.read(userChangeProvider);
     try {
       var response = await client.post(Uri.parse("${CustomIP.apiBaseUrl}area"),
@@ -250,7 +252,7 @@ class FileService extends ChangeNotifier {
     }
   }
 
-  assignVideosToUser(Map data) async {
+  assignVideosToUser(data) async {
     var userProvider = ref.read(userChangeProvider);
     try {
       var response = await client.put(
@@ -428,7 +430,8 @@ class FileService extends ChangeNotifier {
             location: element.location,
             path: element.path.replaceAll(".MP4", "_processed.json"),
             isUseable: element.isUseable,
-            status: element.status);
+            status: element.status,
+            isLeft: element.isLeft);
 
         try {
           var originalData = await fetchOriginalLocation(element.id);
@@ -509,5 +512,125 @@ class FileService extends ChangeNotifier {
     } catch (e) {
       throw "$e";
     }
+  }
+
+  Future<FileDetailMini?> findFile(
+      {required List<FileDetailMini> visibleFilesList,
+      required FileDetailMini file,
+      required Rect fileRect,
+      double minimumDistance = 200}) async {
+    loop(List<LatLng> first, List<LatLng> second) {
+      List<double> distance = [],
+          firstDistanceTotal = [],
+          secondDistanceTotal = [];
+      var length = first.length < second.length ? first.length : second.length;
+      print(length);
+      for (int i = 0; i < length; i++) {
+        try {
+          // var fileElement = first.first;
+          // var secondFileElement = second.first;
+
+          var dist = calculateDistance(first[i], second[i]);
+          distance.add(dist);
+          if (i > 0) {
+            firstDistanceTotal.add(calculateDistance(first[i], first[i - 1]));
+            secondDistanceTotal
+                .add(calculateDistance(second[i], second[i - 1]));
+          }
+        } catch (e) {}
+      }
+      double avg = 0, firstTotal = 0, secondTotal = 0;
+      for (var element in distance) {
+        avg += element;
+      }
+      for (var element in firstDistanceTotal) {
+        firstTotal += element;
+      }
+      for (var element in secondDistanceTotal) {
+        secondTotal += element;
+      }
+      print(
+          "Avg Distance: ${avg / length}m distDiff: ${(firstTotal - secondTotal).abs()} FirstDist: $firstTotal SecondDist: $secondTotal");
+      // print(
+      //   "Startdiff : ${calculateDistance(LatLng(file.location.coordinates.first.last, file.location.coordinates.first.first), LatLng(distances.first.file.location.coordinates.first.last, distances.first.file.location.coordinates.first.first))}m Enddiff: ${calculateDistance(LatLng(file.location.coordinates.last.last, file.location.coordinates.last.first), LatLng(distances.first.file.location.coordinates.last.last, distances.first.file.location.coordinates.last.first))}m",
+      // );
+    }
+
+    List<FileWithDistance> distances = [];
+    var list = visibleFilesList.toList();
+    list.removeWhere((element) => element.isLeft == file.isLeft);
+    for (var e in list) {
+      Rect testElement = getRect(e.boundingBox!, SelectedArea.transformer);
+      double distance = (testElement.center - fileRect.center).distance.abs();
+
+      if (SelectedArea.transformer.controller.zoom < 19) {
+        if (distance < minimumDistance) {
+          if (e != file) {
+            distances.add(FileWithDistance(file: e, distance: distance));
+          }
+        }
+      } else {
+        if (e != file) {
+          distances.add(FileWithDistance(file: e, distance: distance));
+        }
+      }
+    }
+    distances.sort((a, b) => a.distance.compareTo(b.distance));
+
+    if (distances.isNotEmpty) {
+      var firstOriginalData = await fetchOriginalLocation(file.id);
+      var secondOriginalData =
+          await fetchOriginalLocation(distances.first.file.id);
+
+      if (firstOriginalData.isNotEmpty && secondOriginalData.isNotEmpty) {
+        print(
+            "${firstOriginalData.first.timeStamp} ${firstOriginalData.last.timeStamp}");
+        print(
+            "${secondOriginalData.first.timeStamp} ${secondOriginalData.last.timeStamp}");
+
+        loop(
+            firstOriginalData.map((e) {
+              return LatLng(e.lat, e.lng);
+            }).toList(),
+            secondOriginalData.map((e) => LatLng(e.lat, e.lng)).toList());
+        loop(
+            file.location.coordinates
+                .map((e) => LatLng(e.last, e.first))
+                .toList(),
+            distances.first.file.location.coordinates
+                .map((e) => LatLng(e.last, e.first))
+                .toList());
+      } else {
+        loop(
+            file.location.coordinates
+                .map((e) => LatLng(e.last, e.first))
+                .toList(),
+            distances.first.file.location.coordinates
+                .map((e) => LatLng(e.last, e.first))
+                .toList());
+      }
+
+      return distances.first.file;
+    } else {
+      return null;
+    }
+  }
+
+  Rect getRect(Rect boundingBox, MapTransformer transformer) {
+    Offset topLeft = transformer.fromLatLngToXYCoords(
+        LatLng(boundingBox.topLeft.dx, boundingBox.topLeft.dy));
+    Offset topRight = transformer.fromLatLngToXYCoords(
+        LatLng(boundingBox.topRight.dx, boundingBox.topRight.dy));
+    Offset bottomLeft = transformer.fromLatLngToXYCoords(
+        LatLng(boundingBox.bottomLeft.dx, boundingBox.bottomLeft.dy));
+
+    var height = (topLeft - topRight).distance;
+    var width = (topLeft - bottomLeft).distance;
+
+    return Rect.fromCenter(
+        center: transformer.fromLatLngToXYCoords(
+            LatLng(boundingBox.center.dx, boundingBox.center.dy)),
+        width: width,
+        height: height);
   }
 }
