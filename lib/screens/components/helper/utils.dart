@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:random_color/random_color.dart';
@@ -83,4 +84,17 @@ Future<Color> getColorFromImagePixel(
         colorBrightness: ColorBrightness.light);
   }
   return color;
+}
+
+double calculateDistance(LatLng first, LatLng second) {
+  var p = 0.017453292519943295;
+  var c = cos;
+  var a = 0.5 -
+      c((second.latitude - first.latitude) * p) / 2 +
+      c(first.latitude * p) *
+          c(second.latitude * p) *
+          (1 - c((second.longitude - first.longitude) * p)) /
+          2;
+  var f = ((12742 * asin(sqrt(a))) * 1000);
+  return f;
 }

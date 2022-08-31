@@ -280,6 +280,44 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            IconButton(
+              onPressed: () async {
+                var fileService = ref.read(fileDetailMiniServiceProvider);
+                var selectedAreaService = ref.read(selectedAreaServiceProvider);
+                CustomOverlayEntry().showLoader();
+                List<List<FileDetailMini?>> fileCheckList = [];
+
+                var list = selectedAreaService.refinedSelection.value.toList();
+                for (var element in list) {
+                  try {
+                    var adjacentPair = await fileService.findFile(
+                        visibleFilesList: list,
+                        file: element,
+                        fileRect: fileService.getRect(
+                            element.boundingBox!, SelectedArea.transformer));
+                    fileCheckList.add([element, adjacentPair]);
+                  } catch (e, s) {
+                    print("$e $s");
+                  }
+                }
+                fileCheckList.forEach((element) {
+                  String line = '';
+                  if (element.first != null)
+                    line += element.first!.path;
+                  else
+                    line += "null";
+
+                  if (element.last != null)
+                    line += " " + element.last!.path;
+                  else
+                    line += " null";
+
+                  print(line);
+                });
+                CustomOverlayEntry().closeLoader();
+              },
+              icon: Icon(Icons.abc),
+            ),
             // SizedBox(
             //   height: 54.sr(),
             //   width: 54.sr(),
