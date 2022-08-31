@@ -1,5 +1,6 @@
 import 'package:map/map.dart';
 import 'package:videomanager/screens/Bug/component/bug.dart';
+import 'package:videomanager/screens/Bug/screen/bugscreen.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
 import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
@@ -13,6 +14,8 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screens
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
+import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/users/users.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -104,7 +107,17 @@ class Holder extends ConsumerWidget {
                             // ),
                             Container(),
                             const ChatHolder(),
-                            Container() // Bug()
+
+                            BugScreen(
+                                isActive: true,
+                                user: UserModelMini(
+                                    id: '1',
+                                    name: 'Shruti',
+                                    role: 1,
+                                    createdAt: DateTime.now()))
+
+                            // Container() // Bug()
+
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])
