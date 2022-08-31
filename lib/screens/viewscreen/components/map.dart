@@ -280,44 +280,44 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            IconButton(
-              onPressed: () async {
-                var fileService = ref.read(fileDetailMiniServiceProvider);
-                var selectedAreaService = ref.read(selectedAreaServiceProvider);
-                CustomOverlayEntry().showLoader();
-                List<List<FileDetailMini?>> fileCheckList = [];
+            // IconButton(
+            //   onPressed: () async {
+            //     var fileService = ref.read(fileDetailMiniServiceProvider);
+            //     var selectedAreaService = ref.read(selectedAreaServiceProvider);
+            //     CustomOverlayEntry().showLoader();
+            //     List<List<FileDetailMini?>> fileCheckList = [];
 
-                var list = selectedAreaService.refinedSelection.value.toList();
-                for (var element in list) {
-                  try {
-                    var adjacentPair = await fileService.findFile(
-                        visibleFilesList: list,
-                        file: element,
-                        fileRect: fileService.getRect(
-                            element.boundingBox!, SelectedArea.transformer));
-                    fileCheckList.add([element, adjacentPair]);
-                  } catch (e, s) {
-                    print("$e $s");
-                  }
-                }
-                fileCheckList.forEach((element) {
-                  String line = '';
-                  if (element.first != null)
-                    line += element.first!.path;
-                  else
-                    line += "null";
+            //     var list = selectedAreaService.refinedSelection.value.toList();
+            //     for (var element in list) {
+            //       try {
+            //         var adjacentPair = await fileService.findFile(
+            //             visibleFilesList: list,
+            //             file: element,
+            //             fileRect: fileService.getRect(
+            //                 element.boundingBox!, SelectedArea.transformer));
+            //         fileCheckList.add([element, adjacentPair]);
+            //       } catch (e, s) {
+            //         print("$e $s");
+            //       }
+            //     }
+            //     fileCheckList.forEach((element) {
+            //       String line = '';
+            //       if (element.first != null)
+            //         line += element.first!.path;
+            //       else
+            //         line += "null";
 
-                  if (element.last != null)
-                    line += " " + element.last!.path;
-                  else
-                    line += " null";
+            //       if (element.last != null)
+            //         line += " " + element.last!.path;
+            //       else
+            //         line += " null";
 
-                  print(line);
-                });
-                CustomOverlayEntry().closeLoader();
-              },
-              icon: Icon(Icons.abc),
-            ),
+            //       print(line);
+            //     });
+            //     CustomOverlayEntry().closeLoader();
+            //   },
+            //   icon: Icon(Icons.abc),
+            // ),
             // SizedBox(
             //   height: 54.sr(),
             //   width: 54.sr(),
@@ -421,23 +421,24 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    showDialog(
-                                        context: context,
-                                        builder: (_) {
-                                          // debugPrint(selectedPoints.length.toString());
-                                          return AlertDialog(
-                                            backgroundColor: Colors.transparent,
-                                            titlePadding: EdgeInsets.zero,
-                                            contentPadding: EdgeInsets.zero,
-                                            content: AssignManager(
-                                              files: selectedAreaService
-                                                  .refinedSelection.value,
-                                              points: selectedPoints,
-                                            ),
-                                          );
-                                        });
-                                    // var fileService =
-                                    //     ref.read(fileDetailMiniServiceProvider);
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (_) {
+                                    //       // debugPrint(selectedPoints.length.toString());
+                                    //       return AlertDialog(
+                                    //         backgroundColor: Colors.transparent,
+                                    //         titlePadding: EdgeInsets.zero,
+                                    //         contentPadding: EdgeInsets.zero,
+                                    //         content: AssignManager(
+                                    //           files: selectedAreaService
+                                    //               .refinedSelection.value,
+                                    //           points: selectedPoints,
+                                    //         ),
+                                    //       );
+                                    //     });
+                                    CustomOverlayEntry().showLoader();
+                                    var fileService =
+                                        ref.read(fileDetailMiniServiceProvider);
                                     // var listOfFilesToFix = selectedAreaService
                                     //     .refinedSelection.value;
 
@@ -454,10 +455,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
                                     // print(fileService.files[10175].id);
 
-                                    // // await fileService.fixLocationData();
-                                    // fileService.updateLocationDataInServer();
-                                    // await fileService
-                                    //     .updateLocationDataInServer();
+                                    await fileService.fixLocationData(
+                                        selectedAreaService
+                                            .refinedSelection.value);
+                                    fileService.updateLocationDataInServer(
+                                        selectedAreaService
+                                            .refinedSelection.value);
+                                    CustomOverlayEntry().closeLoader();
                                   },
                                   tooltip: 'Assign Area'),
                             ),

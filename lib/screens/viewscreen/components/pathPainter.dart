@@ -14,6 +14,7 @@ import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/video/video.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
@@ -170,20 +171,47 @@ class Painter extends CustomPainter {
         Function tap, tapSecondary;
         tap = () async {
           ref.read(selectedFileProvider.state).state = element;
-          if (element.originalLocation.isEmpty) {}
-          FileDetailMini temp = FileDetailMini(
-              filename: element.filename,
-              location: element.location,
-              isUseable: element.isUseable,
-              id: element.id,
-              status: element.status,
-              isLeft: element.isLeft,
-              path: element.path.replaceAll('.MP4', '_processed.json'));
-
           if (element.originalLocation.isEmpty) {
+            FileDetailMini temp = FileDetailMini(
+                filename: element.filename,
+                location: element.location,
+                isUseable: element.isUseable,
+                id: element.id,
+                status: element.status,
+                isLeft: element.isLeft,
+                path: element.path.replaceAll('.MP4', '_processed.json'));
+
             var originalLocationData =
                 await fileservice.fetchOriginalLocation(temp.id);
             fileservice.addOriginalLocation(element, originalLocationData);
+          } else {
+            List<OriginalLocation> data = [], originalData = [];
+            originalData.addAll(element.originalLocation);
+            data.add(element.originalLocation.first);
+            for (int i = 1; i < element.originalLocation.length; i++) {
+              var e = element.originalLocation[i];
+              if (i < element.originalLocation.length - 1) {
+                for (int j = i; j < element.originalLocation.length; j++) {
+                  var u = element.originalLocation[j];
+
+                  var dist = calculateDistance(
+                      LatLng(e.lat, e.lng), LatLng(u.lat, u.lng));
+
+                  if (dist > 1) {
+                    i = j;
+                    data.add(u);
+                    break;
+                  }
+                }
+              }
+            }
+
+            fileservice.addOriginalLocation(element, data);
+            Future.delayed(const Duration(seconds: 3), () {
+              fileservice.addOriginalLocation(element, originalData);
+            });
+
+            // print(data.length);
           }
 
           // var metrics=selectedPointsProvider.path.value.computeMetrics();

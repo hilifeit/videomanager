@@ -211,6 +211,9 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
       bool buffering = false;
       return StatefulBuilder(builder: (context, setCustomState) {
         if (UniversalPlatform.isDesktop) {
+          // player!.playbackStream.listen((event) {
+
+          // });
         } else {
           controller!.addListener(() {
             setCustomState(() {
@@ -218,6 +221,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
             });
           });
         }
+
         return Stack(
           children: [
             UniversalPlatform.isDesktop
@@ -241,13 +245,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
   @override
   void dispose() {
     ref.read(dualVideoServiceProvider).dispose();
-    // if (UniversalPlatform.isDesktop) {
-    //   player1!.player.dispose();
-    //   player2!.player.dispose();
-    // } else {
-    //   _controller1!.dispose();
-    //   _controller2!.dispose();
-    // }
+
     super.dispose();
   }
 }

@@ -60,4 +60,20 @@ class DualVideoService extends ChangeNotifier {
         seconds: date.second,
         milliseconds: date.millisecond);
   }
+
+  dispose() {
+    if (UniversalPlatform.isDesktop) {
+      if (desktop1.value!.player.playback.isPlaying) {
+        desktop1.value!.player.pause();
+      }
+      if (desktop2.value!.player.playback.isPlaying) {
+        desktop2.value!.player.pause();
+      }
+      desktop1.value!.player.dispose();
+      desktop2.value!.player.dispose();
+    } else {
+      web1.value!.dispose();
+      web2.value!.dispose();
+    }
+  }
 }
