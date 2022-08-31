@@ -35,7 +35,7 @@ class Bug extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 },
                 child: const Icon(
                   Icons.close,
@@ -146,9 +146,6 @@ class Bug extends StatelessWidget {
                         snack.success('Your report is submitted');
                       }
 
-
-
-
                       // showDialog(
                       //     context: context,
                       //     builder: (context) {
@@ -161,14 +158,9 @@ class Bug extends StatelessWidget {
                       //                 topRight: Radius.circular(15.sr()))),
                       //       );
                       //     });
-                  
-                  
-                  
-                  
                     },
                   ),
                 ),
-              
               ],
             ),
           ),

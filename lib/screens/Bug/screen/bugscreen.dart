@@ -1,91 +1,152 @@
-import 'dart:math';
-
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:videomanager/screens/chat/components/profileAvatar.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/users/model/userModelSource.dart';
+import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 class BugScreen extends StatelessWidget {
-  BugScreen({Key? key}) : super(key: key);
-  final List<String> title = ['Username', 'Name', 'Role', 'Description'];
-  final List<String> content = [
-    'user1',
-    'Shruti Pokharel',
-    'User',
-    'Bugs found'
-  ];
-
+  const BugScreen({Key? key, required this.isActive, required this.user})
+      : super(key: key);
+  final bool isActive;
+  final UserModelMini user;
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: lightGrey,
-        child: ListView.separated(
-            itemBuilder: (context, index) {
-              if (index != title.length - 1) {
-                return Column(
-                  children: [
-                    Text(title[index]),
-                    SizedBox(
-                      height: 6.h,
-                    ),
-                    SingleRoleText(
-                        text: content[index], style: kTextStyleIbmRegularBlack)
-                  ],
-                  // children: title.map((e) => Text(e)).toList(),
-                );
-              } else {
-                return Column(
-                  children: [
-                    Text(title[index]),
-                    SizedBox(
-                      height: 6.h,
-                    ),
-                    Container(
-                      height: 200.h,
-                      child: SingleRoleText(
-                          text: content[index],
-                          style: kTextStyleIbmRegularBlack),
-                    ),
-                  ],
-                );
-              }
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 14.h);
-            },
-            itemCount: title.length));
-  }
-}
-
-class SingleRoleText extends StatelessWidget {
-  SingleRoleText({
-    Key? key,
-    required this.text,
-    required this.style,
-  }) : super(key: key);
-  final String text;
-  final TextStyle style;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 55.sh(),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          4.sr(),
-        ),
-        border: Border.all(
-          color: lightGrey,
-        ),
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 13.sw(), bottom: 10.sh(), top: 10.sh()),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(text, style: style),
-        ),
+    final fontSize = ResponsiveLayout.isMobile ? 16.ssp() : 21.ssp();
+    return Material(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (ResponsiveLayout.isMobile)
+            AppBar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Theme.of(context).primaryColor,
+              elevation: 0,
+            ),
+          SizedBox(
+            height: 24.sh(),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: ProfileAvatar(
+              name: user.name,
+              isActive: isActive,
+              profileradius: 60.sr(),
+            ),
+          ),
+          SizedBox(
+            height: 45.sh(),
+          ),
+          Row(
+            children: [
+              Spacer(),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Name:',
+                    style: kTextStyleIbmRegular.copyWith(fontSize: fontSize),
+                  ),
+                  SizedBox(
+                    height: 24.sh(),
+                  ),
+                  Text(
+                    'Username:',
+                    style: kTextStyleIbmRegular.copyWith(fontSize: fontSize),
+                  ),
+                  SizedBox(
+                    height: 24.sh(),
+                  ),
+                  Text(
+                    'Role:',
+                    style: kTextStyleIbmRegular.copyWith(fontSize: fontSize),
+                  ),
+                     SizedBox(
+                    height: 24.sh(),
+                  ),             
+                  Text(
+                    'Bug Details:',
+                    style: kTextStyleIbmRegular.copyWith(fontSize: fontSize),
+                  ),
+             
+                  
+                ],
+              ),
+              SizedBox(
+                width: 30.sw(),
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name,
+                    maxLines: 2,
+                    style:
+                        kTextStyleIbmRegularBlack.copyWith(fontSize: fontSize),
+                  ),
+                  SizedBox(
+                    height: 24.sh(),
+                  ),
+                  // Text(
+                  //   user.username,
+                  //   style:
+                  //       kTextStyleIbmRegularBlack.copyWith(fontSize: fontSize),
+                  // ),
+                  // SizedBox(
+                  //   height: 24.sh(),
+                  // ),
+                  // Text(
+                  //   user.email,
+                  //   style:
+                  //       kTextStyleIbmRegularBlack.copyWith(fontSize: fontSize),
+                  // ),
+                  // SizedBox(
+                  //   height: 24.sh(),
+                  // ),
+                  // Text(
+                  //   user.mobile.toString(),
+                  //   style:
+                  //       kTextStyleIbmRegularBlack.copyWith(fontSize: fontSize),
+                  // ),
+                  SizedBox(
+                    height: 24.sh(),
+                  ),
+                  Text(
+                    user.createdAt.toString().substring(0, 10),
+                    style:
+                        kTextStyleIbmRegularBlack.copyWith(fontSize: fontSize),
+                  ),
+                  SizedBox(
+                    height: 24.sh(),
+                  ),
+                  Text(
+                    getRole(user.role),
+                    style:
+                        kTextStyleIbmRegularBlack.copyWith(fontSize: fontSize),
+                  ),
+                ],
+              ),
+              Spacer(),
+            ],
+          ),
+          SizedBox(
+            height: 24.sh(),
+          ),
+        ],
       ),
     );
   }
 }
+
+// appBar: ResponsiveLayout.isMobile
+//           ? AppBar(
+//               backgroundColor: Colors.transparent,
+//               elevation: 0,
+//               foregroundColor: Theme.of(context).primaryColor,
+//             )
+//           : null,

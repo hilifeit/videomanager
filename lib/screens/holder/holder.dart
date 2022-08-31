@@ -14,6 +14,8 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screens
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
+import 'package:videomanager/screens/users/model/usermodel.dart';
+import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/users/users.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -29,7 +31,9 @@ class Holder extends ConsumerWidget {
   final controller = MapController(
     location: home,
   );
-
+  final scaleProvider = StateProvider<double>((ref) {
+    return 1.0;
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     CustomKeys().init(ref, context);
@@ -98,9 +102,22 @@ class Holder extends ConsumerWidget {
                         ? AnimatedIndexedStack(index: index, children: [
                             ViewScreen(),
                             const Users(),
-                            Bug(),
+                            // Container(
+                            //   color: Colors.red,
+                            // ),
+                            Container(),
                             const ChatHolder(),
-                            BugScreen(),
+
+                            BugScreen(
+                                isActive: true,
+                                user: UserModelMini(
+                                    id: '1',
+                                    name: 'Shruti',
+                                    role: 1,
+                                    createdAt: DateTime.now()))
+
+                            // Container() // Bug()
+
                             // futureBuilder
                             // PlayVideo(videoFile: videoFile, role: role),
                           ])

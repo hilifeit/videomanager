@@ -8,6 +8,7 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/compone
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/userstatswrap.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/videoassignedcard.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboardHolder.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/videoplayerIntent.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/viewscreen/components/map.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
@@ -21,6 +22,7 @@ class VideoSideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenshotIntentFunctions().focus.requestFocus();
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Row(
@@ -33,6 +35,7 @@ class VideoSideBar extends StatelessWidget {
                     CustomOverlayEntry().closeFilter();
                   }
                   // CustomOverlayEntry().closeVideoBar();
+                  ScreenshotIntentFunctions().focus.requestFocus();
                   ref.read(showVideoBarProvider.state).state = false;
                 },
                 child: Container(
@@ -72,6 +75,7 @@ class VideoSideBar extends StatelessWidget {
                             isvisible: false,
                             draw: true,
                             miniMap: false,
+                            originalData: [],
                             controller: MapController(location: home),
                           ),
                         ),

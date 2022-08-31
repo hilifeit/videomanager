@@ -11,7 +11,9 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/video/components/videodetails.dart';
 import 'package:videomanager/screens/viewscreen/components/pathPainter.dart';
+import 'package:videomanager/screens/viewscreen/components/singlePath.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
@@ -22,11 +24,15 @@ final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
 class MapScreen extends ConsumerStatefulWidget {
   final bool isvisible, draw, miniMap;
   final MapController controller;
+  final List<OriginalLocation> originalData;
+  final bool isFirst;
   const MapScreen(
       {this.isvisible = true,
       required this.controller,
       this.draw = false,
-      this.miniMap = true});
+      this.miniMap = true,
+      required this.originalData,
+      this.isFirst = true});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MapScreenState();
@@ -35,7 +41,7 @@ class MapScreen extends ConsumerStatefulWidget {
 class _MapScreenState extends ConsumerState<MapScreen> {
   final List<Offset> selectedArea = [];
   void _gotoDefault() {
-    widget.controller.center = LatLng(27.7251933, 85.3411312);
+    // widget.controller.center = widget.controller;
     setState(() {});
   }
 
@@ -79,7 +85,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer(builder: (context, ref, c) {
-        final fileService = ref.watch(fileDetailMiniServiceProvider);
+        // final fileService = ref.watch(fileDetailMiniServiceProvider);
         final selectedFile = ref.watch(selectedFileProvider.state).state;
 
         return LayoutBuilder(builder: (context, constraint) {
@@ -87,41 +93,51 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             controller: widget.controller,
             builder: (context, transformer) {
               SelectedArea.transformer = transformer;
-              transformer.controller.addListener(() {
-                setState(() {});
-              });
+              try {
+                transformer.controller.addListener(() {
+                  setState(() {});
+                });
+              } catch (e) {
+                // print(e);
+              }
 
               // transformer.controller.center = LatLng(
               //     fileService.files[10].location.coordinates[0][1],
               //     fileService.files[10].location.coordinates[0][0]);
 
               // transformer.controller.zoom = 20;
+              Widget markerWidgets = Container();
+              transformer.controller.addListener(() {
+                setState(() {});
+              });
 
-              final markerWidgets = ClipRRect(
-                child: CanvasTouchDetector(
-                    gesturesToOverride: const [
-                      GestureType.onTapUp,
-                      GestureType.onTapDown,
-                      GestureType.onSecondaryTapDown,
-                      GestureType.onSecondaryTapUp,
-                      GestureType.onForcePressEnd,
-                      GestureType.onLongPressEnd,
-                      GestureType.onLongPressStart,
+              if (widget.originalData.isEmpty) {
+                markerWidgets = ClipRRect(
+                  child: CanvasTouchDetector(
+                      gesturesToOverride: const [
+                        GestureType.onTapUp,
+                        GestureType.onTapDown,
+                        GestureType.onSecondaryTapDown,
+                        GestureType.onSecondaryTapUp,
+                        GestureType.onForcePressEnd,
+                        GestureType.onLongPressEnd,
+                        GestureType.onLongPressStart,
 
-                      // GestureType.onLongPressMoveUpdate
-                    ],
-                    builder: (context) {
-                      return CustomPaint(
-                        size: Size(constraint.maxWidth, constraint.maxHeight),
-                        painter: Painter(
-                          context,
-                          ref,
-                          selectedFileProvider: selectedFileProvider,
-                          transformer: transformer,
-                        ),
-                      );
-                    }),
-              );
+                        // GestureType.onLongPressMoveUpdate
+                      ],
+                      builder: (context) {
+                        return CustomPaint(
+                          size: Size(constraint.maxWidth, constraint.maxHeight),
+                          painter: Painter(
+                            context,
+                            ref,
+                            selectedFileProvider: selectedFileProvider,
+                            transformer: transformer,
+                          ),
+                        );
+                      }),
+                );
+              }
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
@@ -146,23 +162,26 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   },
                   onPointerSignal: (event) {
                     if (event is PointerScrollEvent) {
-                      final delta = event.scrollDelta;
+                      // if (widget.originalData.isEmpty)
+                      {
+                        final delta = event.scrollDelta;
 
-                      widget.controller.zoom -= delta.dy /
-                          (1010 -
-                              mapDouble(
-                                  x: ref
-                                      .read(settingChangeNotifierProvider)
-                                      .setting
-                                      .mapSetting
-                                      .scroll
-                                      .toDouble(),
-                                  in_min: 10,
-                                  in_max: 100,
-                                  out_min: 10,
-                                  out_max: 1000));
+                        widget.controller.zoom -= delta.dy /
+                            (1010 -
+                                mapDouble(
+                                    x: ref
+                                        .read(settingChangeNotifierProvider)
+                                        .setting
+                                        .mapSetting
+                                        .scroll
+                                        .toDouble(),
+                                    in_min: 10,
+                                    in_max: 100,
+                                    out_min: 10,
+                                    out_max: 1000));
 
-                      setState(() {});
+                        setState(() {});
+                      }
                     }
                   },
                   child: Stack(
@@ -188,7 +207,15 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           ),
                         ],
                       ),
-                      if (widget.draw) Listener(child: markerWidgets),
+                      if (widget.draw)
+                        if (widget.originalData.isEmpty)
+                          Listener(child: markerWidgets),
+                      if (widget.originalData.isNotEmpty)
+                        SinglePath(
+                          transformer: transformer,
+                          data: widget.originalData,
+                          isFirst: widget.isFirst,
+                        ),
                       if (widget.miniMap)
                         if (selectedFile != null)
                           Positioned(

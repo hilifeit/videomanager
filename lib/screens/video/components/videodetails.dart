@@ -14,12 +14,13 @@ class VideoDetails extends StatelessWidget {
       this.showMap = true,
       this.isDetailed = true,
       this.file,
-      this.detailedFile})
+      this.detailedFile,
+      this.isFirst = true})
       : super(key: key);
   final bool showMap, isDetailed;
   final FileDetailMini? file;
   final FileDetail? detailedFile;
-
+  final bool isFirst;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -98,14 +99,19 @@ class VideoDetails extends StatelessWidget {
                     .videoSetting;
                 final VideoSetting temp =
                     VideoSetting.fromJson(videoSetting.toJson());
+                final mapWidget = MapScreen(
+                  draw: false,
+                  controller: MapController(
+                      location: LatLng(detailedFile!.originalLocation.first.lat,
+                          detailedFile!.originalLocation.first.lng)),
+                  originalData: detailedFile!.originalLocation,
+                  isvisible: false,
+                  miniMap: false,
+                  isFirst: isFirst,
+                );
                 return Stack(
                   children: [
-                    MapScreen(
-                      draw: false,
-                      controller: MapController(location: home),
-                      isvisible: false,
-                      miniMap: false,
-                    ),
+                    mapWidget,
                     if (temp.allowMinMapFScreen)
                       Positioned(
                           bottom: 5.sh(),
@@ -122,11 +128,7 @@ class VideoDetails extends StatelessWidget {
                                                     .size
                                                     .width *
                                                 .8,
-                                            child: MapScreen(
-                                              miniMap: true,
-                                              controller:
-                                                  MapController(location: home),
-                                            )),
+                                            child: mapWidget),
                                       );
                                     });
                               },

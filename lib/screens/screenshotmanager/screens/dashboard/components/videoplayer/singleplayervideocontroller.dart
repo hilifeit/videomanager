@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/playbackMenu.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/videoplayerIntent.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/sliderwithtext.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
@@ -27,24 +27,24 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
     final controller =
         useAnimationController(duration: const Duration(milliseconds: 15));
 
+    ScreenshotIntentFunctions().onSpace = () {
+      videoPlayPause(controller);
+    };
+    ScreenshotIntentFunctions().onSKey = () async {
+      await takeScreenShot(context, ref, controller);
+    };
+    ScreenshotIntentFunctions().onArrowLeft = () async {
+      await rewind(controller);
+    };
     final double volume = ref.watch(volumeProvider.state).state;
     final bool mute = ref.watch(mutedProvider.state).state;
+
     return Row(
       children: [
         IconButton(
           tooltip: 'Rewind',
           onPressed: () async {
-            if (UniversalPlatform.isDesktop) {
-              desktop!.player.seek(((desktop!.player.position.position!)) -
-                  const Duration(seconds: 10));
-              if (!desktop!.player.playback.isPlaying) {
-                desktop!.player.play();
-                controller.forward();
-              }
-            } else {
-              web!.seekTo(
-                  (await (web!.position))! - const Duration(seconds: 10));
-            }
+            rewind(controller);
           },
           icon: Icon(
             Videomanager.rewind,
@@ -55,62 +55,16 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         SizedBox(
           width: 30.5.sw(),
         ),
-        RawKeyboardListener(
-          focusNode: FocusNode(),
-          autofocus: true,
-          onKey: (event) {
-            if (event.isKeyPressed(LogicalKeyboardKey.space)) {
-              if (UniversalPlatform.isDesktop) {
-                if (desktop!.player.playback.isPlaying) {
-                  desktop!.player.pause();
-                  controller.reverse();
-                } else {
-                  desktop!.player.play();
-
-                  controller.forward();
-                }
-              } else {
-                if (web!.value.isPlaying) {
-                  web!.pause();
-                  controller.reverse();
-                } else {
-                  web!.play();
-                  controller.forward();
-                }
-              }
-            }
+        IconButton(
+          tooltip: 'Play/Pause',
+          onPressed: () {
+            videoPlayPause(controller);
           },
-          child: IconButton(
-            tooltip: 'Play/Pause',
-            onPressed: () {
-              if (UniversalPlatform.isDesktop) {
-                // desktop!.player.open(Media.network(
-                //   getVideoUrl("62931b515e4df91e44463cea"),
-                // ));
-                if (desktop!.player.playback.isPlaying) {
-                  desktop!.player.pause();
-                  controller.reverse();
-                } else {
-                  desktop!.player.play();
-
-                  controller.forward();
-                }
-              } else {
-                if (web!.value.isPlaying) {
-                  web!.pause();
-                  controller.reverse();
-                } else {
-                  web!.play();
-                  controller.forward();
-                }
-              }
-            },
-            icon: AnimatedIcon(
-              icon: AnimatedIcons.play_pause,
-              size: 30.ssp(),
-              color: Colors.white,
-              progress: controller,
-            ),
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.play_pause,
+            size: 30.ssp(),
+            color: Colors.white,
+            progress: controller,
           ),
         ),
         SizedBox(
@@ -207,64 +161,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         ),
         InkWell(
           onTap: () async {
-            if (UniversalPlatform.isDesktop) {
-              if (desktop!.player.playback.isPlaying) {
-                desktop!.player.pause();
-                controller.reverse();
-              }
-            } else {
-              if (web!.value.isPlaying) {
-                web!.pause();
-                controller.reverse();
-              }
-            }
-            try {
-              CustomOverlayEntry().showLoader();
-
-              var ms = 0;
-              if (UniversalPlatform.isDesktop) {
-                ms = desktop!.player.position.position!.inMilliseconds;
-              } else {
-                ms = web!.value.position.inMilliseconds;
-              }
-              var videoDataService = ref.read(videoDataDetailServiceProvider);
-              try {
-                if (!videoDataService.checkAndAddSnap(ms)) {
-                  snack.info("Screenshot already taken!");
-                  CustomOverlayEntry().closeLoader();
-                } else {
-                  Uint8List image = await ref
-                      .read(fileDetailMiniServiceProvider)
-                      .getFrameFromUrl(
-                          url:
-                              "http://192.168.1.74:5000/v1/video/${videoFile.id}",
-                          positionInMs: ms);
-
-                  await videoDataService.selectedSnap.value?.decodeImage(image);
-                  CustomOverlayEntry().closeLoader();
-
-                  Future.delayed(Duration(milliseconds: 10), () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return ScreenShotScreen();
-                    }));
-                  });
-
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (context) {
-                  //       return ScreenShotScreen();
-                  //     });
-                }
-              } catch (e) {
-                videoDataService.cancelNewSnap();
-                CustomOverlayEntry().closeLoader();
-                snack.info("Try again");
-              }
-            } catch (e, s) {
-              print("$e $context");
-              CustomOverlayEntry().closeLoader();
-              snack.error(e);
-            }
+            await takeScreenShot(context, ref, controller);
           },
           child: Container(
             width: 50.sr(),
@@ -318,6 +215,106 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         ),
       ],
     );
+  }
+
+  rewind(AnimationController controller) async {
+    if (UniversalPlatform.isDesktop) {
+      desktop!.player.seek(
+          ((desktop!.player.position.position!)) - const Duration(seconds: 10));
+      if (!desktop!.player.playback.isPlaying) {
+        desktop!.player.play();
+        controller.forward();
+      }
+    } else {
+      web!.seekTo((await (web!.position))! - const Duration(seconds: 10));
+    }
+  }
+
+  takeScreenShot(BuildContext context, WidgetRef ref,
+      AnimationController controller) async {
+    if (UniversalPlatform.isDesktop) {
+      if (desktop!.player.playback.isPlaying) {
+        desktop!.player.pause();
+        controller.reverse();
+      }
+    } else {
+      if (web!.value.isPlaying) {
+        web!.pause();
+        controller.reverse();
+      }
+    }
+    try {
+      CustomOverlayEntry().showLoader();
+
+      Duration duration;
+      if (UniversalPlatform.isDesktop) {
+        duration = desktop!.player.position.position!;
+      } else {
+        duration = web!.value.position;
+      }
+      var videoDataService = ref.read(videoDataDetailServiceProvider);
+      try {
+        if (!videoDataService.checkAndAddSnap(duration)) {
+          snack.info("Screenshot already taken!");
+          CustomOverlayEntry().closeLoader();
+        } else {
+          Uint8List image = await ref
+              .read(fileDetailMiniServiceProvider)
+              .getFrameFromUrl(
+                  url: "http://192.168.1.74:5000/v1/video/${videoFile.id}",
+                  duration: duration);
+
+          await videoDataService.selectedSnap.value?.decodeImage(image);
+          CustomOverlayEntry().closeLoader();
+
+          Future.delayed(const Duration(milliseconds: 10), () async {
+            ScreenshotIntentFunctions().isSpaceActive = false;
+            await Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return ScreenShotScreen();
+            }));
+            ScreenshotIntentFunctions().isSpaceActive = true;
+          });
+
+          // showDialog(
+          //     context: context,
+          //     builder: (context) {
+          //       return ScreenShotScreen();
+          //     });
+        }
+      } catch (e) {
+        videoDataService.cancelNewSnap();
+        CustomOverlayEntry().closeLoader();
+        snack.info("Try again");
+      }
+    } catch (e, s) {
+      print("$e $context");
+      CustomOverlayEntry().closeLoader();
+      snack.error(e);
+    }
+  }
+
+  videoPlayPause(AnimationController controller) {
+    if (UniversalPlatform.isDesktop) {
+      // desktop!.player.open(Media.network(
+      //   getVideoUrl("62931b515e4df91e44463cea"),
+      // ));
+      if (desktop!.player.playback.isPlaying) {
+        desktop!.player.pause();
+        controller.reverse();
+      } else {
+        desktop!.player.play();
+
+        controller.forward();
+      }
+    } else {
+      if (web!.value.isPlaying) {
+        web!.pause();
+        controller.reverse();
+      } else {
+        web!.play();
+        controller.forward();
+      }
+    }
   }
 }
 

@@ -20,14 +20,10 @@ class VideoDataDetail extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool checkAndAddSnap(int milisecond, {Uint8List? imageData}) {
-    var snap = SnapModel(
-        shops: [],
-        timeStamp: Duration(milliseconds: milisecond),
-        image: imageData);
+  bool checkAndAddSnap(Duration duration, {Uint8List? imageData}) {
+    var snap = SnapModel(shops: [], timeStamp: duration, image: imageData);
 
-    var matches = _snaps
-        .where((element) => element.timeStamp.inMilliseconds == milisecond);
+    var matches = _snaps.where((element) => element.timeStamp == duration);
     if (matches.isEmpty) {
       _snaps.add(snap);
       selectedSnap.value = snap;

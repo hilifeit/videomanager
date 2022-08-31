@@ -15,88 +15,93 @@ class ScreenShotScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final snapService = ref.watch(videoDataDetailServiceProvider);
     final snap = snapService.selectedSnap.value;
-    return LayoutBuilder(builder: (context, constraint) {
-      // print('$constraint ${MediaQuery.of(context).size}');
-      return snap != null
-          ? Stack(
-              children: [
-                InteractiveViewer(
-                  maxScale: 4,
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: snap.image != null
-                        ? BoxDecoration(
-                            color: whiteColor,
-                            image: DecorationImage(
-                              opacity: 1,
-                              image: MemoryImage(snap.image!),
-                              fit: BoxFit.fill,
-                            ))
-                        : const BoxDecoration(
-                            color: whiteColor,
-                          ),
-                    child: CanvasTouchDetector(
-                      gesturesToOverride: const [
-                        GestureType.onTapUp,
-                        GestureType.onTapDown,
-                        GestureType.onSecondaryTapUp,
-                        GestureType.onPanUpdate,
-                        GestureType.onPanStart,
-                      ],
-                      builder: (context) {
-                        return CustomPaint(
-                          size: Size(constraint.maxWidth, constraint.maxHeight),
-                          painter: ShopPinPainter(
-                              ref: ref,
-                              context: context,
-                              imageData: snap.image!),
-                        );
-                      },
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      autofocus: true,
+      child: LayoutBuilder(builder: (context, constraint) {
+        print('$constraint ${MediaQuery.of(context).size}');
+        return snap != null
+            ? Stack(
+                children: [
+                  InteractiveViewer(
+                    maxScale: 4,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: snap.image != null
+                          ? BoxDecoration(
+                              color: whiteColor,
+                              image: DecorationImage(
+                                opacity: 1,
+                                image: MemoryImage(snap.image!),
+                                fit: BoxFit.fill,
+                              ))
+                          : const BoxDecoration(
+                              color: whiteColor,
+                            ),
+                      child: CanvasTouchDetector(
+                        gesturesToOverride: const [
+                          GestureType.onTapUp,
+                          GestureType.onTapDown,
+                          GestureType.onSecondaryTapUp,
+                          GestureType.onPanUpdate,
+                          GestureType.onPanStart,
+                        ],
+                        builder: (context) {
+                          return CustomPaint(
+                            size:
+                                Size(constraint.maxWidth, constraint.maxHeight),
+                            painter: ShopPinPainter(
+                                ref: ref,
+                                context: context,
+                                imageData: snap.image!),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  bottom: 46.sh(),
-                  right: 54.sw(),
-                  child: Row(
-                    children: [
-                      CustomOutlinedButton(
-                          borderColor: whiteColor,
-                          onPressedOutlined: snap.shops.isEmpty
-                              ? null
-                              : () {
-                                  snapService.clearShop();
-                                },
-                          outlinedButtonText: 'Clear All'),
-                      SizedBox(
-                        width: 25.sw(),
-                      ),
-                      CustomOutlinedButton(
-                          borderColor: whiteColor,
-                          onPressedOutlined: () {
-                            Navigator.pop(context);
-                            snapService.cancelNewSnap();
-                          },
-                          outlinedButtonText: 'Cancel'),
-                      SizedBox(
-                        width: 25.sw(),
-                      ),
-                      CustomElevatedButton(
-                          onPressedElevated: snap.shops.isNotEmpty
-                              ? () {
-                                  Navigator.pop(context);
-                                }
-                              : null,
-                          elevatedButtonText:
-                              'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
-                    ],
+                  Positioned(
+                    bottom: 46.sh(),
+                    right: 54.sw(),
+                    child: Row(
+                      children: [
+                        CustomOutlinedButton(
+                            borderColor: whiteColor,
+                            onPressedOutlined: snap.shops.isEmpty
+                                ? null
+                                : () {
+                                    snapService.clearShop();
+                                  },
+                            outlinedButtonText: 'Clear All'),
+                        SizedBox(
+                          width: 25.sw(),
+                        ),
+                        CustomOutlinedButton(
+                            borderColor: whiteColor,
+                            onPressedOutlined: () {
+                              Navigator.pop(context);
+                              snapService.cancelNewSnap();
+                            },
+                            outlinedButtonText: 'Cancel'),
+                        SizedBox(
+                          width: 25.sw(),
+                        ),
+                        CustomElevatedButton(
+                            onPressedElevated: snap.shops.isNotEmpty
+                                ? () {
+                                    Navigator.pop(context);
+                                  }
+                                : null,
+                            elevatedButtonText:
+                                'Confirm${snap.shops.isEmpty ? '' : " (${snap.shops.length})"}')
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            )
-          : Container();
-    });
+                ],
+              )
+            : Container();
+      }),
+    );
   }
 }
 
@@ -140,18 +145,24 @@ class ShopPinPainter extends CustomPainter {
           });
       if (data != null) {
         Shop shop = data as Shop;
-        shop.position = details.localPosition;
+        Offset ratio = Offset(size.width / details.localPosition.dx,
+            size.height / details.localPosition.dy);
+        shop.position = ratio;
         snapService.addShop(shop);
       }
     });
 
     for (var element in shops) {
-      drawIcon(canvas, element.color, element.position);
+      drawIcon(canvas, element.color, element.position, size);
+      // TODO Delete the
+      print(element.position);
+      Offset position = Offset(
+          size.width / element.position.dx, size.height / element.position.dy);
+
       //Single Marker Touchy Start
       newCanvas.drawRect(
           Rect.fromCenter(
-              center: Offset(
-                  element.position.dx, element.position.dy - iconSize * .4),
+              center: Offset(position.dx, position.dy - iconSize * .4),
               width: iconSize * .6,
               height: iconSize * .9),
           boxPaint,
@@ -193,7 +204,9 @@ class ShopPinPainter extends CustomPainter {
     return true;
   }
 
-  drawIcon(Canvas canvas, Color color, Offset pinPosition) {
+  drawIcon(Canvas canvas, Color color, Offset pinPosition, Size size) {
+    Offset position =
+        Offset(size.width / pinPosition.dx, size.height / pinPosition.dy);
     double iconSize = 40.ssp();
     const icon = Icons.location_on;
     TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);
@@ -203,7 +216,7 @@ class ShopPinPainter extends CustomPainter {
             fontSize: iconSize, fontFamily: icon.fontFamily, color: color));
     textPainter.layout();
     Offset fixedPosition =
-        Offset(pinPosition.dx - iconSize / 2, pinPosition.dy - iconSize * 0.9);
+        Offset(position.dx - iconSize / 2, position.dy - iconSize * 0.9);
     textPainter.paint(canvas, fixedPosition);
   }
 }
