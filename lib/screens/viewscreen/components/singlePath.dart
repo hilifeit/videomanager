@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:image_compare/image_compare.dart';
 import 'package:map/map.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -40,7 +44,12 @@ class _SinglePathState extends State<SinglePath> {
             painter: SinglePathPainter(
                 transformer: widget.transformer,
                 data: widget.data,
-                paths: paths),
+                paths: paths,
+                getImage: (image) async {
+                  final img = Uint8List.view(image.buffer);
+
+                  // var result = await compareImages(src1: img, src2: Image(image: image));
+                }),
           ),
         ),
         Consumer(builder: (context, ref, c) {

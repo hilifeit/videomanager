@@ -53,6 +53,15 @@ class FileService extends ChangeNotifier {
     await fetchAllArea();
     await fetchAll(fromServer: true);
     CustomOverlayEntry().closeLoader();
+    // for (var element in files) {
+    //   print(files.indexOf(element));
+    //   if (element.originalLocation.isEmpty) {
+    //     var originalData = await fetchOriginalLocation(element.id);
+    //     if (originalData.isNotEmpty) {
+    //       element.originalLocation.addAll(originalData);
+    //     }
+    //   }
+    // }
   }
 
   loadUserData() async {
@@ -288,7 +297,7 @@ class FileService extends ChangeNotifier {
         throw response.statusCode;
       }
     } catch (e) {
-      rethrow;
+      return originalLocation;
     }
   }
 
@@ -609,6 +618,8 @@ class FileService extends ChangeNotifier {
                 .map((e) => LatLng(e.last, e.first))
                 .toList());
       }
+
+      print(file.boundingBox!.overlaps(distances.first.file.boundingBox!));
 
       return distances.first.file;
     } else {

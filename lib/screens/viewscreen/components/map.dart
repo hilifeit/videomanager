@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:map/map.dart';
 import 'package:touchable/touchable.dart';
@@ -26,12 +29,14 @@ class MapScreen extends ConsumerStatefulWidget {
   final MapController controller;
   final List<OriginalLocation> originalData;
   final bool isFirst;
-  const MapScreen(
+  final Function(Uint8List)? onScreenShot;
+  MapScreen(
       {this.isvisible = true,
       required this.controller,
       this.draw = false,
       this.miniMap = true,
       required this.originalData,
+      this.onScreenShot,
       this.isFirst = true});
 
   @override
@@ -40,6 +45,8 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   final List<Offset> selectedArea = [];
+
+  final GlobalKey _canvasRepaint = GlobalKey();
   void _gotoDefault() {
     // widget.controller.center = widget.controller;
     setState(() {});

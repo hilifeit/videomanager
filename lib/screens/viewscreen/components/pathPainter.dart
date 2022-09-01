@@ -13,6 +13,7 @@ import 'package:videomanager/screens/settings/service/settingService.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/video/video.dart';
+import 'package:videomanager/screens/viewscreen/screens/analysis/analysis.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -340,6 +341,33 @@ class Painter extends CustomPainter {
                       text: "Play Video",
                       width: 137.sw(),
                     )),
+                PopupMenuItem(
+                  onTap: () async {
+                    Future.delayed(const Duration(milliseconds: 50), () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              elevation: 0.1,
+                              contentPadding: EdgeInsets.zero,
+                              content: SizedBox(
+                                width: MediaQuery.of(context).size.width * .65,
+                                child: PathAnalysis(
+                                  file: element,
+                                  files: visibleFilesList,
+                                  itemBox: item,
+                                ),
+                              ),
+                            );
+                          });
+                    });
+                  },
+                  child: CustomPopUpMenuItemChild(
+                    icon: Icons.analytics,
+                    text: "Analyze",
+                    width: 137.sw(),
+                  ),
+                ),
                 PopupMenuItem(
                     onTap: () async {
                       final fileminiService =

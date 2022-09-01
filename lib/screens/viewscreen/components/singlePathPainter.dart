@@ -1,7 +1,9 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:map/map.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
-import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class Paths {
   Paths({required this.paths, required this.duplicate});
@@ -11,14 +13,21 @@ class Paths {
 
 class SinglePathPainter extends CustomPainter {
   SinglePathPainter(
-      {required this.data, required this.transformer, required this.paths});
+      {required this.data,
+      required this.transformer,
+      required this.paths,
+      required this.getImage});
   final List<OriginalLocation> data;
   final MapTransformer transformer;
   final List<Paths> paths;
-  @override
-  void paint(Canvas canvas, Size size) {
-    // TODO: implement paint
+  final Function(ByteData) getImage;
 
+  @override
+  void paint(Canvas canvas, Size size) async {
+    // TODO: implement paint
+    final recorder = ui.PictureRecorder();
+    final newCanvas = Canvas(recorder,
+        Rect.fromPoints(Offset(0.0, 0.0), Offset(size.width, size.height)));
     Paint paint = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.stroke
@@ -46,15 +55,28 @@ class SinglePathPainter extends CustomPainter {
                 .fromLatLngToXYCoords(LatLng(data[i - 1].lat, data[i - 1].lng)),
             transformer.fromLatLngToXYCoords(LatLng(data[i].lat, data[i].lng)),
             paint);
+        newCanvas.drawLine(
+            transformer
+                .fromLatLngToXYCoords(LatLng(data[i - 1].lat, data[i - 1].lng)),
+            transformer.fromLatLngToXYCoords(LatLng(data[i].lat, data[i].lng)),
+            paint);
       } else {
         canvas.drawLine(
             transformer
                 .fromLatLngToXYCoords(LatLng(data[i - 1].lat, data[i - 1].lng)),
             transformer.fromLatLngToXYCoords(LatLng(data[i].lat, data[i].lng)),
             duplicate);
+        newCanvas.drawLine(
+            transformer
+                .fromLatLngToXYCoords(LatLng(data[i - 1].lat, data[i - 1].lng)),
+            transformer.fromLatLngToXYCoords(LatLng(data[i].lat, data[i].lng)),
+            duplicate);
       }
     }
-
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(size.width.toInt(), size.height.toInt());
+    var byte = await img.toByteData(format: ui.ImageByteFormat.png);
+    getImage(byte!);
     // for (var element in paths) {
     //   if (!element.duplicate) {
     //     canvas.drawPath(element.paths, paint);
