@@ -23,6 +23,11 @@ class CustomIP {
 
   static String get apiBaseUrl => "$baseUrl/api/";
   // static String get apiBaseUrl=> "$baseUrl:$apiPort/v1/";
-  static String get socketBaseUrl => "$baseUrl/socket/";
+  static String get socketBaseUrl {
+    String url = "${baseUrl.replaceAll("https", "http")}/socket/";
+    print(url);
+    return url;
+  }
+
   // static String get socketBaseUrl=> "$baseUrl:$socketPort/";
 }
