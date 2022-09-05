@@ -11,13 +11,17 @@ class CustomSocket {
     return false;
   });
   connect() {
+    var uri = Uri.parse("http://192.168.1.74/");
+    print(uri.port);
     try {
       var ref = CustomKeys().ref!;
       var user = ref.read(userChangeProvider).loggedInUser.value;
       if (user != null) {
         socket = io(
-            CustomIP.socketBaseUrl,
+            // CustomIP.socketBaseUrl,
+            "ws://192.168.1.74:3000/",
             OptionBuilder()
+                // .setPath("/")
                 .setTransports(['websocket'])
                 .disableAutoConnect()
                 .setQuery({"token": user.accessToken})
@@ -34,13 +38,16 @@ class CustomSocket {
           socket.onConnecting((data) => print("connecting"));
           socket.onConnectError((data) {
             snack.error(data);
+            print(CustomIP.socketBaseUrl);
             ref.read(status.state).state = false;
           });
           socket.onConnectTimeout((data) {
             snack.error(data);
+            print(CustomIP.socketBaseUrl);
             ref.read(status.state).state = false;
           });
           socket.onError((data) async {
+            print(data);
             try {
               ref.read(status.state).state = false;
               var json = jsonEncode(data);

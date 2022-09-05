@@ -67,6 +67,26 @@ return getBase64StringFromDataURL(img);
 }
 
   </script>
+
+<script>
+  document.addEventListener('wheel', function(e) {
+    e.ctrlKey && e.preventDefault();
+  }, {
+    passive: false,
+  });
+</script>
+<script>
+  window.addEventListener('keydown', function(e) {
+    if (event.metaKey || event.ctrlKey) {
+      switch (event.key) {
+        case '=':
+        case '-':
+          event.preventDefault();
+          break;
+      }
+    }
+  });
+</script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
   <script src="splash/splash.js"></script>
