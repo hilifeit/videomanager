@@ -20,17 +20,17 @@ class SnapModel {
 
   ui.Image? decodedImage;
 
-  decodeImage(Uint8List img) async {
-    try {
-      final codec = await ui.instantiateImageCodec(img,
-          targetHeight: height, targetWidth: width);
+  // decodeImage(Uint8List img) async {
+  //   try {
+  //     final codec = await ui.instantiateImageCodec(img,
+  //         targetHeight: height, targetWidth: width);
 
-      final frame = await codec.getNextFrame();
-      decodedImage = frame.image;
-      // decodedImage = await decodeImageFromList(img);
-      image = img;
-    } catch (e, s) {
-      print('$e $s');
-    }
-  }
+  //     final frame = await codec.getNextFrame();
+  //     decodedImage = frame.image;
+  //     // decodedImage = await decodeImageFromList(img);
+  //     image = img;
+  //   } catch (e, s) {
+  //     print('$e $s');
+  //   }
+  // }
 }

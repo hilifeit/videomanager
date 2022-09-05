@@ -301,7 +301,7 @@ class FileService extends ChangeNotifier {
     }
   }
 
-  Future<Uint8List> getFrameFromUrl(
+  Future<Uint8List?> getFrameFromUrl(
       {required String url, Duration duration = Duration.zero}) async {
     // duration - Duration(milliseconds: 200);
     print(duration);
@@ -319,12 +319,12 @@ class FileService extends ChangeNotifier {
         return response.bodyBytes;
       } else {
         var error = jsonDecode(response.body);
-        throw error("message");
+        return null;
       }
     } catch (e, s) {
       print("$e $s");
 
-      rethrow;
+      return null;
     }
   }
 

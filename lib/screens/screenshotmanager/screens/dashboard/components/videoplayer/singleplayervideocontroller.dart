@@ -1,3 +1,7 @@
+import 'package:videomanager/screens/others/fakejs.dart'
+    if (dart.library.js) "dart:js" as js;
+
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
@@ -252,25 +256,43 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
       } else {
         duration = web!.value.position;
       }
+
+      Uint8List? image;
       var videoDataService = ref.read(videoDataDetailServiceProvider);
+      if (UniversalPlatform.isDesktop) {
+        File file = File("temp.png");
+        desktop!.player.takeSnapshot(file, 854, 480);
+
+        image = file.readAsBytesSync();
+      } else {
+        var result =
+            js.context.callMethod("getFrame", [getVideoUrl(videoFile.id)]);
+        image = const Base64Decoder().convert(result);
+      }
+
+      //  image = await ref
+      //       .read(fileDetailMiniServiceProvider)
+      //       .getFrameFromUrl(
+      //           url: "http://192.168.1.74:5000/v1/video/${videoFile.id}?q=480",
+      //           duration: duration);
       try {
         if (!videoDataService.checkAndAddSnap(duration)) {
           snack.info("Screenshot already taken!");
           CustomOverlayEntry().closeLoader();
         } else {
-          Uint8List image = await ref
-              .read(fileDetailMiniServiceProvider)
-              .getFrameFromUrl(
-                  url: "http://192.168.1.74:5000/v1/video/${videoFile.id}",
-                  duration: duration);
-
-          await videoDataService.selectedSnap.value?.decodeImage(image);
+          // videoDataService.selectedSnap.value?.image = image;
           CustomOverlayEntry().closeLoader();
+
+          if (image == null) return 0;
 
           Future.delayed(const Duration(milliseconds: 10), () async {
             ScreenshotIntentFunctions().isSpaceActive = false;
             await Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return ScreenShotScreen();
+              return ScreenShotScreen(
+                thumb: image,
+                url: "http://192.168.1.74:5000/v1/video/${videoFile.id}",
+                duration: duration,
+              );
             }));
             ScreenshotIntentFunctions().isSpaceActive = true;
           });

@@ -66,7 +66,7 @@ class FileDetailMini {
       location: Location.fromJson(json["location"]),
       isUseable: json["useable"],
       path: json["path"],
-      isLeft: json["isLeft"],
+      isLeft: json["isLeft"] ?? false,
       assignDetail: json["assignDetail"] != null
           ? AssignDetail.fromJson(json["assignDetail"])
           : null,

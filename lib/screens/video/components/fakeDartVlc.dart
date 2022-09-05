@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:videomanager/screens/others/exporter.dart';
 
 class Video extends StatefulWidget {
@@ -36,6 +38,7 @@ class Player {
   play() {}
   setVolume(vol) {}
   setRate(double value) {}
+  takeSnapshot(File file, int width, int height) {}
   PositionState get position => PositionState();
 }
 

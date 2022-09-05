@@ -13,7 +13,7 @@ class CustomIP {
     if (UniversalPlatform.isWeb) {
       // var url=Uri.base.toString().split(":")[1].replaceAll("//","http://");
       final url = Uri.base.toString();
-      final finalUrl = "https://${url.split('/')[2].split(':')[0]}";
+      final finalUrl = "http://${url.split('/')[2].split(':')[0]}";
 
       return finalUrl;
     } else {
@@ -24,7 +24,8 @@ class CustomIP {
   static String get apiBaseUrl => "$baseUrl/api/";
   // static String get apiBaseUrl=> "$baseUrl:$apiPort/v1/";
   static String get socketBaseUrl {
-    String url = "${baseUrl.replaceAll("https", "http")}/socket/";
+    // String url = "${baseUrl.replaceAll("https", "http")}/socket/";
+    String url = "$baseUrl/socket/";
     print(url);
     return url;
   }

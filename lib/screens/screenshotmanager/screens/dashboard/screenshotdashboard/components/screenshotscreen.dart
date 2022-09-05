@@ -7,59 +7,127 @@ import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
 
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
+import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
-class ScreenShotScreen extends ConsumerWidget {
-  ScreenShotScreen({Key? key, this.edit = false}) : super(key: key);
+class ScreenShotScreen extends StatefulHookConsumerWidget {
+  ScreenShotScreen(
+      {Key? key, this.edit = false, this.thumb, this.duration, this.url})
+      : super(key: key);
   final bool edit;
+  final String? url;
+  final Duration? duration;
+  final Uint8List? thumb;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ScreenShotScreenState();
+}
+
+class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
+  late Future<Uint8List?> imageFuture;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    imageFuture = fetchImage();
+  }
+
+  Future<Uint8List?> fetchImage() async {
+    Uint8List? image;
+    var videoDataDetailService = ref.read(videoDataDetailServiceProvider);
+    if (videoDataDetailService.selectedSnap.value != null) {
+      if (videoDataDetailService.selectedSnap.value!.image == null) {
+        image = await ref
+            .read(fileDetailMiniServiceProvider)
+            .getFrameFromUrl(url: widget.url!, duration: widget.duration!);
+
+        if (image != null) {
+          videoDataDetailService.selectedSnap.value!.image = image;
+        }
+      }
+    }
+
+    return image;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final snapService = ref.watch(videoDataDetailServiceProvider);
     final snap = snapService.selectedSnap.value;
     return RawKeyboardListener(
       focusNode: FocusNode(),
       autofocus: true,
       child: LayoutBuilder(builder: (context, constraint) {
-        print('$constraint ${MediaQuery.of(context).size}');
+        // print('$constraint ${MediaQuery.of(context).size}');
         return snap != null
             ? Stack(
                 children: [
-                  InteractiveViewer(
-                    maxScale: 4,
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: snap.image != null
-                          ? BoxDecoration(
-                              color: whiteColor,
-                              image: DecorationImage(
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.black,
+                  ),
+                  if (snap.image == null)
+                    Image.memory(
+                      widget.thumb!,
+                      width: constraint.maxWidth,
+                      height: constraint.maxHeight,
+                      fit: BoxFit.fill,
+                    ),
+                  FutureBuilder<Uint8List?>(
+                      future: imageFuture,
+                      builder: (context, snapshot) {
+                        late Uint8List img;
+                        if (snap.image != null) {
+                          img = snap.image!;
+                        } else {
+                          if (snapshot.hasData) {
+                            img = snapshot.data!;
+                          } else {
+                            if (snapshot.hasError) {
+                              return const Center(
+                                child: Text("Original Image load Failed!"),
+                              );
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        }
+
+                        return InteractiveViewer(
+                          maxScale: 4,
+                          child: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              decoration: BoxDecoration(
+                                  // color: whiteColor,
+                                  image: DecorationImage(
                                 opacity: 1,
-                                image: MemoryImage(snap.image!),
+                                image: MemoryImage(img),
                                 fit: BoxFit.fill,
                               ))
-                          : const BoxDecoration(
-                              color: whiteColor,
-                            ),
-                      child: CanvasTouchDetector(
-                        gesturesToOverride: const [
-                          GestureType.onTapUp,
-                          GestureType.onTapDown,
-                          GestureType.onSecondaryTapUp,
-                          GestureType.onPanUpdate,
-                          GestureType.onPanStart,
-                        ],
-                        builder: (context) {
-                          return CustomPaint(
-                            size:
-                                Size(constraint.maxWidth, constraint.maxHeight),
-                            painter: ShopPinPainter(
-                                ref: ref,
-                                context: context,
-                                imageData: snap.image!),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                              // child: CanvasTouchDetector(
+                              //   gesturesToOverride: const [
+                              //     GestureType.onTapUp,
+                              //     GestureType.onTapDown,
+                              //     GestureType.onSecondaryTapUp,
+                              //     GestureType.onPanUpdate,
+                              //     GestureType.onPanStart,
+                              //   ],
+                              //   builder: (context) {
+                              //     return CustomPaint(
+                              //       size:
+                              //           Size(constraint.maxWidth, constraint.maxHeight),
+                              //       painter: ShopPinPainter(
+                              //           ref: ref,
+                              //           context: context,
+                              //           imageData: snap.image!),
+                              //     );
+                              //   },
+                              // ),
+                              ),
+                        );
+                      }),
                   Positioned(
                     bottom: 46.sh(),
                     right: 54.sw(),
