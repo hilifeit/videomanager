@@ -13,7 +13,7 @@ class CustomIP {
     if (UniversalPlatform.isWeb) {
       // var url=Uri.base.toString().split(":")[1].replaceAll("//","http://");
       final url = Uri.base.toString();
-      final finalUrl = "http://${url.split('/')[2].split(':')[0]}";
+      final finalUrl = "https://${url.split('/')[2].split(':')[0]}";
 
       return finalUrl;
     } else {
