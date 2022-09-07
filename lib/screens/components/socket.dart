@@ -27,8 +27,11 @@ class CustomSocket {
           socket.connect();
 
           socket.onConnect((data) {
-            print("Connected: $data");
-            ref.read(status.state).state = true;
+            Future.delayed(const Duration(milliseconds: 10), () {
+              try {
+                ref.read(status.state).state = true;
+              } catch (e) {}
+            });
 
             socket.emit('join', "");
           });

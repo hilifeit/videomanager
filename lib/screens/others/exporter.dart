@@ -54,7 +54,9 @@ final CustomSnackBar snack = CustomSnackBar();
 logout() {
   try {
     customSocket.socket.disconnect();
-  } catch (e) {}
+  } catch (e) {
+    print(e);
+  }
 
   if (CustomOverlayEntry().videoTimeStampOpen) {
     CustomOverlayEntry().closeVideoTimeStamp();

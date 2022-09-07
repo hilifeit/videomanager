@@ -67,67 +67,72 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
                     height: double.infinity,
                     color: Colors.black,
                   ),
-                  if (snap.image == null)
-                    Image.memory(
-                      widget.thumb!,
-                      width: constraint.maxWidth,
-                      height: constraint.maxHeight,
-                      fit: BoxFit.fill,
-                    ),
-                  FutureBuilder<Uint8List?>(
-                      future: imageFuture,
-                      builder: (context, snapshot) {
-                        late Uint8List img;
-                        if (snap.image != null) {
-                          img = snap.image!;
-                        } else {
-                          if (snapshot.hasData) {
-                            img = snapshot.data!;
-                          } else {
-                            if (snapshot.hasError) {
-                              return const Center(
-                                child: Text("Original Image load Failed!"),
-                              );
-                            }
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                        }
+                  InteractiveViewer(
+                    maxScale: 4,
+                    child: Stack(
+                      children: [
+                        if (snap.image == null)
+                          Image.memory(
+                            widget.thumb!,
+                            width: constraint.maxWidth,
+                            height: constraint.maxHeight,
+                            fit: BoxFit.fill,
+                          ),
+                        FutureBuilder<Uint8List?>(
+                            future: imageFuture,
+                            builder: (context, snapshot) {
+                              late Uint8List img;
+                              if (snap.image != null) {
+                                img = snap.image!;
+                              } else {
+                                if (snapshot.hasData) {
+                                  img = snapshot.data!;
+                                } else {
+                                  if (snapshot.hasError) {
+                                    return const Center(
+                                      child:
+                                          Text("Original Image load Failed!"),
+                                    );
+                                  }
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              }
 
-                        return InteractiveViewer(
-                          maxScale: 4,
-                          child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                  // color: whiteColor,
-                                  image: DecorationImage(
-                                opacity: 1,
-                                image: MemoryImage(img),
-                                fit: BoxFit.fill,
-                              ))
-                              // child: CanvasTouchDetector(
-                              //   gesturesToOverride: const [
-                              //     GestureType.onTapUp,
-                              //     GestureType.onTapDown,
-                              //     GestureType.onSecondaryTapUp,
-                              //     GestureType.onPanUpdate,
-                              //     GestureType.onPanStart,
-                              //   ],
-                              //   builder: (context) {
-                              //     return CustomPaint(
-                              //       size:
-                              //           Size(constraint.maxWidth, constraint.maxHeight),
-                              //       painter: ShopPinPainter(
-                              //           ref: ref,
-                              //           context: context,
-                              //           imageData: snap.image!),
-                              //     );
-                              //   },
-                              // ),
-                              ),
-                        );
-                      }),
+                              return Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                decoration: BoxDecoration(
+                                    // color: whiteColor,
+                                    image: DecorationImage(
+                                  opacity: 1,
+                                  image: MemoryImage(img),
+                                  fit: BoxFit.fill,
+                                )),
+                                child: CanvasTouchDetector(
+                                  gesturesToOverride: const [
+                                    GestureType.onTapUp,
+                                    GestureType.onTapDown,
+                                    GestureType.onSecondaryTapUp,
+                                    GestureType.onPanUpdate,
+                                    GestureType.onPanStart,
+                                  ],
+                                  builder: (context) {
+                                    return CustomPaint(
+                                      size: Size(constraint.maxWidth,
+                                          constraint.maxHeight),
+                                      painter: ShopPinPainter(
+                                          ref: ref,
+                                          context: context,
+                                          imageData: snap.image!),
+                                    );
+                                  },
+                                ),
+                              );
+                            }),
+                      ],
+                    ),
+                  ),
                   Positioned(
                     bottom: 46.sh(),
                     right: 54.sw(),
