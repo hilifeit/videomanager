@@ -267,14 +267,15 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
       } else {
         var result =
             js.context.callMethod("getFrame", [getVideoUrl(videoFile.id)]);
-        image = const Base64Decoder().convert(result);
+        try {
+          image = const Base64Decoder().convert(result);
+        } catch (e) {
+          image = await ref.read(fileDetailMiniServiceProvider).getFrameFromUrl(
+              url: "${CustomIP.apiBaseUrl}video/${videoFile.id}?q=480}",
+              duration: duration);
+        }
       }
 
-      //  image = await ref
-      //       .read(fileDetailMiniServiceProvider)
-      //       .getFrameFromUrl(
-      //           url: "http://192.168.1.74:5000/v1/video/${videoFile.id}?q=480",
-      //           duration: duration);
       try {
         if (!videoDataService.checkAndAddSnap(duration)) {
           snack.info("Screenshot already taken!");

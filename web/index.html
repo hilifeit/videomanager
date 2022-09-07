@@ -79,6 +79,7 @@ return getBase64StringFromDataURL(img);
   window.addEventListener('keydown', function(e) {
     if (event.metaKey || event.ctrlKey) {
       switch (event.key) {
+        case "+":
         case '=':
         case '-':
           event.preventDefault();
