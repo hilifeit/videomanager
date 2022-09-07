@@ -11,15 +11,12 @@ class CustomSocket {
     return false;
   });
   connect() {
-    var uri = Uri.parse("http://192.168.1.74/");
-    print(uri.port);
     try {
       var ref = CustomKeys().ref!;
       var user = ref.read(userChangeProvider).loggedInUser.value;
       if (user != null) {
         socket = io(
-            // CustomIP.socketBaseUrl,
-            "ws://192.168.1.74:3000/",
+            CustomIP.socketBaseUrl,
             OptionBuilder()
                 // .setPath("/")
                 .setTransports(['websocket'])
