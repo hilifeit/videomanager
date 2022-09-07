@@ -203,8 +203,11 @@ class ShopPinPainter extends CustomPainter {
 
     newCanvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), boxPaint,
         hitTestBehavior: HitTestBehavior.translucent, onTapUp: (details) async {
-      var color = await getColorFromImagePixel(
-          imageData: imageData, pixelPosition: details.localPosition);
+      var color = primaryColor;
+      if (!UniversalPlatform.isWeb) {
+        color = await getColorFromImagePixel(
+            imageData: imageData, pixelPosition: details.localPosition);
+      }
       Shop newShop = Shop.empty()..color = color;
 
       var data = await showDialog(
@@ -228,7 +231,7 @@ class ShopPinPainter extends CustomPainter {
     for (var element in shops) {
       drawIcon(canvas, element.color, element.position, size);
       // TODO Delete the
-      print(element.position);
+
       Offset position = Offset(
           size.width / element.position.dx, size.height / element.position.dy);
 

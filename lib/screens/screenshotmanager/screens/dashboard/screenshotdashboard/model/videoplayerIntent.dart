@@ -59,6 +59,7 @@ class ScreenshotIntentFunctions {
   factory ScreenshotIntentFunctions() => _instance;
   FocusNode focus = FocusNode();
   bool isSpaceActive = true;
+  bool isSActive = true;
   ScreenshotIntentFunctions._internal({
     required this.onSpace,
     required this.onArrowLeft,

@@ -248,6 +248,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
       }
     }
     try {
+      var videoDataService = ref.read(videoDataDetailServiceProvider);
       CustomOverlayEntry().showLoader();
 
       Duration duration;
@@ -256,31 +257,43 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
       } else {
         duration = web!.value.position;
       }
+      if (!videoDataService.checkAndAddSnap(duration)) {
+        var index = videoDataService.snaps
+            .indexWhere(((element) => element.timeStamp == duration));
+        Future.delayed(const Duration(milliseconds: 10), () async {
+          ScreenshotIntentFunctions().isSpaceActive = false;
 
-      Uint8List? image;
-      var videoDataService = ref.read(videoDataDetailServiceProvider);
-      if (UniversalPlatform.isDesktop) {
-        File file = File("temp.png");
-        desktop!.player.takeSnapshot(file, 854, 480);
-
-        image = file.readAsBytesSync();
+          await Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return ScreenShotScreen(
+              duration: duration,
+            );
+          }));
+          ScreenshotIntentFunctions().isSpaceActive = true;
+        });
+        CustomOverlayEntry().closeLoader();
       } else {
-        var result =
-            js.context.callMethod("getFrame", [getVideoUrl(videoFile.id)]);
-        try {
-          image = const Base64Decoder().convert(result);
-        } catch (e) {
-          image = await ref.read(fileDetailMiniServiceProvider).getFrameFromUrl(
-              url: "${CustomIP.apiBaseUrl}video/${videoFile.id}?q=480}",
-              duration: duration);
-        }
-      }
+        Uint8List? image;
 
-      try {
-        if (!videoDataService.checkAndAddSnap(duration)) {
-          snack.info("Screenshot already taken!");
-          CustomOverlayEntry().closeLoader();
+        if (UniversalPlatform.isDesktop) {
+          File file = File("temp.png");
+          desktop!.player.takeSnapshot(file, 854, 480);
+
+          image = file.readAsBytesSync();
         } else {
+          var result =
+              js.context.callMethod("getFrame", [getVideoUrl(videoFile.id)]);
+          try {
+            image = const Base64Decoder().convert(result);
+          } catch (e) {
+            image = await ref
+                .read(fileDetailMiniServiceProvider)
+                .getFrameFromUrl(
+                    url: "${CustomIP.apiBaseUrl}video/${videoFile.id}?q=480}",
+                    duration: duration);
+          }
+        }
+
+        try {
           // videoDataService.selectedSnap.value?.image = image;
           CustomOverlayEntry().closeLoader();
 
@@ -303,11 +316,12 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           //     builder: (context) {
           //       return ScreenShotScreen();
           //     });
+
+        } catch (e) {
+          videoDataService.cancelNewSnap();
+          CustomOverlayEntry().closeLoader();
+          snack.info("Try again");
         }
-      } catch (e) {
-        videoDataService.cancelNewSnap();
-        CustomOverlayEntry().closeLoader();
-        snack.info("Try again");
       }
     } catch (e, s) {
       print("$e $context");
