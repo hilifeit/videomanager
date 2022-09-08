@@ -7,19 +7,23 @@ import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class AnalysisHub extends ConsumerWidget {
-  const AnalysisHub({Key? key, required this.files}) : super(key: key);
+  AnalysisHub({Key? key, required this.files}) : super(key: key);
   final List<FileDetailMini> files;
+  final currentFileProvider = StateProvider<int>((ref) {
+    return 0;
+  });
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var fileservice = ref.read(fileDetailMiniServiceProvider);
-    var element = files[0];
+    var index = ref.watch(currentFileProvider.state).state;
+    var element = files[index];
     var item =
         fileservice.getRect(element.boundingBox!, SelectedArea.transformer);
     return PathAnalysis(
       files: files,
-      file: files[0],
+      file: element,
       itemBox: item,
-      manualVerification: false,
+      manualVerification: true,
     );
   }
 }
