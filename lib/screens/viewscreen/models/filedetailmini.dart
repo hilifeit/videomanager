@@ -25,11 +25,13 @@ class FileDetailMini {
       this.foundPath = '',
       this.isSelected = false,
       this.assignDetail,
+      this.pair,
       required this.isLeft
       // required this.area
       });
 
   final String id;
+  final String? pair;
   final String filename, path;
   String foundPath;
   final Location location;
@@ -70,6 +72,7 @@ class FileDetailMini {
       assignDetail: json["assignDetail"] != null
           ? AssignDetail.fromJson(json["assignDetail"])
           : null,
+      pair: json["pair"],
       status: Status.fromJson(json["status"] ?? jsonDecode('{"status":0}'))
       // area: Area.fromJson(json["area"])
       );

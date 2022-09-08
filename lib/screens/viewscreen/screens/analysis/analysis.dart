@@ -17,11 +17,13 @@ class PathAnalysis extends StatefulHookConsumerWidget {
       {Key? key,
       required this.files,
       required this.file,
-      required this.itemBox})
+      required this.itemBox,
+      this.manualVerification = false})
       : super(key: key);
   final List<FileDetailMini> files;
   final FileDetailMini file;
   final Rect itemBox;
+  final bool manualVerification;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PathAnalysisState();
 }
@@ -129,87 +131,105 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                         controller: controller,
                       ),
                     ),
-                    Expanded(
-                      child: LayoutBuilder(builder: (context, constraint) {
-                        SelectedArea.transformer.controller
-                            .addListener(() async {
-                          if (mounted) {
-                            if (!isBusy) {
-                              isBusy = true;
-                              image1 = await getImage(
-                                  snapshot.data!.first.originalLocation);
-                              image2 = await getImage(
-                                  snapshot.data!.last.originalLocation);
-
-                              var result = await compareImages(
-                                  src1: image1, src2: image2);
-                              // print(result);
-                              matchPercentage = (((result * 1000) - 100)).abs();
-                              setState(() {});
-                              isBusy = false;
-                            }
-                          }
-                        });
-                        return Stack(
-                          clipBehavior: Clip.none,
+                    if (widget.manualVerification)
+                      Expanded(
+                        child: Row(
                           children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: image1 != null
-                                      ? Image.memory(
-                                          image1!,
-                                          fit: BoxFit.contain,
-                                        )
-                                      : const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                ),
-                                Container(
-                                  width: 2,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Expanded(
-                                  child: image2 != null
-                                      ? Image.memory(image2!,
-                                          fit: BoxFit.contain)
-                                      : const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                )
-                              ],
+                            Expanded(
+                              child: SinglePaint(
+                                  locs: snapshot.data!.first.originalLocation),
                             ),
-                            Positioned(
-                              top: -40,
-                              left: constraint.maxWidth / 2 - 70,
-                              child: Container(
-                                  height: 40,
-                                  color: Theme.of(context).primaryColor,
-                                  padding: EdgeInsets.all(12.sr()),
-                                  child: Row(
-                                    children: [
-                                      Text("Match : ",
-                                          style: kTextStyleIbmMedium),
-                                      image1 == null && image2 == null
-                                          ? const SizedBox(
-                                              width: 9,
-                                              height: 9,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                          : Text(
-                                              "${matchPercentage.toStringAsFixed(2)}%",
-                                              style: kTextStyleIbmSemiBold
-                                                  .copyWith(
-                                                      color: Colors.white))
-                                    ],
-                                  )),
-                            )
+                            Expanded(
+                              child: SinglePaint(
+                                  locs: snapshot.data!.last.originalLocation),
+                            ),
                           ],
-                        );
-                      }),
-                    ),
+                        ),
+                      )
+                    else
+                      Expanded(
+                        child: LayoutBuilder(builder: (context, constraint) {
+                          SelectedArea.transformer.controller
+                              .addListener(() async {
+                            if (mounted) {
+                              if (!isBusy) {
+                                isBusy = true;
+                                image1 = await getImage(
+                                    snapshot.data!.first.originalLocation);
+                                image2 = await getImage(
+                                    snapshot.data!.last.originalLocation);
+
+                                // var result = await compareImages(
+                                //     src1: image1, src2: image2);
+                                // // print(result);
+                                // matchPercentage =
+                                //     (((result * 1000) - 100)).abs();
+                                setState(() {});
+                                isBusy = false;
+                              }
+                            }
+                          });
+                          return Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: image1 != null
+                                        ? Image.memory(
+                                            image1!,
+                                            fit: BoxFit.contain,
+                                          )
+                                        : const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                  ),
+                                  Container(
+                                    width: 2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  Expanded(
+                                    child: image2 != null
+                                        ? Image.memory(image2!,
+                                            fit: BoxFit.contain)
+                                        : const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                  )
+                                ],
+                              ),
+                              Positioned(
+                                top: -40,
+                                left: constraint.maxWidth / 2 - 70,
+                                child: Container(
+                                    height: 40,
+                                    color: Theme.of(context).primaryColor,
+                                    padding: EdgeInsets.all(12.sr()),
+                                    child: Row(
+                                      children: [
+                                        Text("Match : ",
+                                            style: kTextStyleIbmMedium),
+                                        image1 == null && image2 == null
+                                            ? const SizedBox(
+                                                width: 9,
+                                                height: 9,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : Text(
+                                                "${matchPercentage.toStringAsFixed(2)}%",
+                                                style: kTextStyleIbmSemiBold
+                                                    .copyWith(
+                                                        color: Colors.white))
+                                      ],
+                                    )),
+                              )
+                            ],
+                          );
+                        }),
+                      ),
                   ],
                 ),
                 // Align(
@@ -267,5 +287,50 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
     final img = await picture.toImage(size.width.toInt(), size.height.toInt());
     var byte = await img.toByteData(format: ui.ImageByteFormat.png);
     return Uint8List.view(byte!.buffer);
+  }
+}
+
+class SinglePaint extends StatelessWidget {
+  const SinglePaint({Key? key, required this.locs}) : super(key: key);
+  final List<OriginalLocation> locs;
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      print(constraints.maxWidth);
+      return ClipRect(
+        child: CustomPaint(
+          size: Size(constraints.maxWidth, constraints.maxHeight),
+          painter: SinglePainter(locs: locs),
+        ),
+      );
+    });
+  }
+}
+
+class SinglePainter extends CustomPainter {
+  SinglePainter({required this.locs});
+  final List<OriginalLocation> locs;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // TODO: implement paint
+    Paint paint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4;
+    Path path = Path();
+    path.addPolygon(
+        locs
+            .map((e) => SelectedArea.transformer
+                .fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
+            .toList(),
+        false);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    return false;
   }
 }

@@ -26,22 +26,22 @@ class TimeLineCanvas extends ConsumerWidget {
     return LayoutBuilder(builder: (context, constraint) {
       return Listener(
         onPointerSignal: (event) {
-          if (event is PointerScrollEvent) {
-            // var estimatedHeigh = snaps.length * SnapModel.height + 80.sh();
+          // if (event is PointerScrollEvent) {
+          //   var estimatedHeigh = snaps.length * SnapModel.height + 80.sh();
 
-            // final delta = event.scrollDelta;
+          //   final delta = event.scrollDelta;
 
-            // if (estimatedHeigh > constraint.maxHeight ||
-            //     scrollOffset.abs() < estimatedHeigh) {
-            //   if (scrollOffset - delta.dy > 0 &&
-            //       scrollOffset - delta.dy < estimatedHeigh)
-            //     ref.read(mouseScrollProvider.state).state += delta.dy;
-            //   else if (scrollOffset - delta.dy < estimatedHeigh &&
-            //       scrollOffset - delta.dy != 0) {
-            //     ref.read(mouseScrollProvider.state).state -= delta.dy;
-            //   }
-            // }
-          }
+          //   if (estimatedHeigh > constraint.maxHeight ||
+          //       scrollOffset.abs() < estimatedHeigh) {
+          //     if (scrollOffset - delta.dy > 0 &&
+          //         scrollOffset - delta.dy < estimatedHeigh)
+          //       ref.read(mouseScrollProvider.state).state += delta.dy;
+          //     else if (scrollOffset - delta.dy < estimatedHeigh &&
+          //         scrollOffset - delta.dy != 0) {
+          //       ref.read(mouseScrollProvider.state).state -= delta.dy;
+          //     }
+          //   }
+          // }
         },
         child: Container(
           color: Colors.white,
