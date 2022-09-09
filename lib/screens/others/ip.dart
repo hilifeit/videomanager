@@ -21,7 +21,7 @@ class CustomIP {
       // var url=Uri.base.toString().split(":")[1].replaceAll("//","http://");
       final url = Uri.base.toString();
       final finalUrl =
-          "${production ? "https:" : "http"}://${url.split('/')[2].split(':')[0]}";
+          "${production ? "https" : "http"}://${url.split('/')[2].split(':')[0]}";
 
       return finalUrl;
     } else {

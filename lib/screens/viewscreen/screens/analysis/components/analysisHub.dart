@@ -19,11 +19,60 @@ class AnalysisHub extends ConsumerWidget {
     var element = files[index];
     var item =
         fileservice.getRect(element.boundingBox!, SelectedArea.transformer);
+    var info = Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(index.toString()),
+        ),
+        ElevatedButton.icon(
+            onPressed: () {
+              if (index < files.length - 1) {
+                ref.read(currentFileProvider.state).state++;
+              }
+            },
+            icon: Padding(
+              padding: EdgeInsets.all(8.sr()),
+              child: const Icon(
+                Icons.verified,
+                color: Colors.greenAccent,
+              ),
+            ),
+            label: Text("Match")),
+        SizedBox(
+          width: 10.sw(),
+        ),
+        ElevatedButton.icon(
+            onPressed: () {},
+            icon: Padding(
+              padding: EdgeInsets.all(8.sr()),
+              child: const Icon(
+                Icons.help,
+                color: Colors.orangeAccent,
+              ),
+            ),
+            label: Text("Not Sure")),
+        SizedBox(
+          width: 10.sw(),
+        ),
+        ElevatedButton.icon(
+            onPressed: () {},
+            icon: Padding(
+              padding: EdgeInsets.all(8.sr()),
+              child: const Icon(
+                Icons.dangerous,
+                color: Colors.redAccent,
+              ),
+            ),
+            label: Text("No Match"))
+      ],
+    );
     return PathAnalysis(
+      key: Key(index.toString()),
       files: files,
       file: element,
       itemBox: item,
-      manualVerification: true,
+      info: info,
     );
   }
 }

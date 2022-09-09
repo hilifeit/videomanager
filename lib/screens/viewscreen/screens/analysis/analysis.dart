@@ -18,12 +18,12 @@ class PathAnalysis extends StatefulHookConsumerWidget {
       required this.files,
       required this.file,
       required this.itemBox,
-      this.manualVerification = false})
+      this.info})
       : super(key: key);
   final List<FileDetailMini> files;
   final FileDetailMini file;
   final Rect itemBox;
-  final bool manualVerification;
+  final Widget? info;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PathAnalysisState();
 }
@@ -95,14 +95,15 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
       Future.delayed(Duration(milliseconds: 200), () {
         setState(() {
           Future.delayed(Duration(milliseconds: 50), () {
-            SelectedArea.transformer.controller.zoom += 0.01;
+            SelectedArea.transformer.controller.zoom += 0.001;
           });
         });
       });
-      if (filePair != null)
+      if (filePair != null) {
         return [widget.file, filePair];
-      else
-        return [];
+      } else {
+        return [widget.file];
+      }
     } catch (e, s) {
       print(e);
       return [];
@@ -138,10 +139,16 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                           if (mounted) {
                             if (!isBusy) {
                               isBusy = true;
-                              image1 = await getImage(
-                                  snapshot.data!.first.originalLocation);
-                              image2 = await getImage(
-                                  snapshot.data!.last.originalLocation);
+                              try {
+                                image1 = await getImage(snapshot.data!.first);
+                              } catch (e) {
+                                image1 = Uint8List.fromList([]);
+                              }
+                              try {
+                                image2 = await getImage(snapshot.data!.last);
+                              } catch (e) {
+                                image2 = Uint8List.fromList([]);
+                              }
 
                               // var result = await compareImages(
                               //     src1: image1, src2: image2);
@@ -160,10 +167,12 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                               children: [
                                 Expanded(
                                   child: image1 != null
-                                      ? Image.memory(
-                                          image1!,
-                                          fit: BoxFit.contain,
-                                        )
+                                      ? image1!.isNotEmpty
+                                          ? Image.memory(
+                                              image1!,
+                                              fit: BoxFit.contain,
+                                            )
+                                          : Icon(Icons.approval_outlined)
                                       : const Center(
                                           child: CircularProgressIndicator(),
                                         ),
@@ -174,15 +183,25 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                                 ),
                                 Expanded(
                                   child: image2 != null
-                                      ? Image.memory(image2!,
-                                          fit: BoxFit.contain)
+                                      ? image2!.isNotEmpty
+                                          ? Image.memory(image2!,
+                                              fit: BoxFit.contain)
+                                          : Icon(Icons.approval_outlined)
                                       : const Center(
                                           child: CircularProgressIndicator(),
                                         ),
                                 )
                               ],
                             ),
-                            if (!widget.manualVerification)
+                            if (widget.info != null &&
+                                image1 != null &&
+                                image2 != null)
+                              Positioned(
+                                top: 0.sh(),
+                                left: constraint.maxWidth / 2.9,
+                                child: widget.info!,
+                              )
+                            else
                               Positioned(
                                 top: -40,
                                 left: constraint.maxWidth / 2 - 70,
@@ -247,7 +266,15 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
     );
   }
 
-  Future<Uint8List> getImage(List<OriginalLocation> data) async {
+  Future<Uint8List> getImage(FileDetailMini file) async {
+    List<LatLng> data = [];
+    if (file.originalLocation.isEmpty) {
+      data = file.location.coordinates
+          .map((e) => LatLng(e.last, e.first))
+          .toList();
+    } else {
+      data = file.originalLocation.map((e) => LatLng(e.lat, e.lng)).toList();
+    }
     final RenderBox renderBox =
         _widgetKey.currentContext?.findRenderObject() as RenderBox;
     final Size size = renderBox.size;
@@ -264,7 +291,7 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
     path.addPolygon(
         data
             .map((e) => SelectedArea.transformer
-                .fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
+                .fromLatLngToXYCoords(LatLng(e.latitude, e.longitude)))
             .toList(),
         false);
     canvas.drawPath(path, paint);
