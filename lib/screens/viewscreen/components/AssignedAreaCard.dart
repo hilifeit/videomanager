@@ -35,22 +35,28 @@ class AssignedAreaCard extends ConsumerWidget {
                 selectedAreaService.refine();
                 var selectedArea = selectedAreaService.refinedSelection.value;
 
-                Future.delayed(const Duration(milliseconds: 300), () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          elevation: 0.1,
-                          contentPadding: EdgeInsets.zero,
-                          content: SizedBox(
-                            width: MediaQuery.of(context).size.width * .65,
-                            child: AnalysisHub(
-                              files: selectedArea,
+                selectedArea.removeWhere((element) => element.pair != null);
+
+                if (selectedArea.isNotEmpty) {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            elevation: 0.1,
+                            contentPadding: EdgeInsets.zero,
+                            content: SizedBox(
+                              width: MediaQuery.of(context).size.width * .65,
+                              child: AnalysisHub(
+                                files: selectedArea,
+                              ),
                             ),
-                          ),
-                        );
-                      });
-                });
+                          );
+                        });
+                  });
+                } else {
+                  snack.info("All Pair already made!");
+                }
               },
               child: CustomPopUpMenuItemChild(
                 icon: Videomanager.assign,

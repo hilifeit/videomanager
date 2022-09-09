@@ -26,18 +26,20 @@ class FileDetailMini {
       this.isSelected = false,
       this.assignDetail,
       this.pair,
+      this.cleanPair = false,
       required this.isLeft
       // required this.area
       });
 
   final String id;
-  final String? pair;
+  String? pair;
   final String filename, path;
   String foundPath;
   final Location location;
   final Status status;
   final List<OriginalLocation> originalLocation = [];
   final bool isLeft;
+  bool cleanPair;
   bool isUseable;
   bool isSelected;
   final AssignDetail? assignDetail;
@@ -73,6 +75,7 @@ class FileDetailMini {
           ? AssignDetail.fromJson(json["assignDetail"])
           : null,
       pair: json["pair"],
+      cleanPair: json["cleanPair"] ?? false,
       status: Status.fromJson(json["status"] ?? jsonDecode('{"status":0}'))
       // area: Area.fromJson(json["area"])
       );

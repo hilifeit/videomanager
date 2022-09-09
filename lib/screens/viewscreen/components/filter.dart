@@ -43,73 +43,106 @@ class Filter extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ListView.separated(
-            itemBuilder: (_, index) {
-              return ExpansionTile(
+          child: ListView(
+              // ListView.separated(
+              // itemBuilder: (_, index) {
+              children: [
+                ExpansionTile(
 
-                  // tilePadding: EdgeInsets.only(left: 0,right: 10),
-                  childrenPadding: EdgeInsets.only(left: 57.sw()),
-                  leading: Consumer(builder: (context, ref, c) {
-                    final checked = ref.watch(filterServiceProvider);
-                    return Checkbox(
-                        // visualDensity: VisualDensity.adaptivePlatformDensity,
-                        materialTapTargetSize: MaterialTapTargetSize.padded,
-                        side: const BorderSide(
-                          width: 1,
-                          color: secondaryColorText,
-                        ),
-                        activeColor: primaryColor,
-                        value: checked.onlyNotUsable,
-                        onChanged: (value) {
-                          checked.toggleUsable(value!);
-                          ref.read(selectedFileProvider.state).state = null;
-                        });
-                  }),
-                  title: Text(
-                    'Only Damaged',
-                    style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
-                  ),
-                  children: const [
-                    // ListTile(
-                    //   horizontalTitleGap: 0.r,
-                    //   // contentPadding: EdgeInsets.only(left: 0),
-                    //   leading: Consumer(builder: (context, ref, c) {
-                    //     final checked =
-                    //         ref.watch(checkBoxStateStateProvider.state).state;
-                    //     return SizedBox(
-                    //       width: 15,
-                    //       height: 15,
-                    //       child: Checkbox(
-                    //           materialTapTargetSize:
-                    //               MaterialTapTargetSize.padded,
-                    //           side: const BorderSide(
-                    //             width: 1,
-                    //             color: secondaryColorText,
-                    //           ),
-                    //           activeColor: primaryColor,
-                    //           value: checked,
-                    //           onChanged: (value) {
-                    //             ref
-                    //                 .read(checkBoxStateStateProvider.state)
-                    //                 .state = value!;
-                    //           }),
-                    //     );
-                    //   }),
-                    //   title: Text(
-                    //     'State 1',
-                    //     style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
-                    //   ),
-                    // ),
-                  ]);
-            },
-            separatorBuilder: (_, index) {
-              return const Divider(
-                height: 1,
-                thickness: 0.5,
-              );
-            },
-            itemCount: 1,
-          ),
+                    // tilePadding: EdgeInsets.only(left: 0,right: 10),
+                    childrenPadding: EdgeInsets.only(left: 57.sw()),
+                    leading: Consumer(builder: (context, ref, c) {
+                      final checked = ref.read(filterServiceProvider);
+                      final val =
+                          ref.watch(filterServiceProvider).onlyNotUsable;
+                      return Checkbox(
+                          // visualDensity: VisualDensity.adaptivePlatformDensity,
+                          materialTapTargetSize: MaterialTapTargetSize.padded,
+                          side: const BorderSide(
+                            width: 1,
+                            color: secondaryColorText,
+                          ),
+                          activeColor: primaryColor,
+                          value: val,
+                          onChanged: (value) {
+                            checked.toggleUsable(value!);
+                            ref.read(selectedFileProvider.state).state = null;
+                          });
+                    }),
+                    title: Text(
+                      'Only Damaged',
+                      style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+                    ),
+                    children: const [
+                      // ListTile(
+                      //   horizontalTitleGap: 0.r,
+                      //   // contentPadding: EdgeInsets.only(left: 0),
+                      //   leading: Consumer(builder: (context, ref, c) {
+                      //     final checked =
+                      //         ref.watch(checkBoxStateStateProvider.state).state;
+                      //     return SizedBox(
+                      //       width: 15,
+                      //       height: 15,
+                      //       child: Checkbox(
+                      //           materialTapTargetSize:
+                      //               MaterialTapTargetSize.padded,
+                      //           side: const BorderSide(
+                      //             width: 1,
+                      //             color: secondaryColorText,
+                      //           ),
+                      //           activeColor: primaryColor,
+                      //           value: checked,
+                      //           onChanged: (value) {
+                      //             ref
+                      //                 .read(checkBoxStateStateProvider.state)
+                      //                 .state = value!;
+                      //           }),
+                      //     );
+                      //   }),
+                      //   title: Text(
+                      //     'State 1',
+                      //     style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+                      //   ),
+                      // ),
+                    ]),
+                ExpansionTile(
+
+                    // tilePadding: EdgeInsets.only(left: 0,right: 10),
+                    childrenPadding: EdgeInsets.only(left: 57.sw()),
+                    leading: Consumer(builder: (context, ref, c) {
+                      final checked = ref.read(filterServiceProvider);
+                      final val = ref.watch(filterServiceProvider).onlyPair;
+
+                      return Checkbox(
+                          tristate: true,
+                          // visualDensity: VisualDensity.adaptivePlatformDensity,
+                          materialTapTargetSize: MaterialTapTargetSize.padded,
+                          side: const BorderSide(
+                            width: 1,
+                            color: secondaryColorText,
+                          ),
+                          activeColor: primaryColor,
+                          value: val,
+                          onChanged: (value) {
+                            checked.togglePair(value);
+                            ref.read(selectedFileProvider.state).state = null;
+                          });
+                    }),
+                    title: Text(
+                      'Only Pair',
+                      style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+                    ),
+                    children: const [])
+              ]
+
+              // separatorBuilder: (_, index) {
+              //   return const Divider(
+              //     height: 1,
+              //     thickness: 0.5,
+              //   );
+              // },
+              // itemCount: 2,
+              ),
         ),
         Divider(),
         Expanded(

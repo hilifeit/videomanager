@@ -12,6 +12,8 @@ class AnalysisHub extends ConsumerWidget {
   final currentFileProvider = StateProvider<int>((ref) {
     return 0;
   });
+
+  final List<FileDetailMini> data = [];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var fileservice = ref.read(fileDetailMiniServiceProvider);
@@ -27,9 +29,7 @@ class AnalysisHub extends ConsumerWidget {
         ),
         ElevatedButton.icon(
             onPressed: () {
-              if (index < files.length - 1) {
-                ref.read(currentFileProvider.state).state++;
-              }
+              matchPair(index: index, ref: ref, cleanPair: true);
             },
             icon: Padding(
               padding: EdgeInsets.all(8.sr()),
@@ -38,12 +38,14 @@ class AnalysisHub extends ConsumerWidget {
                 color: Colors.greenAccent,
               ),
             ),
-            label: Text("Match")),
+            label: const Text("Match")),
         SizedBox(
           width: 10.sw(),
         ),
         ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              matchPair(index: index, ref: ref);
+            },
             icon: Padding(
               padding: EdgeInsets.all(8.sr()),
               child: const Icon(
@@ -51,12 +53,16 @@ class AnalysisHub extends ConsumerWidget {
                 color: Colors.orangeAccent,
               ),
             ),
-            label: Text("Not Sure")),
+            label: const Text("Not Sure")),
         SizedBox(
           width: 10.sw(),
         ),
         ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              if (index < files.length - 1) {
+                ref.read(currentFileProvider.state).state++;
+              }
+            },
             icon: Padding(
               padding: EdgeInsets.all(8.sr()),
               child: const Icon(
@@ -64,7 +70,7 @@ class AnalysisHub extends ConsumerWidget {
                 color: Colors.redAccent,
               ),
             ),
-            label: Text("No Match"))
+            label: const Text("No Match"))
       ],
     );
     return PathAnalysis(
@@ -73,6 +79,28 @@ class AnalysisHub extends ConsumerWidget {
       file: element,
       itemBox: item,
       info: info,
+      onMatch: (newData) {
+        data.clear();
+        data.addAll(newData);
+      },
     );
+  }
+
+  matchPair(
+      {required int index, required WidgetRef ref, bool cleanPair = false}) {
+    if (data.isNotEmpty) {
+      if (data.length > 1) {
+        // print(data.first.id.toString() + "" + data.last.id.toString());
+        data.last.pair = data.first.id;
+        data.first.pair = data.last.id;
+        data.first.cleanPair = cleanPair;
+        data.last.cleanPair = cleanPair;
+        files.remove(data.last);
+
+        if (index < files.length - 1) {
+          ref.read(currentFileProvider.state).state++;
+        }
+      }
+    }
   }
 }

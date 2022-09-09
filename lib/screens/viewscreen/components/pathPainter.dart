@@ -44,7 +44,10 @@ class Painter extends CustomPainter {
     sampler = 6 - sampler;
     const Color strokeColor = Colors.red,
         selectedInAreaColor = primaryColor,
-        damagedColor = Colors.black;
+        damagedColor = Colors.black,
+        pairColor = Colors.purple,
+        notSurePairColor = Colors.lightBlue;
+
     const HitTestBehavior hitBehaviorTranslucent = HitTestBehavior.opaque;
     final fileservice = ref.watch(fileDetailMiniServiceProvider);
     final selectedPointsProvider = ref.watch(selectedAreaServiceProvider);
@@ -252,53 +255,105 @@ class Painter extends CustomPainter {
                 PopupMenuItem(
                     onTap: () async {
                       CustomOverlayEntry().showLoader();
-                      var firstVideoExists =
-                          await fileservice.fileExists(element.id);
-                      if (firstVideoExists) {
-                        FileDetailMini? secondVideo =
-                            await fileservice.findFile(
-                                visibleFilesList: visibleFilesList,
-                                file: element,
-                                fileRect: item);
-                        var leftFile = await fileservice.fetchOne(element.id);
-                        leftFile.foundPath = getVideoUrl(element.id);
-                        if (secondVideo != null) {
-                          var secondVideoExists =
-                              await fileservice.fileExists(secondVideo.id);
-                          if (secondVideoExists) {
-                            var rightFile =
-                                await fileservice.fetchOne(secondVideo.id);
-                            rightFile.foundPath = getVideoUrl(secondVideo.id);
-                            if (element.originalLocation.isNotEmpty) {
-                              leftFile.originalLocation
-                                  .addAll(element.originalLocation);
-                            }
 
-                            var secondVideoOriginalData = await fileservice
-                                .fetchOriginalLocation(secondVideo.id);
-                            rightFile.originalLocation
-                                .addAll(secondVideoOriginalData);
-                            CustomOverlayEntry().closeLoader();
-
-                            Future.delayed(const Duration(milliseconds: 100),
-                                () async {
-                              CustomOverlayEntry().closeLoader();
-                              await showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return CustomVideo(
-                                      leftFile: leftFile,
-                                      rightFile: rightFile,
-                                    );
-                                  });
-
-                              transformer.controller.drag(0.1, 0.1);
-                            });
+                      if (element.pair != null) {
+                        Future.delayed(const Duration(milliseconds: 100),
+                            () async {
+                          CustomOverlayEntry().closeLoader();
+                          var leftFile = await fileservice.fetchOne(element.id);
+                          leftFile.foundPath = getVideoUrl(element.id);
+                          var rightFile =
+                              await fileservice.fetchOne(element.pair!);
+                          if (element.originalLocation.isEmpty) {
+                            var data = await fileservice
+                                .fetchOriginalLocation(element.id);
+                            leftFile.originalLocation.addAll(data);
                           } else {
-                            CustomOverlayEntry().closeLoader();
+                            leftFile.originalLocation
+                                .addAll(element.originalLocation);
+                          }
+                          rightFile.foundPath = getVideoUrl(element.pair!);
+                          var secondVideoOriginalData = await fileservice
+                              .fetchOriginalLocation(element.pair!);
+                          rightFile.originalLocation
+                              .addAll(secondVideoOriginalData);
+                          await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return CustomVideo(
+                                  leftFile: leftFile,
+                                  rightFile: rightFile,
+                                );
+                              });
+
+                          transformer.controller.drag(0.1, 0.1);
+                        });
+                      } else {
+                        var firstVideoExists =
+                            await fileservice.fileExists(element.id);
+                        if (firstVideoExists) {
+                          FileDetailMini? secondVideo =
+                              await fileservice.findFile(
+                                  visibleFilesList: visibleFilesList,
+                                  file: element,
+                                  fileRect: item);
+                          var leftFile = await fileservice.fetchOne(element.id);
+                          leftFile.foundPath = getVideoUrl(element.id);
+                          if (secondVideo != null) {
+                            var secondVideoExists =
+                                await fileservice.fileExists(secondVideo.id);
+                            if (secondVideoExists) {
+                              var rightFile =
+                                  await fileservice.fetchOne(secondVideo.id);
+                              rightFile.foundPath = getVideoUrl(secondVideo.id);
+                              if (element.originalLocation.isNotEmpty) {
+                                leftFile.originalLocation
+                                    .addAll(element.originalLocation);
+                              }
+
+                              var secondVideoOriginalData = await fileservice
+                                  .fetchOriginalLocation(secondVideo.id);
+                              rightFile.originalLocation
+                                  .addAll(secondVideoOriginalData);
+                              CustomOverlayEntry().closeLoader();
+
+                              Future.delayed(const Duration(milliseconds: 100),
+                                  () async {
+                                CustomOverlayEntry().closeLoader();
+                                await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return CustomVideo(
+                                        leftFile: leftFile,
+                                        rightFile: rightFile,
+                                      );
+                                    });
+
+                                transformer.controller.drag(0.1, 0.1);
+                              });
+                            } else {
+                              CustomOverlayEntry().closeLoader();
+                              await snack.info("Adjacent Video not found");
+                              Future.delayed(const Duration(milliseconds: 800),
+                                  () async {
+                                await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return CustomVideo(
+                                        leftFile: leftFile,
+                                        rightFile: leftFile,
+                                      );
+                                    });
+
+                                transformer.controller.drag(0.1, 0.1);
+                              });
+                            }
+                          } else {
                             await snack.info("Adjacent Video not found");
+
                             Future.delayed(const Duration(milliseconds: 800),
                                 () async {
+                              CustomOverlayEntry().closeLoader();
                               await showDialog(
                                   context: context,
                                   builder: (_) {
@@ -312,28 +367,11 @@ class Painter extends CustomPainter {
                             });
                           }
                         } else {
-                          await snack.info("Adjacent Video not found");
-
-                          Future.delayed(const Duration(milliseconds: 800),
-                              () async {
+                          snack.error("Video not found!");
+                          Future.delayed(const Duration(milliseconds: 500), () {
                             CustomOverlayEntry().closeLoader();
-                            await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return CustomVideo(
-                                    leftFile: leftFile,
-                                    rightFile: leftFile,
-                                  );
-                                });
-
-                            transformer.controller.drag(0.1, 0.1);
                           });
                         }
-                      } else {
-                        snack.error("Video not found!");
-                        Future.delayed(const Duration(milliseconds: 500), () {
-                          CustomOverlayEntry().closeLoader();
-                        });
                       }
                     },
                     child: CustomPopUpMenuItemChild(
@@ -444,7 +482,11 @@ class Painter extends CustomPainter {
         paint.color = element.isUseable
             ? finalselectedFileList.contains(element)
                 ? selectedInAreaColor
-                : strokeColor
+                : element.pair == null
+                    ? strokeColor
+                    : element.cleanPair
+                        ? pairColor
+                        : notSurePairColor
             : damagedColor;
 
         path.addPolygon(points, false);

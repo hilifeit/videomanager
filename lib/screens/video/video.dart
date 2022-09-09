@@ -95,112 +95,127 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
     final player1 = dualVideoService.desktop1.value;
     final player2 = dualVideoService.desktop2.value;
     return Scaffold(
-      body: Column(
-        children: [
-          Flexible(
-            flex: 6,
-            child: Container(
-              color: Colors.black,
-              child: Row(
+      body: WillPopScope(
+        onWillPop: () {
+          if (UniversalPlatform.isDesktop) {
+            try {
+              player1!.player.pause();
+              player2!.player.pause();
+              return Future.value(true);
+            } catch (e) {
+              return Future.value(true);
+            }
+          }
+          return Future.value(true);
+        },
+        child: Column(
+          children: [
+            Flexible(
+              flex: 6,
+              child: Container(
+                color: Colors.black,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Column(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Stack(
+                            children: [
+                              CustomVideoPlayer(
+                                  controller: _controller1,
+                                  player: player1?.player),
+                              Positioned(
+                                  top: 20.sh(),
+                                  left: 19.sw(),
+                                  child: SizedBox(
+                                      width: 105.77.sw(),
+                                      height: 38.26.sh(),
+                                      child: Container(
+                                        color: Colors.black.withOpacity(0.5),
+                                        child: Center(
+                                            child: Text(
+                                          'Left',
+                                          style: kTextStyleInterMedium.copyWith(
+                                              color: Colors.white),
+                                        )),
+                                      )))
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          CustomVideoPlayer(
+                              controller: _controller2,
+                              player: player2?.player),
+                          Positioned(
+                              top: 20.sh(),
+                              right: 24.32.sw(),
+                              child: SizedBox(
+                                width: 105.77.sw(),
+                                height: 38.26.sh(),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.5),
+                                  child: Center(
+                                      child: Text(
+                                    'Right',
+                                    style: kTextStyleInterMedium.copyWith(
+                                        color: Colors.white),
+                                  )),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Column(
                 children: [
                   Expanded(
-                      child: Column(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Stack(
-                          children: [
-                            CustomVideoPlayer(
-                                controller: _controller1,
-                                player: player1?.player),
-                            Positioned(
-                                top: 20.sh(),
-                                left: 19.sw(),
-                                child: SizedBox(
-                                    width: 105.77.sw(),
-                                    height: 38.26.sh(),
-                                    child: Container(
-                                      color: Colors.black.withOpacity(0.5),
-                                      child: Center(
-                                          child: Text(
-                                        'Left',
-                                        style: kTextStyleInterMedium.copyWith(
-                                            color: Colors.white),
-                                      )),
-                                    )))
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-                  Expanded(
-                    child: Stack(
+                    flex: 3,
+                    child: Row(
                       children: [
-                        CustomVideoPlayer(
-                            controller: _controller2, player: player2?.player),
-                        Positioned(
-                            top: 20.sh(),
-                            right: 24.32.sw(),
-                            child: SizedBox(
-                              width: 105.77.sw(),
-                              height: 38.26.sh(),
-                              child: Container(
-                                color: Colors.black.withOpacity(0.5),
-                                child: Center(
-                                    child: Text(
-                                  'Right',
-                                  style: kTextStyleInterMedium.copyWith(
-                                      color: Colors.white),
-                                )),
-                              ),
-                            )),
+                        Expanded(
+                          child: VideoDetails(
+                            isDetailed: true,
+                            detailedFile: widget.leftFile,
+                          ),
+                        ),
+                        Expanded(
+                          child: VideoDetails(
+                            isFirst: false,
+                            isDetailed: true,
+                            detailedFile: widget.rightFile,
+                          ),
+                        ),
                       ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: VideoPlayerControls(
+                      leftWeb: _controller1,
+                      rightWeb: _controller2,
+                      leftDesktop: player1,
+                      rightDesktop: player2,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: VideoDetails(
-                          isDetailed: true,
-                          detailedFile: widget.leftFile,
-                        ),
-                      ),
-                      Expanded(
-                        child: VideoDetails(
-                          isFirst: false,
-                          isDetailed: true,
-                          detailedFile: widget.rightFile,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: VideoPlayerControls(
-                    leftWeb: _controller1,
-                    rightWeb: _controller2,
-                    leftDesktop: player1,
-                    rightDesktop: player2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Placeholder(
-          //   fallbackHeight: 50.sm,
-          // )
-        ],
+            // Placeholder(
+            //   fallbackHeight: 50.sm,
+            // )
+          ],
+        ),
       ),
     );
   }
@@ -244,8 +259,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
 
   @override
   void dispose() {
-    ref.read(dualVideoServiceProvider).dispose();
-
     super.dispose();
+    ref.read(dualVideoServiceProvider).dispose();
   }
 }

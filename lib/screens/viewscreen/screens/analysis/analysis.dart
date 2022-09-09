@@ -18,12 +18,14 @@ class PathAnalysis extends StatefulHookConsumerWidget {
       required this.files,
       required this.file,
       required this.itemBox,
+      this.onMatch,
       this.info})
       : super(key: key);
   final List<FileDetailMini> files;
   final FileDetailMini file;
   final Rect itemBox;
   final Widget? info;
+  final Function(List<FileDetailMini>)? onMatch;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PathAnalysisState();
 }
@@ -118,6 +120,9 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
         future: processFiles,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data != null && widget.onMatch != null) {
+              widget.onMatch!(snapshot.data!);
+            }
             return Stack(
               children: [
                 Column(
@@ -126,10 +131,13 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                     Expanded(
                       key: _widgetKey,
                       flex: 2,
-                      child: AnalysisMapScreen(
-                        file: widget.file,
-                        files: snapshot.data!,
-                        controller: controller,
+                      child: IgnorePointer(
+                        ignoring: widget.info == null ? false : true,
+                        child: AnalysisMapScreen(
+                          file: widget.file,
+                          files: snapshot.data!,
+                          controller: controller,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -168,9 +176,13 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                                 Expanded(
                                   child: image1 != null
                                       ? image1!.isNotEmpty
-                                          ? Image.memory(
-                                              image1!,
-                                              fit: BoxFit.contain,
+                                          ? InteractiveViewer(
+                                              minScale: 0.25,
+                                              maxScale: 2,
+                                              child: Image.memory(
+                                                image1!,
+                                                fit: BoxFit.contain,
+                                              ),
                                             )
                                           : Icon(Icons.approval_outlined)
                                       : const Center(
@@ -184,9 +196,11 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                                 Expanded(
                                   child: image2 != null
                                       ? image2!.isNotEmpty
-                                          ? Image.memory(image2!,
-                                              fit: BoxFit.contain)
-                                          : Icon(Icons.approval_outlined)
+                                          ? InteractiveViewer(
+                                              child: Image.memory(image2!,
+                                                  fit: BoxFit.contain),
+                                            )
+                                          : const Icon(Icons.approval_outlined)
                                       : const Center(
                                           child: CircularProgressIndicator(),
                                         ),
