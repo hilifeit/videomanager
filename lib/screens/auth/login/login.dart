@@ -60,7 +60,7 @@ class Login extends ConsumerWidget {
                 snack.success("Login Succesful");
                 ref.read(loginStateProvider.state).state = false;
 
-                Future.delayed(const Duration(milliseconds: 100), () async {
+                Future.delayed(const Duration(milliseconds: 250), () async {
                   await userService.fetchAll();
                   customSocket.connect();
                 });
@@ -68,6 +68,7 @@ class Login extends ConsumerWidget {
                 Navigator.pop(context);
               } catch (e) {
                 Navigator.pop(context);
+
                 snack.error(e);
               }
             }
@@ -177,7 +178,7 @@ class Login extends ConsumerWidget {
                                     false;
 
                                 Future.delayed(
-                                    const Duration(milliseconds: 100),
+                                    const Duration(milliseconds: 250),
                                     () async {
                                   await userService.fetchAll();
                                   customSocket.connect();

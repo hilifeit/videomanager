@@ -161,40 +161,37 @@ class ScreenshotDashboard extends HookConsumerWidget {
                       ),
                     ),
                     if (ResponsiveLayout.isDesktop)
-                      GestureDetector(
-                        onTap: () async {},
-                        child: Container(
-                          height: 73.sh(),
-                          color: primaryColor,
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 51.sw(),
+                      Container(
+                        height: 73.sh(),
+                        color: primaryColor,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 51.sw(),
+                                  ),
+                                  Expanded(
+                                    child: SingleVideoPlayerControls(
+                                      videoFile: videoFile,
+                                      desktop: player,
+                                      web: controller,
                                     ),
-                                    Expanded(
-                                      child: SingleVideoPlayerControls(
-                                        videoFile: videoFile,
-                                        desktop: player,
-                                        web: controller,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Positioned(
-                                child: LinearProgressIndicator(
-                                  value: 0.3,
-                                  backgroundColor: Colors.transparent,
-                                  color: successColor,
-                                  minHeight: 4.sh(),
-                                ),
+                            ),
+                            Positioned(
+                              child: LinearProgressIndicator(
+                                value: 0.3,
+                                backgroundColor: Colors.transparent,
+                                color: successColor,
+                                minHeight: 4.sh(),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                   ],

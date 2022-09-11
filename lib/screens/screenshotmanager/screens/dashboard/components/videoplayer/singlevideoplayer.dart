@@ -23,7 +23,6 @@ class CustomVideoPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        print("here");
         // final boundary =
         //     skey.currentContext!.findRenderObject() as RenderRepaintBoundary?;
         // final image = await boundary?.toImage();

@@ -93,7 +93,7 @@ class ImagePicker<T> extends FormField<FilePickerResult> {
                             );
                             double fileSize = (singleResult!.files.first.size) /
                                 (1024 * 1024);
-                            print(fileSize);
+
                             if (fileSize < 5) {
                               List<PlatformFile> fileList = [];
                               fileList.addAll(state.value!.files);

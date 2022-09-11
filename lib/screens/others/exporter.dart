@@ -1,6 +1,5 @@
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:http/http.dart' as http;
-import 'package:universal_platform/universal_platform.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/snackbar/customsnackbar.dart';
 import 'package:videomanager/screens/others/exporter.dart';

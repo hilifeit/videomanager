@@ -7,6 +7,8 @@ import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screens
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'dart:ui' as ui;
 
+import 'package:videomanager/screens/video/components/models/playerController.dart';
+
 final mouseScrollProvider = StateProvider<double>((ref) {
   return 0.0;
 });
@@ -15,6 +17,7 @@ class TimeLineCanvas extends ConsumerWidget {
   TimeLineCanvas({Key? key, required this.duration}) : super(key: key);
   final Duration duration;
   final ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var scrollOffset = ref.watch(mouseScrollProvider.state).state;
@@ -24,24 +27,39 @@ class TimeLineCanvas extends ConsumerWidget {
         a.timeStamp.inMilliseconds.compareTo(b.timeStamp.inMilliseconds));
 
     return LayoutBuilder(builder: (context, constraint) {
+      // print("constraints : ${constraint.maxHeight}");
       return Listener(
         onPointerSignal: (event) {
-          if (event is PointerScrollEvent) {
-            // var estimatedHeigh = snaps.length * SnapModel.height + 80.sh();
+          // if (event is PointerScrollEvent) {
+          var estimatedHeigh = snaps.length * SnapModel.height + 80.sh();
 
-            // final delta = event.scrollDelta;
+          // final delta = event.scrollDelta;
+          // print(delta);
+          // print(estimatedHeigh);
+          // if (delta.dy > 0) {
+          //   if (estimatedHeigh > constraint.maxHeight) {
+          //     ref.read(mouseScrollProvider.state).state -= delta.dy;
+          //   }
+          // } else {
+          //   if (ref.read(mouseScrollProvider.state).state < 0) {
+          //     if (estimatedHeigh > constraint.maxHeight) {
+          //       ref.read(mouseScrollProvider.state).state -= delta.dy;
+          //     }
+          //   }
+          // }
+          // print(ref.read(mouseScrollProvider.state).state);
 
-            // if (estimatedHeigh > constraint.maxHeight ||
-            //     scrollOffset.abs() < estimatedHeigh) {
-            //   if (scrollOffset - delta.dy > 0 &&
-            //       scrollOffset - delta.dy < estimatedHeigh)
-            //     ref.read(mouseScrollProvider.state).state += delta.dy;
-            //   else if (scrollOffset - delta.dy < estimatedHeigh &&
-            //       scrollOffset - delta.dy != 0) {
-            //     ref.read(mouseScrollProvider.state).state -= delta.dy;
-            //   }
-            // }
-          }
+          // if (estimatedHeigh > constraint.maxHeight ||
+          //     scrollOffset.abs() < estimatedHeigh) {
+          //   if (scrollOffset - delta.dy > 0 &&
+          //       scrollOffset - delta.dy < estimatedHeigh)
+          //     ref.read(mouseScrollProvider.state).state += delta.dy;
+          //   else if (scrollOffset - delta.dy < estimatedHeigh &&
+          //       scrollOffset - delta.dy != 0) {
+          //     ref.read(mouseScrollProvider.state).state -= delta.dy;
+          //   }
+          // }
+          // }
         },
         child: Container(
           color: Colors.white,
@@ -57,7 +75,13 @@ class TimeLineCanvas extends ConsumerWidget {
                           duration: duration,
                           maxWidth: constraint.maxWidth,
                           currentValue: snap.timeStamp,
-                          scrollOffset: scrollOffset);
+                          scrollOffset: scrollOffset,
+                          constraints: constraint);
+
+                      // if (position.dy > constraint.maxHeight) {
+                      //   var yPostion =
+                      //   position = Offset(position.dx + 22.sw(), 80.sh());
+                      // }
 
                       return Positioned(
                           left: position.dx,
@@ -143,7 +167,8 @@ class TimeLineCanvas extends ConsumerWidget {
       required double maxWidth,
       required Duration currentValue,
       required int index,
-      required double scrollOffset}) {
+      required double scrollOffset,
+      required BoxConstraints constraints}) {
     var xPosition = mapDouble(
         x: currentValue.inMilliseconds.toDouble(),
         in_min: 0,
@@ -152,8 +177,27 @@ class TimeLineCanvas extends ConsumerWidget {
         out_max: maxWidth);
     var yPosition = 80.sh();
     if (index != 0) yPosition += (SnapModel.height + 5.sh()) * index;
+    // print(yPosition);
+
+    yPosition = recurse(yPosition, constraints);
 
     return Offset(xPosition, yPosition + scrollOffset);
+  }
+
+  recurse(yPosition, constraints) {
+    if (yPosition > constraints.maxHeight - 10.sh()) {
+      double add = (yPosition - constraints.maxHeight) - 2.5.sh();
+
+      yPosition = 80.sh() + add;
+      if (yPosition < 80.sh()) {
+        yPosition = 80.sh();
+      }
+    }
+    if (yPosition > constraints.maxHeight - 10.sh()) {
+      recurse(yPosition, constraints);
+      return yPosition;
+    } else {}
+    return yPosition;
   }
 }
 

@@ -40,7 +40,9 @@ class Timeline extends ConsumerWidget {
                 const SizedBox(
                   height: double.infinity,
                 ),
-                TimeLineCanvas(duration: duration),
+                TimeLineCanvas(
+                  duration: duration,
+                ),
                 GestureDetector(
                     onDoubleTap: () {
                       if (customHeight == defaultHeight) {

@@ -36,8 +36,10 @@ class CustomSocket {
             socket.emit('join', "");
           });
           socket.onConnecting((data) => print("connecting"));
+
           socket.onConnectError((data) {
             snack.error(data);
+
             print(CustomIP.socketBaseUrl);
             ref.read(status.state).state = false;
           });
@@ -47,7 +49,7 @@ class CustomSocket {
             ref.read(status.state).state = false;
           });
           socket.onError((data) async {
-            print(data);
+            print("error here $data");
             try {
               ref.read(status.state).state = false;
               var json = jsonEncode(data);
