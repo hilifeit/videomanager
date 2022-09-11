@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:image_compare/image_compare.dart';
@@ -12,20 +13,42 @@ import 'dart:ui' as ui;
 
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
+enum Matcher { Match, NotSure, NoMatch }
+
+class PreviousAction {
+  PreviousAction(
+      {this.file1,
+      this.file2,
+      this.image1,
+      this.image2,
+      this.match,
+      this.file2Index});
+  FileDetailMini? file1, file2;
+  Uint8List? image1, image2;
+  Matcher? match;
+  int? file2Index;
+}
+
 class PathAnalysis extends StatefulHookConsumerWidget {
   const PathAnalysis(
       {Key? key,
       required this.files,
       required this.file,
       required this.itemBox,
+      this.undoWidget,
       this.onMatch,
-      this.info})
+      this.info,
+      this.previousAction,
+      this.undo})
       : super(key: key);
   final List<FileDetailMini> files;
   final FileDetailMini file;
   final Rect itemBox;
   final Widget? info;
-  final Function(List<FileDetailMini>)? onMatch;
+  final Widget? undoWidget;
+  final PreviousAction? previousAction;
+  final Function(PreviousAction)? onMatch;
+  final Function? undo;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PathAnalysisState();
 }
@@ -120,24 +143,32 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
         future: processFiles,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data != null && widget.onMatch != null) {
-              widget.onMatch!(snapshot.data!);
-            }
             return Stack(
               children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Expanded(
-                      key: _widgetKey,
                       flex: 2,
-                      child: IgnorePointer(
-                        ignoring: widget.info == null ? false : true,
-                        child: AnalysisMapScreen(
-                          file: widget.file,
-                          files: snapshot.data!,
-                          controller: controller,
-                        ),
+                      child: Row(
+                        children: [
+                          if (widget.undoWidget != null)
+                            Expanded(
+                              child: widget.undoWidget!,
+                            ),
+                          Expanded(
+                            key: _widgetKey,
+                            flex: 4,
+                            child: IgnorePointer(
+                              ignoring: widget.info == null ? false : true,
+                              child: AnalysisMapScreen(
+                                file: widget.file,
+                                files: snapshot.data!,
+                                controller: controller,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Expanded(
@@ -157,7 +188,14 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                               } catch (e) {
                                 image2 = Uint8List.fromList([]);
                               }
-
+                              if (widget.onMatch != null) {
+                                widget.onMatch!(PreviousAction(
+                                  file1: snapshot.data!.first,
+                                  file2: snapshot.data!.last,
+                                  image1: image1,
+                                  image2: image2,
+                                ));
+                              }
                               // var result = await compareImages(
                               //     src1: image1, src2: image2);
                               // // print(result);
@@ -173,38 +211,12 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                           children: [
                             Row(
                               children: [
-                                Expanded(
-                                  child: image1 != null
-                                      ? image1!.isNotEmpty
-                                          ? InteractiveViewer(
-                                              minScale: 0.25,
-                                              maxScale: 2,
-                                              child: Image.memory(
-                                                image1!,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            )
-                                          : Icon(Icons.approval_outlined)
-                                      : const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                ),
+                                Expanded(child: showImage(image1)),
                                 Container(
                                   width: 2,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                Expanded(
-                                  child: image2 != null
-                                      ? image2!.isNotEmpty
-                                          ? InteractiveViewer(
-                                              child: Image.memory(image2!,
-                                                  fit: BoxFit.contain),
-                                            )
-                                          : const Icon(Icons.approval_outlined)
-                                      : const Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                )
+                                Expanded(child: showImage(image2))
                               ],
                             ),
                             if (widget.info != null &&
@@ -250,6 +262,49 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                     ),
                   ],
                 ),
+                if (widget.previousAction != null)
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      heightFactor: 1.15,
+                      child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        width: 250,
+                        height: MediaQuery.of(context).size.height / 1.8,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  const Text("Previous: "),
+                                  Text(
+                                      "${widget.previousAction!.match!.name.toString()}"),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                                child: Transform.scale(
+                                    scale: 2,
+                                    child: showImage(
+                                        widget.previousAction!.image1))),
+                            Expanded(
+                                child: Transform.scale(
+                                    scale: 2,
+                                    child: showImage(
+                                        widget.previousAction!.image2))),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: ElevatedButton(
+                                  onPressed: widget.undo != null
+                                      ? () {
+                                          widget.undo!();
+                                        }
+                                      : null,
+                                  child: const Text("Undo")),
+                            )
+                          ],
+                        ),
+                      ))
                 // Align(
                 //     alignment: Alignment.bottomRight,
                 //     child: IconButton(
@@ -278,6 +333,24 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
         },
       ),
     );
+  }
+
+  Widget showImage(Uint8List? img, {bool scale = false}) {
+    return img != null
+        ? img.isNotEmpty
+            ? InteractiveViewer(
+                minScale: 0.25,
+                maxScale: 2,
+                scaleEnabled: scale,
+                child: Image.memory(
+                  img,
+                  fit: BoxFit.contain,
+                ),
+              )
+            : const Icon(Icons.approval_outlined)
+        : const Center(
+            child: CircularProgressIndicator(),
+          );
   }
 
   Future<Uint8List> getImage(FileDetailMini file) async {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/others/exporter.dart';
@@ -7,13 +9,13 @@ import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class AnalysisHub extends ConsumerWidget {
-  AnalysisHub({Key? key, required this.files}) : super(key: key);
+  AnalysisHub({Key? key, required this.files, this.action}) : super(key: key);
   final List<FileDetailMini> files;
   final currentFileProvider = StateProvider<int>((ref) {
     return 0;
   });
 
-  final List<FileDetailMini> data = [];
+  PreviousAction? action, tempAction;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var fileservice = ref.read(fileDetailMiniServiceProvider);
@@ -21,15 +23,16 @@ class AnalysisHub extends ConsumerWidget {
     var element = files[index];
     var item =
         fileservice.getRect(element.boundingBox!, SelectedArea.transformer);
+
     var info = Row(
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(index.toString()),
+          child: Text((index + 1).toString()),
         ),
         ElevatedButton.icon(
             onPressed: () {
-              matchPair(index: index, ref: ref, cleanPair: true);
+              matchPair(context, index: index, ref: ref, cleanPair: true);
             },
             icon: Padding(
               padding: EdgeInsets.all(8.sr()),
@@ -44,7 +47,7 @@ class AnalysisHub extends ConsumerWidget {
         ),
         ElevatedButton.icon(
             onPressed: () {
-              matchPair(index: index, ref: ref);
+              matchPair(context, index: index, ref: ref);
             },
             icon: Padding(
               padding: EdgeInsets.all(8.sr()),
@@ -60,7 +63,13 @@ class AnalysisHub extends ConsumerWidget {
         ElevatedButton.icon(
             onPressed: () {
               if (index < files.length - 1) {
+                if (tempAction != null) {
+                  action = tempAction!..match = Matcher.NoMatch;
+                }
+
                 ref.read(currentFileProvider.state).state++;
+              } else if (index == files.length - 1) {
+                endProcess(context);
               }
             },
             icon: Padding(
@@ -80,27 +89,63 @@ class AnalysisHub extends ConsumerWidget {
       itemBox: item,
       info: info,
       onMatch: (newData) {
-        data.clear();
-        data.addAll(newData);
+        tempAction = PreviousAction(
+            file1: newData.file1,
+            file2: newData.file2,
+            image1: newData.image1,
+            image2: newData.image2,
+            match: newData.match);
       },
+      previousAction: action,
+      undo: action == null
+          ? null
+          : () {
+              if (action!.match != Matcher.NoMatch) {
+                action!.file2!.pair = null;
+                action!.file2!.cleanPair = false;
+                files.insert(action!.file2Index!, action!.file2!);
+                action = null;
+                if (index > 0) ref.read(currentFileProvider.state).state--;
+              } else {
+                if (index > 0) ref.read(currentFileProvider.state).state--;
+              }
+            },
     );
   }
 
-  matchPair(
+  matchPair(BuildContext context,
       {required int index, required WidgetRef ref, bool cleanPair = false}) {
-    if (data.isNotEmpty) {
-      if (data.length > 1) {
-        // print(data.first.id.toString() + "" + data.last.id.toString());
-        data.last.pair = data.first.id;
-        data.first.pair = data.last.id;
-        data.first.cleanPair = cleanPair;
-        data.last.cleanPair = cleanPair;
-        files.remove(data.last);
+    if (tempAction!.file1 != null && tempAction!.file2 != null) {
+      // print(data.first.id.toString() + "" + data.last.id.toString());
 
-        if (index < files.length - 1) {
+      tempAction!.file2!.pair = tempAction!.file1!.id;
+      tempAction!.file2!.cleanPair = cleanPair;
+      tempAction!.file1!.pair = tempAction!.file2!.id;
+      tempAction!.file1!.cleanPair = cleanPair;
+      var file2index = files.indexOf(tempAction!.file2!);
+      files.remove(tempAction!.file2);
+
+      if (index < files.length - 1) {
+        action = PreviousAction(
+            file1: tempAction!.file1,
+            file2: tempAction!.file2,
+            image1: tempAction!.image1,
+            image2: tempAction!.image2,
+            match: cleanPair ? Matcher.Match : Matcher.NotSure,
+            file2Index: file2index);
+
+        Future.delayed(Duration(milliseconds: 20), () {
           ref.read(currentFileProvider.state).state++;
-        }
+        });
+      } else if (index == files.length - 1) {
+        endProcess(context);
       }
     }
+  }
+
+  endProcess(BuildContext context) {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.pop(context);
+    });
   }
 }
