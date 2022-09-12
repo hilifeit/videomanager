@@ -309,6 +309,7 @@ class Painter extends CustomPainter {
                                   fileRect: item);
                           var leftFile = await fileservice.fetchOne(element.id);
                           leftFile.foundPath = getVideoUrl(element.id);
+
                           if (secondVideo != null) {
                             var secondVideoExists =
                                 await fileservice.fileExists(secondVideo.id);

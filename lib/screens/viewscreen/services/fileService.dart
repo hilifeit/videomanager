@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
@@ -561,7 +562,7 @@ class FileService extends ChangeNotifier {
           firstDistanceTotal = [],
           secondDistanceTotal = [];
       var length = first.length < second.length ? first.length : second.length;
-      print(length);
+
       for (int i = 0; i < length; i++) {
         try {
           // var fileElement = first.first;
@@ -595,11 +596,14 @@ class FileService extends ChangeNotifier {
 
     List<FileWithDistance> distances = [];
     var list = visibleFilesList.toList();
-    list.removeWhere((element) => element.isLeft == file.isLeft);
+
+    list.removeWhere((element) => file.isLeft == element.isLeft);
+    // print(list.length);
     for (var e in list) {
       Rect testElement = getRect(e.boundingBox!, SelectedArea.transformer);
+      // inspect(e.boundingBox);
       double distance = (testElement.center - fileRect.center).distance.abs();
-
+      // inspect(fileRect);
       if (SelectedArea.transformer.controller.zoom < 19) {
         if (distance < minimumDistance) {
           if (e != file) {

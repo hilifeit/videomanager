@@ -113,10 +113,14 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
           }
         }
       }
+      //  else
+      // print(element.filename);
     });
+
     try {
       var filePair = await fileService.findFile(
           visibleFilesList: files, file: widget.file, fileRect: widget.itemBox);
+
       Future.delayed(Duration(milliseconds: 200), () {
         setState(() {
           Future.delayed(Duration(milliseconds: 50), () {
