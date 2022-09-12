@@ -211,12 +211,12 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                           children: [
                             Row(
                               children: [
-                                Expanded(child: showImage(image1)),
+                                Expanded(child: showImage(image1, scale: true)),
                                 Container(
                                   width: 2,
                                   color: Theme.of(context).primaryColor,
                                 ),
-                                Expanded(child: showImage(image2))
+                                Expanded(child: showImage(image2, scale: true))
                               ],
                             ),
                             if (widget.info != null &&
@@ -255,7 +255,20 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                                                         color: Colors.white))
                                       ],
                                     )),
-                              )
+                              ),
+                            Positioned(
+                              right: constraint.maxWidth / 2 - 90,
+                              top: -45,
+                              child: Container(
+                                color: Colors.white.withOpacity(0.8),
+                                child: Text(
+                                  "${snapshot.data!.length > 1 ? "Double" : "Single"} File",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 30.ssp()),
+                                ),
+                              ),
+                            )
                           ],
                         );
                       }),
@@ -306,16 +319,6 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                         ),
                       )),
 
-                Positioned(
-                  right: 10,
-                  top: 20,
-                  child: Text(
-                    "${snapshot.data!.length > 1 ? "Double" : "Single"} File",
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 30.ssp()),
-                  ),
-                )
                 // Align(
                 //     alignment: Alignment.bottomRight,
                 //     child: IconButton(
