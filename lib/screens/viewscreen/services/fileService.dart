@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
@@ -495,6 +496,34 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  Future<bool> pairFiles({required String id, required dynamic body}) async {
+    var userProvider = ref.read(userChangeProvider);
+    try {
+      var response =
+          await client.put(Uri.parse("${CustomIP.apiBaseUrl}file/pair/$id"),
+              headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userProvider.loggedInUser.value!.accessToken!
+              },
+              body: jsonEncode(body));
+
+      if (response.statusCode == 200) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
+        // notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
   Future<bool> deleteArea({required String id}) async {
     var userProvider = ref.read(userChangeProvider);
     try {
@@ -533,7 +562,7 @@ class FileService extends ChangeNotifier {
           firstDistanceTotal = [],
           secondDistanceTotal = [];
       var length = first.length < second.length ? first.length : second.length;
-      print(length);
+
       for (int i = 0; i < length; i++) {
         try {
           // var fileElement = first.first;
@@ -567,11 +596,14 @@ class FileService extends ChangeNotifier {
 
     List<FileWithDistance> distances = [];
     var list = visibleFilesList.toList();
-    list.removeWhere((element) => element.isLeft == file.isLeft);
+
+    list.removeWhere((element) => file.isLeft == element.isLeft);
+    // print(list.length);
     for (var e in list) {
       Rect testElement = getRect(e.boundingBox!, SelectedArea.transformer);
+      // inspect(e.boundingBox);
       double distance = (testElement.center - fileRect.center).distance.abs();
-
+      // inspect(fileRect);
       if (SelectedArea.transformer.controller.zoom < 19) {
         if (distance < minimumDistance) {
           if (e != file) {

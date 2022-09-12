@@ -116,7 +116,17 @@ class Painter extends CustomPainter {
       Rect item = fileservice.getRect(element.boundingBox!, transformer);
 
       if (item.overlaps(visibleScreen)) {
-        visibleFilesList.add(element);
+        if (filterService.onlyPair == null) {
+          if (element.pair != null && !element.cleanPair) {
+            visibleFilesList.add(element);
+          }
+        } else if (filterService.onlyPair == true) {
+          if (element.cleanPair) {
+            visibleFilesList.add(element);
+          }
+        } else {
+          visibleFilesList.add(element);
+        }
         if (selectedPointsProvider.pathClosed.value) {
           Rect? selection = selectedPointsProvider.getRectFromPoints();
           if (selection != null &&
@@ -299,6 +309,7 @@ class Painter extends CustomPainter {
                                   fileRect: item);
                           var leftFile = await fileservice.fetchOne(element.id);
                           leftFile.foundPath = getVideoUrl(element.id);
+
                           if (secondVideo != null) {
                             var secondVideoExists =
                                 await fileservice.fileExists(secondVideo.id);

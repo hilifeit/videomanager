@@ -22,10 +22,19 @@ class AnalaysisMapPainter extends CustomPainter {
       ..strokeWidth = 4.5;
     for (var element in files) {
       Path path = Path();
+      List<LatLng> data = [];
+      if (element.originalLocation.isEmpty) {
+        data.addAll(element.location.coordinates
+            .map((e) => LatLng(e.last, e.first))
+            .toList());
+      } else {
+        data.addAll(
+            element.originalLocation.map((e) => LatLng(e.lat, e.lng)).toList());
+      }
       path.addPolygon(
-          element.originalLocation
-              .map(
-                  (e) => transfromer.fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
+          data
+              .map((e) => transfromer
+                  .fromLatLngToXYCoords(LatLng(e.latitude, e.longitude)))
               .toList(),
           false);
       canvas.drawPath(path, element != file ? paint : selectedPaint);
