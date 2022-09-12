@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/screens/analysis/analysis.dart';
@@ -99,13 +100,26 @@ class AnalysisHub extends ConsumerWidget {
       previousAction: action,
       undo: action == null
           ? null
-          : () {
+          : () async {
               if (action!.match != Matcher.NoMatch) {
-                action!.file2!.pair = null;
-                action!.file2!.cleanPair = false;
-                files.insert(action!.file2Index!, action!.file2!);
-                action = null;
-                if (index > 0) ref.read(currentFileProvider.state).state--;
+                try {
+                  CustomOverlayEntry().showLoader();
+                  var fileService = ref.read(fileDetailMiniServiceProvider);
+                  var status = await fileService.pairFiles(
+                    id: action!.file1!.id,
+                    body: {"cleanPair": "null", "pair": action!.file2!.id},
+                  );
+                  CustomOverlayEntry().closeLoader();
+                  if (status) {
+                    action!.file2!.pair = null;
+                    action!.file2!.cleanPair = false;
+                    files.insert(action!.file2Index!, action!.file2!);
+                    action = null;
+                    if (index > 0) ref.read(currentFileProvider.state).state--;
+                  }
+                } catch (e, s) {
+                  snack.error(e);
+                }
               } else {
                 if (index > 0) ref.read(currentFileProvider.state).state--;
               }
@@ -114,31 +128,48 @@ class AnalysisHub extends ConsumerWidget {
   }
 
   matchPair(BuildContext context,
-      {required int index, required WidgetRef ref, bool cleanPair = false}) {
+      {required int index,
+      required WidgetRef ref,
+      bool cleanPair = false}) async {
     if (tempAction!.file1 != null && tempAction!.file2 != null) {
       // print(data.first.id.toString() + "" + data.last.id.toString());
 
-      tempAction!.file2!.pair = tempAction!.file1!.id;
-      tempAction!.file2!.cleanPair = cleanPair;
-      tempAction!.file1!.pair = tempAction!.file2!.id;
-      tempAction!.file1!.cleanPair = cleanPair;
-      var file2index = files.indexOf(tempAction!.file2!);
-      files.remove(tempAction!.file2);
+      var fileService = ref.read(fileDetailMiniServiceProvider);
+      try {
+        CustomOverlayEntry().showLoader();
+        var status = await fileService.pairFiles(
+            id: tempAction!.file1!.id,
+            body: {"cleanPair": cleanPair, "pair": tempAction!.file2!.id});
+        CustomOverlayEntry().closeLoader();
+        if (status) {
+          tempAction!.file2!.pair = tempAction!.file1!.id;
+          tempAction!.file2!.cleanPair = cleanPair;
+          tempAction!.file1!.pair = tempAction!.file2!.id;
+          tempAction!.file1!.cleanPair = cleanPair;
+          var file2index = files.indexOf(tempAction!.file2!);
+          files.remove(tempAction!.file2);
+          if (index < files.length - 1) {
+            action = PreviousAction(
+                file1: tempAction!.file1,
+                file2: tempAction!.file2,
+                image1: tempAction!.image1,
+                image2: tempAction!.image2,
+                match: cleanPair ? Matcher.Match : Matcher.NotSure,
+                file2Index: file2index);
 
-      if (index < files.length - 1) {
-        action = PreviousAction(
-            file1: tempAction!.file1,
-            file2: tempAction!.file2,
-            image1: tempAction!.image1,
-            image2: tempAction!.image2,
-            match: cleanPair ? Matcher.Match : Matcher.NotSure,
-            file2Index: file2index);
-
-        Future.delayed(Duration(milliseconds: 20), () {
-          ref.read(currentFileProvider.state).state++;
-        });
-      } else if (index == files.length - 1) {
-        endProcess(context);
+            Future.delayed(const Duration(milliseconds: 20), () {
+              ref.read(currentFileProvider.state).state++;
+            });
+          } else if (index == files.length - 1) {
+            Future.delayed(Duration(milliseconds: 10), () {
+              endProcess(context);
+            });
+          }
+        }
+      } catch (e, s) {
+        CustomOverlayEntry().closeLoader();
+        print("$e $s");
+        snack.error(e);
       }
     }
   }

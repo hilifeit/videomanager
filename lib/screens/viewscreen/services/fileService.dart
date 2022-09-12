@@ -495,6 +495,34 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  Future<bool> pairFiles({required String id, required dynamic body}) async {
+    var userProvider = ref.read(userChangeProvider);
+    try {
+      var response =
+          await client.put(Uri.parse("${CustomIP.apiBaseUrl}file/pair/$id"),
+              headers: {
+                "Content-Type": "application/json",
+                "x-access-token": userProvider.loggedInUser.value!.accessToken!
+              },
+              body: jsonEncode(body));
+
+      if (response.statusCode == 200) {
+        // var temp = userModelListFromJson(response.body);
+        // users = temp;
+        // store();
+        // notifyListeners();
+
+        return true;
+      } else {
+        var error = jsonDecode(response.body);
+        print(error);
+        throw error['message'];
+      }
+    } catch (e) {
+      throw "$e";
+    }
+  }
+
   Future<bool> deleteArea({required String id}) async {
     var userProvider = ref.read(userChangeProvider);
     try {

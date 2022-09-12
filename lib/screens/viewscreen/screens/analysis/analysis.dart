@@ -304,7 +304,18 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                             )
                           ],
                         ),
-                      ))
+                      )),
+
+                Positioned(
+                  right: 10,
+                  top: 20,
+                  child: Text(
+                    "${snapshot.data!.length > 1 ? "Double" : "Single"} File",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 30.ssp()),
+                  ),
+                )
                 // Align(
                 //     alignment: Alignment.bottomRight,
                 //     child: IconButton(
