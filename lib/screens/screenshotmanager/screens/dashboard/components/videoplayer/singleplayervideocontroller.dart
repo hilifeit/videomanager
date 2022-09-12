@@ -17,6 +17,10 @@ import 'package:videomanager/screens/video/components/models/playerController.da
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
+final timelineZoomProvider = StateProvider<double>((ref) {
+  return 0;
+});
+
 class SingleVideoPlayerControls extends HookConsumerWidget {
   SingleVideoPlayerControls(
       {required this.videoFile, this.web, this.desktop, Key? key})
@@ -42,6 +46,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
     };
     final double volume = ref.watch(volumeProvider.state).state;
     final bool mute = ref.watch(mutedProvider.state).state;
+    final double zoom = ref.watch(timelineZoomProvider.state).state;
 
     return Row(
       children: [
@@ -152,6 +157,15 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           web: web,
           desktop: desktop,
         ),
+        SizedBox(
+          width: 40.sw(),
+        ),
+        CustomSliderHollowThumb(
+            value: zoom,
+            onChangedEnd: (val) {},
+            onChanged: (val) {
+              ref.read(timelineZoomProvider.state).state = val;
+            }),
         const Spacer(),
         Text(
           videoFile.info.filename,

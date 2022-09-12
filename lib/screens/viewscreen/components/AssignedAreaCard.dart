@@ -2,6 +2,9 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/statuswidget.dart';
 import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
+import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/screens/analysis/components/analysisHub.dart';
+import 'package:videomanager/screens/viewscreen/screens/analysis/components/analysisMap.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
@@ -25,6 +28,41 @@ class AssignedAreaCard extends ConsumerWidget {
           position: RelativeRect.fromLTRB(globalPostion.dx, globalPostion.dy,
               globalPostion.dx + 1, globalPostion.dy + 1),
           items: [
+            PopupMenuItem(
+              onTap: () async {
+                //  var fileService = ref.read(fileDetailMiniServiceProvider);
+                var selectedAreaService = ref.read(selectedAreaServiceProvider);
+                selectedAreaService.refine();
+                var selectedArea = selectedAreaService.refinedSelection.value;
+
+                selectedArea.removeWhere((element) => element.pair != null);
+
+                if (selectedArea.isNotEmpty) {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            elevation: 0.1,
+                            contentPadding: EdgeInsets.zero,
+                            content: SizedBox(
+                              width: MediaQuery.of(context).size.width * .65,
+                              child: AnalysisHub(
+                                files: selectedArea,
+                              ),
+                            ),
+                          );
+                        });
+                  });
+                } else {
+                  snack.info("All Pair already made!");
+                }
+              },
+              child: CustomPopUpMenuItemChild(
+                icon: Videomanager.assign,
+                text: "Analyze Area",
+              ),
+            ),
             PopupMenuItem(
               child: CustomPopUpMenuItemChild(
                 icon: Videomanager.assign,

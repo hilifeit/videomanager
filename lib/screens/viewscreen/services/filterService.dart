@@ -6,9 +6,15 @@ final filterServiceProvider = ChangeNotifierProvider<FilterService>((ref) {
 
 class FilterService extends ChangeNotifier {
   bool onlyNotUsable = false;
+  bool? onlyPair;
 
   toggleUsable(bool value) {
     onlyNotUsable = value;
+    notifyListeners();
+  }
+
+  togglePair(bool? value) {
+    onlyPair = value;
     notifyListeners();
   }
 }

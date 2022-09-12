@@ -17,11 +17,15 @@ class PathAnalysis extends StatefulHookConsumerWidget {
       {Key? key,
       required this.files,
       required this.file,
-      required this.itemBox})
+      required this.itemBox,
+      this.onMatch,
+      this.info})
       : super(key: key);
   final List<FileDetailMini> files;
   final FileDetailMini file;
   final Rect itemBox;
+  final Widget? info;
+  final Function(List<FileDetailMini>)? onMatch;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PathAnalysisState();
 }
@@ -93,14 +97,15 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
       Future.delayed(Duration(milliseconds: 200), () {
         setState(() {
           Future.delayed(Duration(milliseconds: 50), () {
-            SelectedArea.transformer.controller.zoom += 0.01;
+            SelectedArea.transformer.controller.zoom += 0.001;
           });
         });
       });
-      if (filePair != null)
+      if (filePair != null) {
         return [widget.file, filePair];
-      else
-        return [];
+      } else {
+        return [widget.file];
+      }
     } catch (e, s) {
       print(e);
       return [];
@@ -115,6 +120,9 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
         future: processFiles,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data != null && widget.onMatch != null) {
+              widget.onMatch!(snapshot.data!);
+            }
             return Stack(
               children: [
                 Column(
@@ -123,10 +131,13 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                     Expanded(
                       key: _widgetKey,
                       flex: 2,
-                      child: AnalysisMapScreen(
-                        file: widget.file,
-                        files: snapshot.data!,
-                        controller: controller,
+                      child: IgnorePointer(
+                        ignoring: widget.info == null ? false : true,
+                        child: AnalysisMapScreen(
+                          file: widget.file,
+                          files: snapshot.data!,
+                          controller: controller,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -136,15 +147,22 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                           if (mounted) {
                             if (!isBusy) {
                               isBusy = true;
-                              image1 = await getImage(
-                                  snapshot.data!.first.originalLocation);
-                              image2 = await getImage(
-                                  snapshot.data!.last.originalLocation);
+                              try {
+                                image1 = await getImage(snapshot.data!.first);
+                              } catch (e) {
+                                image1 = Uint8List.fromList([]);
+                              }
+                              try {
+                                image2 = await getImage(snapshot.data!.last);
+                              } catch (e) {
+                                image2 = Uint8List.fromList([]);
+                              }
 
-                              var result = await compareImages(
-                                  src1: image1, src2: image2);
-                              // print(result);
-                              matchPercentage = (((result * 1000) - 100)).abs();
+                              // var result = await compareImages(
+                              //     src1: image1, src2: image2);
+                              // // print(result);
+                              // matchPercentage =
+                              //     (((result * 1000) - 100)).abs();
                               setState(() {});
                               isBusy = false;
                             }
@@ -157,10 +175,16 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                               children: [
                                 Expanded(
                                   child: image1 != null
-                                      ? Image.memory(
-                                          image1!,
-                                          fit: BoxFit.contain,
-                                        )
+                                      ? image1!.isNotEmpty
+                                          ? InteractiveViewer(
+                                              minScale: 0.25,
+                                              maxScale: 2,
+                                              child: Image.memory(
+                                                image1!,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )
+                                          : Icon(Icons.approval_outlined)
                                       : const Center(
                                           child: CircularProgressIndicator(),
                                         ),
@@ -171,41 +195,55 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
                                 ),
                                 Expanded(
                                   child: image2 != null
-                                      ? Image.memory(image2!,
-                                          fit: BoxFit.contain)
+                                      ? image2!.isNotEmpty
+                                          ? InteractiveViewer(
+                                              child: Image.memory(image2!,
+                                                  fit: BoxFit.contain),
+                                            )
+                                          : const Icon(Icons.approval_outlined)
                                       : const Center(
                                           child: CircularProgressIndicator(),
                                         ),
                                 )
                               ],
                             ),
-                            Positioned(
-                              top: -40,
-                              left: constraint.maxWidth / 2 - 70,
-                              child: Container(
-                                  height: 40,
-                                  color: Theme.of(context).primaryColor,
-                                  padding: EdgeInsets.all(12.sr()),
-                                  child: Row(
-                                    children: [
-                                      Text("Match : ",
-                                          style: kTextStyleIbmMedium),
-                                      image1 == null && image2 == null
-                                          ? const SizedBox(
-                                              width: 9,
-                                              height: 9,
-                                              child: CircularProgressIndicator(
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                          : Text(
-                                              "${matchPercentage.toStringAsFixed(2)}%",
-                                              style: kTextStyleIbmSemiBold
-                                                  .copyWith(
-                                                      color: Colors.white))
-                                    ],
-                                  )),
-                            )
+                            if (widget.info != null &&
+                                image1 != null &&
+                                image2 != null)
+                              Positioned(
+                                top: 0.sh(),
+                                left: constraint.maxWidth / 2.9,
+                                child: widget.info!,
+                              )
+                            else
+                              Positioned(
+                                top: -40,
+                                left: constraint.maxWidth / 2 - 70,
+                                child: Container(
+                                    height: 40,
+                                    color: Theme.of(context).primaryColor,
+                                    padding: EdgeInsets.all(12.sr()),
+                                    child: Row(
+                                      children: [
+                                        Text("Match : ",
+                                            style: kTextStyleIbmMedium),
+                                        image1 == null && image2 == null
+                                            ? const SizedBox(
+                                                width: 9,
+                                                height: 9,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : Text(
+                                                "${matchPercentage.toStringAsFixed(2)}%",
+                                                style: kTextStyleIbmSemiBold
+                                                    .copyWith(
+                                                        color: Colors.white))
+                                      ],
+                                    )),
+                              )
                           ],
                         );
                       }),
@@ -242,7 +280,15 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
     );
   }
 
-  Future<Uint8List> getImage(List<OriginalLocation> data) async {
+  Future<Uint8List> getImage(FileDetailMini file) async {
+    List<LatLng> data = [];
+    if (file.originalLocation.isEmpty) {
+      data = file.location.coordinates
+          .map((e) => LatLng(e.last, e.first))
+          .toList();
+    } else {
+      data = file.originalLocation.map((e) => LatLng(e.lat, e.lng)).toList();
+    }
     final RenderBox renderBox =
         _widgetKey.currentContext?.findRenderObject() as RenderBox;
     final Size size = renderBox.size;
@@ -259,7 +305,7 @@ class _PathAnalysisState extends ConsumerState<PathAnalysis> {
     path.addPolygon(
         data
             .map((e) => SelectedArea.transformer
-                .fromLatLngToXYCoords(LatLng(e.lat, e.lng)))
+                .fromLatLngToXYCoords(LatLng(e.latitude, e.longitude)))
             .toList(),
         false);
     canvas.drawPath(path, paint);

@@ -1,6 +1,7 @@
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinecanvas.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinetop.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
 
 class Timeline extends ConsumerWidget {

@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:touchable/touchable.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/snapModel.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
@@ -23,6 +24,8 @@ class TimeLineCanvas extends ConsumerWidget {
     var scrollOffset = ref.watch(mouseScrollProvider.state).state;
     var snapService = ref.read(videoDataDetailServiceProvider);
     var snaps = ref.watch(videoDataDetailServiceProvider).snaps;
+    final zoom = ref.watch(timelineZoomProvider.state).state;
+
     snaps.sort((a, b) =>
         a.timeStamp.inMilliseconds.compareTo(b.timeStamp.inMilliseconds));
 
@@ -31,6 +34,7 @@ class TimeLineCanvas extends ConsumerWidget {
       return Listener(
         onPointerSignal: (event) {
           // if (event is PointerScrollEvent) {
+
           var estimatedHeigh = snaps.length * SnapModel.height + 80.sh();
 
           // final delta = event.scrollDelta;
@@ -60,6 +64,22 @@ class TimeLineCanvas extends ConsumerWidget {
           //   }
           // }
           // }
+
+          //   var estimatedHeigh = snaps.length * SnapModel.height + 80.sh();
+
+          //   final delta = event.scrollDelta;
+
+          //   if (estimatedHeigh > constraint.maxHeight ||
+          //       scrollOffset.abs() < estimatedHeigh) {
+          //     if (scrollOffset - delta.dy > 0 &&
+          //         scrollOffset - delta.dy < estimatedHeigh)
+          //       ref.read(mouseScrollProvider.state).state += delta.dy;
+          //     else if (scrollOffset - delta.dy < estimatedHeigh &&
+          //         scrollOffset - delta.dy != 0) {
+          //       ref.read(mouseScrollProvider.state).state -= delta.dy;
+          //     }
+          //   }
+          // }
         },
         child: Container(
           color: Colors.white,
@@ -82,31 +102,33 @@ class TimeLineCanvas extends ConsumerWidget {
                       //   var yPostion =
                       //   position = Offset(position.dx + 22.sw(), 80.sh());
                       // }
-
-                      return Positioned(
-                          left: position.dx,
-                          top: position.dy,
-                          child: GestureDetector(
-                            onTap: () {
-                              snapService.selectedSnap.value = snap;
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (_) {
-                                return ScreenShotScreen(
-                                  edit: true,
-                                );
-                              }));
-                            },
-                            child: Stack(
-                              children: [
-                                Image.memory(
-                                  snap.image!,
-                                  width: 22.sw(),
-                                  fit: BoxFit.fill,
-                                ),
-                                // Positioned(child: Text("10"))
-                              ],
-                            ),
-                          ));
+                      print(position);
+                      return Consumer(builder: (context, ref, c) {
+                        return Positioned(
+                            left: position.dx,
+                            top: position.dy,
+                            child: GestureDetector(
+                              onTap: () {
+                                snapService.selectedSnap.value = snap;
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return ScreenShotScreen(
+                                    edit: true,
+                                  );
+                                }));
+                              },
+                              child: Stack(
+                                children: [
+                                  Image.memory(
+                                    snap.image!,
+                                    width: 22.sw(),
+                                    fit: BoxFit.fill,
+                                  ),
+                                  // Positioned(child: Text("10"))
+                                ],
+                              ),
+                            ));
+                      });
                     },
                   )
 
@@ -133,26 +155,47 @@ class TimeLineCanvas extends ConsumerWidget {
               //   ],
               // ),
               ,
+              // Positioned(
+              //   right: 0,
+              //   top: 0,
+              //   child: Container(
+              //     width: 20.sw(),
+              //     height: constraint.maxHeight,
+              //     color: Colors.grey,
+              //     child: Stack(
+              //       children: [
+              //         AnimatedPositioned(
+              //             left: 0,
+              //             top: 80.sh() - scrollOffset,
+              //             duration: const Duration(milliseconds: 100),
+              //             child: Container(
+              //                 width: 15.sw(),
+              //                 height: 15.sh(),
+              //                 color: Theme.of(context).primaryColor))
+              //       ],
+              //     ),
+              //     // child:
+              //   ),
+              // )
               Positioned(
-                right: 0,
-                top: 0,
+                left: 0,
+                bottom: 0,
                 child: Container(
-                  width: 20.sw(),
-                  height: constraint.maxHeight,
+                  width: constraint.maxWidth,
+                  height: 20.sh(),
                   color: Colors.grey,
                   child: Stack(
                     children: [
                       AnimatedPositioned(
-                          left: 0,
-                          top: 80.sh() - scrollOffset,
+                          left: zoom == 0 ? constraint.maxWidth : 16.sw(),
+                          top: 0,
+                          duration: const Duration(milliseconds: 100),
                           child: Container(
                               width: 15.sw(),
                               height: 15.sh(),
-                              color: Theme.of(context).primaryColor),
-                          duration: Duration(milliseconds: 100))
+                              color: Theme.of(context).primaryColor))
                     ],
                   ),
-                  // child:
                 ),
               )
             ],
@@ -179,26 +222,26 @@ class TimeLineCanvas extends ConsumerWidget {
     if (index != 0) yPosition += (SnapModel.height + 5.sh()) * index;
     // print(yPosition);
 
-    yPosition = recurse(yPosition, constraints);
+    // yPosition = recurse(yPosition, constraints);
 
     return Offset(xPosition, yPosition + scrollOffset);
   }
 
-  recurse(yPosition, constraints) {
-    if (yPosition > constraints.maxHeight - 10.sh()) {
-      double add = (yPosition - constraints.maxHeight) - 2.5.sh();
+  // recurse(yPosition, constraints) {
+  //   if (yPosition > constraints.maxHeight - 10.sh()) {
+  //     double add = (yPosition - constraints.maxHeight) - 2.5.sh();
 
-      yPosition = 80.sh() + add;
-      if (yPosition < 80.sh()) {
-        yPosition = 80.sh();
-      }
-    }
-    if (yPosition > constraints.maxHeight - 10.sh()) {
-      recurse(yPosition, constraints);
-      return yPosition;
-    } else {}
-    return yPosition;
-  }
+  //     yPosition = 80.sh() + add;
+  //     if (yPosition < 80.sh()) {
+  //       yPosition = 80.sh();
+  //     }
+  //   }
+  //   if (yPosition > constraints.maxHeight - 10.sh()) {
+  //     recurse(yPosition, constraints);
+  //     return yPosition;
+  //   } else {}
+  //   return yPosition;
+  // }
 }
 
 // class TimeLinePainter extends CustomPainter {

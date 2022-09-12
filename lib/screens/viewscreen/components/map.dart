@@ -428,24 +428,24 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                                   roundShape: true,
                                   icon: Videomanager.assign,
                                   onPressed: () async {
-                                    // showDialog(
-                                    //     context: context,
-                                    //     builder: (_) {
-                                    //       // debugPrint(selectedPoints.length.toString());
-                                    //       return AlertDialog(
-                                    //         backgroundColor: Colors.transparent,
-                                    //         titlePadding: EdgeInsets.zero,
-                                    //         contentPadding: EdgeInsets.zero,
-                                    //         content: AssignManager(
-                                    //           files: selectedAreaService
-                                    //               .refinedSelection.value,
-                                    //           points: selectedPoints,
-                                    //         ),
-                                    //       );
-                                    //     });
-                                    CustomOverlayEntry().showLoader();
-                                    var fileService =
-                                        ref.read(fileDetailMiniServiceProvider);
+                                    showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          // debugPrint(selectedPoints.length.toString());
+                                          return AlertDialog(
+                                            backgroundColor: Colors.transparent,
+                                            titlePadding: EdgeInsets.zero,
+                                            contentPadding: EdgeInsets.zero,
+                                            content: AssignManager(
+                                              files: selectedAreaService
+                                                  .refinedSelection.value,
+                                              points: selectedPoints,
+                                            ),
+                                          );
+                                        });
+                                    // CustomOverlayEntry().showLoader();
+                                    // var fileService =
+                                    //     ref.read(fileDetailMiniServiceProvider);
                                     // var listOfFilesToFix = selectedAreaService
                                     //     .refinedSelection.value;
 
@@ -462,13 +462,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
                                     // print(fileService.files[10175].id);
 
-                                    await fileService.fixLocationData(
-                                        selectedAreaService
-                                            .refinedSelection.value);
-                                    fileService.updateLocationDataInServer(
-                                        selectedAreaService
-                                            .refinedSelection.value);
-                                    CustomOverlayEntry().closeLoader();
+                                    // await fileService.fixLocationData(
+                                    //     selectedAreaService
+                                    //         .refinedSelection.value);
+                                    // fileService.updateLocationDataInServer(
+                                    //     selectedAreaService
+                                    //         .refinedSelection.value);
+                                    // CustomOverlayEntry().closeLoader();
                                   },
                                   tooltip: 'Assign Area'),
                             ),
