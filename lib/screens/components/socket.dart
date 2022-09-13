@@ -50,27 +50,27 @@ class CustomSocket {
             ref.read(status.state).state = false;
           });
           socket.onError((data) async {
-            print("error here $data");
-            try {
-              ref.read(status.state).state = false;
-              var json = jsonEncode(data);
+            // print("error here $data");
+            // try {
+            //   ref.read(status.state).state = false;
+            //   var json = jsonEncode(data);
 
-              var dat = jsonDecode(json);
-              var msg = jsonDecode(dat["message"]);
+            //   var dat = jsonDecode(json);
+            //   var msg = jsonDecode(dat["message"]);
 
-              int code = int.parse(msg["code"].toString());
-              if (code == 403) {
-                await CustomDialogBox.alertMessage(() {
-                  logout();
-                },
-                    title: 'Your Session has Expired!',
-                    message: ' Login to continue');
-              }
-              snack.error(msg["message"]);
-            } catch (e) {
-              snack.error(e);
-            }
-            snack.error(data);
+            //   int code = int.parse(msg["code"].toString());
+            //   if (code == 403) {
+            //     await CustomDialogBox.alertMessage(() {
+            //       logout();
+            //     },
+            //         title: 'Your Session has Expired!',
+            //         message: ' Login to continue');
+            //   }
+            //   snack.error(msg["message"]);
+            // } catch (e) {
+            //   snack.error(e);
+            // }
+            // snack.error(data);
           });
           socket.onDisconnect((data) {
             ref.read(status.state).state = false;
