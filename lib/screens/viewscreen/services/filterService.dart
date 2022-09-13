@@ -15,7 +15,17 @@ class FilterService extends ChangeNotifier {
   }
 
   togglestate(bool value) {
+    if (!value) {
+      for (int i = 0; i < statesState.length; i++) {
+        statesState[i] = false;
+      }
+    } else {
+      if (!statesState.contains(true)) {
+        statesState[0] = true;
+      }
+    }
     state = value;
+
     notifyListeners();
   }
 
