@@ -120,6 +120,17 @@ class Painter extends CustomPainter {
           if (stateRect.overlaps(visibleScreen)) {
             files.addAll(element.files);
           }
+          Path statePath = Path();
+          statePath.addPolygon(
+              element.coordinates
+                  .map((e) =>
+                      transformer.fromLatLngToXYCoords(LatLng(e.last, e.first)))
+                  .toList(),
+              false);
+          Paint statePaint = Paint()
+            ..color = Colors.black
+            ..strokeWidth = 2;
+          canvas.drawPath(statePath, paint);
         }
       } else {
         Rect stateRect = getRect(element.boundingBox!, transformer);

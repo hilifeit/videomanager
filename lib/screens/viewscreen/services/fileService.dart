@@ -16,6 +16,7 @@ import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/newstate.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
+import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
 import 'package:videomanager/screens/viewscreen/models/state.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
@@ -23,6 +24,22 @@ final fileDetailMiniServiceProvider =
     ChangeNotifierProvider<FileService>((ref) {
   return FileService(ref);
 });
+
+class PathAndRect {
+  PathAndRect(List<List<double>> data, Rect rect) {
+    path = Path();
+
+    path.addPolygon(
+        data
+            .map((e) => SelectedArea.transformer
+                .fromLatLngToXYCoords(LatLng(e.last, e.first)))
+            .toList(),
+        false);
+    box = getRect(rect, SelectedArea.transformer);
+  }
+  late Path path;
+  late Rect box;
+}
 
 class FileService extends ChangeNotifier {
   FileService(ChangeNotifierProviderRef<FileService> reff) {
@@ -255,17 +272,31 @@ class FileService extends ChangeNotifier {
   }
 
   classifyFiles() async {
+    List<PathAndRect> stateBorderData = [];
+    for (var e in filesInStates) {
+      stateBorderData.add(PathAndRect(e.coordinates, e.boundingBox!));
+    }
     await Future.forEach<FileDetailMini>(files, (element) {
       // if (element.isUseable)
       {
         Rect fileMapRect =
             getRect(element.boundingBox!, SelectedArea.transformer);
         for (var e in filesInStates) {
-          Rect stateBoundary =
-              getRect(e.boundingBox!, SelectedArea.transformer);
-          if (fileMapRect.overlaps(stateBoundary)) {
-            e.files.add(element);
-            break;
+          var index = filesInStates.indexOf(e);
+          var stateBorderItem = stateBorderData[index];
+          if (fileMapRect.overlaps(stateBorderItem.box)) {
+            var first = SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                element.location.coordinates.first.last,
+                element.location.coordinates.first.first));
+            var last = SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                element.location.coordinates.last.last,
+                element.location.coordinates.last.first));
+            if (stateBorderItem.path.contains(first) &&
+                stateBorderItem.path.contains(last)) {
+              e.files.add(element);
+              break;
+              // }
+            }
           }
         }
       }
