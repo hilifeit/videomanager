@@ -113,11 +113,22 @@ class Painter extends CustomPainter {
     selectedPointsProvider.draw(customCanvas);
 
     for (var element in fileservice.filesInStates) {
-      Rect stateRect = getRect(element.boundingBox!, transformer);
-      if (stateRect.overlaps(visibleScreen)) {
-        files.addAll(element.files);
+      var index = fileservice.filesInStates.indexOf(element);
+      if (filterService.state) {
+        if (filterService.statesState[index]) {
+          Rect stateRect = getRect(element.boundingBox!, transformer);
+          if (stateRect.overlaps(visibleScreen)) {
+            files.addAll(element.files);
+          }
+        }
+      } else {
+        Rect stateRect = getRect(element.boundingBox!, transformer);
+        if (stateRect.overlaps(visibleScreen)) {
+          files.addAll(element.files);
+        }
       }
     }
+
     for (var element in files) {
       Rect item = getRect(element.boundingBox!, transformer);
 

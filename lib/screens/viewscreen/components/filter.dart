@@ -43,10 +43,83 @@ class Filter extends StatelessWidget {
           ),
         ),
         Expanded(
+          flex: 3,
           child: ListView(
               // ListView.separated(
               // itemBuilder: (_, index) {
               children: [
+                ExpansionTile(
+                    initiallyExpanded: true,
+
+                    // tilePadding: EdgeInsets.only(left: 0,right: 10),
+                    childrenPadding: EdgeInsets.only(left: 57.sw()),
+                    leading: Consumer(builder: (context, ref, c) {
+                      final checked = ref.read(filterServiceProvider);
+                      final val = ref.watch(filterServiceProvider).state;
+
+                      return Checkbox(
+
+                          // visualDensity: VisualDensity.adaptivePlatformDensity,
+                          materialTapTargetSize: MaterialTapTargetSize.padded,
+                          side: const BorderSide(
+                            width: 1,
+                            color: secondaryColorText,
+                          ),
+                          activeColor: primaryColor,
+                          value: val,
+                          onChanged: (value) {
+                            checked.togglestate(value!);
+                            ref.read(selectedFileProvider.state).state = null;
+                          });
+                    }),
+                    title: Text(
+                      'State',
+                      style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+                    ),
+                    children: List.generate(7, (index) {
+                      return Consumer(builder: (context, ref, c) {
+                        final checked = ref.read(filterServiceProvider);
+                        return ListTile(
+                          onTap: () {
+                            var fileService =
+                                ref.read(fileDetailMiniServiceProvider);
+                            var centerOffseet = fileService
+                                .filesInStates[index].boundingBox!.center;
+                            SelectedArea.transformer.controller.zoom = 9.3;
+                            SelectedArea.transformer.controller.center =
+                                LatLng(centerOffseet.dx, centerOffseet.dy);
+                          },
+                          title: Text(
+                            'State ${index + 1}',
+                            style: kTextStyleInterMedium.copyWith(
+                                fontSize: 16.ssp()),
+                          ),
+                          leading: Consumer(
+                            builder: ((context, ref, child) {
+                              final val = ref
+                                  .watch(filterServiceProvider)
+                                  .statesState[index];
+                              return Checkbox(
+                                  tristate: false,
+                                  // visualDensity: VisualDensity.adaptivePlatformDensity,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.padded,
+                                  side: const BorderSide(
+                                    width: 1,
+                                    color: secondaryColorText,
+                                  ),
+                                  activeColor: primaryColor,
+                                  value: val,
+                                  onChanged: (value) {
+                                    checked.toggleStateSingle(value!, index);
+                                    ref.read(selectedFileProvider.state).state =
+                                        null;
+                                  });
+                            }),
+                          ),
+                        );
+                      });
+                    })),
                 ExpansionTile(
 
                     // tilePadding: EdgeInsets.only(left: 0,right: 10),
@@ -132,7 +205,7 @@ class Filter extends StatelessWidget {
                       'Only Pair',
                       style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
                     ),
-                    children: const [])
+                    children: const []),
               ]
 
               // separatorBuilder: (_, index) {
@@ -146,7 +219,7 @@ class Filter extends StatelessWidget {
         ),
         Divider(),
         Expanded(
-          flex: 3,
+          flex: 2,
           child: Consumer(builder: (context, ref, c) {
             final areas = ref.watch(fileDetailMiniServiceProvider).areas;
             final selectedArea =
