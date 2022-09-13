@@ -14,7 +14,9 @@ import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/viewscreen/models/areaModel.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetail.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
+import 'package:videomanager/screens/viewscreen/models/newstate.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
+import 'package:videomanager/screens/viewscreen/models/state.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 final fileDetailMiniServiceProvider =
@@ -40,6 +42,7 @@ class FileService extends ChangeNotifier {
   }
   late ChangeNotifierProviderRef<FileService> ref;
   final List<FileDetailMini> files = [];
+  final List<CountryState> filesInStates = [];
   // final List<FileDetailMini> selectedVideos = [];
   late List<FileDetailMini>? userFiles;
 
@@ -53,6 +56,8 @@ class FileService extends ChangeNotifier {
     CustomOverlayEntry().showLoader();
     await fetchAllArea();
     await fetchAll(fromServer: true);
+    await fetchStates();
+    notifyListeners();
     CustomOverlayEntry().closeLoader();
     // for (var element in files) {
     //   print(files.indexOf(element));
@@ -232,6 +237,41 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  fetchStates() async {
+    try {
+      var response = await tunnelRequest(() =>
+          client.get(Uri.parse("${CustomIP.apiBaseUrl}boundary"), headers: {
+            "Content-Type": "application/json",
+          }));
+      if (response.statusCode == 200) {
+        filesInStates.addAll(countryStatesFromJson(response.body));
+        await classifyFiles();
+      } else {
+        throw response.statusCode;
+      }
+    } catch (e, s) {
+      print("$e $s");
+    }
+  }
+
+  classifyFiles() async {
+    await Future.forEach<FileDetailMini>(files, (element) {
+      // if (element.isUseable)
+      {
+        Rect fileMapRect =
+            getRect(element.boundingBox!, SelectedArea.transformer);
+        for (var e in filesInStates) {
+          Rect stateBoundary =
+              getRect(e.boundingBox!, SelectedArea.transformer);
+          if (fileMapRect.overlaps(stateBoundary)) {
+            e.files.add(element);
+            break;
+          }
+        }
+      }
+    });
+  }
+
   addOriginalLocation(FileDetailMini file, List<OriginalLocation> data) {
     var index = files.indexOf(file);
     files[index].originalLocation.clear();
@@ -372,25 +412,6 @@ class FileService extends ChangeNotifier {
     } catch (e) {
       throw "$e";
     }
-  }
-
-  Rect boundingBoxOffset(List<List<double>> list) {
-    double minX = double.infinity;
-    double maxX = 0;
-    double minY = double.infinity;
-    double maxY = 0;
-    for (int i = 0; i < list.length; i++) {
-      minX = min(minX, list[i].last);
-      minY = min(minY, list[i].first);
-      maxX = max(maxX, list[i].last);
-      maxY = max(maxY, list[i].first);
-    }
-
-    //var space = 5;
-    var rec = Rect.fromLTWH(minX, minY, (maxX - minX), (maxY - minY));
-
-    //print(rec);
-    return rec;
   }
 
   Future<String> getUrlFromFile(FileDetailMini file) async {
@@ -657,23 +678,5 @@ class FileService extends ChangeNotifier {
     } else {
       return null;
     }
-  }
-
-  Rect getRect(Rect boundingBox, MapTransformer transformer) {
-    Offset topLeft = transformer.fromLatLngToXYCoords(
-        LatLng(boundingBox.topLeft.dx, boundingBox.topLeft.dy));
-    Offset topRight = transformer.fromLatLngToXYCoords(
-        LatLng(boundingBox.topRight.dx, boundingBox.topRight.dy));
-    Offset bottomLeft = transformer.fromLatLngToXYCoords(
-        LatLng(boundingBox.bottomLeft.dx, boundingBox.bottomLeft.dy));
-
-    var height = (topLeft - topRight).distance;
-    var width = (topLeft - bottomLeft).distance;
-
-    return Rect.fromCenter(
-        center: transformer.fromLatLngToXYCoords(
-            LatLng(boundingBox.center.dx, boundingBox.center.dy)),
-        width: width,
-        height: height);
   }
 }

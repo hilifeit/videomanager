@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
+import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/screens/analysis/analysis.dart';
@@ -22,8 +23,7 @@ class AnalysisHub extends ConsumerWidget {
     var fileservice = ref.read(fileDetailMiniServiceProvider);
     var index = ref.watch(currentFileProvider.state).state;
     var element = files[index];
-    var item =
-        fileservice.getRect(element.boundingBox!, SelectedArea.transformer);
+    var item = getRect(element.boundingBox!, SelectedArea.transformer);
 
     var info = Row(
       children: [

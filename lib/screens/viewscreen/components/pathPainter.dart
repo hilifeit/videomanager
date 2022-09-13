@@ -56,7 +56,7 @@ class Painter extends CustomPainter {
     final selectedFile = ref.watch(selectedFileProvider);
     final filterService = ref.watch(filterServiceProvider);
     final settingService = ref.watch(settingChangeNotifierProvider);
-    final files = fileservice.files;
+    // final files = fileservice.files;
     final stroke = settingService.setting.mapSetting.stroke.toDouble();
     final handleDragged = selectedPointsProvider.selectedHandle;
     final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
@@ -109,15 +109,21 @@ class Painter extends CustomPainter {
     List<FileDetailMini> visibleFilesList = [];
     List<FileDetailMini> selectedFileList = [];
     List<FileDetailMini> finalselectedFileList = [];
-
+    List<FileDetailMini> files = [];
     selectedPointsProvider.draw(customCanvas);
 
+    for (var element in fileservice.filesInStates) {
+      Rect stateRect = getRect(element.boundingBox!, transformer);
+      if (stateRect.overlaps(visibleScreen)) {
+        files.addAll(element.files);
+      }
+    }
     for (var element in files) {
-      Rect item = fileservice.getRect(element.boundingBox!, transformer);
+      Rect item = getRect(element.boundingBox!, transformer);
 
       if (item.overlaps(visibleScreen)) {
         if (filterService.onlyPair == null) {
-          if (element.pair != null && !element.cleanPair) {
+          if (element.pair == null) {
             visibleFilesList.add(element);
           }
         } else if (filterService.onlyPair == true) {
@@ -180,7 +186,7 @@ class Painter extends CustomPainter {
       if (filterService.onlyNotUsable == !element.isUseable) {
         visibleFiles++;
         Path path = Path();
-        Rect item = fileservice.getRect(element.boundingBox!, transformer);
+        Rect item = getRect(element.boundingBox!, transformer);
 
         Function tap, tapSecondary;
         tap = () async {

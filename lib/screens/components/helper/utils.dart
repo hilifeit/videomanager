@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:map/map.dart';
 import 'package:random_color/random_color.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/pixelColorPicker.dart';
@@ -97,4 +98,41 @@ double calculateDistance(LatLng first, LatLng second) {
           2;
   var f = ((12742 * asin(sqrt(a))) * 1000);
   return f;
+}
+
+Rect boundingBoxOffset(List<List<dynamic>> list) {
+  double minX = double.infinity;
+  double maxX = 0;
+  double minY = double.infinity;
+  double maxY = 0;
+  for (int i = 0; i < list.length; i++) {
+    minX = min(minX, list[i].last);
+    minY = min(minY, list[i].first);
+    maxX = max(maxX, list[i].last);
+    maxY = max(maxY, list[i].first);
+  }
+
+  //var space = 5;
+  var rec = Rect.fromLTWH(minX, minY, (maxX - minX), (maxY - minY));
+
+  //print(rec);
+  return rec;
+}
+
+Rect getRect(Rect boundingBox, MapTransformer transformer) {
+  Offset topLeft = transformer.fromLatLngToXYCoords(
+      LatLng(boundingBox.topLeft.dx, boundingBox.topLeft.dy));
+  Offset topRight = transformer.fromLatLngToXYCoords(
+      LatLng(boundingBox.topRight.dx, boundingBox.topRight.dy));
+  Offset bottomLeft = transformer.fromLatLngToXYCoords(
+      LatLng(boundingBox.bottomLeft.dx, boundingBox.bottomLeft.dy));
+
+  var height = (topLeft - topRight).distance;
+  var width = (topLeft - bottomLeft).distance;
+
+  return Rect.fromCenter(
+      center: transformer.fromLatLngToXYCoords(
+          LatLng(boundingBox.center.dx, boundingBox.center.dy)),
+      width: width,
+      height: height);
 }
