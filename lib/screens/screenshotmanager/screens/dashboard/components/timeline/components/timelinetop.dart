@@ -1,5 +1,6 @@
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinecanvas.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinehead.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singleplayervideocontroller.dart';
 import 'package:videomanager/screens/video/components/models/playerController.dart';
@@ -36,10 +37,12 @@ class TimeLineTop extends StatelessWidget {
             int divison = mapDouble(
                     x: zoom, in_min: 0, in_max: 1, out_min: 10, out_max: 60)
                 .round();
-
+            final double scrollHorizontal =
+                ref.watch(horizontalDragProvider.state).state;
             return CustomPaint(
               size: Size(double.infinity, 50.sh()),
               painter: TestTimelineRuler(
+                  scrollHorizontal: scrollHorizontal,
                   duration: duration,
                   height: 40.sh(),
                   subDivisor: divison.toInt()),
@@ -207,10 +210,14 @@ class TimeLineTop extends StatelessWidget {
 
 class TestTimelineRuler extends CustomPainter {
   const TestTimelineRuler(
-      {required this.duration, required this.height, this.subDivisor = 9});
+      {required this.scrollHorizontal,
+      required this.duration,
+      required this.height,
+      this.subDivisor = 9});
   final Duration duration;
   final double height;
   final int subDivisor;
+  final double scrollHorizontal;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -234,13 +241,23 @@ class TestTimelineRuler extends CustomPainter {
           paint.color = Colors.black;
           if (i == 0) {
             canvas.drawRect(
-                Rect.fromLTWH((i * numDivider) + (j * (widthDivisor / 10)),
-                    size.height / 2, 1.sw(), 4.sh()),
+                Rect.fromLTWH(
+                    (i * numDivider) +
+                        (j * (widthDivisor / 10)) -
+                        scrollHorizontal,
+                    size.height / 2,
+                    1.sw(),
+                    4.sh()),
                 paint);
           } else {
             canvas.drawRect(
-                Rect.fromLTWH((i * numDivider) + (j * (widthDivisor / 10)),
-                    size.height / 2, 1.sw(), 4.sh()),
+                Rect.fromLTWH(
+                    (i * numDivider) +
+                        (j * (widthDivisor / 10)) -
+                        scrollHorizontal,
+                    size.height / 2,
+                    1.sw(),
+                    4.sh()),
                 paint);
           }
         }
@@ -261,7 +278,7 @@ class TestTimelineRuler extends CustomPainter {
         tp.layout();
         tp.paint(
             canvas,
-            Offset(numDivider * i - tp.size.width / 2,
+            Offset((numDivider * i - tp.size.width / 2) - scrollHorizontal,
                 size.height / 2 - (tp.size.height / 2)));
       }
 
