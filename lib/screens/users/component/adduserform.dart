@@ -2,7 +2,6 @@ import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/settings/screens/mapsettings/components/customdropDown.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
 import 'package:videomanager/screens/users/model/addnewusermodel.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -90,7 +89,7 @@ class AddUser extends ConsumerWidget {
                         ),
                         InputTextField(
                           value: addNewUser.username,
-                          title: 'username',
+                          title: 'Username',
                           isVisible: true,
                           fillColor: Colors.white,
                           style: kTextStyleIbmSemiBold.copyWith(

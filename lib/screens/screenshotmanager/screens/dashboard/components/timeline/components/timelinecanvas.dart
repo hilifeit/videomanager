@@ -13,6 +13,9 @@ import 'package:videomanager/screens/video/components/models/playerController.da
 final mouseScrollProvider = StateProvider<double>((ref) {
   return 0.0;
 });
+final horizontalDragProvider = StateProvider<double>((ref) {
+  return 0.0;
+});
 
 class TimeLineCanvas extends ConsumerWidget {
   TimeLineCanvas({Key? key, required this.duration}) : super(key: key);
@@ -22,6 +25,7 @@ class TimeLineCanvas extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var scrollOffset = ref.watch(mouseScrollProvider.state).state;
+
     var snapService = ref.read(videoDataDetailServiceProvider);
     var snaps = ref.watch(videoDataDetailServiceProvider).snaps;
     final zoom = ref.watch(timelineZoomProvider.state).state;
@@ -31,6 +35,10 @@ class TimeLineCanvas extends ConsumerWidget {
 
     return LayoutBuilder(builder: (context, constraint) {
       // print("constraints : ${constraint.maxHeight}");
+      double scrollValue = zoom < 0.9
+          ? constraint.maxWidth - constraint.maxWidth * zoom
+          : constraint.maxWidth - constraint.maxWidth * 0.9;
+
       return Listener(
         onPointerSignal: (event) {
           // if (event is PointerScrollEvent) {
@@ -102,7 +110,7 @@ class TimeLineCanvas extends ConsumerWidget {
                       //   var yPostion =
                       //   position = Offset(position.dx + 22.sw(), 80.sh());
                       // }
-                      print(position);
+
                       return Consumer(builder: (context, ref, c) {
                         return Positioned(
                             left: position.dx,
@@ -180,21 +188,70 @@ class TimeLineCanvas extends ConsumerWidget {
               Positioned(
                 left: 0,
                 bottom: 0,
-                child: Container(
-                  width: constraint.maxWidth,
-                  height: 20.sh(),
-                  color: Colors.grey,
-                  child: Stack(
-                    children: [
-                      AnimatedPositioned(
-                          left: zoom == 0 ? constraint.maxWidth : 16.sw(),
-                          top: 0,
-                          duration: const Duration(milliseconds: 100),
-                          child: Container(
-                              width: 15.sw(),
-                              height: 15.sh(),
-                              color: Theme.of(context).primaryColor))
-                    ],
+                child: GestureDetector(
+                  onTapUp: (details) {
+                    ref.read(horizontalDragProvider.state).state =
+                        details.localPosition.dx;
+                    if (ref.read(horizontalDragProvider.state).state +
+                            scrollValue >
+                        constraint.maxWidth) {
+                      ref.read(horizontalDragProvider.state).state =
+                          constraint.maxWidth - scrollValue;
+                    }
+                  },
+                  child: Container(
+                    width: constraint.maxWidth,
+                    height: 20.sh(),
+                    color: Colors.grey,
+                    child: Consumer(builder: (context, ref, c) {
+                      var horizontalDrag =
+                          ref.watch(horizontalDragProvider.state).state;
+                      return Stack(
+                        children: [
+                          AnimatedPositioned(
+                              left:
+                                  // ref.read(timelineZoomProvider.state).state ==
+                                  //         0
+                                  //     ? 0
+                                  //     :
+                                  horizontalDrag,
+                              top: 0,
+                              duration: const Duration(milliseconds: 50),
+                              child: GestureDetector(
+                                onHorizontalDragUpdate: (details) {
+                                  ref
+                                      .read(horizontalDragProvider.state)
+                                      .state += details.delta.dx;
+
+                                  if (ref
+                                          .read(horizontalDragProvider.state)
+                                          .state <
+                                      0) {
+                                    ref
+                                        .read(horizontalDragProvider.state)
+                                        .state = 0;
+                                  } else if (ref
+                                              .read(
+                                                  horizontalDragProvider.state)
+                                              .state +
+                                          scrollValue >
+                                      constraint.maxWidth) {
+                                    ref
+                                            .read(horizontalDragProvider.state)
+                                            .state =
+                                        constraint.maxWidth - scrollValue;
+                                  }
+                                },
+                                child: Container(
+                                    width: zoom == 0
+                                        ? constraint.maxWidth
+                                        : scrollValue,
+                                    height: 15.sh(),
+                                    color: Theme.of(context).primaryColor),
+                              ))
+                        ],
+                      );
+                    }),
                   ),
                 ),
               )

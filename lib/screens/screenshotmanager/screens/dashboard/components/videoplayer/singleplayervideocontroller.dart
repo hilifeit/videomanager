@@ -8,6 +8,7 @@ import 'package:videomanager/screens/components/helper/customoverlayentry.dart';
 import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/playbackMenu.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/timeline/components/timelinecanvas.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/videoplayer/singlevideoplayer.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/components/screenshotscreen.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/videoplayerIntent.dart';
@@ -165,6 +166,9 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
             onChangedEnd: (val) {},
             onChanged: (val) {
               ref.read(timelineZoomProvider.state).state = val;
+              if (val == 0) {
+                ref.read(horizontalDragProvider.state).state = 0;
+              }
             }),
         const Spacer(),
         Text(
