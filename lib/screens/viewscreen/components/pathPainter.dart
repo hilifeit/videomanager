@@ -214,17 +214,17 @@ class Painter extends CustomPainter {
         tap = () async {
           ref.read(selectedFileProvider.state).state = element;
           if (element.originalLocation.isEmpty) {
-            FileDetailMini temp = FileDetailMini(
-                filename: element.filename,
-                location: element.location,
-                isUseable: element.isUseable,
-                id: element.id,
-                status: element.status,
-                isLeft: element.isLeft,
-                path: element.path.replaceAll('.MP4', '_processed.json'));
+            // FileDetailMini temp = FileDetailMini(
+            //     filename: element.filename,
+            //     location: element.location,
+            //     isUseable: element.isUseable,
+            //     id: element.id,
+            //     status: element.status,
+            //     isLeft: element.isLeft,
+            //     path: element.path.replaceAll('.MP4', '_processed.json'));
 
             var originalLocationData =
-                await fileservice.fetchOriginalLocation(temp.id);
+                await fileservice.fetchOriginalLocation(element.id);
             fileservice.addOriginalLocation(element, originalLocationData);
           } else {
             List<OriginalLocation> data = [], originalData = [];
