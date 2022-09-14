@@ -265,11 +265,18 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
       var videoDataService = ref.read(videoDataDetailServiceProvider);
       CustomOverlayEntry().showLoader();
 
-      Duration duration;
+      late Duration duration;
       if (UniversalPlatform.isDesktop) {
         duration = desktop!.player.position.position!;
       } else {
-        duration = web!.value.position;
+        var dur = js.context.callMethod("getCurrentTime", []);
+        try {
+          duration = Duration(microseconds: dur * 1000 * 1000);
+        } catch (e) {
+          print(e);
+          duration = web!.value.position;
+          // duration = Duration(microseconds: dur * 1000 * 1000);
+        }
       }
       if (!videoDataService.checkAndAddSnap(duration)) {
         var index = videoDataService.snaps
@@ -296,6 +303,10 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
         } else {
           var result =
               js.context.callMethod("getFrame", [getVideoUrl(videoFile.id)]);
+
+          if (result == null) print("no image");
+
+          // print("$dur $d $duration");
           try {
             image = const Base64Decoder().convert(result);
           } catch (e) {

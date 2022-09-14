@@ -136,3 +136,15 @@ Rect getRect(Rect boundingBox, MapTransformer transformer) {
       width: width,
       height: height);
 }
+
+Duration intToTimeLeft(double value) {
+  // int h, m, s;
+
+  // h = value ~/ 3600;
+
+  // m = ((value - h * 3600)) ~/ 60;
+
+  // s = (value - (h * 3600) - (m * 60)) ;
+
+  return Duration(seconds: (value * 60).toInt());
+}

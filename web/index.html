@@ -36,11 +36,9 @@
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js" defer>
-    </script>
   <script>
   
-   
+  
 function getFrame(){
 const getBase64StringFromDataURL = (dataURL) =>
     dataURL.replace('data:', '').replace(/^.+,/, '');
@@ -67,7 +65,12 @@ return getBase64StringFromDataURL(img);
 }
 
   </script>
-
+<script>
+   function getCurrentTime(){
+    var vid = document.getElementsByTagName('video');
+    return vid[0].currentTime;
+   }
+  </script>
 <script>
   document.addEventListener('wheel', function(e) {
     e.ctrlKey && e.preventDefault();

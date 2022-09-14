@@ -376,7 +376,7 @@ class FileService extends ChangeNotifier {
   Future<Uint8List?> getFrameFromUrl(
       {required String url, Duration duration = Duration.zero}) async {
     // duration - Duration(milliseconds: 200);
-    print(duration);
+    // print(duration);
     try {
       //00:00:00.000
       //   var url='http://192.168.1.74/';
