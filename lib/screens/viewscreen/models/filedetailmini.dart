@@ -25,6 +25,7 @@ class FileDetailMini {
       this.foundPath = '',
       this.isSelected = false,
       this.assignDetail,
+      this.length,
       this.pair,
       this.cleanPair = false,
       required this.isLeft
@@ -33,6 +34,7 @@ class FileDetailMini {
 
   final String id;
   String? pair;
+  Duration? length;
   final String filename, path;
   String foundPath;
   final Location location;
@@ -64,21 +66,29 @@ class FileDetailMini {
           // area: area
           );
 
-  factory FileDetailMini.fromJson(Map<String, dynamic> json) => FileDetailMini(
-      id: json["_id"],
-      filename: json["filename"],
-      location: Location.fromJson(json["location"]),
-      isUseable: json["useable"],
-      path: json["path"],
-      isLeft: json["isLeft"] ?? false,
-      assignDetail: json["assignDetail"] != null
-          ? AssignDetail.fromJson(json["assignDetail"])
-          : null,
-      pair: json["pair"],
-      cleanPair: json["cleanPair"] ?? false,
-      status: Status.fromJson(json["status"] ?? jsonDecode('{"status":0}'))
-      // area: Area.fromJson(json["area"])
-      );
+  factory FileDetailMini.fromJson(Map<String, dynamic> json) {
+    DateTime? lengthDate = DateTime.parse(json["length"]);
+    return FileDetailMini(
+        id: json["_id"],
+        filename: json["filename"],
+        location: Location.fromJson(json["location"]),
+        isUseable: json["useable"],
+        path: json["path"],
+        isLeft: json["isLeft"] ?? false,
+        assignDetail: json["assignDetail"] != null
+            ? AssignDetail.fromJson(json["assignDetail"])
+            : null,
+        pair: json["pair"],
+        cleanPair: json["cleanPair"] ?? false,
+        status: Status.fromJson(json["status"] ?? jsonDecode('{"status":0}')),
+        length: Duration(
+          hours: lengthDate.hour,
+          minutes: lengthDate.minute,
+          seconds: lengthDate.second,
+        )
+        // area: Area.fromJson(json["area"])
+        );
+  }
 
   Map<String, dynamic> toJson() => {
         "_id": id,

@@ -388,6 +388,10 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  String getFrameUrl(String id, Duration duration) {
+    return "${CustomIP.apiBaseUrl}video/image?url=${CustomIP.apiBaseUrl}video/$id&ms=${duration.toString().substring(0, 11)}";
+  }
+
   Future<Uint8List?> getFrameFromUrl(
       {required String url, Duration duration = Duration.zero}) async {
     // duration - Duration(milliseconds: 200);

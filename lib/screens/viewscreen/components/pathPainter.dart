@@ -20,6 +20,12 @@ import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
+class offsetWithDistance {
+  offsetWithDistance({required this.distance, required this.point});
+  double distance;
+  Offset point;
+}
+
 class Painter extends CustomPainter {
   Painter(
     this.context,
@@ -214,7 +220,8 @@ class Painter extends CustomPainter {
             Rect item = getRect(element.boundingBox!, transformer);
 
             Function tap, tapSecondary;
-
+            List<Offset> points = [];
+            List<Offset> duplicatePoints = [];
             tap = ({TapUpDetails? details}) async {
               ref.read(selectedFileProvider.state).state = element;
               if (element.originalLocation.isEmpty) {
@@ -223,7 +230,34 @@ class Painter extends CustomPainter {
                 fileservice.addOriginalLocation(element, originalLocationData);
               } else {
                 if (details != null) {
-                  print(details.localPosition);
+                  List<offsetWithDistance> pointDistanceList = [];
+
+                  Offset clickedPoint = Offset(
+                      details.localPosition.dx - item.topLeft.dx,
+                      details.localPosition.dy - item.topLeft.dy);
+
+                  for (var element in points) {
+                    var dist = (details.localPosition - element).distance;
+                    pointDistanceList.add(
+                        offsetWithDistance(distance: dist, point: element));
+                  }
+                  pointDistanceList
+                      .sort(((a, b) => a.distance.compareTo(b.distance)));
+                  var timeStamp = Duration(
+                      milliseconds: map(
+                          points.indexOf(pointDistanceList.first.point),
+                          0,
+                          points.length,
+                          0,
+                          element.length!.inMilliseconds));
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Image.network(
+                              fileservice.getFrameUrl(element.id, timeStamp)),
+                        );
+                      });
                 }
 
                 // reduce samples
@@ -488,9 +522,6 @@ class Painter extends CustomPainter {
                         )
                   ]);
             };
-
-            List<Offset> points = [];
-            List<Offset> duplicatePoints = [];
 
             if (selectedFile == element &&
                 element.originalLocation.isNotEmpty) {

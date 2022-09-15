@@ -56,7 +56,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.controller.zoom = 7;
+    // widget.controller.zoom = 7;
   }
 
   void _onDoubleTap() {
