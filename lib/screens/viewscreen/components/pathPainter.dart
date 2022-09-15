@@ -254,8 +254,10 @@ class Painter extends CustomPainter {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          content: Image.network(
-                              fileservice.getFrameUrl(element.id, timeStamp)),
+                          content: InteractiveViewer(
+                            child: Image.network(
+                                fileservice.getFrameUrl(element.id, timeStamp)),
+                          ),
                         );
                       });
                 }
