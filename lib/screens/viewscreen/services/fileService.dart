@@ -301,21 +301,21 @@ class FileService extends ChangeNotifier {
         }
       }
     });
-    if (filesInStates.first.files.isNotEmpty) {
-      filesInStates.first.path = Path();
-      for (var element in filesInStates.first.files) {
-        var path = Path();
-        path.addPolygon([
-          SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
-              element.location.coordinates.first.last,
-              element.location.coordinates.first.first)),
-          SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
-              element.location.coordinates.last.last,
-              element.location.coordinates.last.first)),
-        ], false);
-        filesInStates.first.path!.addPath(path, Offset.zero);
-      }
-    }
+    // if (filesInStates.first.files.isNotEmpty) {
+    //   filesInStates.first.path = Path();
+    //   for (var element in filesInStates.first.files) {
+    //     var path = Path();
+    //     path.addPolygon([
+    //       SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+    //           element.location.coordinates.first.last,
+    //           element.location.coordinates.first.first)),
+    //       SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+    //           element.location.coordinates.last.last,
+    //           element.location.coordinates.last.first)),
+    //     ], false);
+    //     filesInStates.first.path!.addPath(path, Offset.zero);
+    //   }
+    // }
   }
 
   addOriginalLocation(FileDetailMini file, List<OriginalLocation> data) {
