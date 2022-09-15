@@ -111,6 +111,7 @@ class Painter extends CustomPainter {
     List<FileDetailMini> finalselectedFileList = [];
     List<FileDetailMini> files = [];
     selectedPointsProvider.draw(customCanvas);
+    var stateCounter = 0;
 
     for (var element in fileservice.filesInStates) {
       var index = fileservice.filesInStates.indexOf(element);
@@ -119,8 +120,11 @@ class Painter extends CustomPainter {
           Rect stateRect = getRect(element.boundingBox!, transformer);
           if (stateRect.overlaps(visibleScreen)) {
             files.addAll(element.files);
+            stateCounter++;
           }
           Path statePath = Path();
+          var a = statePath.computeMetrics();
+
           statePath.addPolygon(
               element.coordinates
                   .map((e) =>
@@ -136,200 +140,270 @@ class Painter extends CustomPainter {
         Rect stateRect = getRect(element.boundingBox!, transformer);
         if (stateRect.overlaps(visibleScreen)) {
           files.addAll(element.files);
+          stateCounter++;
         }
       }
     }
-    if (files.isNotEmpty) {
-      if (!filterService.onlyNotUsable) {
-        if (kIsWeb) {
-          sampleLength = map(
-              files.length - visibleFilesList.length, 0, files.length, 0, 15);
+
+    var lightMode = stateCounter > 2 ? true : false;
+    Color getCurrentFileColor(FileDetailMini element) {
+      return element.isUseable
+          ? finalselectedFileList.contains(element)
+              ? selectedInAreaColor
+              : element.pair == null
+                  ? strokeColor
+                  : element.cleanPair
+                      ? pairColor
+                      : notSurePairColor
+          : damagedColor;
+    }
+
+    if (lightMode) {
+      for (var element in fileservice.filesInStates) {
+        // var index = fileservice.filesInStates.indexOf(element);
+        // if (index > stateCounter) break;
+        // Path newPath = Path();
+        for (var e in element.files) {
+          if (e.isUseable) {
+            var path = Path();
+            path.addPolygon(
+                [
+                  SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                      e.location.coordinates.first.last,
+                      e.location.coordinates.first.first)),
+                  SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                      e.location.coordinates.last.last,
+                      e.location.coordinates.last.first)),
+                ],
+                // element.location.coordinates
+                //     .map((e) =>
+                //         transformer.fromLatLngToXYCoords(LatLng(e.last, e.first)))
+                //     .toList(),
+                false);
+
+            // fileservice.filesInStates.first.path!.addPath(path, Offset.zero);
+            // newPath.addPath(path, Offset.zero);
+            Paint pcaint = Paint()
+              ..color = getCurrentFileColor(e).withOpacity(0.75)
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 3;
+            canvas.drawPath(path, pcaint);
+          }
+        }
+      }
+    } else {
+      if (files.isNotEmpty) {
+        if (!filterService.onlyNotUsable) {
+          if (kIsWeb) {
+            sampleLength = map(fileservice.files.length - files.length, 0,
+                files.length, 0, 20);
+          } else {
+            sampleLength = map(fileservice.files.length - files.length, 0,
+                fileservice.files.length, 0, 40);
+          }
         } else {
-          sampleLength = map(fileservice.files.length - files.length, 0,
-              fileservice.files.length, 0, 40);
+          sampleLength = 50;
         }
-      } else {
-        sampleLength = 50;
       }
-    }
-    paintElement(FileDetailMini element) async {
-      {
-        if (filterService.onlyNotUsable == !element.isUseable) {
-          visibleFiles++;
-          Path path = Path();
-          Rect item = getRect(element.boundingBox!, transformer);
 
-          Function tap, tapSecondary;
+      paintElement(FileDetailMini element) async {
+        {
+          if (filterService.onlyNotUsable == !element.isUseable) {
+            visibleFiles++;
+            Path path = Path();
+            Rect item = getRect(element.boundingBox!, transformer);
 
-          tap = ({TapUpDetails? details}) async {
-            ref.read(selectedFileProvider.state).state = element;
-            if (element.originalLocation.isEmpty) {
-              var originalLocationData =
-                  await fileservice.fetchOriginalLocation(element.id);
-              fileservice.addOriginalLocation(element, originalLocationData);
-            } else {
-              if (details != null) {
-                print(details.localPosition);
+            Function tap, tapSecondary;
+
+            tap = ({TapUpDetails? details}) async {
+              ref.read(selectedFileProvider.state).state = element;
+              if (element.originalLocation.isEmpty) {
+                var originalLocationData =
+                    await fileservice.fetchOriginalLocation(element.id);
+                fileservice.addOriginalLocation(element, originalLocationData);
+              } else {
+                if (details != null) {
+                  print(details.localPosition);
+                }
+
+                // reduce samples
+                // List<OriginalLocation> data = [], originalData = [];
+                // originalData.addAll(element.originalLocation);
+                // data.add(element.originalLocation.first);
+                // for (int i = 1; i < element.originalLocation.length; i++) {
+                //   var e = element.originalLocation[i];
+                //   if (i < element.originalLocation.length - 1) {
+                //     for (int j = i; j < element.originalLocation.length; j++) {
+                //       var u = element.originalLocation[j];
+
+                //       var dist = calculateDistance(
+                //           LatLng(e.lat, e.lng), LatLng(u.lat, u.lng));
+
+                //       if (dist > 1) {
+                //         i = j;
+                //         data.add(u);
+                //         break;
+                //       }
+                //     }
+                //   }
+                // }
+
+                // fileservice.addOriginalLocation(element, data);
+                // Future.delayed(const Duration(seconds: 3), () {
+                //   fileservice.addOriginalLocation(element, originalData);
+                // });
+                // reduce samples end
+
+                // print(data.length);
               }
 
-              // reduce samples
-              // List<OriginalLocation> data = [], originalData = [];
-              // originalData.addAll(element.originalLocation);
-              // data.add(element.originalLocation.first);
-              // for (int i = 1; i < element.originalLocation.length; i++) {
-              //   var e = element.originalLocation[i];
-              //   if (i < element.originalLocation.length - 1) {
-              //     for (int j = i; j < element.originalLocation.length; j++) {
-              //       var u = element.originalLocation[j];
+              // var metrics=selectedPointsProvider.path.value.computeMetrics();
+            };
+            tapSecondary = (Offset globalPostion) {
+              tap();
 
-              //       var dist = calculateDistance(
-              //           LatLng(e.lat, e.lng), LatLng(u.lat, u.lng));
-
-              //       if (dist > 1) {
-              //         i = j;
-              //         data.add(u);
-              //         break;
-              //       }
-              //     }
-              //   }
-              // }
-
-              // fileservice.addOriginalLocation(element, data);
-              // Future.delayed(const Duration(seconds: 3), () {
-              //   fileservice.addOriginalLocation(element, originalData);
-              // });
-              // reduce samples end
-
-              // print(data.length);
-            }
-
-            // var metrics=selectedPointsProvider.path.value.computeMetrics();
-          };
-          tapSecondary = (Offset globalPostion) {
-            tap();
-
-            showMenu(
-                context: context,
-                position: RelativeRect.fromLTRB(
-                    globalPostion.dx,
-                    globalPostion.dy,
-                    globalPostion.dx + 1,
-                    globalPostion.dy + 1),
-                items: [
-                  PopupMenuItem(
-                    child: CustomPopUpMenuItemChild(
-                      icon: Videomanager.assign,
-                      text: "Assign Video",
-                    ),
-                    onTap: () async {
-                      // Navigator.pop(context);
-                      Future.delayed(const Duration(milliseconds: 10), () {
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                backgroundColor: Colors.transparent,
-                                titlePadding: EdgeInsets.zero,
-                                contentPadding: EdgeInsets.zero,
-                                content: AssignManager(
-                                  files: const [],
-                                  points: [],
-                                ),
-                              );
-                            });
-                      });
-                    },
-                  ),
-                  PopupMenuItem(
+              showMenu(
+                  context: context,
+                  position: RelativeRect.fromLTRB(
+                      globalPostion.dx,
+                      globalPostion.dy,
+                      globalPostion.dx + 1,
+                      globalPostion.dy + 1),
+                  items: [
+                    PopupMenuItem(
+                      child: CustomPopUpMenuItemChild(
+                        icon: Videomanager.assign,
+                        text: "Assign Video",
+                      ),
                       onTap: () async {
-                        CustomOverlayEntry().showLoader();
+                        // Navigator.pop(context);
+                        Future.delayed(const Duration(milliseconds: 10), () {
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  backgroundColor: Colors.transparent,
+                                  titlePadding: EdgeInsets.zero,
+                                  contentPadding: EdgeInsets.zero,
+                                  content: AssignManager(
+                                    files: const [],
+                                    points: [],
+                                  ),
+                                );
+                              });
+                        });
+                      },
+                    ),
+                    PopupMenuItem(
+                        onTap: () async {
+                          CustomOverlayEntry().showLoader();
 
-                        if (element.pair != null) {
-                          Future.delayed(const Duration(milliseconds: 100),
-                              () async {
-                            CustomOverlayEntry().closeLoader();
-                            var leftFile =
-                                await fileservice.fetchOne(element.id);
-                            leftFile.foundPath = getVideoUrl(element.id);
-                            var rightFile =
-                                await fileservice.fetchOne(element.pair!);
-                            if (element.originalLocation.isEmpty) {
-                              var data = await fileservice
-                                  .fetchOriginalLocation(element.id);
-                              leftFile.originalLocation.addAll(data);
-                            } else {
-                              leftFile.originalLocation
-                                  .addAll(element.originalLocation);
-                            }
-                            rightFile.foundPath = getVideoUrl(element.pair!);
-                            var secondVideoOriginalData = await fileservice
-                                .fetchOriginalLocation(element.pair!);
-                            rightFile.originalLocation
-                                .addAll(secondVideoOriginalData);
-                            await showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return CustomVideo(
-                                    leftFile: leftFile,
-                                    rightFile: rightFile,
-                                  );
-                                });
-
-                            transformer.controller.drag(0.1, 0.1);
-                          });
-                        } else {
-                          var firstVideoExists =
-                              await fileservice.fileExists(element.id);
-                          if (firstVideoExists) {
-                            FileDetailMini? secondVideo =
-                                await fileservice.findFile(
-                                    visibleFilesList: visibleFilesList,
-                                    file: element,
-                                    fileRect: item);
-                            var leftFile =
-                                await fileservice.fetchOne(element.id);
-                            leftFile.foundPath = getVideoUrl(element.id);
-
-                            if (secondVideo != null) {
-                              var secondVideoExists =
-                                  await fileservice.fileExists(secondVideo.id);
-                              if (secondVideoExists) {
-                                var rightFile =
-                                    await fileservice.fetchOne(secondVideo.id);
-                                rightFile.foundPath =
-                                    getVideoUrl(secondVideo.id);
-                                if (element.originalLocation.isNotEmpty) {
-                                  leftFile.originalLocation
-                                      .addAll(element.originalLocation);
-                                }
-
-                                var secondVideoOriginalData = await fileservice
-                                    .fetchOriginalLocation(secondVideo.id);
-                                rightFile.originalLocation
-                                    .addAll(secondVideoOriginalData);
-                                CustomOverlayEntry().closeLoader();
-
-                                Future.delayed(
-                                    const Duration(milliseconds: 100),
-                                    () async {
-                                  CustomOverlayEntry().closeLoader();
-                                  await showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return CustomVideo(
-                                          leftFile: leftFile,
-                                          rightFile: rightFile,
-                                        );
-                                      });
-
-                                  transformer.controller.drag(0.1, 0.1);
-                                });
+                          if (element.pair != null) {
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () async {
+                              CustomOverlayEntry().closeLoader();
+                              var leftFile =
+                                  await fileservice.fetchOne(element.id);
+                              leftFile.foundPath = getVideoUrl(element.id);
+                              var rightFile =
+                                  await fileservice.fetchOne(element.pair!);
+                              if (element.originalLocation.isEmpty) {
+                                var data = await fileservice
+                                    .fetchOriginalLocation(element.id);
+                                leftFile.originalLocation.addAll(data);
                               } else {
-                                CustomOverlayEntry().closeLoader();
+                                leftFile.originalLocation
+                                    .addAll(element.originalLocation);
+                              }
+                              rightFile.foundPath = getVideoUrl(element.pair!);
+                              var secondVideoOriginalData = await fileservice
+                                  .fetchOriginalLocation(element.pair!);
+                              rightFile.originalLocation
+                                  .addAll(secondVideoOriginalData);
+                              await showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return CustomVideo(
+                                      leftFile: leftFile,
+                                      rightFile: rightFile,
+                                    );
+                                  });
+
+                              transformer.controller.drag(0.1, 0.1);
+                            });
+                          } else {
+                            var firstVideoExists =
+                                await fileservice.fileExists(element.id);
+                            if (firstVideoExists) {
+                              FileDetailMini? secondVideo =
+                                  await fileservice.findFile(
+                                      visibleFilesList: visibleFilesList,
+                                      file: element,
+                                      fileRect: item);
+                              var leftFile =
+                                  await fileservice.fetchOne(element.id);
+                              leftFile.foundPath = getVideoUrl(element.id);
+
+                              if (secondVideo != null) {
+                                var secondVideoExists = await fileservice
+                                    .fileExists(secondVideo.id);
+                                if (secondVideoExists) {
+                                  var rightFile = await fileservice
+                                      .fetchOne(secondVideo.id);
+                                  rightFile.foundPath =
+                                      getVideoUrl(secondVideo.id);
+                                  if (element.originalLocation.isNotEmpty) {
+                                    leftFile.originalLocation
+                                        .addAll(element.originalLocation);
+                                  }
+
+                                  var secondVideoOriginalData =
+                                      await fileservice.fetchOriginalLocation(
+                                          secondVideo.id);
+                                  rightFile.originalLocation
+                                      .addAll(secondVideoOriginalData);
+                                  CustomOverlayEntry().closeLoader();
+
+                                  Future.delayed(
+                                      const Duration(milliseconds: 100),
+                                      () async {
+                                    CustomOverlayEntry().closeLoader();
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return CustomVideo(
+                                            leftFile: leftFile,
+                                            rightFile: rightFile,
+                                          );
+                                        });
+
+                                    transformer.controller.drag(0.1, 0.1);
+                                  });
+                                } else {
+                                  CustomOverlayEntry().closeLoader();
+                                  await snack.info("Adjacent Video not found");
+                                  Future.delayed(
+                                      const Duration(milliseconds: 800),
+                                      () async {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return CustomVideo(
+                                            leftFile: leftFile,
+                                            rightFile: leftFile,
+                                          );
+                                        });
+
+                                    transformer.controller.drag(0.1, 0.1);
+                                  });
+                                }
+                              } else {
                                 await snack.info("Adjacent Video not found");
+
                                 Future.delayed(
                                     const Duration(milliseconds: 800),
                                     () async {
+                                  CustomOverlayEntry().closeLoader();
                                   await showDialog(
                                       context: context,
                                       builder: (_) {
@@ -343,292 +417,274 @@ class Painter extends CustomPainter {
                                 });
                               }
                             } else {
-                              await snack.info("Adjacent Video not found");
-
-                              Future.delayed(const Duration(milliseconds: 800),
-                                  () async {
+                              snack.error("Video not found!");
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
                                 CustomOverlayEntry().closeLoader();
-                                await showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return CustomVideo(
-                                        leftFile: leftFile,
-                                        rightFile: leftFile,
-                                      );
-                                    });
-
-                                transformer.controller.drag(0.1, 0.1);
                               });
                             }
-                          } else {
-                            snack.error("Video not found!");
-                            Future.delayed(const Duration(milliseconds: 500),
-                                () {
-                              CustomOverlayEntry().closeLoader();
-                            });
                           }
-                        }
-                      },
-                      child: CustomPopUpMenuItemChild(
-                        icon: Videomanager.play_video,
-                        text: "Play Video",
-                        width: 137.sw(),
-                      )),
-                  PopupMenuItem(
-                    onTap: () async {
-                      Future.delayed(const Duration(milliseconds: 50),
-                          () async {
-                        await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                elevation: 0.1,
-                                contentPadding: EdgeInsets.zero,
-                                content: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * .65,
-                                  child: PathAnalysis(
-                                    file: element,
-                                    files: visibleFilesList,
-                                    itemBox: item,
-                                  ),
-                                ),
-                              );
-                            });
-                      });
-                    },
-                    child: CustomPopUpMenuItemChild(
-                      icon: Icons.analytics,
-                      text: "Analyze",
-                      width: 137.sw(),
-                    ),
-                  ),
-                  PopupMenuItem(
+                        },
+                        child: CustomPopUpMenuItemChild(
+                          icon: Videomanager.play_video,
+                          text: "Play Video",
+                          width: 137.sw(),
+                        )),
+                    PopupMenuItem(
                       onTap: () async {
-                        final fileminiService =
-                            ref.read(fileDetailMiniServiceProvider);
-
-                        try {
-                          if (await fileminiService.edit(element,
-                              data: {"useable": !element.isUseable})) {
-                            fileminiService.updateOneFileUsable(
-                                element, !element.isUseable);
-                            ref.read(selectedFileProvider.state).state = null;
-                            snack.success("Status Updated Succesfully");
-                          }
-                        } catch (e) {
-                          snack.error(e.toString());
-                        }
+                        Future.delayed(const Duration(milliseconds: 50),
+                            () async {
+                          await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  elevation: 0.1,
+                                  contentPadding: EdgeInsets.zero,
+                                  content: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .65,
+                                    child: PathAnalysis(
+                                      file: element,
+                                      files: visibleFilesList,
+                                      itemBox: item,
+                                    ),
+                                  ),
+                                );
+                              });
+                        });
                       },
                       child: CustomPopUpMenuItemChild(
-                        icon: element.isUseable
-                            ? Videomanager.close
-                            : Videomanager.sucess,
-                        text: element.isUseable ? "Damaged" : "Fixed",
+                        icon: Icons.analytics,
+                        text: "Analyze",
                         width: 137.sw(),
-                      )
+                      ),
+                    ),
+                    PopupMenuItem(
+                        onTap: () async {
+                          final fileminiService =
+                              ref.read(fileDetailMiniServiceProvider);
 
-                      // Text("Flag ${element.isUseable ? "Damaged" : "Fixed"}")
-                      )
-                ]);
-          };
+                          try {
+                            if (await fileminiService.edit(element,
+                                data: {"useable": !element.isUseable})) {
+                              fileminiService.updateOneFileUsable(
+                                  element, !element.isUseable);
+                              ref.read(selectedFileProvider.state).state = null;
+                              snack.success("Status Updated Succesfully");
+                            }
+                          } catch (e) {
+                            snack.error(e.toString());
+                          }
+                        },
+                        child: CustomPopUpMenuItemChild(
+                          icon: element.isUseable
+                              ? Videomanager.close
+                              : Videomanager.sucess,
+                          text: element.isUseable ? "Damaged" : "Fixed",
+                          width: 137.sw(),
+                        )
 
-          List<Offset> points = [];
-          List<Offset> duplicatePoints = [];
+                        // Text("Flag ${element.isUseable ? "Damaged" : "Fixed"}")
+                        )
+                  ]);
+            };
 
-          if (selectedFile == element && element.originalLocation.isNotEmpty) {
-            for (var locationData in element.originalLocation) {
-              if (!locationData.duplicate) {
-                points.add(transformer.fromLatLngToXYCoords(
-                    LatLng(locationData.lat, locationData.lng)));
-              } else {
-                duplicatePoints.add(transformer.fromLatLngToXYCoords(
-                    LatLng(locationData.lat, locationData.lng)));
+            List<Offset> points = [];
+            List<Offset> duplicatePoints = [];
+
+            if (selectedFile == element &&
+                element.originalLocation.isNotEmpty) {
+              for (var locationData in element.originalLocation) {
+                if (!locationData.duplicate) {
+                  points.add(transformer.fromLatLngToXYCoords(
+                      LatLng(locationData.lat, locationData.lng)));
+                } else {
+                  duplicatePoints.add(transformer.fromLatLngToXYCoords(
+                      LatLng(locationData.lat, locationData.lng)));
+                }
               }
-            }
-          } else {
-            Offset start = transformer.fromLatLngToXYCoords(LatLng(
-                element.location.coordinates.first.last,
-                element.location.coordinates.first.first));
-            points.add(start);
-            if (sampleLength != 0) {
-              for (int i = 1;
-                  i < element.location.coordinates.length;
-                  i = i + (50 ~/ sampleLength)) {
-                // print('$i');
-                // if (i < sampleLength - 1) {
+            } else {
+              Offset start = transformer.fromLatLngToXYCoords(LatLng(
+                  element.location.coordinates.first.last,
+                  element.location.coordinates.first.first));
+              points.add(start);
+              if (sampleLength != 0) {
+                for (int i = 1;
+                    i < element.location.coordinates.length;
+                    i = i + (50 ~/ sampleLength)) {
+                  // print('$i');
+                  // if (i < sampleLength - 1) {
 
-                Offset current = transformer.fromLatLngToXYCoords(LatLng(
-                    element.location.coordinates[i].last,
-                    element.location.coordinates[i].first));
-                points.add(current);
+                  Offset current = transformer.fromLatLngToXYCoords(LatLng(
+                      element.location.coordinates[i].last,
+                      element.location.coordinates[i].first));
+                  points.add(current);
 
-                // }
+                  // }
+                }
               }
+
+              Offset end = transformer.fromLatLngToXYCoords(LatLng(
+                  element.location.coordinates.last.last,
+                  element.location.coordinates.last.first));
+              points.add(end);
             }
 
-            Offset end = transformer.fromLatLngToXYCoords(LatLng(
-                element.location.coordinates.last.last,
-                element.location.coordinates.last.first));
-            points.add(end);
-          }
+            totalDataUsedForPaint += points.length;
+            paint.strokeWidth = stroke;
+            paint.style = PaintingStyle.stroke;
+            paint.color = getCurrentFileColor(element);
 
-          totalDataUsedForPaint += points.length;
-          paint.strokeWidth = stroke;
-          paint.style = PaintingStyle.stroke;
-          paint.color = element.isUseable
-              ? finalselectedFileList.contains(element)
-                  ? selectedInAreaColor
-                  : element.pair == null
-                      ? strokeColor
-                      : element.cleanPair
-                          ? pairColor
-                          : notSurePairColor
-              : damagedColor;
+            path.addPolygon(points, false);
 
-          path.addPolygon(points, false);
+            // Path duplicatePath = Path();
+            // Paint duplicatePaint = Paint()
+            //   ..color = Colors.blue
+            //   ..style = PaintingStyle.stroke
+            //   ..strokeWidth = 3;
+            // duplicatePath.addPolygon(duplicatePoints, false);
+            Paint newPaint = Paint()
+              ..color = Theme.of(context).primaryColor.withOpacity(0.1);
 
-          Path duplicatePath = Path();
-          Paint duplicatePaint = Paint()
-            ..color = Colors.blue
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 3;
-          duplicatePath.addPolygon(duplicatePoints, false);
-          Paint newPaint = Paint()
-            ..color = Theme.of(context).primaryColor.withOpacity(0.1);
-
-          // if (duplicatePoints.isNotEmpty) {
-          //   customCanvas.drawPath(duplicatePath, duplicatePaint);
-          // }
-
-          // Main Path
-          {
-            // if (element.assignDetail != null) {
-            //   if (element.assignDetail!.assignedTo == null) {
-            //     paint.color = strokeColor;
-            //   } else {
-            //     paint.color = Colors.green;
-            //   }
+            // if (duplicatePoints.isNotEmpty) {
+            //   customCanvas.drawPath(duplicatePath, duplicatePaint);
             // }
 
-            customCanvas.drawPath(path, paint, onTapUp: (details) {
-              tap(details: details);
-            }, onSecondaryTapUp: (detail) {
-              tapSecondary(detail.globalPosition);
-            }, onLongPressStart: (detail) {
-              tapSecondary(detail.globalPosition);
-            });
-          }
-          // Main Path End
-          if (selectedPointsProvider.selectedPoints.isEmpty ||
-              selectedPointsProvider.pathClosed.value) {
-            if (selectedFile != null) {
-              if (selectedFile.id == element.id) {
-                paint.strokeWidth = stroke * 2;
-                paint.color = Theme.of(context).primaryColor;
-                //
-                customCanvas.drawPath(path, paint, onTapUp: (details) {
-                  tap(details: details);
-                }, onSecondaryTapUp: (detail) {});
+            // Main Path
+            {
+              // if (element.assignDetail != null) {
+              //   if (element.assignDetail!.assignedTo == null) {
+              //     paint.color = strokeColor;
+              //   } else {
+              //     paint.color = Colors.green;
+              //   }
+              // }
 
-                paint.color = strokeColor;
-                paint.strokeWidth = stroke;
-                customCanvas.drawPath(path, paint, onTapUp: (details) {
-                  // tap();
-                }, onSecondaryTapUp: (detail) {
-                  tapSecondary(detail.globalPosition);
-                }, onLongPressStart: (detail) {
-                  tapSecondary(detail.globalPosition);
-                });
+              customCanvas.drawPath(path, paint, onTapUp: (details) {
+                tap(details: details);
+              }, onSecondaryTapUp: (detail) {
+                tapSecondary(detail.globalPosition);
+              }, onLongPressStart: (detail) {
+                tapSecondary(detail.globalPosition);
+              });
+            }
+            // Main Path End
 
-                newPaint.style = PaintingStyle.stroke;
-                newPaint.color = Theme.of(context).primaryColor;
-                if (handleDragged.value == null) {
-                  customCanvas.drawRect(path.getBounds(), newPaint,
-                      onTapUp: ((details) {
-                    tap(details: details);
-                  }), onSecondaryTapUp: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, onLongPressStart: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, hitTestBehavior: hitBehaviorTranslucent);
-                }
+            // if (!lightMode)
+            {
+              if (selectedPointsProvider.selectedPoints.isEmpty ||
+                  selectedPointsProvider.pathClosed.value) {
+                if (selectedFile != null) {
+                  if (selectedFile.id == element.id) {
+                    paint.strokeWidth = stroke * 2;
+                    paint.color = Theme.of(context).primaryColor;
+                    //
+                    customCanvas.drawPath(path, paint, onTapUp: (details) {
+                      tap(details: details);
+                    }, onSecondaryTapUp: (detail) {});
 
-                newPaint.style = PaintingStyle.fill;
-                newPaint.color = Colors.transparent;
-                if (handleDragged.value == null) {
-                  customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-                    tap(details: details);
-                  }), onSecondaryTapUp: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, onLongPressStart: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, hitTestBehavior: hitBehaviorTranslucent);
+                    paint.color = strokeColor;
+                    paint.strokeWidth = stroke;
+                    customCanvas.drawPath(path, paint, onTapUp: (details) {
+                      // tap();
+                    }, onSecondaryTapUp: (detail) {
+                      tapSecondary(detail.globalPosition);
+                    }, onLongPressStart: (detail) {
+                      tapSecondary(detail.globalPosition);
+                    });
+
+                    newPaint.style = PaintingStyle.stroke;
+                    newPaint.color = Theme.of(context).primaryColor;
+                    if (handleDragged.value == null) {
+                      customCanvas.drawRect(path.getBounds(), newPaint,
+                          onTapUp: ((details) {
+                        tap(details: details);
+                      }), onSecondaryTapUp: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, onLongPressStart: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, hitTestBehavior: hitBehaviorTranslucent);
+                    }
+
+                    newPaint.style = PaintingStyle.fill;
+                    newPaint.color = Colors.transparent;
+                    if (handleDragged.value == null) {
+                      customCanvas.drawRect(item, newPaint,
+                          onTapUp: ((details) {
+                        tap(details: details);
+                      }), onSecondaryTapUp: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, onLongPressStart: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, hitTestBehavior: hitBehaviorTranslucent);
+                    }
+                  } else {
+                    if (filterService.onlyNotUsable == !element.isUseable) {
+                      customCanvas.drawRect(item, newPaint,
+                          onTapUp: ((details) {
+                        tap(details: details);
+                      }), onSecondaryTapUp: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, onLongPressStart: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, hitTestBehavior: hitBehaviorTranslucent);
+                    }
+                  }
                 }
-              } else {
-                if (filterService.onlyNotUsable == !element.isUseable) {
-                  customCanvas.drawRect(item, newPaint, onTapUp: ((details) {
-                    tap(details: details);
-                  }), onSecondaryTapUp: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, onLongPressStart: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, hitTestBehavior: hitBehaviorTranslucent);
+                //Damaged Path Rectangle
+                else {
+                  if (filterService.onlyNotUsable == !element.isUseable) {
+                    if (handleDragged.value == null) {
+                      customCanvas.drawRect(path.getBounds(), newPaint,
+                          onTapUp: ((details) {
+                        tap();
+                      }), onSecondaryTapUp: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, onLongPressStart: (detail) {
+                        tapSecondary(detail.globalPosition);
+                      }, hitTestBehavior: hitBehaviorTranslucent);
+                    }
+                  }
                 }
+                //Damaged Path Rectangle End
               }
             }
-            //Damaged Path Rectangle
-            else {
-              if (filterService.onlyNotUsable == !element.isUseable) {
-                if (handleDragged.value == null) {
-                  customCanvas.drawRect(path.getBounds(), newPaint,
-                      onTapUp: ((details) {
-                    tap();
-                  }), onSecondaryTapUp: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, onLongPressStart: (detail) {
-                    tapSecondary(detail.globalPosition);
-                  }, hitTestBehavior: hitBehaviorTranslucent);
-                }
-              }
-            }
-            //Damaged Path Rectangle End
-          }
-          // path.close();
+            // path.close();
 
+          }
         }
       }
-    }
 
-    //
-    for (var element in files) {
-      Rect item = getRect(element.boundingBox!, transformer);
+      //
+      for (var element in files) {
+        Rect item = getRect(element.boundingBox!, transformer);
 
-      if (item.overlaps(visibleScreen)) {
-        if (filterService.onlyPair == null) {
-          if (element.pair == null) {
+        if (item.overlaps(visibleScreen)) {
+          if (filterService.onlyPair == null) {
+            if (element.pair == null) {
+              visibleFilesList.add(element);
+            }
+          } else if (filterService.onlyPair == true) {
+            if (element.cleanPair) {
+              visibleFilesList.add(element);
+            }
+          } else {
             visibleFilesList.add(element);
           }
-        } else if (filterService.onlyPair == true) {
-          if (element.cleanPair) {
-            visibleFilesList.add(element);
-          }
-        } else {
-          visibleFilesList.add(element);
-        }
-        if (selectedPointsProvider.pathClosed.value) {
-          Rect? selection = selectedPointsProvider.getRectFromPoints();
-          if (selection != null &&
-              filterService.onlyNotUsable == !element.isUseable) {
-            if (item.overlaps(selection) &&
-                !selectedFileList.contains(element)) {
-              selectedFileList.add(element);
-            } else {
-              selectedFileList.remove(element);
+          if (selectedPointsProvider.pathClosed.value) {
+            Rect? selection = selectedPointsProvider.getRectFromPoints();
+            if (selection != null &&
+                filterService.onlyNotUsable == !element.isUseable) {
+              if (item.overlaps(selection) &&
+                  !selectedFileList.contains(element)) {
+                selectedFileList.add(element);
+              } else {
+                selectedFileList.remove(element);
+              }
             }
           }
+          paintElement(element);
         }
-        paintElement(element);
       }
     }
     // for (var element in selectedFileList) {

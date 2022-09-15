@@ -27,6 +27,7 @@ class CountryState {
   final List<List<double>> coordinates;
   Rect? boundingBox;
   final List<FileDetailMini> files = [];
+  Path? path;
   CountryState copyWith({
     required String type,
     required List<List<double>> coordinates,
