@@ -70,9 +70,12 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                       child:
                           StatefulBuilder(builder: (context, setCustomState) {
                         late Duration length;
+                        late Duration lengthR;
                         late Duration current;
                         if (UniversalPlatform.isDesktop) {
                           length = widget.leftDesktop!.duration;
+                          lengthR = widget.rightDesktop!.duration;
+
                           current =
                               widget.leftDesktop!.player.position.position!;
                           widget.leftDesktop!.player.positionStream
@@ -90,6 +93,10 @@ class _VideoPlayerControlsState extends ConsumerState<VideoPlayerControls>
                               if (progress.isNaN) progress = 0.0;
                             });
                           });
+
+                          if (length <= current) {
+                            _playPauseController.reverse();
+                          }
                         } else {
                           length = widget.leftWeb!.value.duration;
                           current = widget.leftWeb!.value.position;

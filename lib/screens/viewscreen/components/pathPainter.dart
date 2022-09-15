@@ -266,30 +266,30 @@ class Painter extends CustomPainter {
               position: RelativeRect.fromLTRB(globalPostion.dx,
                   globalPostion.dy, globalPostion.dx + 1, globalPostion.dy + 1),
               items: [
-                PopupMenuItem(
-                  child: CustomPopUpMenuItemChild(
-                    icon: Videomanager.assign,
-                    text: "Assign Video",
-                  ),
-                  onTap: () async {
-                    // Navigator.pop(context);
-                    Future.delayed(const Duration(milliseconds: 10), () {
-                      showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              backgroundColor: Colors.transparent,
-                              titlePadding: EdgeInsets.zero,
-                              contentPadding: EdgeInsets.zero,
-                              content: AssignManager(
-                                files: [],
-                                points: [],
-                              ),
-                            );
-                          });
-                    });
-                  },
-                ),
+                // PopupMenuItem(
+                //   child: CustomPopUpMenuItemChild(
+                //     icon: Videomanager.assign,
+                //     text: "Assign Video",
+                //   ),
+                //   onTap: () async {
+                //     // Navigator.pop(context);
+                //     Future.delayed(const Duration(milliseconds: 10), () {
+                //       showDialog(
+                //           context: context,
+                //           builder: (_) {
+                //             return AlertDialog(
+                //               backgroundColor: Colors.transparent,
+                //               titlePadding: EdgeInsets.zero,
+                //               contentPadding: EdgeInsets.zero,
+                //               content: AssignManager(
+                //                 files: [],
+                //                 points: [],
+                //               ),
+                //             );
+                //           });
+                //     });
+                //   },
+                // ),
                 PopupMenuItem(
                     onTap: () async {
                       CustomOverlayEntry().showLoader();
