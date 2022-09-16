@@ -12,10 +12,10 @@ import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
 class ScreenShotScreen extends StatefulHookConsumerWidget {
   ScreenShotScreen(
-      {Key? key, this.edit = false, this.thumb, this.duration, this.url})
+      {Key? key, this.edit = false, this.thumb, this.duration, this.id})
       : super(key: key);
   final bool edit;
-  final String? url;
+  final String? id;
   final Duration? duration;
   final Uint8List? thumb;
 
@@ -40,7 +40,7 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
       if (videoDataDetailService.selectedSnap.value!.image == null) {
         image = await ref
             .read(fileDetailMiniServiceProvider)
-            .getFrameFromUrl(url: widget.url!, duration: widget.duration!);
+            .getFrameFromUrl(id: widget.id!, duration: widget.duration!);
 
         if (image != null) {
           videoDataDetailService.selectedSnap.value!.image = image;
@@ -205,7 +205,7 @@ class ShopAreaPoints extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       left: constraint.maxWidth / snap!.shops.first.area.last.dx,
-      top: constraint.maxHeight / snap!.shops.first.area.last.dx,
+      top: constraint.maxHeight / snap!.shops.first.area.last.dy,
       child: Draggable(
         onDragEnd: (details) {
           var dragRatio = Offset(constraint.maxWidth / details.offset.dx,

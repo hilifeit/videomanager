@@ -18,6 +18,7 @@ import 'package:videomanager/screens/viewscreen/components/singlePath.dart';
 import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
+import 'package:videomanager/screens/viewscreen/services/mapPointService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 final selectedFileProvider = StateProvider<FileDetailMini?>((ref) {
@@ -50,6 +51,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   void _gotoDefault() {
     // widget.controller.center = widget.controller;
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // widget.controller.zoom = 7;
   }
 
   void _onDoubleTap() {
@@ -214,9 +222,83 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           ),
                         ],
                       ),
-                      if (widget.draw)
-                        if (widget.originalData.isEmpty)
+                      if (widget.draw) ...[
+                        if (widget.originalData.isEmpty) ...[
                           Listener(child: markerWidgets),
+                          Consumer(builder: (context, ref, child) {
+                            final radius = 8.sr();
+                            final mapPointService =
+                                ref.watch(mapPointerServiceProvider);
+                            final point = mapPointService.point;
+
+                            if (point == null) return Container();
+                            return Positioned(
+                                left: point.dx - radius / 2,
+                                top: point.dy - radius / 2,
+                                width: radius,
+                                height: radius,
+                                // duration: const Duration(milliseconds: 250),
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                          color: Colors.blue,
+                                          shape: BoxShape.circle),
+                                      child: Container(
+                                        margin: const EdgeInsets.all(2.5),
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      left: radius,
+                                      top: radius,
+                                      child: AnimatedOpacity(
+                                        opacity: 1,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Theme.of(context)
+                                                        .primaryColor
+                                                        .withOpacity(0.8),
+                                                    spreadRadius: 2,
+                                                    blurRadius: 10)
+                                              ]),
+                                          width: 300.sw(),
+                                          child: AspectRatio(
+                                            aspectRatio: 1.778,
+                                            child: Image.network(
+                                              mapPointService.url,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder: ((context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return Center(
+                                                    child: child,
+                                                  );
+                                                }
+
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ));
+                          })
+                        ]
+                      ],
                       if (widget.originalData.isNotEmpty)
                         SinglePath(
                           transformer: transformer,

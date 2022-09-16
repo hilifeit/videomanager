@@ -301,6 +301,21 @@ class FileService extends ChangeNotifier {
         }
       }
     });
+    // if (filesInStates.first.files.isNotEmpty) {
+    //   filesInStates.first.path = Path();
+    //   for (var element in filesInStates.first.files) {
+    //     var path = Path();
+    //     path.addPolygon([
+    //       SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+    //           element.location.coordinates.first.last,
+    //           element.location.coordinates.first.first)),
+    //       SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+    //           element.location.coordinates.last.last,
+    //           element.location.coordinates.last.first)),
+    //     ], false);
+    //     filesInStates.first.path!.addPath(path, Offset.zero);
+    //   }
+    // }
   }
 
   addOriginalLocation(FileDetailMini file, List<OriginalLocation> data) {
@@ -373,8 +388,12 @@ class FileService extends ChangeNotifier {
     }
   }
 
+  String getFrameUrl(String id, Duration duration) {
+    return "${CustomIP.apiBaseUrl}video/image?id=$id&ms=${duration.toString().substring(0, 11)}";
+  }
+
   Future<Uint8List?> getFrameFromUrl(
-      {required String url, Duration duration = Duration.zero}) async {
+      {required String id, Duration duration = Duration.zero}) async {
     // duration - Duration(milliseconds: 200);
     // print(duration);
     try {
@@ -383,7 +402,7 @@ class FileService extends ChangeNotifier {
       // if(!CustomIP.baseUrl.contains('103.'))
       // url=CustomIP.apiBaseUrl;
       var response = await client.get(Uri.parse(
-          "${CustomIP.apiBaseUrl}video/image?url=$url&ms=${duration.toString().substring(0, 11)}"));
+          "${CustomIP.apiBaseUrl}video/image?id=$id&ms=${duration.toString().substring(0, 11)}"));
 //       final ByteData imageData = await NetworkAssetBundle(Uri.parse("${CustomIP.apiBaseUrl}video/image?url=$url&ms=$positionInMs")).load("");
 // final Uint8List bytes = imageData.buffer.asUint8List();
       if (response.statusCode == 200) {
