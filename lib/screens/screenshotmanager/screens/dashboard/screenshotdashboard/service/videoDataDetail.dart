@@ -20,6 +20,8 @@ class VideoDataDetail extends ChangeNotifier {
     notifyListeners();
   }
 
+  Offset drag = Offset(50, 50);
+
   bool checkAndAddSnap(Duration duration, {Uint8List? imageData}) {
     var snap = SnapModel(shops: [], timeStamp: duration, image: imageData);
 
@@ -68,5 +70,10 @@ class VideoDataDetail extends ChangeNotifier {
 
   deselectSnap() {
     selectedSnap.value = null;
+  }
+
+  dragUpdate(Offset newData) {
+    selectedSnap.value!.shops.first.area.last = Offset(newData.dx, newData.dy);
+    notifyListeners();
   }
 }

@@ -37,8 +37,21 @@ class TimeLineTop extends StatelessWidget {
             int divison = mapDouble(
                     x: zoom, in_min: 0, in_max: 1, out_min: 10, out_max: 60)
                 .round();
-            final double scrollHorizontal =
+
+            //old code
+            // double scrollHorizontal =
+            //     ref.watch(horizontalDragProvider.state).state;
+
+            //new code
+            var scrollableWidth =
+                (ref.read(constraintsProvider.state).state?.maxWidth ??
+                        MediaQuery.of(context).size.width) -
+                    ref.read(buttonWidthProvider.state).state;
+            var displayWidth = divison * (duration.inSeconds / 60) * 50.sh();
+            final double scrollHorizontal = (displayWidth / scrollableWidth) *
                 ref.watch(horizontalDragProvider.state).state;
+            //----------------------------
+
             return CustomPaint(
               size: Size(double.infinity, 50.sh()),
               painter: TestTimelineRuler(
@@ -49,8 +62,6 @@ class TimeLineTop extends StatelessWidget {
             );
           }),
           Consumer(builder: (context, ref, c) {
-            // final left = ref.watch(leftValueProvider.state).state;
-
             if (UniversalPlatform.isDesktop) {
               int length = desktop!.duration.inMilliseconds;
 
@@ -226,6 +237,7 @@ class TestTimelineRuler extends CustomPainter {
     var paint = Paint()
       ..color = Colors.black
       ..strokeWidth = 2;
+
     var divisor = duration.inMilliseconds / 1000;
 
     if (divisor > 60) divisor = (divisor / 60).ceilToDouble();

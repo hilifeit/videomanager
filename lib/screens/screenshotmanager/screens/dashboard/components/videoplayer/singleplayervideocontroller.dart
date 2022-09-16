@@ -169,6 +169,13 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
               if (val == 0) {
                 ref.read(horizontalDragProvider.state).state = 0;
               }
+              print(zoom);
+
+              // ref.read(buttonWidthProvider.state).state = zoom < 0.9
+              //     ? MediaQuery.of(context).size.width -
+              //         MediaQuery.of(context).size.width * zoom
+              //     : MediaQuery.of(context).size.width -
+              //         MediaQuery.of(context).size.width * 0.9;
             }),
         const Spacer(),
         Text(

@@ -14,15 +14,17 @@ Shop shopModelMiniFromJson(String str) => Shop.fromJson(json.decode(str));
 String shopModelMiniToJson(Shop data) => json.encode(data.toJson());
 
 class Shop {
-  Shop(
-      {required this.shopName,
-      required this.category,
-      required this.shopSize,
-      this.phone,
-      required this.roadFaceNum,
-      required this.roadFace,
-      required this.color,
-      required this.position});
+  Shop({
+    required this.shopName,
+    required this.category,
+    required this.shopSize,
+    this.phone,
+    required this.roadFaceNum,
+    required this.roadFace,
+    required this.color,
+    required this.position,
+    required this.area,
+  });
 
   String shopName;
   int category;
@@ -32,6 +34,7 @@ class Shop {
   RoadFace roadFace;
   Color color;
   Offset position;
+  List<Offset> area;
 
   Shop copyWith({
     required String shopName,
@@ -41,6 +44,7 @@ class Shop {
     required int roadFaceNum,
     required RoadFace roadFace,
     required Color color,
+    required List<Offset> area,
   }) =>
       Shop(
           shopName: shopName,
@@ -50,7 +54,8 @@ class Shop {
           roadFaceNum: roadFaceNum,
           roadFace: roadFace,
           color: color,
-          position: position);
+          position: position,
+          area: area);
   static empty() => Shop(
       shopName: '',
       category: 0,
@@ -58,7 +63,8 @@ class Shop {
       roadFaceNum: 1,
       roadFace: RoadFace(roadFace1: 1),
       color: primaryColor,
-      position: const Offset(0, 0));
+      position: const Offset(0, 0),
+      area: [Offset(0, 0), Offset(20, 0), Offset(20, 20), Offset(0, 20)]);
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
       shopName: json["shopName"],
@@ -68,7 +74,8 @@ class Shop {
       roadFaceNum: json["roadFaceNum"],
       roadFace: RoadFace.fromJson(json["roadFace"]),
       color: json["color"],
-      position: json["position"]);
+      position: json["position"],
+      area: json["position"]);
 
   Map<String, dynamic> toJson() => {
         "shopName": shopName,
@@ -78,7 +85,8 @@ class Shop {
         "roadFaceNum": roadFaceNum,
         "roadFace": roadFace,
         "color": color,
-        "position": position
+        "position": position,
+        "area": area
       };
 
   @override
@@ -97,6 +105,7 @@ class Shop {
         other.roadFaceNum == roadFaceNum &&
         other.position == position &&
         other.phone == phone &&
+        other.area == area &&
         other.roadFace == roadFace;
   }
 

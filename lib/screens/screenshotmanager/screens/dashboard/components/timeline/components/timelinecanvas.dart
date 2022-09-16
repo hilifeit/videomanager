@@ -16,6 +16,12 @@ final mouseScrollProvider = StateProvider<double>((ref) {
 final horizontalDragProvider = StateProvider<double>((ref) {
   return 0.0;
 });
+final buttonWidthProvider = StateProvider<double>((ref) {
+  return 0.0;
+});
+final constraintsProvider = StateProvider<BoxConstraints?>((ref) {
+  return null;
+});
 
 class TimeLineCanvas extends ConsumerWidget {
   TimeLineCanvas({Key? key, required this.duration}) : super(key: key);
@@ -38,7 +44,6 @@ class TimeLineCanvas extends ConsumerWidget {
       double scrollValue = zoom < 0.9
           ? constraint.maxWidth - constraint.maxWidth * zoom
           : constraint.maxWidth - constraint.maxWidth * 0.9;
-
       return Listener(
         onPointerSignal: (event) {
           // if (event is PointerScrollEvent) {
@@ -219,6 +224,10 @@ class TimeLineCanvas extends ConsumerWidget {
                               duration: const Duration(milliseconds: 50),
                               child: GestureDetector(
                                 onHorizontalDragUpdate: (details) {
+                                  ref.read(buttonWidthProvider.state).state =
+                                      scrollValue;
+                                  ref.read(constraintsProvider.state).state =
+                                      constraint;
                                   ref
                                       .read(horizontalDragProvider.state)
                                       .state += details.delta.dx;
@@ -284,7 +293,7 @@ class TimeLineCanvas extends ConsumerWidget {
     return Offset(xPosition, yPosition + scrollOffset);
   }
 
-  // recurse(yPosition, constraints) {
+  // recurse(yPosition, constraints) {s
   //   if (yPosition > constraints.maxHeight - 10.sh()) {
   //     double add = (yPosition - constraints.maxHeight) - 2.5.sh();
 

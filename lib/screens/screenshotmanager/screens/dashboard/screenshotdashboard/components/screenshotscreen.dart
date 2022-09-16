@@ -5,6 +5,7 @@ import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
+import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/snapModel.dart';
 
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
@@ -54,6 +55,7 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
   Widget build(BuildContext context) {
     final snapService = ref.watch(videoDataDetailServiceProvider);
     final snap = snapService.selectedSnap.value;
+    final drag = snapService.drag;
     return RawKeyboardListener(
       focusNode: FocusNode(),
       autofocus: true,
@@ -99,35 +101,44 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
                                 }
                               }
 
-                              return Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                decoration: BoxDecoration(
-                                    // color: whiteColor,
-                                    image: DecorationImage(
-                                  opacity: 1,
-                                  image: MemoryImage(img),
-                                  fit: BoxFit.fill,
-                                )),
-                                child: CanvasTouchDetector(
-                                  gesturesToOverride: const [
-                                    GestureType.onTapUp,
-                                    GestureType.onTapDown,
-                                    GestureType.onSecondaryTapUp,
-                                    GestureType.onPanUpdate,
-                                    GestureType.onPanStart,
-                                  ],
-                                  builder: (context) {
-                                    return CustomPaint(
-                                      size: Size(constraint.maxWidth,
-                                          constraint.maxHeight),
-                                      painter: ShopPinPainter(
-                                          ref: ref,
-                                          context: context,
-                                          imageData: snap.image!),
-                                    );
-                                  },
-                                ),
+                              return Stack(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                        // color: whiteColor,
+                                        image: DecorationImage(
+                                      opacity: 1,
+                                      image: MemoryImage(img),
+                                      fit: BoxFit.fill,
+                                    )),
+                                    child: CanvasTouchDetector(
+                                      gesturesToOverride: const [
+                                        GestureType.onTapUp,
+                                        GestureType.onTapDown,
+                                        GestureType.onSecondaryTapUp,
+                                        GestureType.onPanUpdate,
+                                        GestureType.onPanStart,
+                                      ],
+                                      builder: (context) {
+                                        return CustomPaint(
+                                          size: Size(constraint.maxWidth,
+                                              constraint.maxHeight),
+                                          painter: ShopPinPainter(
+                                              ref: ref,
+                                              context: context,
+                                              imageData: snap.image!),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  if (snap.shops.isNotEmpty)
+                                    ShopAreaPoints(
+                                        constraint: constraint,
+                                        snap: snap,
+                                        snapService: snapService)
+                                ],
                               );
                             }),
                       ],
@@ -178,6 +189,47 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
   }
 }
 
+class ShopAreaPoints extends StatelessWidget {
+  const ShopAreaPoints(
+      {Key? key,
+      required this.snap,
+      required this.snapService,
+      required this.constraint})
+      : super(key: key);
+
+  final SnapModel? snap;
+  final VideoDataDetail snapService;
+  final BoxConstraints constraint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: constraint.maxWidth / snap!.shops.first.area.last.dx,
+      top: constraint.maxHeight / snap!.shops.first.area.last.dx,
+      child: Draggable(
+        onDragEnd: (details) {
+          var dragRatio = Offset(constraint.maxWidth / details.offset.dx,
+              constraint.maxHeight / details.offset.dy);
+          snapService.dragUpdate(dragRatio);
+        },
+        feedback: Container(
+          height: 20,
+          width: 20,
+          decoration: const BoxDecoration(
+              color: Colors.lightGreenAccent, shape: BoxShape.circle),
+        ),
+        childWhenDragging: Container(),
+        child: Container(
+          height: 20,
+          width: 20,
+          decoration: const BoxDecoration(
+              color: Colors.lightGreenAccent, shape: BoxShape.circle),
+        ),
+      ),
+    );
+  }
+}
+
 class ShopPinPainter extends CustomPainter {
   ShopPinPainter(
       {required this.ref, required this.context, required this.imageData});
@@ -223,7 +275,16 @@ class ShopPinPainter extends CustomPainter {
         Shop shop = data as Shop;
         Offset ratio = Offset(size.width / details.localPosition.dx,
             size.height / details.localPosition.dy);
+        shop.area[0] = Offset(size.width / shop.position.dx - 25.sw(),
+            size.width / shop.position.dy - 25.sw());
+        shop.area[1] = Offset(size.width / shop.position.dx + 25.sw(),
+            size.width / shop.position.dy - 25.sw());
+        shop.area[2] = Offset(size.width / shop.position.dx + 25.sw(),
+            size.width / shop.position.dy + 25.sw());
+        shop.area[3] = Offset(size.width / shop.position.dx - 25.sw(),
+            size.width / shop.position.dy + 25.sw());
         shop.position = ratio;
+        print(shop.area.last);
         snapService.addShop(shop);
       }
     });
