@@ -72,8 +72,9 @@ class VideoDataDetail extends ChangeNotifier {
     selectedSnap.value = null;
   }
 
-  dragUpdate(Offset newData) {
-    selectedSnap.value!.shops.first.area.last = Offset(newData.dx, newData.dy);
+  dragUpdate(Offset newData, int indexPoint, int indexShop) {
+    selectedSnap.value!.shops[indexShop].area[indexPoint] =
+        Offset(newData.dx, newData.dy);
     notifyListeners();
   }
 }

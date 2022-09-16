@@ -51,11 +51,14 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
     return image;
   }
 
+  bool isZoomed = false;
+
   @override
   Widget build(BuildContext context) {
     final snapService = ref.watch(videoDataDetailServiceProvider);
     final snap = snapService.selectedSnap.value;
     final drag = snapService.drag;
+
     return RawKeyboardListener(
       focusNode: FocusNode(),
       autofocus: true,
@@ -70,6 +73,9 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
                     color: Colors.black,
                   ),
                   InteractiveViewer(
+                    onInteractionUpdate: (details) {
+                      print(details);
+                    },
                     maxScale: 4,
                     child: Stack(
                       children: [
@@ -134,10 +140,54 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
                                     ),
                                   ),
                                   if (snap.shops.isNotEmpty)
-                                    ShopAreaPoints(
-                                        constraint: constraint,
-                                        snap: snap,
-                                        snapService: snapService)
+                                    for (var element in snap.shops)
+                                      for (var e in element.area)
+                                        Positioned(
+                                          left: (constraint.maxWidth / e.dx) -
+                                              (12.sr() / 2),
+                                          top: (constraint.maxHeight / e.dy) -
+                                              (12.sr() / 2),
+                                          child: Builder(builder: (context) {
+                                            pointDrag(Offset details) {
+                                              var dragRatio = Offset(
+                                                  constraint.maxWidth /
+                                                      details.dx,
+                                                  constraint.maxHeight /
+                                                      details.dy);
+                                              int indexPoint =
+                                                  element.area.indexOf(e);
+                                              int indexShop =
+                                                  snap.shops.indexOf(element);
+                                              snapService.dragUpdate(dragRatio,
+                                                  indexPoint, indexShop);
+                                            }
+
+                                            return Draggable(
+                                              onDragUpdate: (details) {
+                                                pointDrag(
+                                                    details.localPosition);
+                                              },
+                                              // onDragEnd: (details) {
+                                              //   pointDrag(details.offset);
+                                              // },
+                                              feedback: Container(
+                                                height: 12.sr(),
+                                                width: 12.sr(),
+                                                decoration: BoxDecoration(
+                                                    color: element.color,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                              childWhenDragging: Container(),
+                                              child: Container(
+                                                height: 12.sr(),
+                                                width: 12.sr(),
+                                                decoration: BoxDecoration(
+                                                    color: element.color,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                            );
+                                          }),
+                                        )
                                 ],
                               );
                             }),
@@ -189,46 +239,46 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
   }
 }
 
-class ShopAreaPoints extends StatelessWidget {
-  const ShopAreaPoints(
-      {Key? key,
-      required this.snap,
-      required this.snapService,
-      required this.constraint})
-      : super(key: key);
+// class ShopAreaPoints extends StatelessWidget {
+//   const ShopAreaPoints(
+//       {Key? key,
+//       required this.snap,
+//       required this.snapService,
+//       required this.constraint})
+//       : super(key: key);
 
-  final SnapModel? snap;
-  final VideoDataDetail snapService;
-  final BoxConstraints constraint;
+//   final SnapModel? snap;
+//   final VideoDataDetail snapService;
+//   final BoxConstraints constraint;
 
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: constraint.maxWidth / snap!.shops.first.area.last.dx,
-      top: constraint.maxHeight / snap!.shops.first.area.last.dy,
-      child: Draggable(
-        onDragEnd: (details) {
-          var dragRatio = Offset(constraint.maxWidth / details.offset.dx,
-              constraint.maxHeight / details.offset.dy);
-          snapService.dragUpdate(dragRatio);
-        },
-        feedback: Container(
-          height: 20,
-          width: 20,
-          decoration: const BoxDecoration(
-              color: Colors.lightGreenAccent, shape: BoxShape.circle),
-        ),
-        childWhenDragging: Container(),
-        child: Container(
-          height: 20,
-          width: 20,
-          decoration: const BoxDecoration(
-              color: Colors.lightGreenAccent, shape: BoxShape.circle),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Positioned(
+//       left: constraint.maxWidth / snap!.shops.first.area[1].dx,
+//       top: constraint.maxHeight / snap!.shops.first.area[1].dy,
+//       child: Draggable(
+//         onDragEnd: (details) {
+//           var dragRatio = Offset(constraint.maxWidth / details.offset.dx,
+//               constraint.maxHeight / details.offset.dy);
+//           snapService.dragUpdate(dragRatio);
+//         },
+//         feedback: Container(
+//           height: 20,
+//           width: 20,
+//           decoration: const BoxDecoration(
+//               color: Colors.lightGreenAccent, shape: BoxShape.circle),
+//         ),
+//         childWhenDragging: Container(),
+//         child: Container(
+//           height: 20,
+//           width: 20,
+//           decoration: const BoxDecoration(
+//               color: Colors.lightGreenAccent, shape: BoxShape.circle),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class ShopPinPainter extends CustomPainter {
   ShopPinPainter(
@@ -247,12 +297,13 @@ class ShopPinPainter extends CustomPainter {
     Paint boxPaint = Paint()
       ..style = PaintingStyle.fill
       ..color = Colors.transparent;
+
     // path.addRect(Rect.fromLTWH(pinPosition.dx, pinPosition.dy, 10, 20));
     var snapService = ref.read(videoDataDetailServiceProvider);
     var shops = snapService.selectedSnap.value!.shops;
 
     TouchyCanvas newCanvas = TouchyCanvas(context, canvas);
-
+    double boxIconSize = 40.ssp();
     newCanvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), boxPaint,
         hitTestBehavior: HitTestBehavior.translucent, onTapUp: (details) async {
       var color = primaryColor;
@@ -275,22 +326,26 @@ class ShopPinPainter extends CustomPainter {
         Shop shop = data as Shop;
         Offset ratio = Offset(size.width / details.localPosition.dx,
             size.height / details.localPosition.dy);
-        shop.area[0] = Offset(size.width / shop.position.dx - 25.sw(),
-            size.width / shop.position.dy - 25.sw());
-        shop.area[1] = Offset(size.width / shop.position.dx + 25.sw(),
-            size.width / shop.position.dy - 25.sw());
-        shop.area[2] = Offset(size.width / shop.position.dx + 25.sw(),
-            size.width / shop.position.dy + 25.sw());
-        shop.area[3] = Offset(size.width / shop.position.dx - 25.sw(),
-            size.width / shop.position.dy + 25.sw());
+        shop.area.clear();
+
+        shop.area.addAll([
+          Offset(size.width / (details.localPosition.dx - boxIconSize),
+              size.height / (details.localPosition.dy - boxIconSize * 1.5)),
+          Offset(size.width / (details.localPosition.dx + boxIconSize),
+              size.height / (details.localPosition.dy - boxIconSize * 1.5)),
+          Offset(size.width / (details.localPosition.dx + boxIconSize),
+              size.height / (details.localPosition.dy + boxIconSize)),
+          Offset(size.width / (details.localPosition.dx - boxIconSize),
+              size.height / (details.localPosition.dy + boxIconSize))
+        ]);
+
         shop.position = ratio;
-        print(shop.area.last);
         snapService.addShop(shop);
       }
     });
 
     for (var element in shops) {
-      drawIcon(canvas, element.color, element.position, size);
+      drawIcon(canvas, element.color, element.position, size, boxIconSize);
       // TODO Delete the
 
       Offset position = Offset(
@@ -302,35 +357,40 @@ class ShopPinPainter extends CustomPainter {
               center: Offset(position.dx, position.dy - iconSize * .4),
               width: iconSize * .6,
               height: iconSize * .9),
-          boxPaint,
-          onTapUp: (details) async {
-            //Left Click Action
-            var data = await showDialog(
-                context: context,
-                builder: (context) {
-                  return Center(
-                    child: AddEditShop(
-                      edit: true,
-                      shop: element,
-                    ),
-                  );
-                });
-            if (data != null) {
-              // Shop shop = data as Shop;
-              // shop.position = details.localPosition;
-              // snapService.removeShop(element);
-              // snapService.addShop(shop);
-            }
+          boxPaint, onTapUp: (details) async {
+        //Left Click Action
+        var data = await showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: AddEditShop(
+                  edit: true,
+                  shop: element,
+                ),
+              );
+            });
+        if (data != null) {
+          // Shop shop = data as Shop;
+          // shop.position = details.localPosition;
+          // snapService.removeShop(element);
+          // snapService.addShop(shop);
+        }
 
-            //Right Click Action
-          },
-          onSecondaryTapUp: (details) {
-            snapService.removeShop(element);
-          },
-          onPanStart: (details) {},
-          onPanUpdate: (details) {
-            print(details.localPosition);
-          });
+        //Right Click Action
+      }, onSecondaryTapUp: (details) {
+        snapService.removeShop(element);
+      }, onPanStart: (details) {}, onPanUpdate: (details) {});
+      Paint areaBoxPaint = Paint()
+        ..color = element.color.withAlpha(150)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5;
+      var path = Path();
+      path.addPolygon(
+          element.area
+              .map((e) => Offset(size.width / e.dx, size.height / e.dy))
+              .toList(),
+          true);
+      canvas.drawPath(path, areaBoxPaint);
       //Single Marker Touchy End
     }
   }
@@ -341,10 +401,11 @@ class ShopPinPainter extends CustomPainter {
     return true;
   }
 
-  drawIcon(Canvas canvas, Color color, Offset pinPosition, Size size) {
+  drawIcon(Canvas canvas, Color color, Offset pinPosition, Size size,
+      double iconSize) {
     Offset position =
         Offset(size.width / pinPosition.dx, size.height / pinPosition.dy);
-    double iconSize = 40.ssp();
+
     const icon = Icons.location_on;
     TextPainter textPainter = TextPainter(textDirection: TextDirection.rtl);
     textPainter.text = TextSpan(
