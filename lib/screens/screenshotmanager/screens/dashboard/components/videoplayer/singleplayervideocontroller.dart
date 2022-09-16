@@ -316,9 +316,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
           } catch (e) {
             image = await ref
                 .read(fileDetailMiniServiceProvider)
-                .getFrameFromUrl(
-                    url: "${CustomIP.apiBaseUrl}video/${videoFile.id}?q=480}",
-                    duration: duration);
+                .getFrameFromUrl(id: videoFile.id, duration: duration);
           }
         }
 
@@ -333,7 +331,7 @@ class SingleVideoPlayerControls extends HookConsumerWidget {
             await Navigator.push(context, MaterialPageRoute(builder: (_) {
               return ScreenShotScreen(
                 thumb: image,
-                url: "http://192.168.1.74:5000/v1/video/${videoFile.id}",
+                id: videoFile.id,
                 duration: duration,
               );
             }));

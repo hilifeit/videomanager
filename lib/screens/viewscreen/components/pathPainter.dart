@@ -18,13 +18,8 @@ import 'package:videomanager/screens/viewscreen/models/filedetailmini.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/services/filterService.dart';
+import 'package:videomanager/screens/viewscreen/services/mapPointService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
-
-class offsetWithDistance {
-  offsetWithDistance({required this.distance, required this.point});
-  double distance;
-  Offset point;
-}
 
 class Painter extends CustomPainter {
   Painter(
@@ -68,6 +63,7 @@ class Painter extends CustomPainter {
     final thisUser = ref.watch(userChangeProvider).loggedInUser.value;
     var paint = Paint()..style = PaintingStyle.fill;
     var rpaint = Paint()..style = PaintingStyle.fill;
+    var mapPointService = ref.read(mapPointerServiceProvider);
     rpaint.style = PaintingStyle.fill;
     rpaint.color = strokeColor.withOpacity(0.01);
 
@@ -90,6 +86,10 @@ class Painter extends CustomPainter {
       onTapUp: (details) {
         var selectedFile = ref.read(selectedFileProvider.state).state;
         if (selectedFile != null) {
+          // if (mapPointService.file != selectedFile) {
+          mapPointService.currentPoint(null, null);
+          // }
+
           ref.read(selectedFileProvider.state).state = null;
         } else {
           if (selectedPointsProvider.pathSelected.value) {
@@ -230,36 +230,42 @@ class Painter extends CustomPainter {
                 fileservice.addOriginalLocation(element, originalLocationData);
               } else {
                 if (details != null) {
-                  List<offsetWithDistance> pointDistanceList = [];
-
-                  Offset clickedPoint = Offset(
-                      details.localPosition.dx - item.topLeft.dx,
-                      details.localPosition.dy - item.topLeft.dy);
+                  // Offset clickedPoint = Offset(
+                  //     details.localPosition.dx - item.topLeft.dx,
+                  //     details.localPosition.dy - item.topLeft.dy);
+                  double finaldist = 50000;
+                  Offset foundPoint = Offset.zero;
 
                   for (var element in points) {
                     var dist = (details.localPosition - element).distance;
-                    pointDistanceList.add(
-                        offsetWithDistance(distance: dist, point: element));
+                    if (dist < finaldist) {
+                      finaldist = dist;
+                      foundPoint = element;
+                    }
                   }
-                  pointDistanceList
-                      .sort(((a, b) => a.distance.compareTo(b.distance)));
                   var timeStamp = Duration(
-                      milliseconds: map(
-                          points.indexOf(pointDistanceList.first.point),
-                          0,
-                          points.length,
-                          0,
-                          element.length!.inMilliseconds));
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: InteractiveViewer(
-                            child: Image.network(
-                                fileservice.getFrameUrl(element.id, timeStamp)),
-                          ),
-                        );
-                      });
+                      milliseconds: map(points.indexOf(foundPoint), 0,
+                          points.length, 0, element.length!.inMilliseconds));
+                  var url = fileservice.getFrameUrl(element.id, timeStamp);
+                  mapPointService.currentPoint(
+                      SelectedArea.transformer.fromXYCoordsToLatLng(foundPoint),
+                      element,
+                      url: url);
+
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return AlertDialog(
+                  //         content: SizedBox(
+                  //           width: double.infinity,
+                  //           height: double.infinity,
+                  //           child: InteractiveViewer(
+                  //             child: Image.network(fileservice.getFrameUrl(
+                  //                 element.id, timeStamp)),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     });
                 }
 
                 // reduce samples
