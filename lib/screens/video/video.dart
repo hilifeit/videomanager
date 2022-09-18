@@ -226,9 +226,17 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
       bool buffering = false;
       return StatefulBuilder(builder: (context, setCustomState) {
         if (UniversalPlatform.isDesktop) {
-          // player!.playbackStream.listen((event) {
-
-          // });
+          player!.bufferingProgressStream.listen((event) {
+            if (event < 100) {
+              setCustomState(() {
+                buffering = true;
+              });
+            } else {
+              setCustomState(() {
+                buffering = false;
+              });
+            }
+          });
         } else {
           controller!.addListener(() {
             setCustomState(() {

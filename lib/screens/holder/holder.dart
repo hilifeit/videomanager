@@ -1,24 +1,16 @@
 import 'package:map/map.dart';
-import 'package:videomanager/screens/Bug/component/bug.dart';
 import 'package:videomanager/screens/Bug/screen/bugscreen.dart';
 import 'package:videomanager/screens/chat/chatHolder.dart';
-import 'package:videomanager/screens/chat/screens/message/component/viewProfile.dart';
 import 'package:videomanager/screens/components/helper/customSafeArea.dart';
 import 'package:videomanager/screens/holder/components/menubar.dart';
 import 'package:videomanager/screens/holder/components/profilemenu.dart';
 import 'package:videomanager/screens/others/exporter.dart';
-import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/components/Sidebar/components/videoassignedcard.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/screenshotDashboard.dart';
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotDashboardHolder.dart';
 import 'package:videomanager/screens/settings/settingsholder.dart';
 import 'package:videomanager/screens/users/component/userService.dart';
-import 'package:videomanager/screens/users/model/userModelSource.dart';
-import 'package:videomanager/screens/users/model/usermodel.dart';
 import 'package:videomanager/screens/users/model/usermodelmini.dart';
 import 'package:videomanager/screens/users/users.dart';
 import 'package:videomanager/screens/viewscreen/components/filter.dart';
-import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 import 'package:videomanager/screens/viewscreen/viewscreen.dart';
 
 final indexProvider = StateProvider<int>((ref) {

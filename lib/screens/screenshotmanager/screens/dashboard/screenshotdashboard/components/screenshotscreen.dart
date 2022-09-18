@@ -5,8 +5,6 @@ import 'package:videomanager/screens/components/helper/utils.dart';
 import 'package:videomanager/screens/others/exporter.dart';
 import 'package:videomanager/screens/screenshotmanager/components/addshop.dart';
 import 'package:videomanager/screens/screenshotmanager/models/shops.dart';
-import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/model/snapModel.dart';
-
 import 'package:videomanager/screens/screenshotmanager/screens/dashboard/screenshotdashboard/service/videoDataDetail.dart';
 import 'package:videomanager/screens/viewscreen/services/fileService.dart';
 
@@ -107,97 +105,101 @@ class _ScreenShotScreenState extends ConsumerState<ScreenShotScreen> {
                                 }
                               }
 
-                              return AnimatedOpacity(
-                                key: const Key("anim"),
-                                opacity: img == null ? 0 : 1,
-                                duration: const Duration(milliseconds: 1000),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      decoration: BoxDecoration(
-                                          // color: whiteColor,
-                                          image: DecorationImage(
-                                        opacity: 1,
-                                        image:
-                                            MemoryImage(img ?? widget.thumb!),
-                                        fit: BoxFit.fill,
-                                      )),
-                                      child: CanvasTouchDetector(
-                                        gesturesToOverride: const [
-                                          GestureType.onTapUp,
-                                          GestureType.onTapDown,
-                                          GestureType.onSecondaryTapUp,
-                                          GestureType.onPanUpdate,
-                                          GestureType.onPanStart,
-                                        ],
-                                        builder: (context) {
-                                          return CustomPaint(
-                                            size: Size(constraint.maxWidth,
-                                                constraint.maxHeight),
-                                            painter: ShopPinPainter(
-                                                ref: ref,
-                                                context: context,
-                                                imageData:
-                                                    img ?? widget.thumb!),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    if (snap.shops.isNotEmpty)
-                                      for (var element in snap.shops)
-                                        for (var e in element.area)
-                                          Positioned(
-                                            left: (constraint.maxWidth / e.dx) -
-                                                (12.sr() / 2),
-                                            top: (constraint.maxHeight / e.dy) -
-                                                (12.sr() / 2),
-                                            child: Builder(builder: (context) {
-                                              pointDrag(Offset details) {
-                                                var dragRatio = Offset(
-                                                    constraint.maxWidth /
-                                                        details.dx,
-                                                    constraint.maxHeight /
-                                                        details.dy);
-                                                int indexPoint =
-                                                    element.area.indexOf(e);
-                                                int indexShop =
-                                                    snap.shops.indexOf(element);
-                                                snapService.dragUpdate(
-                                                    dragRatio,
-                                                    indexPoint,
-                                                    indexShop);
-                                              }
+                              return Stack(
+                                children: [
+                                  Builder(builder: (context) {
+                                    var child = CanvasTouchDetector(
+                                      gesturesToOverride: const [
+                                        GestureType.onTapUp,
+                                        GestureType.onTapDown,
+                                        GestureType.onSecondaryTapUp,
+                                        GestureType.onPanUpdate,
+                                        GestureType.onPanStart,
+                                      ],
+                                      builder: (context) {
+                                        return CustomPaint(
+                                          size: Size(constraint.maxWidth,
+                                              constraint.maxHeight),
+                                          painter: ShopPinPainter(
+                                              ref: ref,
+                                              context: context,
+                                              imageData: img ?? widget.thumb!),
+                                        );
+                                      },
+                                    );
 
-                                              return Draggable(
-                                                onDragUpdate: (details) {
-                                                  pointDrag(
-                                                      details.localPosition);
-                                                },
-                                                // onDragEnd: (details) {
-                                                //   pointDrag(details.offset);
-                                                // },
-                                                feedback: Container(
-                                                  height: 12.sr(),
-                                                  width: 12.sr(),
-                                                  decoration: BoxDecoration(
-                                                      color: element.color,
-                                                      shape: BoxShape.circle),
-                                                ),
-                                                childWhenDragging: Container(),
-                                                child: Container(
-                                                  height: 12.sr(),
-                                                  width: 12.sr(),
-                                                  decoration: BoxDecoration(
-                                                      color: element.color,
-                                                      shape: BoxShape.circle),
-                                                ),
-                                              );
-                                            }),
-                                          )
-                                  ],
-                                ),
+                                    var mainWidget = AnimatedOpacity(
+                                      opacity: img != null ? 1 : 0.5,
+                                      duration:
+                                          const Duration(milliseconds: 1000),
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        decoration: BoxDecoration(
+                                            // color: whiteColor,
+                                            image: DecorationImage(
+                                          opacity: 1,
+                                          image:
+                                              MemoryImage(img ?? widget.thumb!),
+                                          fit: BoxFit.fill,
+                                        )),
+                                        child: child,
+                                      ),
+                                    );
+                                    return mainWidget;
+                                    //         key: const Key("anim"),
+                                    // opacity: img == null ? 0 : 1,
+                                  }),
+                                  if (snap.shops.isNotEmpty)
+                                    for (var element in snap.shops)
+                                      for (var e in element.area)
+                                        Positioned(
+                                          left: (constraint.maxWidth / e.dx) -
+                                              (12.sr() / 2),
+                                          top: (constraint.maxHeight / e.dy) -
+                                              (12.sr() / 2),
+                                          child: Builder(builder: (context) {
+                                            pointDrag(Offset details) {
+                                              var dragRatio = Offset(
+                                                  constraint.maxWidth /
+                                                      details.dx,
+                                                  constraint.maxHeight /
+                                                      details.dy);
+                                              int indexPoint =
+                                                  element.area.indexOf(e);
+                                              int indexShop =
+                                                  snap.shops.indexOf(element);
+                                              snapService.dragUpdate(dragRatio,
+                                                  indexPoint, indexShop);
+                                            }
+
+                                            return Draggable(
+                                              onDragUpdate: (details) {
+                                                pointDrag(
+                                                    details.localPosition);
+                                              },
+                                              // onDragEnd: (details) {
+                                              //   pointDrag(details.offset);
+                                              // },
+                                              feedback: Container(
+                                                height: 12.sr(),
+                                                width: 12.sr(),
+                                                decoration: BoxDecoration(
+                                                    color: element.color,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                              childWhenDragging: Container(),
+                                              child: Container(
+                                                height: 12.sr(),
+                                                width: 12.sr(),
+                                                decoration: BoxDecoration(
+                                                    color: element.color,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                            );
+                                          }),
+                                        )
+                                ],
                               );
                             }),
                       ],

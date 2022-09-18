@@ -182,6 +182,8 @@ class Info {
     required this.size,
     required this.startTime,
     required this.endTime,
+    this.startTimeLoc,
+    this.endTimeLoc,
     required this.duration,
     required this.modifiedDate,
     required this.isLeft,
@@ -195,6 +197,8 @@ class Info {
   final int size;
   final DateTime startTime;
   final DateTime endTime;
+  final DateTime? startTimeLoc;
+  final DateTime? endTimeLoc;
   final DateTime duration;
   final DateTime modifiedDate;
   final bool isLeft;
@@ -208,6 +212,8 @@ class Info {
     required int size,
     required DateTime startTime,
     required DateTime endTime,
+    DateTime? startTimeLoc,
+    DateTime? endTimeLoc,
     required DateTime duration,
     required DateTime modifiedDate,
     required bool isLeft,
@@ -221,6 +227,8 @@ class Info {
         size: size,
         startTime: startTime,
         endTime: endTime,
+        startTimeLoc: startTimeLoc,
+        endTimeLoc: endTimeLoc,
         duration: duration,
         modifiedDate: modifiedDate,
         isLeft: isLeft,
@@ -235,6 +243,12 @@ class Info {
         size: json["size"],
         startTime: DateTime.parse(json["startTime"]),
         endTime: DateTime.parse(json["endTime"]),
+        startTimeLoc: json["startTimeLoc"] != null
+            ? DateTime.parse(json["startTimeLoc"])
+            : null,
+        endTimeLoc: json["endTimeLoc"] != null
+            ? DateTime.parse(json["endTimeLoc"])
+            : null,
         duration: DateTime.parse(json["duration"]),
         modifiedDate: DateTime.parse(json["modifiedDate"]),
         isLeft: json["isLeft"],

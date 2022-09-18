@@ -70,12 +70,22 @@ class VideoDetails extends StatelessWidget {
                         VideoDetailText(
                             title: 'Start Time',
                             details: DateFormat("HH:mm:ss").format(getStartTime(
-                                detailedFile!.info.modifiedDate,
-                                detailedFile!.info.duration))),
+                                    detailedFile!.info.modifiedDate,
+                                    detailedFile!.info.duration)) +
+                                "/" +
+                                (detailedFile!.info.startTimeLoc != null
+                                    ? DateFormat("HH:mm:ss").format(
+                                        detailedFile!.info.startTimeLoc!)
+                                    : "")),
                         VideoDetailText(
                           title: 'End Time',
                           details: DateFormat("HH:mm:ss")
-                              .format(detailedFile!.info.modifiedDate),
+                                  .format(detailedFile!.info.modifiedDate) +
+                              "/" +
+                              (detailedFile!.info.endTimeLoc != null
+                                  ? DateFormat("HH:mm:ss")
+                                      .format(detailedFile!.info.endTimeLoc!)
+                                  : ""),
                         ),
                       ],
                     ),
@@ -170,11 +180,12 @@ class VideoDetailText extends StatelessWidget {
                 fontSize: 18.ssp(), color: Colors.black.withOpacity(0.8))),
         WidgetSpan(
             child: SizedBox(
-          width: 21.79.sw(),
+          // 21.78
+          width: 12.sw(),
         )),
         TextSpan(
-            text: '$details',
-            style: kTextStyleInterMedium.copyWith(fontSize: 18.ssp())),
+            text: '$details', //18
+            style: kTextStyleInterMedium.copyWith(fontSize: 15.ssp())),
       ]),
       // '$title : $details',
       // style: kTextStyleInterMedium.copyWith(fontSize: 18.sp),
