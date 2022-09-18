@@ -66,6 +66,20 @@ return getBase64StringFromDataURL(img);
 
   </script>
 <script>
+//   window.parent.addEventListener("message",(event)=>{
+// alert(event.data);
+// });
+// const video = document.querySelector('video');
+
+// video.addEventListener('timeupdate', (event) => {
+//   window.parent.postMessage(event.currentTime, "");
+// });
+
+// function log(data){
+// /* console.log(data) */
+// }
+
+
    function getCurrentTime(){
     var vid = document.getElementsByTagName('video');
     return vid[0].currentTime;
