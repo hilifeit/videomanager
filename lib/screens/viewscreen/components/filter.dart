@@ -11,10 +11,10 @@ import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 class Filter extends StatelessWidget {
-  const Filter({Key? key, required this.mapController}) : super(key: key);
+  Filter({Key? key, required this.mapController}) : super(key: key);
 
   final MapController mapController;
-
+  final ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -44,7 +44,7 @@ class Filter extends StatelessWidget {
         ),
         Expanded(
           flex: 3,
-          child: ListView(
+          child: ListView(controller: scrollController,
               // ListView.separated(
               // itemBuilder: (_, index) {
               children: [
@@ -120,6 +120,83 @@ class Filter extends StatelessWidget {
                         );
                       });
                     })),
+                ExpansionTile(
+                    initiallyExpanded: false,
+
+                    // tilePadding: EdgeInsets.only(left: 0,right: 10),
+                    childrenPadding: EdgeInsets.only(left: 57.sw()),
+                    leading: Consumer(builder: (context, ref, c) {
+                      final checked = ref.read(filterServiceProvider);
+                      final val = ref.watch(filterServiceProvider).rider;
+
+                      return Checkbox(
+
+                          // visualDensity: VisualDensity.adaptivePlatformDensity,
+                          materialTapTargetSize: MaterialTapTargetSize.padded,
+                          side: const BorderSide(
+                            width: 1,
+                            color: secondaryColorText,
+                          ),
+                          activeColor: primaryColor,
+                          value: val,
+                          onChanged: (value) {
+                            checked.toggleRider(value!);
+                            ref.read(selectedFileProvider.state).state = null;
+                          });
+                    }),
+                    title: Text(
+                      'Rider',
+                      style: kTextStyleInterMedium.copyWith(fontSize: 16.ssp()),
+                    ),
+                    children: [
+                      Consumer(builder: (context, ref, c) {
+                        final checked = ref.read(filterServiceProvider);
+                        final riders = ref.read(filterServiceProvider).riders;
+
+                        return Column(
+                          children: [
+                            for (int i = 0; i < riders.length; i++)
+                              ListTile(
+                                onTap: () {
+                                  // var fileService =
+                                  //     ref.read(fileDetailMiniServiceProvider);
+                                  // var centerOffseet = fileService
+                                  //     .filesInStates[index].boundingBox!.center;
+                                  // SelectedArea.transformer.controller.zoom = 9.3;
+                                  // SelectedArea.transformer.controller.center =
+                                  //     LatLng(centerOffseet.dx, centerOffseet.dy);
+                                },
+                                title: Text(
+                                  riders[i].name,
+                                  style: kTextStyleInterMedium.copyWith(
+                                      fontSize: 16.ssp()),
+                                ),
+                                leading: Consumer(builder: (context, ref, c) {
+                                  final rider = ref
+                                      .watch(filterServiceProvider)
+                                      .riders[i];
+                                  return Checkbox(
+                                      tristate: false,
+                                      // visualDensity: VisualDensity.adaptivePlatformDensity,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.padded,
+                                      side: const BorderSide(
+                                        width: 1,
+                                        color: secondaryColorText,
+                                      ),
+                                      activeColor: primaryColor,
+                                      value: rider.isSelected,
+                                      onChanged: (value) {
+                                        checked.toggleSingleRider(value!, i);
+                                        // ref.read(selectedFileProvider.state).state =
+                                        //     null;
+                                      });
+                                }),
+                              )
+                          ],
+                        );
+                      })
+                    ]),
                 ExpansionTile(
 
                     // tilePadding: EdgeInsets.only(left: 0,right: 10),

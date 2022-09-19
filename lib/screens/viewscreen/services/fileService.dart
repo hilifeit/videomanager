@@ -18,6 +18,7 @@ import 'package:videomanager/screens/viewscreen/models/newstate.dart';
 import 'package:videomanager/screens/viewscreen/models/originalLocation.dart';
 import 'package:videomanager/screens/viewscreen/models/searchItem.dart';
 import 'package:videomanager/screens/viewscreen/models/state.dart';
+import 'package:videomanager/screens/viewscreen/services/filterService.dart';
 import 'package:videomanager/screens/viewscreen/services/selectedAreaservice.dart';
 
 final fileDetailMiniServiceProvider =
@@ -212,7 +213,14 @@ class FileService extends ChangeNotifier {
 
             // List<int> states = [];
             // List<String> district = [];
+            List<String> riders = [];
             await Future.forEach<FileDetailMini>(files, (element) {
+              if (element.rider != null) {
+                if (!riders.contains(element.rider!.toLowerCase())) {
+                  riders.add(element.rider!.toLowerCase());
+                }
+              }
+
               element.boundingBox =
                   boundingBoxOffset(element.location.coordinates);
               // if (!states.contains(element.area.state)) {
@@ -223,6 +231,7 @@ class FileService extends ChangeNotifier {
               // }
             });
 
+            ref.read(filterServiceProvider).addRider(riders);
             // print(
             //     "${files[0].boundingBox!.left.toString()} ${files[0].boundingBox!.top.toString()}");
             notifyListeners();

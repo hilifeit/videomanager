@@ -22,6 +22,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
 
     var timeData =
         dualVideoService.calculateStartTime(widget.leftFile, widget.rightFile);
+
     if (UniversalPlatform.isDesktop) {
       VideoDimensions dimension = const VideoDimensions(1920, 1080);
 
@@ -46,6 +47,8 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
 
       // print('${mediaRight.startTime}${mediaRight.stopTime}');
       Duration finalDuration = mediaLeft.stopTime - mediaLeft.startTime;
+      print(finalDuration);
+      print(mediaRight.stopTime - mediaRight.startTime);
       dualVideoService.desktop1.value = PlayerController(
           player: Player(
               // id: widget.leftFile.foundPath.length,
@@ -90,8 +93,8 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
   @override
   Widget build(BuildContext context) {
     final dualVideoService = ref.watch(dualVideoServiceProvider);
-    final _controller1 = dualVideoService.web1.value;
-    final _controller2 = dualVideoService.web2.value;
+    final controller1 = dualVideoService.web1.value;
+    final controller2 = dualVideoService.web2.value;
     final player1 = dualVideoService.desktop1.value;
     final player2 = dualVideoService.desktop2.value;
     return Scaffold(
@@ -124,7 +127,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
                           child: Stack(
                             children: [
                               CustomVideoPlayer(
-                                  controller: _controller1,
+                                  controller: controller1,
                                   player: player1?.player),
                               Positioned(
                                   top: 20.sh(),
@@ -150,8 +153,7 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
                       child: Stack(
                         children: [
                           CustomVideoPlayer(
-                              controller: _controller2,
-                              player: player2?.player),
+                              controller: controller2, player: player2?.player),
                           Positioned(
                               top: 20.sh(),
                               right: 24.32.sw(),
@@ -202,8 +204,8 @@ class _CustomVideoState extends ConsumerState<CustomVideo> {
                   Expanded(
                     flex: 1,
                     child: VideoPlayerControls(
-                      leftWeb: _controller1,
-                      rightWeb: _controller2,
+                      leftWeb: controller1,
+                      rightWeb: controller2,
                       leftDesktop: player1,
                       rightDesktop: player2,
                     ),

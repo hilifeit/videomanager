@@ -171,29 +171,57 @@ class Painter extends CustomPainter {
         // Path newPath = Path();
         for (var e in element.files) {
           if (e.isUseable) {
-            var path = Path();
-            path.addPolygon(
-                [
-                  SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
-                      e.location.coordinates.first.last,
-                      e.location.coordinates.first.first)),
-                  SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
-                      e.location.coordinates.last.last,
-                      e.location.coordinates.last.first)),
-                ],
-                // element.location.coordinates
-                //     .map((e) =>
-                //         transformer.fromLatLngToXYCoords(LatLng(e.last, e.first)))
-                //     .toList(),
-                false);
+            if (filterService.rider) {
+              if (filterService.riderNames.contains(e.rider!.toLowerCase())) {
+                var path = Path();
+                path.addPolygon(
+                    [
+                      SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                          e.location.coordinates.first.last,
+                          e.location.coordinates.first.first)),
+                      SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                          e.location.coordinates.last.last,
+                          e.location.coordinates.last.first)),
+                    ],
+                    // element.location.coordinates
+                    //     .map((e) =>
+                    //         transformer.fromLatLngToXYCoords(LatLng(e.last, e.first)))
+                    //     .toList(),
+                    false);
 
-            // fileservice.filesInStates.first.path!.addPath(path, Offset.zero);
-            // newPath.addPath(path, Offset.zero);
-            Paint pcaint = Paint()
-              ..color = getCurrentFileColor(e).withOpacity(0.75)
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 3;
-            canvas.drawPath(path, pcaint);
+                // fileservice.filesInStates.first.path!.addPath(path, Offset.zero);
+                // newPath.addPath(path, Offset.zero);
+                Paint pcaint = Paint()
+                  ..color = getCurrentFileColor(e).withOpacity(0.75)
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = 3;
+                canvas.drawPath(path, pcaint);
+              }
+            } else {
+              var path = Path();
+              path.addPolygon(
+                  [
+                    SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                        e.location.coordinates.first.last,
+                        e.location.coordinates.first.first)),
+                    SelectedArea.transformer.fromLatLngToXYCoords(LatLng(
+                        e.location.coordinates.last.last,
+                        e.location.coordinates.last.first)),
+                  ],
+                  // element.location.coordinates
+                  //     .map((e) =>
+                  //         transformer.fromLatLngToXYCoords(LatLng(e.last, e.first)))
+                  //     .toList(),
+                  false);
+
+              // fileservice.filesInStates.first.path!.addPath(path, Offset.zero);
+              // newPath.addPath(path, Offset.zero);
+              Paint pcaint = Paint()
+                ..color = getCurrentFileColor(e).withOpacity(0.75)
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 3;
+              canvas.drawPath(path, pcaint);
+            }
           }
         }
       }
@@ -366,8 +394,12 @@ class Painter extends CustomPainter {
                                   context: context,
                                   builder: (_) {
                                     return CustomVideo(
-                                      leftFile: leftFile,
-                                      rightFile: rightFile,
+                                      leftFile: leftFile.info.isLeft
+                                          ? leftFile
+                                          : rightFile,
+                                      rightFile: !rightFile.info.isLeft
+                                          ? rightFile
+                                          : leftFile,
                                     );
                                   });
 
@@ -410,12 +442,17 @@ class Painter extends CustomPainter {
                                       const Duration(milliseconds: 100),
                                       () async {
                                     CustomOverlayEntry().closeLoader();
+
                                     await showDialog(
                                         context: context,
                                         builder: (_) {
                                           return CustomVideo(
-                                            leftFile: leftFile,
-                                            rightFile: rightFile,
+                                            leftFile: leftFile.info.isLeft
+                                                ? leftFile
+                                                : rightFile,
+                                            rightFile: !rightFile.info.isLeft
+                                                ? rightFile
+                                                : leftFile,
                                           );
                                         });
 
@@ -722,10 +759,16 @@ class Painter extends CustomPainter {
               }
             }
           }
-          paintElement(element);
+          if (filterService.rider) {
+            if (filterService.riderNames.contains(element.rider!.toLowerCase()))
+              paintElement(element);
+          } else {
+            paintElement(element);
+          }
         }
       }
     }
+
     // for (var element in selectedFileList) {
     //   print(element.path);
     // }

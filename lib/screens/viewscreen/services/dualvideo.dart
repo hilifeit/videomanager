@@ -29,6 +29,35 @@ class DualVideoService extends ChangeNotifier {
     var rightStartinDuration = getTimeinDuration(right.info.modifiedDate
         .subtract(getTimeinDuration(right.info.duration)));
 
+    Duration? leftEndLocinDuration,
+        rightEndLocinDuration,
+        leftStartLocinDuration,
+        rightStartLocinDuration;
+
+    if (left.info.endTimeLoc != null &&
+        right.info.endTimeLoc != null &&
+        left.info.startTimeLoc != null &&
+        right.info.startTimeLoc != null) {
+      leftEndLocinDuration = getTimeinDuration(left.info.endTimeLoc!);
+      rightEndLocinDuration = getTimeinDuration(right.info.endTimeLoc!);
+      leftStartLocinDuration = getTimeinDuration(left.info.startTimeLoc!);
+      rightStartLocinDuration = getTimeinDuration(right.info.startTimeLoc!);
+
+      Duration videoEndTime, locationEndTime;
+      videoEndTime = leftEndinDuration - rightEndinDuration;
+      locationEndTime = leftEndLocinDuration - rightEndinDuration;
+
+      // print(videoEndTime.inMilliseconds);
+      // print(locationEndTime.inMilliseconds);
+
+      if (videoEndTime.inMilliseconds > locationEndTime.inMilliseconds) {
+        leftStartinDuration = leftStartLocinDuration;
+        leftEndinDuration = leftEndLocinDuration;
+        rightStartinDuration = rightStartLocinDuration;
+        rightEndinDuration = rightEndLocinDuration;
+      }
+    }
+
     if (leftStartinDuration > rightStartinDuration) {
       data.leftStart = Duration.zero;
       data.rightStart = leftStartinDuration - rightStartinDuration;
@@ -50,6 +79,10 @@ class DualVideoService extends ChangeNotifier {
       data.leftEnd = rightEndinDuration - leftEndinDuration;
       data.rightEnd = Duration.zero;
     }
+    // print(data.leftStart.toString() +
+    //     data.leftEnd.toString() +
+    //     data.rightStart.toString() +
+    //     data.rightEnd.toString());
     return data;
   }
 

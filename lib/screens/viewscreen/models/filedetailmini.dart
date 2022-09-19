@@ -28,12 +28,13 @@ class FileDetailMini {
       this.length,
       this.pair,
       this.cleanPair = false,
+      this.rider,
       required this.isLeft
       // required this.area
       });
 
   final String id;
-  String? pair;
+  String? pair, rider;
   Duration? length;
   final String filename, path;
   String foundPath;
@@ -75,6 +76,7 @@ class FileDetailMini {
         location: Location.fromJson(json["location"]),
         isUseable: json["useable"],
         path: json["path"],
+        rider: json["rider"],
         isLeft: json["isLeft"] ?? false,
         assignDetail: json["assignDetail"] != null
             ? AssignDetail.fromJson(json["assignDetail"])
